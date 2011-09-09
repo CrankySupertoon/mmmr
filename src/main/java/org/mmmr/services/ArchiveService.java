@@ -20,7 +20,7 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 
 /**
  * add data/libs/sevenzipjbinding.jar and data/libs/sevenzipjbinding-AllWindows.jar to the classpath after running {@link SevenZipDownloader}
- *
+ * 
  * @author Jurgen
  */
 public class ArchiveService {

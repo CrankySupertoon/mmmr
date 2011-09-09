@@ -161,7 +161,7 @@ public class MMMR implements StartMe {
 
 	try {
 	    statusFrame.dbstatus.setStatus("Database and Hibernate: starting", null);
-	    db = DBService.getInstance(cfg.getDbdir());
+	    db = DBService.getInstance(cfg);
 	    mc = db.getOrCreate(new MC("1.7.3"));
 	    statusFrame.dbstatus.setStatus("Database and Hibernate: ready", true);
 	} catch (Exception e) {
@@ -305,24 +305,27 @@ public class MMMR implements StartMe {
 		    addContents(mc, cfg.getMcResources().getName() + "/", cfg.getMcResources().getAbsolutePath().length() + 1, cfg.getMcResources());
 		    db.save(mc);
 		}
-		ModCompilation jb = db.get(new ModCompilation("YogBox", "1.1"));
-		if (jb != null) {
-		    for (Mod mod : jb.getMods()) {
-			Date now = new Date();
-			if (mod.getResourceCheck() == null) {
-			    mod.setInstallationDate(now);
-			} else {
-			    File file = new File(cfg.getMcBaseFolder(), mod.getResourceCheck());
-			    if (file.exists()) {
+		if (!"true".equals(cfg.getProperty("jogbox.ignore", "?"))) {
+		    ModCompilation jb = db.get(new ModCompilation("YogBox", "1.1"));
+		    if (jb != null) {
+			for (Mod mod : jb.getMods()) {
+			    Date now = new Date();
+			    if (mod.getResourceCheck() == null) {
 				mod.setInstallationDate(now);
 			    } else {
-				System.out.println("mod not installed: " + mod);
+				File file = new File(cfg.getMcBaseFolder(), mod.getResourceCheck());
+				if (file.exists()) {
+				    mod.setInstallationDate(now);
+				} else {
+				    System.out.println("mod not installed: " + mod);
+				}
 			    }
 			}
+			db.save(jb);
 		    }
-		    db.save(jb);
 		}
-	    }
+		statusFrame.setReadyToGoOn();
+	    }	    
 
 	    allSuccess = mccheck && ybcheck;
 

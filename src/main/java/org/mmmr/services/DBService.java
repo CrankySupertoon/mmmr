@@ -25,15 +25,17 @@ import org.mmmr.Resource;
 public class DBService {
     private static DBService instance = null;
 
-    public static DBService getInstance(File dbdir) throws IOException, ClassNotFoundException {
+    public static DBService getInstance(Config cfg) throws IOException, ClassNotFoundException {
 	if (instance == null)
-	    instance = new DBService(dbdir);
+	    instance = new DBService(cfg.getDbdir());
 	return instance;
     }
 
     private Session session = null;
 
     public DBService(File dbdir) throws IOException, ClassNotFoundException {
+	System.setProperty("derby.stream.error.file", new File(dbdir, "derby.log").getAbsolutePath());
+
 	AnnotationConfiguration configuration = new AnnotationConfiguration();
 	configuration.addAnnotatedClass(Dependency.class);
 	configuration.addAnnotatedClass(MCFile.class);

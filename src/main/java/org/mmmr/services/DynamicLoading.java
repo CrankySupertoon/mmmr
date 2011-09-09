@@ -2,6 +2,7 @@ package org.mmmr.services;
 
 import static org.mmmr.services.IOMethods.downloadURL;
 import static org.mmmr.services.IOMethods.loadjarAtRuntime;
+import static org.mmmr.services.IOMethods.newDir;
 import static org.mmmr.services.IOMethods.unzip;
 
 import java.io.BufferedReader;
@@ -25,6 +26,8 @@ public class DynamicLoading {
     public static void init(StatusPanel status, Config cfg) throws Exception {
 	String message = "";
 	try {
+	    newDir("data/libs");
+
 	    String relative = null;
 	    {
 		File lib1 = new File(cfg.getLibs(), "sevenzipjbinding.jar");

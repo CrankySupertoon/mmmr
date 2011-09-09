@@ -1,11 +1,16 @@
 package org.mmmr.services;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,7 +27,10 @@ public class StatusFrame extends JFrame {
 
 	public StatusPanel(String text, String iconPath) {
 	    super(new BorderLayout());
-	    statuslabel = new JLabel("<html>" + text + "</html>", getIcon(iconPath), SwingConstants.CENTER);
+	    setOpaque(false);
+	    statuslabel = new JLabel(text, getIcon(iconPath), SwingConstants.CENTER);
+	    statuslabel.setVerticalAlignment(SwingConstants.CENTER);
+	    statuslabel.setOpaque(false);
 	    statuslabel.setFont(cfg.getFont18());
 	    add(statuslabel, BorderLayout.CENTER);
 	}
@@ -36,7 +44,7 @@ public class StatusFrame extends JFrame {
 	}
 
 	public void setStatus(String text, Boolean success) {
-	    statuslabel.setText("<html>" + text + "</html>");
+	    statuslabel.setText(text);
 	    statuslabel.setIcon(success == null ? getIcon("images/bullet_yellow_x4.png") : success ? getIcon("images/bullet_green_x4.png") : getIcon("images/bullet_red_x4.png"));
 	}
     }
@@ -48,17 +56,30 @@ public class StatusFrame extends JFrame {
     }
 
     private Config cfg;
+
     public StatusPanel dbstatus;
+
     public StatusPanel libstatus;
+
     public StatusPanel mcstatus;
 
     public StatusPanel xmlstatus;
 
     public StatusPanel ybstatus;
 
+    private JButton goOn = null;
+
+    private JButton quit = null;
+
     public StatusFrame(Config cfg) {
 	this.cfg = cfg;
-	Container contentPane = getContentPane();
+	setTitle("Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b");
+	JPanel contentPane = new JPanel();
+	getContentPane().add(contentPane);
+	JLabel label = new JLabel(getTitle());
+	label.setHorizontalAlignment(SwingConstants.CENTER);
+	label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
+	contentPane.add(label, BorderLayout.CENTER);
 	contentPane.setLayout(new GridLayout(-1, 1));
 	String bullet = "images/bullet_yellow_x4.png";
 	libstatus = new StatusPanel("Program libraries", bullet);
@@ -71,7 +92,47 @@ public class StatusFrame extends JFrame {
 	contentPane.add(mcstatus);
 	ybstatus = new StatusPanel("YogBox", bullet);
 	contentPane.add(ybstatus);
+	goOn = new JButton("I'm ready to start adding mods :)");
+	goOn.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
+	goOn.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		dispose();
+		// TODO new frame
+	    }
+	});	
+	goOn.setEnabled(false);
+	quit = new JButton("Get me out of here :(");
+	quit.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
+	quit.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		dispose();
+	    }
+	});	
+	quit.setEnabled(false);
+
+	goOn.setMinimumSize(new Dimension(300, 30));
+	quit.setMinimumSize(new Dimension(300, 30));
+	goOn.setPreferredSize(new Dimension(300, 30));
+	quit.setPreferredSize(new Dimension(300, 30));
+	goOn.setSize(new Dimension(300, 30));
+	quit.setSize(new Dimension(300, 30));
+	
+	JPanel goOnWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	goOnWrapper.add(goOn, null);
+	goOnWrapper.add(quit, null);
+	goOnWrapper.add(new JLabel("     "), null);
+	contentPane.add(goOnWrapper);
+
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	contentPane.setDoubleBuffered(true);
+    }
+
+    public void setReadyToGoOn() {
+	quit.setEnabled(true);
+	goOn.setEnabled(true);
+	goOn.grabFocus();
     }
 
     public StatusPanel getYbstatus() {
