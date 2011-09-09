@@ -24,27 +24,32 @@ public class DynamicLoading {
 	try {
 	    String relative = null;
 	    {
-		File zip = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
-		message = zip.getName();
-		status.setStatus("Program libraries: downloading " + zip.getName(), null);
-		URL url = new URL(
-			"http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/s/project/se/sevenzipjbind/7-Zip-JBinding/4.65-1.04rc-extr-only/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
-		downloadURL(url, zip);
-		unzip(zip, cfg.getTmp());
+		File lib1 = new File(cfg.getLibs(), "sevenzipjbinding.jar");
+		File lib2 = new File(cfg.getLibs(), "sevenzipjbinding-AllWindows.jar");
 
-		File jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding.jar");
-		File jarTo = new File(cfg.getLibs(), "sevenzipjbinding.jar");
-		message = jarTo.getName();
-		jarFrom.renameTo(jarTo);
-		status.setStatus("Program libraries: loading " + jarTo.getName(), null);
-		loadjarAtRuntime(jarTo);
-
-		jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding-AllWindows.jar");
-		jarTo = new File(cfg.getLibs(), "sevenzipjbinding-AllWindows.jar");
-		message = jarTo.getName();
-		jarFrom.renameTo(jarTo);
-		status.setStatus("Program libraries: loading " + jarTo.getName(), null);
-		loadjarAtRuntime(jarTo);
+		if (!lib1.exists() || !lib2.exists()) {
+		    File zip = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
+		    message = zip.getName();
+		    status.setStatus("Program libraries: downloading " + zip.getName(), null);
+		    URL url = new URL(
+			    "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/s/project/se/sevenzipjbind/7-Zip-JBinding/4.65-1.04rc-extr-only/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
+		    downloadURL(url, zip);
+		    unzip(zip, cfg.getTmp());
+		    {
+			File jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding.jar");
+			message = lib1.getName();
+			jarFrom.renameTo(lib1);
+		    }
+		    {
+			File jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding-AllWindows.jar");
+			message = lib2.getName();
+			jarFrom.renameTo(lib2);
+		    }
+		}
+		status.setStatus("Program libraries: loading " + lib1.getName(), null);
+		loadjarAtRuntime(lib1);
+		status.setStatus("Program libraries: loading " + lib2.getName(), null);
+		loadjarAtRuntime(lib2);
 	    }
 	    {
 		BufferedReader in = new BufferedReader(new InputStreamReader(DynamicLoading.class.getClassLoader().getResourceAsStream("libs.txt")));
