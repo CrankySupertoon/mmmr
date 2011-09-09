@@ -56,7 +56,7 @@ public class MMMRStart {
 	    font = new JLabel().getFont();
 	}
 	cfg.setFont(font);
-	Font font18 = font.deriveFont(18f).deriveFont(Font.BOLD);
+	Font font18 = font.deriveFont(18f);
 	cfg.setFont18(font18);
     }
 }

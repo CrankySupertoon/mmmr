@@ -86,7 +86,7 @@ public class MCFile {
 	this.crc32 = crc32;
     }
 
-    public void setId(Long id) {
+    protected void setId(Long id) {
 	this.id = id;
     }
 
@@ -98,7 +98,7 @@ public class MCFile {
 	this.path = path.replace('\\', '/').replaceAll("//", "/");
     }
 
-    public void setVer(Integer ver) {
+    protected void setVer(Integer ver) {
 	this.ver = ver;
     }
 

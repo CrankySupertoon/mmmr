@@ -11,7 +11,6 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.classic.Session;
 import org.hibernate.criterion.Example;
 import org.mmmr.Dependency;
-import org.mmmr.InstalledMod;
 import org.mmmr.MC;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
@@ -42,7 +41,6 @@ public class DBService {
 	configuration.addAnnotatedClass(ModDependency.class);
 	configuration.addAnnotatedClass(Resource.class);
 	configuration.addAnnotatedClass(Mod.class);
-	configuration.addAnnotatedClass(InstalledMod.class);
 	configuration.addAnnotatedClass(ModCompilation.class);
 	Properties properties = new Properties();
 	properties.setProperty("hibernate.connection.username", "mmmr");
@@ -60,17 +58,25 @@ public class DBService {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getOrCreate(T object) {
+    private <T> T getOrCreate(T object, boolean create) {
 	Example example = Example.create(object).excludeZeroes() // exclude zero valued properties
 		.ignoreCase() // perform case insensitive string comparisons
 		.enableLike(); // use like for string comparisons
 	Class<T> type = (Class<T>) object.getClass();
 	List<T> results = session.createCriteria(type).add(example).list();
 	if (results.size() == 0)
-	    return object;
+	    return create ? object : null;
 	if (results.size() > 1)
 	    throw new RuntimeException("more than 1 result");
 	return results.get(0);
+    }
+
+    public <T> T getOrCreate(T object) {
+	return getOrCreate(object, true);
+    }
+
+    public <T> T get(T object) {
+	return getOrCreate(object, false);
     }
 
     public <T> T save(T object) {

@@ -32,11 +32,11 @@ public abstract class Dependency {
 	return this.ver;
     }
 
-    public void setId(Long id) {
+    protected void setId(Long id) {
 	this.id = id;
     }
 
-    public void setVer(Integer ver) {
+    protected void setVer(Integer ver) {
 	this.ver = ver;
     }
 }

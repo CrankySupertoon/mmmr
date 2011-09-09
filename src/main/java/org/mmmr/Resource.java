@@ -149,7 +149,7 @@ public class Resource {
 	this.files = files;
     }
 
-    public void setId(Long id) {
+    protected void setId(Long id) {
 	this.id = id;
     }
 
@@ -165,7 +165,7 @@ public class Resource {
 	this.targetPath = targetPath;
     }
 
-    public void setVer(Integer ver) {
+    protected void setVer(Integer ver) {
 	this.ver = ver;
     }
 

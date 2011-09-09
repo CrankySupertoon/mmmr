@@ -137,7 +137,7 @@ public class ModCompilation {
 	this.description = description;
     }
 
-    public void setId(Long id) {
+    protected void setId(Long id) {
 	this.id = id;
     }
 
@@ -153,7 +153,7 @@ public class ModCompilation {
 	this.name = name;
     }
 
-    public void setVer(Integer ver) {
+    protected void setVer(Integer ver) {
 	this.ver = ver;
     }
 

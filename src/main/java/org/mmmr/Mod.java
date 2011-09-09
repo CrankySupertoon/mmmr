@@ -55,6 +55,8 @@ public class Mod {
     @Column(nullable = false)
     private String version;
 
+    private String resourceCheck;
+
     public Mod() {
 	super();
     }
@@ -75,6 +77,14 @@ public class Mod {
 	this.name = name;
 	this.version = version;
 	this.url = url;
+    }
+
+    public Mod(String name, String version, String url, String resourceCheck) {
+	this();
+	this.name = name;
+	this.version = version;
+	this.url = url;
+	this.resourceCheck = resourceCheck;
     }
 
     public void addDepencency(Dependency dependency) {
@@ -116,6 +126,15 @@ public class Mod {
 	return true;
     }
 
+    @XmlElement(name = "resourcecheck")
+    public String getResourceCheck() {
+	return resourceCheck;
+    }
+
+    public void setResourceCheck(String resourceCheck) {
+	this.resourceCheck = resourceCheck;
+    }
+
     @XmlAttribute
     public String getArchive() {
 	return this.archive;
@@ -137,7 +156,7 @@ public class Mod {
 	return this.id;
     }
 
-    @XmlElement(name = "installationdate")
+    @XmlTransient
     public Date getInstallationDate() {
 	return this.installationDate;
     }
@@ -190,7 +209,7 @@ public class Mod {
 	this.description = description;
     }
 
-    public void setId(Long id) {
+    protected void setId(Long id) {
 	this.id = id;
     }
 
@@ -210,12 +229,16 @@ public class Mod {
 	this.url = url;
     }
 
-    public void setVer(Integer ver) {
+    protected void setVer(Integer ver) {
 	this.ver = ver;
     }
 
     public void setVersion(String version) {
 	this.version = version;
+    }
+
+    public boolean isInstalled() {
+	return getInstallationDate() != null;
     }
 
     @Override
