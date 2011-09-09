@@ -320,6 +320,7 @@ public class MMMR implements StartMe {
 			    }
 			}
 		    }
+		    db.save(jb);
 		}
 	    }
 
