@@ -1,19 +1,59 @@
 package org.mmmr.services;
 
-import java.io.File;
+import static org.mmmr.services.IOMethods.downloadURL;
+import static org.mmmr.services.IOMethods.unzip;
 
+import java.awt.Font;
+import java.io.File;
+import java.net.URL;
+
+import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 public class MMMRStart {
     public static void main(String[] args) {
-        try {
-            File libs = new File("data/libs");
-            libs.mkdirs();
-            DynamicLoading.init(libs);
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            StartMe.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance()).start(args);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+	try {
+	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
+	    prepareFont(cfg);
+	    StatusFrame statusFrame = new StatusFrame(cfg);
+	    statusFrame.setUndecorated(true);
+	    statusFrame.pack();
+	    statusFrame.setSize(800, statusFrame.getHeight());
+	    statusFrame.setLocationRelativeTo(null);
+	    statusFrame.setVisible(true);
+	    File libs = new File("data/libs");
+	    libs.mkdirs();
+	    DynamicLoading.init(statusFrame.libstatus, cfg);
+	    StartMe cast = StartMe.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance());
+	    cast.setCfg(cfg);
+	    cast.setStatusFrame(statusFrame);
+	    cast.start(args);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * @see http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-2.33.tar.bz2
+     */
+    private static void prepareFont(Config cfg) {
+	Font font = null;
+	try {
+	    File fontfont = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSerif.ttf");
+	    if (!fontfont.exists()) {
+		URL dejavu = new URL("http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip");
+		File file = new File(cfg.getTmp(), "dejavu-fonts-ttf-2.33.zip");
+		downloadURL(dejavu, file);
+		unzip(file, cfg.getCfg());
+	    }
+	    font = Font.createFont(Font.TRUETYPE_FONT, fontfont);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    font = new JLabel().getFont();
+	}
+	cfg.setFont(font);
+	Font font18 = font.deriveFont(18f).deriveFont(Font.BOLD);
+	cfg.setFont18(font18);
     }
 }

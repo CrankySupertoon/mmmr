@@ -11,32 +11,32 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement(name = "installedmod")
 @Entity
 public class InstalledMod {
-    @Version
-    private Integer ver;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    private Integer ver;
+
     public InstalledMod() {
-        super();
+	super();
     }
 
     @XmlTransient
     public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+	return this.id;
     }
 
     @XmlTransient
     public Integer getVer() {
-        return this.ver;
+	return this.ver;
+    }
+
+    public void setId(Long id) {
+	this.id = id;
     }
 
     public void setVer(Integer ver) {
-        this.ver = ver;
+	this.ver = ver;
     }
 }

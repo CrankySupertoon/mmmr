@@ -25,14 +25,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
 public class ModCompilation {
-    @Version
-    private Integer ver;
+    private String description;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String description;
+    @ManyToOne(cascade = { CascadeType.ALL })
+    private MC mc;
 
     @OneToMany(cascade = { CascadeType.ALL })
     private List<Mod> mods;
@@ -40,127 +40,126 @@ public class ModCompilation {
     @Column(nullable = false)
     private String name;
 
+    @Version
+    private Integer ver;
+
     @Column(nullable = false)
     private String version;
 
-    @ManyToOne(cascade = { CascadeType.ALL })
-    private MC mc;
+    public ModCompilation() {
+	super();
 
-    public ModCompilation(String name, String version) {
-        this();
-        this.name = name;
-        this.version = version;
     }
 
-    public ModCompilation() {
-        super();
-
+    public ModCompilation(String name, String version) {
+	this();
+	this.name = name;
+	this.version = version;
     }
 
     public void addMod(Mod mod) {
-        if (getMods() == null)
-            mods = new ArrayList<Mod>();
-        getMods().add(mod);
+	if (getMods() == null)
+	    mods = new ArrayList<Mod>();
+	getMods().add(mod);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	ModCompilation other = (ModCompilation) obj;
+	if (getName() == null) {
+	    if (other.getName() != null)
+		return false;
+	} else if (!getName().equals(other.getName()))
+	    return false;
+	if (getVersion() == null) {
+	    if (other.getVersion() != null)
+		return false;
+	} else if (!getVersion().equals(other.getVersion()))
+	    return false;
+	return true;
+    }
+
+    @XmlAttribute
+    public String getDescription() {
+	return this.description;
+    }
+
+    @XmlTransient
+    public Long getId() {
+	return this.id;
+    }
+
+    @XmlElement
+    public MC getMc() {
+	return mc;
     }
 
     @XmlElementWrapper
     @XmlElementRef
     public List<Mod> getMods() {
-        return mods;
-    }
-
-    public void setMods(List<Mod> mods) {
-        this.mods = mods;
+	return mods;
     }
 
     @XmlAttribute(required = true)
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @XmlAttribute(required = true)
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    @XmlElement
-    public MC getMc() {
-        return mc;
-    }
-
-    public void setMc(MC mc) {
-        this.mc = mc;
-    }
-
-    @Override
-    public String toString() {
-        return "ModCompilation [mods=" + getMods() + ", name=" + getName() + ", description=" + getDescription() + ", version=" + getVersion()
-                + ", mc=" + getMc() + "]";
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getVersion() == null) ? 0 : getVersion().hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ModCompilation other = (ModCompilation) obj;
-        if (getName() == null) {
-            if (other.getName() != null)
-                return false;
-        } else if (!getName().equals(other.getName()))
-            return false;
-        if (getVersion() == null) {
-            if (other.getVersion() != null)
-                return false;
-        } else if (!getVersion().equals(other.getVersion()))
-            return false;
-        return true;
-    }
-
-    @XmlTransient
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+	return name;
     }
 
     @XmlTransient
     public Integer getVer() {
-        return this.ver;
+	return this.ver;
     }
 
-    public void setVer(Integer ver) {
-        this.ver = ver;
+    @XmlAttribute(required = true)
+    public String getVersion() {
+	return version;
     }
 
-    @XmlAttribute
-    public String getDescription() {
-        return this.description;
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+	result = prime * result + ((getVersion() == null) ? 0 : getVersion().hashCode());
+	return result;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+	this.description = description;
+    }
+
+    public void setId(Long id) {
+	this.id = id;
+    }
+
+    public void setMc(MC mc) {
+	this.mc = mc;
+    }
+
+    public void setMods(List<Mod> mods) {
+	this.mods = mods;
+    }
+
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public void setVer(Integer ver) {
+	this.ver = ver;
+    }
+
+    public void setVersion(String version) {
+	this.version = version;
+    }
+
+    @Override
+    public String toString() {
+	return "ModCompilation [mods=" + getMods() + ", name=" + getName() + ", description=" + getDescription() + ", version=" + getVersion() + ", mc=" + getMc() + "]";
     }
 }

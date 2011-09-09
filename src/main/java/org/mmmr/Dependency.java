@@ -12,28 +12,28 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Dependency {
-    @Version
-    private Integer ver;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @XmlTransient
-    public Integer getVer() {
-        return this.ver;
-    }
-
-    public void setVer(Integer ver) {
-        this.ver = ver;
-    }
+    @Version
+    private Integer ver;
 
     @XmlTransient
     public Long getId() {
-        return this.id;
+	return this.id;
+    }
+
+    @XmlTransient
+    public Integer getVer() {
+	return this.ver;
     }
 
     public void setId(Long id) {
-        this.id = id;
+	this.id = id;
+    }
+
+    public void setVer(Integer ver) {
+	this.ver = ver;
     }
 }

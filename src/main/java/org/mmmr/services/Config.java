@@ -1,9 +1,9 @@
 package org.mmmr.services;
 
-import static org.mmmr.services.IOMethods.is64Bit;
 import static org.mmmr.services.IOMethods.newDir;
 import static org.mmmr.services.IOMethods.parseParams;
 
+import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,146 +11,172 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Config {
-    private boolean bit64;
+    private File backup;
 
-    private Map<String, String> parameterValues;
+    private File backupOriginalJar;
+
+    private File cfg;
+
+    private File data;
+
+    private File dbdir;
+
+    private Font font;
+
+    private Font font18;
+
+    private File libs;
 
     private File mcBaseFolder;
 
     private File mcBin;
 
-    private File mcMods;
-
-    private File mcResources;
-
     private File mcJar;
 
     private File mcJarBackup;
 
-    private File data;
+    private File mcMods;
 
-    private File backup;
-
-    private File mods;
-
-    private File tmp;
-
-    private File dbdir;
-
-    private Properties properties;
-
-    private File cfg;
-
-    private File thisFolder;
-
-    private File backupOriginalJar;
+    private File mcResources;
 
     private File minecraftJogboxBackup;
 
+    private File mods;
+
+    private Map<String, String> parameterValues;
+
+    private Properties properties;
+
+    private File thisFolder;
+
+    private File tmp;
+
     public Config(String[] args, File thisFolder) throws IOException {
-        this.thisFolder = thisFolder;
+	this.thisFolder = thisFolder;
 
-        bit64 = is64Bit();
+	parameterValues = parseParams(args);
 
-        parameterValues = parseParams(args);
+	// not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
+	// we use a locally installed minecraft so you can mod at your heart's content
+	mcBaseFolder = new File(thisFolder, ".minecraft");
 
-        mcBaseFolder = new File(thisFolder, ".minecraft");
-        // mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
+	mcBin = new File(mcBaseFolder, "bin");
+	mcMods = new File(mcBaseFolder, "mods");
+	mcResources = new File(mcBaseFolder, "resources");
+	mcJar = new File(mcBin, "minecraft.jar");
+	mcJarBackup = new File(mcBin, "minecraft.jar.backup");
 
-        mcBin = new File(mcBaseFolder, "bin");
-        mcMods = new File(mcBaseFolder, "mods");
-        mcResources = new File(mcBaseFolder, "resources");
-        mcJar = new File(mcBin, "minecraft.jar");
-        mcJarBackup = new File(mcBin, "minecraft.jar.backup");
+	data = newDir(thisFolder, "data");
 
-        cfg = newDir(data, "cfg");
-        properties = new Properties();
-        properties.store(new FileOutputStream(new File(cfg, "config.properties")), null);
+	cfg = newDir(data, "cfg");
+	properties = new Properties();
+	properties.store(new FileOutputStream(new File(cfg, "config.properties")), null);
 
-        data = newDir(thisFolder, "data");
-        backup = newDir(data, "backup");
-        mods = newDir(data, "mods");
-        tmp = newDir(data, "tmp");
-        dbdir = new File(data, "db");
-        backupOriginalJar = newDir(backup, "minecraft.jar");
-        minecraftJogboxBackup = newDir(backup, "jogbox");
-    }
-
-    public File getMinecraftJogboxBackup() {
-        return minecraftJogboxBackup;
-    }
-
-    public File getBackupOriginalJar() {
-        return backupOriginalJar;
-    }
-
-    public boolean isBit64() {
-        return this.bit64;
-    }
-
-    public Map<String, String> getParameterValues() {
-        return this.parameterValues;
-    }
-
-    public File getMcBaseFolder() {
-        return this.mcBaseFolder;
-    }
-
-    public File getMcBin() {
-        return this.mcBin;
-    }
-
-    public File getMcMods() {
-        return this.mcMods;
-    }
-
-    public File getMcResources() {
-        return this.mcResources;
-    }
-
-    public File getMcJar() {
-        return this.mcJar;
-    }
-
-    public File getMcJarBackup() {
-        return this.mcJarBackup;
-    }
-
-    public File getData() {
-        return this.data;
+	backup = newDir(data, "backup");
+	mods = newDir(data, "mods");
+	libs = newDir(data, "libs");
+	tmp = newDir(data, "tmp");
+	dbdir = new File(data, "db");
+	backupOriginalJar = newDir(backup, "minecraft.jar");
+	minecraftJogboxBackup = newDir(backup, "jogbox");
     }
 
     public File getBackup() {
-        return this.backup;
+	return this.backup;
     }
 
-    public File getMods() {
-        return this.mods;
+    public File getBackupOriginalJar() {
+	return backupOriginalJar;
     }
 
-    public File getTmp() {
-        return this.tmp;
+    public File getCfg() {
+	return cfg;
+    }
+
+    public File getData() {
+	return this.data;
     }
 
     public File getDbdir() {
-        return this.dbdir;
+	return this.dbdir;
+    }
+
+    public Font getFont() {
+	return font;
+    }
+
+    public Font getFont18() {
+	return font18;
+    }
+
+    public File getLibs() {
+	return libs;
+    }
+
+    public File getMcBaseFolder() {
+	return this.mcBaseFolder;
+    }
+
+    public File getMcBin() {
+	return this.mcBin;
+    }
+
+    public File getMcJar() {
+	return this.mcJar;
+    }
+
+    public File getMcJarBackup() {
+	return this.mcJarBackup;
+    }
+
+    public File getMcMods() {
+	return this.mcMods;
+    }
+
+    public File getMcResources() {
+	return this.mcResources;
+    }
+
+    public File getMinecraftJogboxBackup() {
+	return minecraftJogboxBackup;
+    }
+
+    public File getMods() {
+	return this.mods;
+    }
+
+    public Map<String, String> getParameterValues() {
+	return this.parameterValues;
     }
 
     public String getProperty(String key, String defaultValue) throws IOException {
-        String value = properties.getProperty(key);
-        if (value == null) {
-            value = setProperty(key, defaultValue);
-        }
-        return value;
-    }
-
-    public String setProperty(String key, String value) throws IOException {
-        properties.put(key, value);
-        properties.store(new FileOutputStream(new File(cfg, "config.properties")), null);
-        return value;
+	String value = properties.getProperty(key);
+	if (value == null) {
+	    value = setProperty(key, defaultValue);
+	}
+	return value;
     }
 
     public File getThisFolder() {
-        return thisFolder;
+	return thisFolder;
     }
+
+    public File getTmp() {
+	return this.tmp;
+    }
+
+    public void setFont(Font font) {
+	this.font = font;
+    }
+
+    public void setFont18(Font font18) {
+	this.font18 = font18;
+    }
+
+    public String setProperty(String key, String value) throws IOException {
+	properties.put(key, value);
+	properties.store(new FileOutputStream(new File(cfg, "config.properties")), null);
+	return value;
+    }
+
 }
