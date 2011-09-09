@@ -6,6 +6,9 @@ import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * @author Jurgen
+ */
 @XmlRootElement(name = "mod")
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })

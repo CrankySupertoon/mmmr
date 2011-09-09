@@ -11,6 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/**
+ * @author Jurgen
+ */
 public class StatusFrame extends JFrame {
     public class StatusPanel extends JPanel {
 	private static final long serialVersionUID = 6282395518853882621L;

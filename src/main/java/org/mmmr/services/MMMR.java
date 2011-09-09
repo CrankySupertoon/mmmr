@@ -27,6 +27,9 @@ import org.mmmr.Mod;
 import org.mmmr.ModCompilation;
 import org.mmmr.Resource;
 
+/**
+ * @author Jurgen
+ */
 public class MMMR implements StartMe {
     private Config cfg;
 

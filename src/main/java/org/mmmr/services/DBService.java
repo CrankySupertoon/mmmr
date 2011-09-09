@@ -19,6 +19,9 @@ import org.mmmr.ModCompilation;
 import org.mmmr.ModDependency;
 import org.mmmr.Resource;
 
+/**
+ * @author Jurgen
+ */
 @SuppressWarnings("deprecation")
 public class DBService {
     private static DBService instance = null;

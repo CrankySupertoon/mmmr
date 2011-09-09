@@ -8,6 +8,9 @@ import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ * @author Jurgen
+ */
 @XmlRootElement(name = "installedmod")
 @Entity
 public class InstalledMod {

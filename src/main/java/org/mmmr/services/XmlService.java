@@ -18,6 +18,11 @@ import javax.xml.validation.SchemaFactory;
 import org.mmmr.Mod;
 import org.xml.sax.SAXException;
 
+/**
+ * uses JAXB
+ * 
+ * @author Jurgen
+ */
 public class XmlService {
     private Marshaller marshaller;
 

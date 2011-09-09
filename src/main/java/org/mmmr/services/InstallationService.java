@@ -15,6 +15,9 @@ import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.Resource;
 
+/**
+ * @author Jurgen
+ */
 public class InstallationService {
     private List<MCFile> copy(List<MCFile> mcfs, Pattern include, Pattern exclude, int flen, File from, int tlen, File to) throws IOException {
 	if (from.isFile()) {

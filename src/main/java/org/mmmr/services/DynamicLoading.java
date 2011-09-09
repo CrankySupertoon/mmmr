@@ -14,6 +14,9 @@ import java.net.URL;
 
 import org.mmmr.services.StatusFrame.StatusPanel;
 
+/**
+ * @author Jurgen
+ */
 public class DynamicLoading {
     private static final String MAVEN_REPO = "http://repo1.maven.org/maven2/";
 

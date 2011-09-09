@@ -29,6 +29,9 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.JFileChooser;
 
+/**
+ * @author Jurgen
+ */
 public class IOMethods {
     private static long _(File source, File target) throws IOException {
 	OutputStream out = target == null ? null : new FileOutputStream(target);

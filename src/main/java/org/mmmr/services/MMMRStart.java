@@ -10,6 +10,9 @@ import java.net.URL;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 
+/**
+ * @author Jurgen
+ */
 public class MMMRStart {
     public static void main(String[] args) {
 	try {

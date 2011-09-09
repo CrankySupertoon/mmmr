@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * @author Jurgen
+ */
 public class Config {
     private File backup;
 

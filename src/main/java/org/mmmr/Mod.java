@@ -21,6 +21,9 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ * @author Jurgen
+ */
 @XmlRootElement(name = "mod")
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })

@@ -9,6 +9,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ * @author Jurgen
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Dependency {

@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
+/**
+ * @author Jurgen
+ */
 @Entity
 public class MCFile {
     private long crc32;

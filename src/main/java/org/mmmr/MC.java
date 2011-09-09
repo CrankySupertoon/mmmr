@@ -12,6 +12,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ * @author Jurgen
+ */
 @XmlRootElement(name = "mc")
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
