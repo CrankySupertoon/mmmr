@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -59,22 +60,23 @@ public class StatusFrame extends JFrame {
 
     public StatusPanel dbstatus;
 
+    private JButton goOn = null;
+
     public StatusPanel libstatus;
 
     public StatusPanel mcstatus;
+
+    private JButton quit = null;
 
     public StatusPanel xmlstatus;
 
     public StatusPanel ybstatus;
 
-    private JButton goOn = null;
-
-    private JButton quit = null;
-
-    public StatusFrame(Config cfg) {
+    public StatusFrame(final Config cfg) {
 	this.cfg = cfg;
 	setTitle("Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b");
 	JPanel contentPane = new JPanel();
+	contentPane.setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
 	getContentPane().add(contentPane);
 	JLabel label = new JLabel(getTitle());
 	label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -97,10 +99,10 @@ public class StatusFrame extends JFrame {
 	goOn.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
+		new ManagerWindow(cfg).setVisible(true);
 		dispose();
-		// TODO new frame
 	    }
-	});	
+	});
 	goOn.setEnabled(false);
 	quit = new JButton("Get me out of here :(");
 	quit.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
@@ -109,8 +111,7 @@ public class StatusFrame extends JFrame {
 	    public void actionPerformed(ActionEvent e) {
 		dispose();
 	    }
-	});	
-	quit.setEnabled(false);
+	});
 
 	goOn.setMinimumSize(new Dimension(300, 30));
 	quit.setMinimumSize(new Dimension(300, 30));
@@ -118,21 +119,14 @@ public class StatusFrame extends JFrame {
 	quit.setPreferredSize(new Dimension(300, 30));
 	goOn.setSize(new Dimension(300, 30));
 	quit.setSize(new Dimension(300, 30));
-	
-	JPanel goOnWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	goOnWrapper.add(goOn, null);
-	goOnWrapper.add(quit, null);
-	goOnWrapper.add(new JLabel("     "), null);
-	contentPane.add(goOnWrapper);
+
+	JPanel btns = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	btns.add(goOn, null);
+	btns.add(quit, null);
+	contentPane.add(btns);
 
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	contentPane.setDoubleBuffered(true);
-    }
-
-    public void setReadyToGoOn() {
-	quit.setEnabled(true);
-	goOn.setEnabled(true);
-	goOn.grabFocus();
     }
 
     public StatusPanel getYbstatus() {
@@ -149,5 +143,11 @@ public class StatusFrame extends JFrame {
 
     public void setMcStatus(String text, Boolean success) {
 	mcstatus.setStatus(text, success);
+    }
+
+    public void setReadyToGoOn() {
+	quit.setEnabled(true);
+	goOn.setEnabled(true);
+	goOn.grabFocus();
     }
 }

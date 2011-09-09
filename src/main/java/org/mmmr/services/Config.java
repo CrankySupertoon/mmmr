@@ -22,6 +22,8 @@ public class Config {
 
     private File data;
 
+    private DBService db;
+
     private File dbdir;
 
     private Font font;
@@ -53,6 +55,8 @@ public class Config {
     private File thisFolder;
 
     private File tmp;
+
+    private XmlService xml;
 
     public Config(String[] args, File thisFolder) throws IOException {
 	this.thisFolder = thisFolder;
@@ -98,6 +102,10 @@ public class Config {
 
     public File getData() {
 	return this.data;
+    }
+
+    public DBService getDb() {
+	return db;
     }
 
     public File getDbdir() {
@@ -168,6 +176,14 @@ public class Config {
 	return this.tmp;
     }
 
+    public XmlService getXml() {
+	return xml;
+    }
+
+    public void setDb(DBService db) {
+	this.db = db;
+    }
+
     public void setFont(Font font) {
 	this.font = font;
     }
@@ -182,4 +198,7 @@ public class Config {
 	return value;
     }
 
+    public void setXml(XmlService xml) {
+	this.xml = xml;
+    }
 }

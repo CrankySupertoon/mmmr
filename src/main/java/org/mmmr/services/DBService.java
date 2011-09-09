@@ -59,6 +59,14 @@ public class DBService {
 	session = sessionFactory.openSession();
     }
 
+    public <T> T get(T object) {
+	return getOrCreate(object, false);
+    }
+
+    public <T> T getOrCreate(T object) {
+	return getOrCreate(object, true);
+    }
+
     @SuppressWarnings("unchecked")
     private <T> T getOrCreate(T object, boolean create) {
 	Example example = Example.create(object).excludeZeroes() // exclude zero valued properties
@@ -71,14 +79,6 @@ public class DBService {
 	if (results.size() > 1)
 	    throw new RuntimeException("more than 1 result");
 	return results.get(0);
-    }
-
-    public <T> T getOrCreate(T object) {
-	return getOrCreate(object, true);
-    }
-
-    public <T> T get(T object) {
-	return getOrCreate(object, false);
     }
 
     public <T> T save(T object) {

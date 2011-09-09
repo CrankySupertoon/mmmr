@@ -11,14 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-// fd.addComponentListener(new ComponentAdapter() {
-// @Override
-// public void componentResized(ComponentEvent evt) {
-// Shape shape = null;
-// shape = new Ellipse2D.Float(0, 0, fd.getWidth(), fd.getHeight());
-// AWTUtilities.setWindowShape(fd, shape);
-// }
-// });
 
 //isShapingSupported = AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilitiesWrapper.PERPIXEL_TRANSPARENT);
 //isOpacityControlSupported = AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilitiesWrapper.TRANSLUCENT);
@@ -31,9 +23,13 @@ import java.util.logging.Logger;
 public class AWTUtilitiesWrapper {
 
     private static Class<?> awtUtilitiesClass;
-    private static Class<?> translucencyClass;
     private static Method mIsTranslucencySupported, mIsTranslucencyCapable, mSetWindowShape, mSetWindowOpacity, mSetWindowOpaque;
     public static Object PERPIXEL_TRANSPARENT, TRANSLUCENT, PERPIXEL_TRANSLUCENT;
+    private static Class<?> translucencyClass;
+
+    static {
+	init();
+    }
 
     static void init() {
 	try {
@@ -61,10 +57,6 @@ public class AWTUtilitiesWrapper {
 	}
     }
 
-    static {
-	init();
-    }
-
     private static boolean isSupported(Method method, Object kind) {
 	if (awtUtilitiesClass == null || method == null) {
 	    return false;
@@ -84,15 +76,15 @@ public class AWTUtilitiesWrapper {
 	return false;
     }
 
+    public static boolean isTranslucencyCapable(GraphicsConfiguration gc) {
+	return isSupported(mIsTranslucencyCapable, gc);
+    }
+
     public static boolean isTranslucencySupported(Object kind) {
 	if (translucencyClass == null) {
 	    return false;
 	}
 	return isSupported(mIsTranslucencySupported, kind);
-    }
-
-    public static boolean isTranslucencyCapable(GraphicsConfiguration gc) {
-	return isSupported(mIsTranslucencyCapable, gc);
     }
 
     private static void set(Method method, Window window, Object value) {
@@ -110,15 +102,15 @@ public class AWTUtilitiesWrapper {
 	}
     }
 
-    public static void setWindowShape(Window window, Shape shape) {
-	set(mSetWindowShape, window, shape);
-    }
-
     public static void setWindowOpacity(Window window, float opacity) {
 	set(mSetWindowOpacity, window, Float.valueOf(opacity));
     }
 
     public static void setWindowOpaque(Window window, boolean opaque) {
 	set(mSetWindowOpaque, window, Boolean.valueOf(opaque));
+    }
+
+    public static void setWindowShape(Window window, Shape shape) {
+	set(mSetWindowShape, window, shape);
     }
 }

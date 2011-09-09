@@ -2,18 +2,12 @@ package org.mmmr.services;
 
 import static org.mmmr.services.IOMethods.downloadURL;
 import static org.mmmr.services.IOMethods.unzip;
+
 import java.awt.Font;
-import java.awt.Shape;
-import java.awt.Window;
-import java.awt.geom.RoundRectangle2D;
 import java.io.File;
-import java.lang.reflect.Method;
 import java.net.URL;
 
 import javax.swing.JLabel;
-import javax.swing.UIManager;
-
-import com.sun.awt.AWTUtilities;
 
 /**
  * @author Jurgen
@@ -21,33 +15,15 @@ import com.sun.awt.AWTUtilities;
 public class MMMRStart {
     public static void main(String[] args) {
 	try {
-	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    FancySwing.lookAndFeel();
 	    Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
 	    prepareFont(cfg);
 	    StatusFrame statusFrame = new StatusFrame(cfg);
 	    statusFrame.setUndecorated(true);
-
-	    if (AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
-		try {
-		    // neat trick: http://java.sun.com/developer/technicalArticles/GUI/translucent_shaped_windows/
-		    AWTUtilitiesWrapper.setWindowOpacity(statusFrame, 0.8f);
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-	    }
-
+	    FancySwing.translucent(statusFrame);
 	    statusFrame.pack();
-	    statusFrame.setSize(800, statusFrame.getHeight() + 40);
-
-	    if (AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilitiesWrapper.PERPIXEL_TRANSPARENT)) {
-		try {
-		    Shape shape = new RoundRectangle2D.Float(0, 0, statusFrame.getWidth(), statusFrame.getHeight(), 40, 40);
-		    AWTUtilitiesWrapper.setWindowShape(statusFrame, shape);
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-	    }
-
+	    statusFrame.setSize(800, statusFrame.getHeight());
+	    FancySwing.rounded(statusFrame);
 	    statusFrame.setLocationRelativeTo(null);
 	    statusFrame.setResizable(false);
 	    statusFrame.setVisible(true);

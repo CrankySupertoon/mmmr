@@ -44,6 +44,8 @@ public class Mod {
     @Column(nullable = false)
     private String name;
 
+    private String resourceCheck;
+
     @OneToMany(cascade = { CascadeType.ALL })
     private List<Resource> resources;
 
@@ -54,8 +56,6 @@ public class Mod {
 
     @Column(nullable = false)
     private String version;
-
-    private String resourceCheck;
 
     public Mod() {
 	super();
@@ -126,15 +126,6 @@ public class Mod {
 	return true;
     }
 
-    @XmlElement(name = "resourcecheck")
-    public String getResourceCheck() {
-	return resourceCheck;
-    }
-
-    public void setResourceCheck(String resourceCheck) {
-	this.resourceCheck = resourceCheck;
-    }
-
     @XmlAttribute
     public String getArchive() {
 	return this.archive;
@@ -164,6 +155,11 @@ public class Mod {
     @XmlAttribute(required = true)
     public String getName() {
 	return this.name;
+    }
+
+    @XmlElement(name = "resourcecheck")
+    public String getResourceCheck() {
+	return resourceCheck;
     }
 
     @XmlElementWrapper
@@ -197,6 +193,10 @@ public class Mod {
 	return result;
     }
 
+    public boolean isInstalled() {
+	return getInstallationDate() != null;
+    }
+
     public void setArchive(String archive) {
 	this.archive = archive;
     }
@@ -221,6 +221,10 @@ public class Mod {
 	this.name = name;
     }
 
+    public void setResourceCheck(String resourceCheck) {
+	this.resourceCheck = resourceCheck;
+    }
+
     public void setResources(List<Resource> resources) {
 	this.resources = resources;
     }
@@ -235,10 +239,6 @@ public class Mod {
 
     public void setVersion(String version) {
 	this.version = version;
-    }
-
-    public boolean isInstalled() {
-	return getInstallationDate() != null;
     }
 
     @Override

@@ -33,13 +33,9 @@ import org.mmmr.Resource;
 public class MMMR implements StartMe {
     private Config cfg;
 
-    private DBService db;
-
     private MC mc;
 
     private StatusFrame statusFrame;
-
-    private XmlService x;
 
     private void addContents(MC mc, String prefix, int pos, File fd) throws IOException {
 	if (fd.isFile()) {
@@ -48,6 +44,40 @@ public class MMMR implements StartMe {
 	for (File child : list(fd)) {
 	    addContents(mc, prefix, pos, child);
 	}
+    }
+
+    /**
+     * returns true if needs reinstalling
+     */
+    private boolean checkMCInstall() {
+	if (list(cfg.getMcBaseFolder()).size() == 0)
+	    return true;
+	if (!new File(cfg.getThisFolder(), "Minecraft.exe").exists())
+	    return true;
+	if (!new File(cfg.getThisFolder(), "minecraft.jar").exists())
+	    return true;
+	if (!new File(cfg.getMcBaseFolder(), "bin/minecraft.jar").exists())
+	    return true;
+	if (!new File(cfg.getMcBaseFolder(), "bin/jinput.jar").exists())
+	    return true;
+	if (!new File(cfg.getMcBaseFolder(), "bin/lwjgl.jar").exists())
+	    return true;
+	if (!new File(cfg.getMcBaseFolder(), "bin/lwjgl_util.jar").exists())
+	    return true;
+
+	return false;
+    }
+
+    private String getMCCommandLine() {
+	int xmx = (int) (1024 * 1.5);
+	int xms = xmx;
+	String commandline = "java.exe -Xms"
+		+ xms
+		+ "M -Xmx"
+		+ xmx
+		+ "m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc -jar "
+		+ "minecraft.jar";
+	return commandline;
     }
 
     private ModCompilation initJogBox(File data) throws FileNotFoundException, JAXBException {
@@ -158,10 +188,12 @@ public class MMMR implements StartMe {
 
     @Override
     public void start(String[] args) throws Exception {
+	DBService db;
 
 	try {
 	    statusFrame.dbstatus.setStatus("Database and Hibernate: starting", null);
 	    db = DBService.getInstance(cfg);
+	    cfg.setDb(db);
 	    mc = db.getOrCreate(new MC("1.7.3"));
 	    statusFrame.dbstatus.setStatus("Database and Hibernate: ready", true);
 	} catch (Exception e) {
@@ -169,10 +201,13 @@ public class MMMR implements StartMe {
 	    throw e;
 	}
 
+	XmlService xml;
+
 	try {
 	    statusFrame.xmlstatus.setStatus("XML service: starting", null);
-	    x = new XmlService(cfg.getData());
-	    testXML(x, cfg.getMods());
+	    xml = new XmlService(cfg.getData());
+	    cfg.setXml(xml);
+	    testXML(xml, cfg.getMods());
 	    statusFrame.xmlstatus.setStatus("XML service: ready", true);
 	} catch (Exception e) {
 	    statusFrame.xmlstatus.setStatus("XML service: starting failed", false);
@@ -273,7 +308,7 @@ public class MMMR implements StartMe {
 			    db.save(jb);
 
 			    File file = new File(cfg.getMods(), "YogBox_1.7.3_v1.1.zip.xml");
-			    x.save(new FileOutputStream(file), jb);
+			    xml.save(new FileOutputStream(file), jb);
 
 			    statusFrame.ybstatus.setStatus("YogBox: ready", ybcheck = true);
 			    cfg.setProperty("jogbox.ignore", "false");
@@ -325,7 +360,7 @@ public class MMMR implements StartMe {
 		    }
 		}
 		statusFrame.setReadyToGoOn();
-	    }	    
+	    }
 
 	    allSuccess = mccheck && ybcheck;
 
@@ -336,28 +371,6 @@ public class MMMR implements StartMe {
 		}
 	    }
 	}
-    }
-
-    /**
-     * returns true if needs reinstalling
-     */
-    private boolean checkMCInstall() {
-	if (list(cfg.getMcBaseFolder()).size() == 0)
-	    return true;
-	if (!new File(cfg.getThisFolder(), "Minecraft.exe").exists())
-	    return true;
-	if (!new File(cfg.getThisFolder(), "minecraft.jar").exists())
-	    return true;
-	if (!new File(cfg.getMcBaseFolder(), "bin/minecraft.jar").exists())
-	    return true;
-	if (!new File(cfg.getMcBaseFolder(), "bin/jinput.jar").exists())
-	    return true;
-	if (!new File(cfg.getMcBaseFolder(), "bin/lwjgl.jar").exists())
-	    return true;
-	if (!new File(cfg.getMcBaseFolder(), "bin/lwjgl_util.jar").exists())
-	    return true;
-
-	return false;
     }
 
     private void startMC(boolean plain) throws IOException {
@@ -378,25 +391,6 @@ public class MMMR implements StartMe {
 	Process javap = pb.start();
     }
 
-    private void writeMCBat() throws IOException {
-	String commandline = getMCCommandLine();
-	FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft.bat"));
-	out.write(("SET APPDATA=" + cfg.getThisFolder().getAbsolutePath() + "\r\n" + commandline + "\r\npause").getBytes());
-	out.close();
-    }
-
-    private String getMCCommandLine() {
-	int xmx = (int) (1024 * 1.5);
-	int xms = xmx;
-	String commandline = "java.exe -Xms"
-		+ xms
-		+ "M -Xmx"
-		+ xmx
-		+ "m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc -jar "
-		+ "minecraft.jar";
-	return commandline;
-    }
-
     private void testXML(XmlService x, File dir) throws FileNotFoundException, JAXBException {
 	Mod mod = new Mod();
 	mod.setArchive("[FileCopter]OptiFine_1.7.3_HD_MT_G2.zip");
@@ -406,6 +400,13 @@ public class MMMR implements StartMe {
 	mod.addDepencency(mc);
 	mod.addResource(new Resource("./", "bin/minecraft.jar"));
 	x.save(new FileOutputStream(new File(dir, "[FileCopter]OptiFine_1.7.3_HD_MT_G2.zip.xml")), mod);
+    }
+
+    private void writeMCBat() throws IOException {
+	String commandline = getMCCommandLine();
+	FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft.bat"));
+	out.write(("SET APPDATA=" + cfg.getThisFolder().getAbsolutePath() + "\r\n" + commandline + "\r\npause").getBytes());
+	out.close();
     }
 }
 //
