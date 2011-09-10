@@ -105,6 +105,50 @@ public class ManagerWindow extends JFrame {
 	    });
 	    cp.add(comp);
 	}
+	{
+	    JButton comp = new JButton("Change startup configuration (performance related)");
+	    comp.setFont(cfg.getFont18());
+	    comp.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    // TODO
+		}
+	    });
+	    cp.add(comp);
+	}
+	{
+	    JButton comp = new JButton("Install mods");
+	    comp.setFont(cfg.getFont18());
+	    comp.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    // TODO
+		}
+	    });
+	    cp.add(comp);
+	}
+	{
+	    JButton comp = new JButton("Uninstall mods");
+	    comp.setFont(cfg.getFont18());
+	    comp.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    // TODO
+		}
+	    });
+	    cp.add(comp);
+	}
+	{
+	    JButton comp = new JButton("Change sex");
+	    comp.setFont(cfg.getFont18());
+	    comp.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    // TODO
+		}
+	    });
+	    cp.add(comp);
+	}
     }
 
     private void performanceMod() {
@@ -121,11 +165,11 @@ public class ManagerWindow extends JFrame {
 	    for (File modxml : modxmls) {
 		Mod availablemod = cfg.getXml().load(new FileInputStream(modxml), Mod.class);
 		Mod installedmod = cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
-		if (installedmod != null)
+		if (installedmod != null && installedmod.isInstalled())
 		    installed = installedmod;
 		Mod mod = installedmod != null ? installedmod : availablemod;
 		ModOption modoption = new ModOption(mod);
-		if (installedmod != null)
+		if (installedmod != null && installedmod.isInstalled())
 		    installedOption = modoption;
 		options.add(modoption);
 	    }
