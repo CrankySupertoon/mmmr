@@ -49,7 +49,7 @@ public class DBService {
 	properties.setProperty("hibernate.connection.username", "mmmr");
 	properties.setProperty("hibernate.connection.password", "mmmr");
 	properties.setProperty("hibernate.hbm2ddl.auto", "update");
-	properties.setProperty("hibernate.show_sql", "true");
+	properties.setProperty("hibernate.show_sql", "false");
 	properties.setProperty("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
 	// embedded server can only be opened by 1 program
 	properties.setProperty("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver");

@@ -126,7 +126,7 @@ public class ManagerWindow extends JFrame {
 	    comp.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		    // TODO
+		    installMods();
 		}
 	    });
 	    cp.add(comp);
@@ -179,6 +179,38 @@ public class ManagerWindow extends JFrame {
 		}
 	    });
 	    cp.add(comp);
+	}
+    }
+
+    private void installMods() {
+	try {
+	    File[] modxmls = cfg.getMods().listFiles(new FilenameFilter() {
+		@Override
+		public boolean accept(File dir, String name) {
+		    if (!name.endsWith(".xml"))
+			return false;
+		    if (name.toLowerCase().contains("optifine"))
+			return false;
+		    if (name.toLowerCase().contains("yogbox"))
+			return false;
+		    return true;
+		}
+	    });
+	    List<ModOption> options = new ArrayList<ModOption>();
+	    for (File modxml : modxmls) {
+		Mod availablemod = cfg.getXml().load(new FileInputStream(modxml), Mod.class);
+		Mod installedmod = cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
+		if (installedmod != null && installedmod.isInstalled())
+		    continue;
+		options.add(new ModOption(availablemod));
+	    }
+	    ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(null, "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE, null,
+		    options.toArray(), options.get(0)));
+	    if (selected != null) {
+		iserv.installMod(cfg.getDb(), selected.getMod(), cfg.getMods(), cfg.getTmp(), cfg.getMcBaseFolder());
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
     }
 
