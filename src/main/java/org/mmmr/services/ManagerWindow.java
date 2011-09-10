@@ -6,18 +6,52 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.mmmr.Mod;
+
+/**
+ * @author Jurgen
+ */
 public class ManagerWindow extends JFrame {
+    private class ModAsOption {
+	private final Mod mod;
+
+	public ModAsOption(Mod mod) {
+	    super();
+	    this.mod = mod;
+	}
+
+	public Mod getMod() {
+	    return mod;
+	}
+
+	@Override
+	public String toString() {
+	    if (mod.isInstalled())
+		return mod.getName() + " v" + mod.getVersion() + " [installed]";
+	    else
+		return mod.getName() + " v" + mod.getVersion();
+	}
+    }
+
     private static final long serialVersionUID = -2874170242621940902L;
 
     private Config cfg;
+
+    private InstallationService iserv = new InstallationService();
 
     public ManagerWindow(Config cfg) {
 	this.cfg = cfg;
@@ -32,7 +66,7 @@ public class ManagerWindow extends JFrame {
 	label.setHorizontalAlignment(SwingConstants.CENTER);
 	label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
 	cp.add(label);
-	addActions(cfg, cp);
+	addActions(cp);
 	JButton quit = new JButton("Get me out of here :(");
 	quit.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
 	quit.addActionListener(new ActionListener() {
@@ -52,12 +86,55 @@ public class ManagerWindow extends JFrame {
 	setVisible(true);
     }
 
-    private void addActions(Config cfg, Container cp) {
-	// just testing
-	for (int j = 0; j < 8; j++) {
-	    JButton comp = new JButton("" + j);
+    private void addActions(Container cp) {
+	{
+	    JButton comp = new JButton("Install OptiFine (performance mod & HD texture enabler)");
 	    comp.setFont(cfg.getFont18());
+	    comp.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    performanceMod();
+		}
+	    });
 	    cp.add(comp);
+	}
+    }
+
+    private void performanceMod() {
+	try {
+	    File[] modxmls = cfg.getMods().listFiles(new FilenameFilter() {
+		@Override
+		public boolean accept(File dir, String name) {
+		    return name.toLowerCase().contains("optifine") && name.endsWith(".xml");
+		}
+	    });
+	    List<ModAsOption> options = new ArrayList<ModAsOption>();
+	    Mod installed = null;
+	    for (File modxml : modxmls) {
+		Mod availablemod = cfg.getXml().load(new FileInputStream(modxml), Mod.class);
+		Mod installedmod = cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
+		if (installedmod != null)
+		    installed = installedmod;
+		Mod mod = installedmod != null ? installedmod : availablemod;
+		options.add(new ModAsOption(mod));
+	    }
+	    Object[] selectionValues = options.toArray();
+	    Object selected = JOptionPane.showInputDialog(null, "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE, null, selectionValues, selectionValues[0]);
+	    if (selected != null) {
+		Mod mod = ModAsOption.class.cast(selected).getMod();
+		if (installed != null) {
+		    if (mod.equals(installed)) {
+			// already installed, nothing to do
+		    } else {
+			iserv.uninstallMod(cfg.getDb(), installed, cfg.getMods(), cfg.getTmp(), cfg.getMcBaseFolder());
+			iserv.installMod(cfg.getDb(), mod, cfg.getMods(), cfg.getTmp(), cfg.getMcBaseFolder());
+		    }
+		} else {
+		    iserv.installMod(cfg.getDb(), mod, cfg.getMods(), cfg.getTmp(), cfg.getMcBaseFolder());
+		}
+	    }
+	} catch (Exception e2) {
+	    e2.printStackTrace();
 	}
     }
 }

@@ -35,7 +35,7 @@ public class MMMR implements StartMe {
 
     private MC mc;
 
-    private StatusFrame statusFrame;
+    private StatusWindow statusWindow;
 
     private void addContents(MC mc, String prefix, int pos, File fd) throws IOException {
 	if (fd.isFile()) {
@@ -182,8 +182,8 @@ public class MMMR implements StartMe {
     }
 
     @Override
-    public void setStatusFrame(StatusFrame statusFrame) {
-	this.statusFrame = statusFrame;
+    public void setStatusWindow(StatusWindow statusWindow) {
+	this.statusWindow = statusWindow;
     }
 
     @Override
@@ -191,26 +191,26 @@ public class MMMR implements StartMe {
 	DBService db;
 
 	try {
-	    statusFrame.dbstatus.setStatus("Database and Hibernate: starting", null);
+	    statusWindow.getDbstatus().setStatus("Database and Hibernate: starting", null);
 	    db = DBService.getInstance(cfg);
 	    cfg.setDb(db);
 	    mc = db.getOrCreate(new MC("1.7.3"));
-	    statusFrame.dbstatus.setStatus("Database and Hibernate: ready", true);
+	    statusWindow.getDbstatus().setStatus("Database and Hibernate: ready", true);
 	} catch (Exception e) {
-	    statusFrame.dbstatus.setStatus("Database and Hibernate: starting failed", false);
+	    statusWindow.getDbstatus().setStatus("Database and Hibernate: starting failed", false);
 	    throw e;
 	}
 
 	XmlService xml;
 
 	try {
-	    statusFrame.xmlstatus.setStatus("XML service: starting", null);
+	    statusWindow.getXmlstatus().setStatus("XML service: starting", null);
 	    xml = new XmlService(cfg.getData());
 	    cfg.setXml(xml);
 	    testXML(xml, cfg.getMods());
-	    statusFrame.xmlstatus.setStatus("XML service: ready", true);
+	    statusWindow.getXmlstatus().setStatus("XML service: ready", true);
 	} catch (Exception e) {
-	    statusFrame.xmlstatus.setStatus("XML service: starting failed", false);
+	    statusWindow.getXmlstatus().setStatus("XML service: starting failed", false);
 	    throw e;
 	}
 
@@ -226,7 +226,7 @@ public class MMMR implements StartMe {
 		    String[] files = { "Minecraft.exe", "minecraft.jar", "Minecraft_Server.exe", "minecraft_server.jar" };
 		    int i = 0;
 		    for (; i < files.length; i++) {
-			statusFrame.mcstatus.setStatus("Minecraft: downloading " + files[i], null);
+			statusWindow.getMcstatus().setStatus("Minecraft: downloading " + files[i], null);
 			try {
 			    error = "downloading " + files[i];
 			    downloadURL(new URL(url + files[i]), new File(cfg.getThisFolder(), files[i]));
@@ -235,7 +235,7 @@ public class MMMR implements StartMe {
 			    throw e;
 			}
 		    }
-		    statusFrame.mcstatus.setStatus("Minecraft: downloaded", null);
+		    statusWindow.getMcstatus().setStatus("Minecraft: downloaded", null);
 		    JOptionPane.showMessageDialog(null, "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.");
 		    startMC(true);
 		    writeMCBat();
@@ -253,12 +253,12 @@ public class MMMR implements StartMe {
 			deleteDirectory(cfg.getBackupOriginalJar());
 			throw new RuntimeException("not a clean install");
 		    }
-		    statusFrame.mcstatus.setStatus("Minecraft: ready", mccheck = true);
+		    statusWindow.getMcstatus().setStatus("Minecraft: ready", mccheck = true);
 		} catch (Exception e) {
-		    statusFrame.mcstatus.setStatus("Minecraft: initialization failed", mccheck = false);
+		    statusWindow.getMcstatus().setStatus("Minecraft: initialization failed", mccheck = false);
 		}
 	    } else {
-		statusFrame.mcstatus.setStatus("Minecraft: ready", mccheck = true);
+		statusWindow.getMcstatus().setStatus("Minecraft: ready", mccheck = true);
 	    }
 
 	    boolean ybcheck = false;
@@ -310,20 +310,20 @@ public class MMMR implements StartMe {
 			    File file = new File(cfg.getMods(), "YogBox_1.7.3_v1.1.zip.xml");
 			    xml.save(new FileOutputStream(file), jb);
 
-			    statusFrame.ybstatus.setStatus("YogBox: ready", ybcheck = true);
+			    statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
 			    cfg.setProperty("jogbox.ignore", "false");
 			} catch (Exception e) {
-			    statusFrame.ybstatus.setStatus("YogBox: failed", ybcheck = false);
+			    statusWindow.getYbstatus().setStatus("YogBox: failed", ybcheck = false);
 			}
 		    } else {
-			statusFrame.ybstatus.setStatus("YogBox: not installed", ybcheck = true);
+			statusWindow.getYbstatus().setStatus("YogBox: not installed", ybcheck = true);
 			cfg.setProperty("jogbox.ignore", "true");
 		    }
 		} else {
 		    if (!"true".equals(cfg.getProperty("jogbox.ignore", "?"))) {
-			statusFrame.ybstatus.setStatus("YogBox: ready", ybcheck = true);
+			statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
 		    } else {
-			statusFrame.ybstatus.setStatus("YogBox: not installed", ybcheck = true);
+			statusWindow.getYbstatus().setStatus("YogBox: not installed", ybcheck = true);
 		    }
 		}
 	    }
@@ -359,7 +359,7 @@ public class MMMR implements StartMe {
 			db.save(jb);
 		    }
 		}
-		statusFrame.setReadyToGoOn();
+		statusWindow.setReadyToGoOn();
 	    }
 
 	    allSuccess = mccheck && ybcheck;

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.mmmr.services.StatusFrame.StatusPanel;
+import org.mmmr.services.StatusWindow.StatusPanel;
 
 /**
  * @author Jurgen

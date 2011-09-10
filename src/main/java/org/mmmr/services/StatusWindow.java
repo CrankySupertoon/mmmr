@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
 /**
  * @author Jurgen
  */
-public class StatusFrame extends JFrame {
+public class StatusWindow extends JFrame {
     public class StatusPanel extends JPanel {
 	private static final long serialVersionUID = 6282395518853882621L;
 
@@ -53,26 +53,26 @@ public class StatusFrame extends JFrame {
     private static final long serialVersionUID = -4214468834438916001L;
 
     private static Icon getIcon(String path) {
-	return new ImageIcon(StatusFrame.class.getClassLoader().getResource(path));
+	return new ImageIcon(StatusWindow.class.getClassLoader().getResource(path));
     }
 
     private Config cfg;
 
-    public StatusPanel dbstatus;
+    private StatusPanel dbstatus;
 
     private JButton goOn = null;
 
-    public StatusPanel libstatus;
+    private StatusPanel libstatus;
 
-    public StatusPanel mcstatus;
+    private StatusPanel mcstatus;
 
     private JButton quit = null;
 
-    public StatusPanel xmlstatus;
+    private StatusPanel xmlstatus;
 
-    public StatusPanel ybstatus;
+    private StatusPanel ybstatus;
 
-    public StatusFrame(final Config cfg) {
+    public StatusWindow(final Config cfg) {
 	this.cfg = cfg;
 	setTitle("Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b");
 	JPanel contentPane = new JPanel();
@@ -127,6 +127,34 @@ public class StatusFrame extends JFrame {
 
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	contentPane.setDoubleBuffered(true);
+
+	setUndecorated(true);
+	FancySwing.translucent(this);
+	pack();
+	setSize(800, this.getHeight());
+	FancySwing.rounded(this);
+	setLocationRelativeTo(null);
+	setResizable(false);
+    }
+
+    public Config getCfg() {
+	return cfg;
+    }
+
+    public StatusPanel getDbstatus() {
+	return dbstatus;
+    }
+
+    public StatusPanel getLibstatus() {
+	return libstatus;
+    }
+
+    public StatusPanel getMcstatus() {
+	return mcstatus;
+    }
+
+    public StatusPanel getXmlstatus() {
+	return xmlstatus;
     }
 
     public StatusPanel getYbstatus() {

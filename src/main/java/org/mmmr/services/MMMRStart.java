@@ -18,20 +18,13 @@ public class MMMRStart {
 	    FancySwing.lookAndFeel();
 	    Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
 	    prepareFont(cfg);
-	    StatusFrame statusFrame = new StatusFrame(cfg);
-	    statusFrame.setUndecorated(true);
-	    FancySwing.translucent(statusFrame);
-	    statusFrame.pack();
-	    statusFrame.setSize(800, statusFrame.getHeight());
-	    FancySwing.rounded(statusFrame);
-	    statusFrame.setLocationRelativeTo(null);
-	    statusFrame.setResizable(false);
-	    statusFrame.setVisible(true);
-	    DynamicLoading.init(statusFrame.libstatus, cfg);
-	    StartMe cast = StartMe.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance());
-	    cast.setCfg(cfg);
-	    cast.setStatusFrame(statusFrame);
-	    cast.start(args);
+	    StatusWindow statusWindow = new StatusWindow(cfg);
+	    statusWindow.setVisible(true);
+	    DynamicLoading.init(statusWindow.getLibstatus(), cfg);
+	    StartMe starter = StartMe.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance());
+	    starter.setCfg(cfg);
+	    starter.setStatusWindow(statusWindow);
+	    starter.start(args);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
