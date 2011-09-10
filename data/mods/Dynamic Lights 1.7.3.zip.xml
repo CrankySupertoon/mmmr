@@ -1,0 +1,12 @@
+<mod archive="Dynamic Lights 1.7.3.zip" name="Dynamic Lights"
+	url="http://www.minecraftforum.net/topic/184426-v173-dynamic-lights-in-aether-too/"
+	version="1.7.3">
+	<dependencies>
+		<mc version="1.7.3" />
+		<mod name="Risugami's Mods: ModLoader Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7.3"/>
+	</dependencies>
+	<resources>
+		<resource sourcepath="compiled_put_this_into_minecraft_jar" targetpath="bin/minecraft.jar" />
+		<resource sourcepath="configfile_put_this_into_.minecraft_folder" targetpath="./" />
+	</resources>
+</mod>

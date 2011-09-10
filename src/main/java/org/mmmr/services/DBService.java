@@ -61,6 +61,10 @@ public class DBService {
 	session = sessionFactory.openSession();
     }
 
+    public void flush() {
+	session.flush();
+    }
+
     public <T extends PersistentObject> T get(T object) {
 	return getOrCreate(object, false);
     }
@@ -68,7 +72,7 @@ public class DBService {
     @SuppressWarnings("unchecked")
     public <T extends PersistentObject> List<T> getAll(T object) {
 	session.flush();
-	
+
 	Example example = Example.create(object).excludeZeroes() // exclude zero valued properties
 		.ignoreCase() // perform case insensitive string comparisons
 		.enableLike(); // use like for string comparisons
@@ -84,7 +88,7 @@ public class DBService {
     @SuppressWarnings("unchecked")
     private <T extends PersistentObject> T getOrCreate(T object, boolean create) {
 	session.flush();
-	
+
 	Example example = Example.create(object).excludeZeroes() // exclude zero valued properties
 		.ignoreCase() // perform case insensitive string comparisons
 		.enableLike(); // use like for string comparisons
@@ -107,9 +111,5 @@ public class DBService {
 	tx.commit();
 
 	return object;
-    }
-
-    public void flush() {
-	session.flush();
     }
 }

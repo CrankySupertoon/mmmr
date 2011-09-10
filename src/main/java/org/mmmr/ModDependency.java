@@ -15,6 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ModDependency extends Dependency {
     private String name;
 
+    private String url;
+
     private String version;
 
     public ModDependency() {
@@ -59,6 +61,11 @@ public class ModDependency extends Dependency {
     }
 
     @XmlAttribute
+    public String getUrl() {
+	return url;
+    }
+
+    @XmlAttribute
     public String getVersion() {
 	return this.version;
     }
@@ -74,6 +81,10 @@ public class ModDependency extends Dependency {
 
     public void setName(String name) {
 	this.name = name;
+    }
+
+    public void setUrl(String url) {
+	this.url = url;
     }
 
     public void setVersion(String version) {
