@@ -34,7 +34,8 @@ import javax.swing.JFileChooser;
  */
 public class IOMethods {
     private static long _(File source, File target) throws IOException {
-	target.getParentFile().mkdirs();
+	if (target != null)
+	    target.getParentFile().mkdirs();
 	OutputStream out = target == null ? null : new FileOutputStream(target);
 	CheckedInputStream in = new CheckedInputStream(new FileInputStream(source), new CRC32());
 	byte[] buffer = new byte[1024 * 8];

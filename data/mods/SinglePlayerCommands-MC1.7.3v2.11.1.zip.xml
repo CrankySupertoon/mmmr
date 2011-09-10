@@ -3,6 +3,6 @@
 	version="2.11.1" mc="1.7.3">
 	<resources>
 		<resource sourcepath="WorldEdit.jar" targetpath="bin/" />
-		<resource sourcepath="./" targetpath="bin/minecraft.jar" exclude="WorldEdit.jar" />
+		<resource sourcepath="./" targetpath="bin/minecraft.jar" exclude="WorldEdit.jar,readme.txt"/>
 	</resources>
 </mod>

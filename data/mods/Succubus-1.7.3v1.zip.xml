@@ -6,7 +6,7 @@
 		<mod name="Risugami's Mods: AudioMod Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7_01"/>
 	</dependencies>
 	<resources>
-		<resource sourcepath="./" targetpath="bin/minecraft.jar" exclude="RESOURCES"/>
+		<resource sourcepath="./" targetpath="bin/minecraft.jar" exclude="RESOURCES,README.txt"/>
 		<resource sourcepath="RESOURCES" targetpath="resources"/>
 	</resources>
 </mod>
