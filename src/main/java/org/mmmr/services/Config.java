@@ -5,6 +5,7 @@ import static org.mmmr.services.IOMethods.parseParams;
 
 import java.awt.Font;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -77,8 +78,9 @@ public class Config {
 
 	cfg = newDir(data, "cfg");
 	properties = new Properties();
-	properties.store(new FileOutputStream(new File(cfg, "config.properties")), null);
-
+	File file = new File(cfg, "config.properties");
+	if (file.exists())
+	    properties.load(new FileInputStream(file));
 	backup = newDir(data, "backup");
 	mods = newDir(data, "mods");
 	libs = newDir(data, "libs");

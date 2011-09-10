@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -20,6 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.apache.log4j.Appender;
+import org.apache.log4j.Level;
+import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.Mod;
 
 /**
@@ -145,6 +149,33 @@ public class ManagerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
+		}
+	    });
+	    cp.add(comp);
+	}
+	{
+	    JButton comp = new JButton("Change MMMR logging level");
+	    comp.setFont(cfg.getFont18());
+	    comp.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    try {
+			Level[] levels = { Level.TRACE, Level.DEBUG, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF };
+			Level level = Level.class.cast(JOptionPane.showInputDialog(null, "Choose logging level", "Logging", JOptionPane.QUESTION_MESSAGE, null, levels,
+				org.apache.log4j.Logger.getRootLogger().getLevel()));
+			if (level != null) {
+			    cfg.setProperty("logging.level", String.valueOf(level));
+			    org.apache.log4j.Logger.getRootLogger().setLevel(level);
+			    Enumeration<?> allAppenders = org.apache.log4j.Logger.getRootLogger().getAllAppenders();
+			    while (allAppenders.hasMoreElements()) {
+				Appender appender = Appender.class.cast(allAppenders.nextElement());
+				LevelRangeFilter filter = LevelRangeFilter.class.cast(appender.getFilter());
+				filter.setLevelMin(level);
+			    }
+			}
+		    } catch (Exception e2) {
+			e2.printStackTrace();
+		    }
 		}
 	    });
 	    cp.add(comp);
