@@ -77,9 +77,9 @@ public class IOMethods {
 	System.out.println(url);
 	URLConnection conn = url.openConnection();
 	conn.setAllowUserInteraction(false);
-	conn.setConnectTimeout(10000);
+	conn.setConnectTimeout(30 * 1000);
 	conn.setDefaultUseCaches(true);
-	conn.setReadTimeout(10000);
+	conn.setReadTimeout(30 * 1000);
 	conn.setUseCaches(true);
 	InputStream uin = conn.getInputStream();
 	OutputStream fout = new FileOutputStream(target);
@@ -174,30 +174,31 @@ public class IOMethods {
     public static boolean is64Bit() {
 	return "64".equals(System.getProperties().getProperty("sun.arch.data.model"));
     }
-    
-    public static List<File> listRecursive(File dir) {
-	List<File> all = new ArrayList<File>();
-	listRecursive(dir,all);
-	return all;
-    }
 
-    private static void listRecursive(File dir, List<File> all) {
-	File[] tmp = dir.listFiles();
-	if (tmp == null || tmp.length == 0) return;
-	for(File child : tmp) {
-	    all.add(child);
-	    if(child.isDirectory()) {
-		listRecursive(child, all);
-	    }
-	}
-    }
-    
     @SuppressWarnings("unchecked")
     public static List<File> list(File dir) {
 	File[] tmp = dir.listFiles();
 	if (tmp == null || tmp.length == 0)
 	    return Collections.EMPTY_LIST;
 	return Arrays.asList(tmp);
+    }
+
+    public static List<File> listRecursive(File dir) {
+	List<File> all = new ArrayList<File>();
+	listRecursive(dir, all);
+	return all;
+    }
+
+    private static void listRecursive(File dir, List<File> all) {
+	File[] tmp = dir.listFiles();
+	if (tmp == null || tmp.length == 0)
+	    return;
+	for (File child : tmp) {
+	    all.add(child);
+	    if (child.isDirectory()) {
+		listRecursive(child, all);
+	    }
+	}
     }
 
     public static void loadjarAtRuntime(File jar) throws SecurityException, NoSuchMethodException, IllegalArgumentException, MalformedURLException, IllegalAccessException,

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,29 +22,34 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.Cascade;
+
 /**
  * @author Jurgen
  */
-@XmlRootElement(name = "compilation")
+@XmlRootElement(name = "modpack")
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
-public class ModCompilation {
+@Table(uniqueConstraints = { @UniqueConstraint(name = "modpack_name_version", columnNames = { "name", "version" }) })
+public class ModPack implements PersistentObject {
     private String description;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(cascade = { CascadeType.ALL })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private MC mc;
 
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "modPack")
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Mod> mods;
 
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "modPack")
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Resource> resources;
 
     @Version
@@ -52,11 +58,11 @@ public class ModCompilation {
     @Column(nullable = false)
     private String version;
 
-    public ModCompilation() {
+    public ModPack() {
 	super();
     }
 
-    public ModCompilation(String name, String version) {
+    public ModPack(String name, String version) {
 	this();
 	this.name = name;
 	this.version = version;
@@ -66,12 +72,14 @@ public class ModCompilation {
 	if (getMods() == null)
 	    mods = new ArrayList<Mod>();
 	getMods().add(mod);
+	mod.setModPack(this);
     }
 
     public void addResource(Resource resource) {
 	if (getResources() == null)
 	    resources = new ArrayList<Resource>();
 	getResources().add(resource);
+	resource.setModPack(this);
     }
 
     @Override
@@ -82,7 +90,7 @@ public class ModCompilation {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	ModCompilation other = (ModCompilation) obj;
+	ModPack other = (ModPack) obj;
 	if (getName() == null) {
 	    if (other.getName() != null)
 		return false;
@@ -166,21 +174,22 @@ public class ModCompilation {
     public void setName(String name) {
 	this.name = name;
     }
-    
+
     public void setResources(List<Resource> resources) {
 	this.resources = resources;
     }
-    
+
     protected void setVer(Integer ver) {
 	this.ver = ver;
     }
-    
+
     public void setVersion(String version) {
 	this.version = version;
     }
-    
+
     @Override
     public String toString() {
-	return "ModCompilation [mods=" + getMods() + ", name=" + getName() + ", description=" + getDescription() + ", version=" + getVersion() + ", mc=" + getMc()  + ", resources=" + getResources() + "]";
+	return "ModPack [mods=" + getMods() + ", name=" + getName() + ", description=" + getDescription() + ", version=" + getVersion() + ", mc=" + getMc() + ", resources="
+		+ getResources() + "]";
     }
 }

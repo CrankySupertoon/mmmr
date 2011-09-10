@@ -40,11 +40,11 @@ public class Config {
 
     private File mcJarBackup;
 
+    private File mcJogboxBackup;
+
     private File mcMods;
 
     private File mcResources;
-
-    private File mcJogboxBackup;
 
     private File mods;
 
@@ -140,16 +140,16 @@ public class Config {
 	return this.mcJarBackup;
     }
 
+    public File getMcJogboxBackup() {
+	return mcJogboxBackup;
+    }
+
     public File getMcMods() {
 	return this.mcMods;
     }
 
     public File getMcResources() {
 	return this.mcResources;
-    }
-
-    public File getMcJogboxBackup() {
-	return mcJogboxBackup;
     }
 
     public File getMods() {

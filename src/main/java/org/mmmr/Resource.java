@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -16,18 +18,22 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.Cascade;
+
 /**
  * @author Jurgen
  */
 @XmlRootElement
 @Entity
-public class Resource {
-    @OneToMany(cascade = { CascadeType.ALL })
+public class Resource implements PersistentObject {
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "resource")
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Dependency> dependencies;
 
     private String exclude;
 
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "resource")
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<MCFile> files;
 
     @Id
@@ -35,6 +41,14 @@ public class Resource {
     private Long id;
 
     private String include;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
+    private Mod mod;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
+    private ModPack modPack;
 
     private String sourcePath;
 
@@ -57,12 +71,14 @@ public class Resource {
 	if (getDependencies() == null)
 	    dependencies = new ArrayList<Dependency>();
 	getDependencies().add(dependency);
+	dependency.setResource(this);
     }
 
     public void addFile(MCFile file) {
 	if (getFiles() == null)
 	    files = new ArrayList<MCFile>();
 	getFiles().add(file);
+	file.setResource(this);
     }
 
     @Override
@@ -113,6 +129,16 @@ public class Resource {
 	return this.include;
     }
 
+    @XmlTransient
+    public Mod getMod() {
+	return mod;
+    }
+
+    @XmlTransient
+    public ModPack getModPack() {
+	return modPack;
+    }
+
     @XmlAttribute(name = "sourcepath")
     public String getSourcePath() {
 	return this.sourcePath;
@@ -155,6 +181,14 @@ public class Resource {
 
     public void setInclude(String include) {
 	this.include = include;
+    }
+
+    protected void setMod(Mod mod) {
+	this.mod = mod;
+    }
+
+    protected void setModPack(ModPack modPack) {
+	this.modPack = modPack;
     }
 
     public void setSourcePath(String sourcePath) {

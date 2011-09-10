@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "mod")
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(name = "moddependency_name_version", columnNames = { "name", "version" }) })
 public class ModDependency extends Dependency {
     private String name;
 

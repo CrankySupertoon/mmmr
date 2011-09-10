@@ -14,8 +14,9 @@ import org.mmmr.Dependency;
 import org.mmmr.MC;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
-import org.mmmr.ModCompilation;
 import org.mmmr.ModDependency;
+import org.mmmr.ModPack;
+import org.mmmr.PersistentObject;
 import org.mmmr.Resource;
 
 /**
@@ -43,11 +44,12 @@ public class DBService {
 	configuration.addAnnotatedClass(ModDependency.class);
 	configuration.addAnnotatedClass(Resource.class);
 	configuration.addAnnotatedClass(Mod.class);
-	configuration.addAnnotatedClass(ModCompilation.class);
+	configuration.addAnnotatedClass(ModPack.class);
 	Properties properties = new Properties();
 	properties.setProperty("hibernate.connection.username", "mmmr");
 	properties.setProperty("hibernate.connection.password", "mmmr");
 	properties.setProperty("hibernate.hbm2ddl.auto", "update");
+	properties.setProperty("hibernate.show_sql", "true");
 	properties.setProperty("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
 	// embedded server can only be opened by 1 program
 	properties.setProperty("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver");
@@ -59,16 +61,30 @@ public class DBService {
 	session = sessionFactory.openSession();
     }
 
-    public <T> T get(T object) {
+    public <T extends PersistentObject> T get(T object) {
 	return getOrCreate(object, false);
     }
 
-    public <T> T getOrCreate(T object) {
+    @SuppressWarnings("unchecked")
+    public <T extends PersistentObject> List<T> getAll(T object) {
+	session.flush();
+	
+	Example example = Example.create(object).excludeZeroes() // exclude zero valued properties
+		.ignoreCase() // perform case insensitive string comparisons
+		.enableLike(); // use like for string comparisons
+	Class<T> type = (Class<T>) object.getClass();
+	List<T> results = session.createCriteria(type).add(example).list();
+	return results;
+    }
+
+    public <T extends PersistentObject> T getOrCreate(T object) {
 	return getOrCreate(object, true);
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T getOrCreate(T object, boolean create) {
+    private <T extends PersistentObject> T getOrCreate(T object, boolean create) {
+	session.flush();
+	
 	Example example = Example.create(object).excludeZeroes() // exclude zero valued properties
 		.ignoreCase() // perform case insensitive string comparisons
 		.enableLike(); // use like for string comparisons
@@ -81,12 +97,19 @@ public class DBService {
 	return results.get(0);
     }
 
-    public <T> T save(T object) {
+    public <T extends PersistentObject> T save(T object) {
 	Transaction tx = session.beginTransaction();
-	session.persist(object);
+	if (object.getId() == null)
+	    session.save(object);
+	else
+	    session.update(object);
 	session.flush();
 	tx.commit();
 
 	return object;
+    }
+
+    public void flush() {
+	session.flush();
     }
 }

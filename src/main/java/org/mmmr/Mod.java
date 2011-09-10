@@ -7,9 +7,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -21,16 +23,19 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.Cascade;
+
 /**
  * @author Jurgen
  */
 @XmlRootElement(name = "mod")
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
-public class Mod {
+@Table(uniqueConstraints = { @UniqueConstraint(name = "mod_name_version", columnNames = { "name", "version" }) })
+public class Mod implements PersistentObject {
     private String archive;
 
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mod")
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Dependency> dependencies;
 
     private String description;
@@ -41,12 +46,17 @@ public class Mod {
 
     private Date installationDate;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
+    private ModPack modPack;
+
     @Column(nullable = false)
     private String name;
 
     private String resourceCheck;
 
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mod")
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Resource> resources;
 
     private String url;
@@ -91,12 +101,14 @@ public class Mod {
 	if (getDependencies() == null)
 	    dependencies = new ArrayList<Dependency>();
 	getDependencies().add(dependency);
+	dependency.setMod(this);
     }
 
     public void addResource(Resource resource) {
 	if (getResources() == null)
 	    resources = new ArrayList<Resource>();
 	getResources().add(resource);
+	resource.setMod(this);
     }
 
     @Override
@@ -150,6 +162,11 @@ public class Mod {
     @XmlTransient
     public Date getInstallationDate() {
 	return this.installationDate;
+    }
+
+    @XmlTransient
+    public ModPack getModPack() {
+	return modPack;
     }
 
     @XmlAttribute(required = true)
@@ -215,6 +232,10 @@ public class Mod {
 
     public void setInstallationDate(Date installationDate) {
 	this.installationDate = installationDate;
+    }
+
+    protected void setModPack(ModPack modPack) {
+	this.modPack = modPack;
     }
 
     public void setName(String name) {

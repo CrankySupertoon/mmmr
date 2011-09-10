@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+	<appender name="ROLLINGFILE" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${user.home}/logs/${oasis.version}/oasis-service.log"/>
+		<param name="MaxFileSize" value="50MB"/>
+ 		<param name="MaxBackupIndex" value="4"/> 
+ 		<layout class="org.apache.log4j.PatternLayout">
+		    <param name="ConversionPattern" value="%d{ABSOLUTE} - %5p (%c.java:%L) - %m%n"/>
+		</layout>
+	 	<filter class="org.apache.log4j.varia.LevelRangeFilter">
+        	<param name="LevelMin" value="DEBUG" />
+        	<param name="LevelMax" value="FATAL" />
+        	<param name="AcceptOnMatch" value="true" />
+        </filter>
+	</appender>
+	
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} - %5p (%c.java:%L) - %m%n"/>
+		</layout>
+	 	<filter class="org.apache.log4j.varia.LevelRangeFilter">
+        	<param name="LevelMin" value="TRACE" />
+        	<param name="LevelMax" value="FATAL" />
+        	<param name="AcceptOnMatch" value="true" />
+        </filter>
+	</appender>	
+
+    <logger name="org.hibernate"><level value="WARN"/></logger>
+    <logger name="org.hibernate.hql.ast"><level value="WARN"/></logger>
+    <logger name="org.hibernate.id.IdentifierGeneratorFactory"><level value="WARN"/></logger>
+    <logger name="org.hibernate.tool.hbm2ddl.SchemaUpdate"><level value="WARN"/></logger>
+    <logger name="org.hibernate.hql.antlr.HqlSqlBaseWalker"><level value="WARN"/></logger>
+    <logger name="org.hibernate.validator.ClassValidator"><level value="WARN"/></logger>
+    <logger name="org.hibernate.tool.hbm2ddl.SchemaExport"><level value="WARN"/></logger>
+    <logger name="org.hibernate.transaction"><level value="WARN"/></logger>
+    <logger name="org.hibernate.SQL"><level value="DEBUG"/></logger>
+    <logger name="org.hibernate.type"><level value="TRACE"/></logger>
+    <logger name="org.hibernate.hql"><level value="DEBUG"/></logger>
+
+	<root>
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="ROLLINGFILE"/>		
+	</root>
+	
+</log4j:configuration>

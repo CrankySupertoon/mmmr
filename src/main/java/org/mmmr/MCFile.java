@@ -2,32 +2,51 @@ package org.mmmr;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.hibernate.annotations.Cascade;
 
 /**
  * @author Jurgen
  */
 @Entity
-public class MCFile {
+public class MCFile implements PersistentObject {
     private long crc32;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
+    private MC mc;
+
     private Date modificationDate;
 
     private String path;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
+    private Resource resource;
 
     @Version
     private Integer ver;
 
     public MCFile() {
 	super();
+    }
+
+    public MCFile(String path) {
+	this();
+	setPath(path);
     }
 
     public MCFile(String path, Date modificationDate, long crc32) {
@@ -62,12 +81,21 @@ public class MCFile {
 	return this.id;
     }
 
+    public MC getMc() {
+	return mc;
+    }
+
     public Date getModificationDate() {
 	return this.modificationDate;
     }
 
     public String getPath() {
 	return this.path;
+    }
+
+    @XmlTransient
+    public Resource getResource() {
+	return resource;
     }
 
     public Integer getVer() {
@@ -90,12 +118,20 @@ public class MCFile {
 	this.id = id;
     }
 
+    protected void setMc(MC mc) {
+	this.mc = mc;
+    }
+
     public void setModificationDate(Date modificationDate) {
 	this.modificationDate = modificationDate;
     }
 
     public void setPath(String path) {
 	this.path = path.replace('\\', '/').replaceAll("//", "/");
+    }
+
+    protected void setResource(Resource resource) {
+	this.resource = resource;
     }
 
     protected void setVer(Integer ver) {

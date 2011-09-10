@@ -25,7 +25,7 @@ import javax.xml.bind.JAXBException;
 import org.mmmr.MC;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
-import org.mmmr.ModCompilation;
+import org.mmmr.ModPack;
 import org.mmmr.Resource;
 
 /**
@@ -81,8 +81,8 @@ public class MMMR implements StartMe {
 	return commandline;
     }
 
-    private ModCompilation initJogBox(File data) throws FileNotFoundException, JAXBException {
-	ModCompilation yogbox = new ModCompilation("YogBox", "1.1");
+    private ModPack initJogBox(File data) throws FileNotFoundException, JAXBException {
+	ModPack yogbox = new ModPack("YogBox", "1.1");
 	yogbox.setDescription("YogBox_1.7.3_v1.1.zip");
 	yogbox.setMc(mc);
 
@@ -168,7 +168,7 @@ public class MMMR implements StartMe {
 	    File duplicate = new File(duplicateBase, relativePath);
 	    if (fileEquals(source, duplicate)) {
 		System.out.println("delete backup duplicate " + relativePath);
-		duplicate.delete();
+		source.delete();
 	    }
 
 	}
@@ -208,7 +208,6 @@ public class MMMR implements StartMe {
 	    statusWindow.getXmlstatus().setStatus("XML service: starting", null);
 	    xml = new XmlService(cfg.getData());
 	    cfg.setXml(xml);
-	    testXML(xml, cfg.getMods());
 	    statusWindow.getXmlstatus().setStatus("XML service: ready", true);
 	} catch (Exception e) {
 	    statusWindow.getXmlstatus().setStatus("XML service: starting failed", false);
@@ -304,7 +303,7 @@ public class MMMR implements StartMe {
 			    extract(cfg.getMcJar(), cfg.getMcJogboxBackup());
 			    removeOriginalFiles(cfg.getMcJogboxBackup().getAbsolutePath().length() + 1, cfg.getMcJogboxBackup(), cfg.getBackupOriginalJar());
 
-			    ModCompilation jb = db.getOrCreate(new ModCompilation("YogBox", "1.1"));
+			    ModPack jb = db.getOrCreate(new ModPack("YogBox", "1.1"));
 			    jb = initJogBox(cfg.getData());
 			    db.save(jb);
 
@@ -336,13 +335,13 @@ public class MMMR implements StartMe {
 		    cfg.getMcJar().mkdirs();
 		    extract(minecraftZip, cfg.getMcJar());
 		}
-		if (mc.getFiles().size() == 0) {
+		if (mc.getFiles() == null || mc.getFiles().size() == 0) {
 		    addContents(mc, "bin/minecraft.jar/", cfg.getBackupOriginalJar().getAbsolutePath().length() + 1, cfg.getBackupOriginalJar());
 		    addContents(mc, cfg.getMcResources().getName() + "/", cfg.getMcResources().getAbsolutePath().length() + 1, cfg.getMcResources());
 		    db.save(mc);
 		}
 		if (!"true".equals(cfg.getProperty("jogbox.ignore", "?"))) {
-		    ModCompilation jb = db.get(new ModCompilation("YogBox", "1.1"));
+		    ModPack jb = db.get(new ModPack("YogBox", "1.1"));
 		    if (jb != null) {
 			for (Mod mod : jb.getMods()) {
 			    Date now = new Date();
@@ -357,8 +356,8 @@ public class MMMR implements StartMe {
 				}
 			    }
 			}
-			if (jb.getResources().size() == 0) {
-			    Resource resource = new Resource(":", ":");
+			if (jb.getResources() == null || jb.getResources().size() == 0) {
+			    Resource resource = new Resource("*", "*");
 			    jb.addResource(resource);
 			    int pos = cfg.getMcJogboxBackup().getAbsolutePath().length() + 1;
 			    for (File file : listRecursive(cfg.getMcJogboxBackup())) {
@@ -402,17 +401,6 @@ public class MMMR implements StartMe {
 	pb.environment().put("APPDATA", cfg.getThisFolder().getAbsolutePath());
 	@SuppressWarnings("unused")
 	Process javap = pb.start();
-    }
-
-    private void testXML(XmlService x, File dir) throws FileNotFoundException, JAXBException {
-	Mod mod = new Mod();
-	mod.setArchive("[FileCopter]OptiFine_1.7.3_HD_MT_G2.zip");
-	mod.setName("OptiFine_HD_MT_G2");
-	mod.setVersion("1.7.3");
-	mod.setUrl("http://www.minecraftforum.net/topic/249637-173-optifine-hd-g-fps-boost/");
-	mod.addDepencency(mc);
-	mod.addResource(new Resource("./", "bin/minecraft.jar"));
-	x.save(new FileOutputStream(new File(dir, "[FileCopter]OptiFine_1.7.3_HD_MT_G2.zip.xml")), mod);
     }
 
     private void writeMCBat() throws IOException {

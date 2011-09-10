@@ -26,10 +26,10 @@ import org.mmmr.Mod;
  * @author Jurgen
  */
 public class ManagerWindow extends JFrame {
-    private class ModAsOption {
+    private class ModOption {
 	private final Mod mod;
 
-	public ModAsOption(Mod mod) {
+	public ModOption(Mod mod) {
 	    super();
 	    this.mod = mod;
 	}
@@ -40,10 +40,17 @@ public class ManagerWindow extends JFrame {
 
 	@Override
 	public String toString() {
+	    StringBuilder sb = new StringBuilder(mod.getName()).append(" v").append(mod.getVersion());
+
 	    if (mod.isInstalled())
-		return mod.getName() + " v" + mod.getVersion() + " [installed]";
-	    else
-		return mod.getName() + " v" + mod.getVersion();
+		sb.append(" [installed]");
+
+	    File file = new File(cfg.getMods(), mod.getArchive());
+	    if (!file.exists()) {
+		sb.append(" [archive not found]");
+	    }
+
+	    return sb.toString();
 	}
     }
 
@@ -108,20 +115,26 @@ public class ManagerWindow extends JFrame {
 		    return name.toLowerCase().contains("optifine") && name.endsWith(".xml");
 		}
 	    });
-	    List<ModAsOption> options = new ArrayList<ModAsOption>();
+	    List<ModOption> options = new ArrayList<ModOption>();
 	    Mod installed = null;
+	    ModOption installedOption = null;
 	    for (File modxml : modxmls) {
 		Mod availablemod = cfg.getXml().load(new FileInputStream(modxml), Mod.class);
 		Mod installedmod = cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
 		if (installedmod != null)
 		    installed = installedmod;
 		Mod mod = installedmod != null ? installedmod : availablemod;
-		options.add(new ModAsOption(mod));
+		ModOption modoption = new ModOption(mod);
+		if (installedmod != null)
+		    installedOption = modoption;
+		options.add(modoption);
 	    }
-	    Object[] selectionValues = options.toArray();
-	    Object selected = JOptionPane.showInputDialog(null, "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE, null, selectionValues, selectionValues[0]);
+	    ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
+	    ModOption selected = installedOption == null ? selectionValues[0] : installedOption;
+	    selected = ModOption.class.cast(JOptionPane
+		    .showInputDialog(null, "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE, null, selectionValues, selected));
 	    if (selected != null) {
-		Mod mod = ModAsOption.class.cast(selected).getMod();
+		Mod mod = ModOption.class.cast(selected).getMod();
 		if (installed != null) {
 		    if (mod.equals(installed)) {
 			// already installed, nothing to do

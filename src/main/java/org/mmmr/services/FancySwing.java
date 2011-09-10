@@ -35,7 +35,7 @@ public class FancySwing {
     public static void translucent(JFrame w) {
 	if (AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
 	    try {
-		AWTUtilitiesWrapper.setWindowOpacity(w, 0.8f);
+		AWTUtilitiesWrapper.setWindowOpacity(w, 0.9f);
 	    } catch (Exception e) {
 		e.printStackTrace();
 	    }

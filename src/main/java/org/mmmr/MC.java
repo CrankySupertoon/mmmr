@@ -12,14 +12,17 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.Cascade;
+
 /**
  * @author Jurgen
  */
 @XmlRootElement(name = "mc")
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "version" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(name = "mc_name_version", columnNames = { "name", "version" }) })
 public class MC extends Dependency {
-    @OneToMany(cascade = { CascadeType.ALL })
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mc")
+    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<MCFile> files;
 
     private String version;
@@ -37,6 +40,7 @@ public class MC extends Dependency {
 	if (getFiles() == null)
 	    files = new ArrayList<MCFile>();
 	getFiles().add(file);
+	file.setMc(this);
     }
 
     @Override
