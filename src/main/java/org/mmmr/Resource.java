@@ -18,6 +18,10 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cascade;
 
 /**
@@ -25,7 +29,7 @@ import org.hibernate.annotations.Cascade;
  */
 @XmlRootElement
 @Entity
-public class Resource implements PersistentObject {
+public class Resource implements Comparable<Resource>, PersistentObject {
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "resource")
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Dependency> dependencies;
@@ -81,26 +85,16 @@ public class Resource implements PersistentObject {
 	file.setResource(this);
     }
 
+    public int compareTo(final Resource other) {
+	return new CompareToBuilder().append(sourcePath, other.sourcePath).append(targetPath, other.targetPath).toComparison();
+    }
+
     @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
+    public boolean equals(final Object other) {
+	if (!(other instanceof Resource))
 	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	Resource other = (Resource) obj;
-	if (this.getSourcePath() == null) {
-	    if (other.getSourcePath() != null)
-		return false;
-	} else if (!this.getSourcePath().equals(other.getSourcePath()))
-	    return false;
-	if (this.getTargetPath() == null) {
-	    if (other.getTargetPath() != null)
-		return false;
-	} else if (!this.getTargetPath().equals(other.getTargetPath()))
-	    return false;
-	return true;
+	Resource castOther = (Resource) other;
+	return new EqualsBuilder().append(sourcePath, castOther.sourcePath).append(targetPath, castOther.targetPath).isEquals();
     }
 
     @XmlElementWrapper
@@ -156,11 +150,7 @@ public class Resource implements PersistentObject {
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((this.getSourcePath() == null) ? 0 : this.getSourcePath().hashCode());
-	result = prime * result + ((this.getTargetPath() == null) ? 0 : this.getTargetPath().hashCode());
-	return result;
+	return new HashCodeBuilder().append(sourcePath).append(targetPath).toHashCode();
     }
 
     public void setDependencies(List<Dependency> dependencies) {
@@ -205,7 +195,7 @@ public class Resource implements PersistentObject {
 
     @Override
     public String toString() {
-	return "Resource [sourcePath=" + this.getSourcePath() + ", targetPath=" + this.getTargetPath() + ", dependencies=" + this.getDependencies() + ", files=" + this.getFiles()
-		+ "]";
+	return new ToStringBuilder(this).append("exclude", exclude).append("include", include).append("mod", mod).append("modPack", modPack).append("sourcePath", sourcePath)
+		.append("targetPath", targetPath).toString();
     }
 }

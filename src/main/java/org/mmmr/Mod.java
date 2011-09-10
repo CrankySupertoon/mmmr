@@ -23,6 +23,10 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cascade;
 
 /**
@@ -31,7 +35,7 @@ import org.hibernate.annotations.Cascade;
 @XmlRootElement(name = "mod")
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "mod_name_version", columnNames = { "name", "version" }) })
-public class Mod implements PersistentObject {
+public class Mod implements Comparable<Mod>, PersistentObject {
     private String archive;
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mod")
@@ -111,31 +115,16 @@ public class Mod implements PersistentObject {
 	resource.setMod(this);
     }
 
+    public int compareTo(final Mod other) {
+	return new CompareToBuilder().append(name, other.name).append(version, other.version).toComparison();
+    }
+
     @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
+    public boolean equals(final Object other) {
+	if (!(other instanceof Mod))
 	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	Mod other = (Mod) obj;
-	if (this.getArchive() == null) {
-	    if (other.getArchive() != null)
-		return false;
-	} else if (!this.getArchive().equals(other.getArchive()))
-	    return false;
-	if (this.getName() == null) {
-	    if (other.getName() != null)
-		return false;
-	} else if (!this.getName().equals(other.getName()))
-	    return false;
-	if (this.getVersion() == null) {
-	    if (other.getVersion() != null)
-		return false;
-	} else if (!this.getVersion().equals(other.getVersion()))
-	    return false;
-	return true;
+	Mod castOther = (Mod) other;
+	return new EqualsBuilder().append(name, castOther.name).append(version, castOther.version).isEquals();
     }
 
     @XmlAttribute
@@ -202,12 +191,7 @@ public class Mod implements PersistentObject {
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((this.getArchive() == null) ? 0 : this.getArchive().hashCode());
-	result = prime * result + ((this.getName() == null) ? 0 : this.getName().hashCode());
-	result = prime * result + ((this.getVersion() == null) ? 0 : this.getVersion().hashCode());
-	return result;
+	return new HashCodeBuilder().append(name).append(version).toHashCode();
     }
 
     public boolean isInstalled() {
@@ -264,7 +248,7 @@ public class Mod implements PersistentObject {
 
     @Override
     public String toString() {
-	return "Mod [name=" + getName() + ", version=" + getVersion() + ", description=" + getDescription() + ", archive=" + getArchive() + ", url=" + getUrl()
-		+ ", installationDate=" + getInstallationDate() + ", resources=" + getResources() + ", dependencies=" + getDependencies() + "]";
+	return new ToStringBuilder(this).append("name", name).append("version", version).append("archive", archive).append("description", description)
+		.append("installationDate", installationDate).append("modPack", modPack).append("url", url).toString();
     }
 }

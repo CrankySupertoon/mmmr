@@ -12,13 +12,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cascade;
 
 /**
  * @author Jurgen
  */
 @Entity
-public class MCFile implements PersistentObject {
+public class MCFile implements Comparable<MCFile>, PersistentObject {
     private long crc32;
 
     @Id
@@ -56,21 +60,16 @@ public class MCFile implements PersistentObject {
 	setCrc32(crc32);
     }
 
+    public int compareTo(final MCFile other) {
+	return new CompareToBuilder().append(path, other.path).toComparison();
+    }
+
     @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
+    public boolean equals(final Object other) {
+	if (!(other instanceof MCFile))
 	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	MCFile other = (MCFile) obj;
-	if (this.getPath() == null) {
-	    if (other.getPath() != null)
-		return false;
-	} else if (!this.getPath().equals(other.getPath()))
-	    return false;
-	return true;
+	MCFile castOther = (MCFile) other;
+	return new EqualsBuilder().append(path, castOther.path).isEquals();
     }
 
     public long getCrc32() {
@@ -104,10 +103,7 @@ public class MCFile implements PersistentObject {
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((this.getPath() == null) ? 0 : this.getPath().hashCode());
-	return result;
+	return new HashCodeBuilder().append(path).toHashCode();
     }
 
     public void setCrc32(long crc32) {
@@ -140,6 +136,7 @@ public class MCFile implements PersistentObject {
 
     @Override
     public String toString() {
-	return "MCFile [path=" + this.getPath() + ", crc32=" + this.getCrc32() + ", modificationDate=" + this.getModificationDate() + "]";
+	return new ToStringBuilder(this).append("path", path).append("crc32", crc32).append("mc", mc).append("modificationDate", modificationDate).append("resource", resource)
+		.toString();
     }
 }

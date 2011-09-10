@@ -1,23 +1,19 @@
 package org.mmmr;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * @author Jurgen
  */
 @XmlRootElement(name = "mod")
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(name = "moddependency_name_version", columnNames = { "name", "version" }) })
 public class ModDependency extends Dependency {
-    private String name;
 
     private String url;
-
-    private String version;
 
     public ModDependency() {
 	super();
@@ -29,8 +25,8 @@ public class ModDependency extends Dependency {
 
     public ModDependency(String name, String version) {
 	this();
-	this.name = name;
-	this.version = version;
+	setName(name);
+	setVersion(version);
     }
 
     @Override
@@ -56,18 +52,8 @@ public class ModDependency extends Dependency {
     }
 
     @XmlAttribute
-    public String getName() {
-	return this.name;
-    }
-
-    @XmlAttribute
     public String getUrl() {
 	return url;
-    }
-
-    @XmlAttribute
-    public String getVersion() {
-	return this.version;
     }
 
     @Override
@@ -79,20 +65,12 @@ public class ModDependency extends Dependency {
 	return result;
     }
 
-    public void setName(String name) {
-	this.name = name;
-    }
-
     public void setUrl(String url) {
 	this.url = url;
     }
 
-    public void setVersion(String version) {
-	this.version = version;
-    }
-
     @Override
     public String toString() {
-	return "ModDependency [name=" + this.getName() + ", version=" + this.getVersion() + "]";
+	return new ToStringBuilder(this).appendSuper(super.toString()).append("url", url).toString();
     }
 }

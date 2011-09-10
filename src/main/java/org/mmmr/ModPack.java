@@ -22,6 +22,10 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cascade;
 
 /**
@@ -30,7 +34,7 @@ import org.hibernate.annotations.Cascade;
 @XmlRootElement(name = "modpack")
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "modpack_name_version", columnNames = { "name", "version" }) })
-public class ModPack implements PersistentObject {
+public class ModPack implements Comparable<ModPack>, PersistentObject {
     private String description;
 
     @Id
@@ -82,26 +86,16 @@ public class ModPack implements PersistentObject {
 	resource.setModPack(this);
     }
 
+    public int compareTo(final ModPack other) {
+	return new CompareToBuilder().append(name, other.name).append(version, other.version).toComparison();
+    }
+
     @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
+    public boolean equals(final Object other) {
+	if (!(other instanceof ModPack))
 	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	ModPack other = (ModPack) obj;
-	if (getName() == null) {
-	    if (other.getName() != null)
-		return false;
-	} else if (!getName().equals(other.getName()))
-	    return false;
-	if (getVersion() == null) {
-	    if (other.getVersion() != null)
-		return false;
-	} else if (!getVersion().equals(other.getVersion()))
-	    return false;
-	return true;
+	ModPack castOther = (ModPack) other;
+	return new EqualsBuilder().append(name, castOther.name).append(version, castOther.version).isEquals();
     }
 
     @XmlAttribute
@@ -148,11 +142,7 @@ public class ModPack implements PersistentObject {
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-	result = prime * result + ((getVersion() == null) ? 0 : getVersion().hashCode());
-	return result;
+	return new HashCodeBuilder().append(name).append(version).toHashCode();
     }
 
     public void setDescription(String description) {
@@ -189,7 +179,6 @@ public class ModPack implements PersistentObject {
 
     @Override
     public String toString() {
-	return "ModPack [mods=" + getMods() + ", name=" + getName() + ", description=" + getDescription() + ", version=" + getVersion() + ", mc=" + getMc() + ", resources="
-		+ getResources() + "]";
+	return new ToStringBuilder(this).append("name", name).append("version", version).append("description", description).append("mc", mc).toString();
     }
 }

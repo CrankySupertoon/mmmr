@@ -6,9 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -19,21 +16,19 @@ import org.hibernate.annotations.Cascade;
  */
 @XmlRootElement(name = "mc")
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(name = "mc_name_version", columnNames = { "name", "version" }) })
 public class MC extends Dependency {
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mc")
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<MCFile> files;
 
-    private String version;
-
     public MC() {
 	super();
+	setName("MC");
     }
 
     public MC(String version) {
 	this();
-	this.version = version;
+	setVersion(version);
     }
 
     public void addFile(MCFile file) {
@@ -65,11 +60,6 @@ public class MC extends Dependency {
 	return this.files;
     }
 
-    @XmlAttribute
-    public String getVersion() {
-	return this.version;
-    }
-
     @Override
     public int hashCode() {
 	final int prime = 31;
@@ -80,10 +70,6 @@ public class MC extends Dependency {
 
     public void setFiles(List<MCFile> files) {
 	this.files = files;
-    }
-
-    public void setVersion(String version) {
-	this.version = version;
     }
 
     @Override

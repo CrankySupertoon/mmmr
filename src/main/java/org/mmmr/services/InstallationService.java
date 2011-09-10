@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
+import org.mmmr.Dependency;
+import org.mmmr.MC;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.Resource;
@@ -38,6 +40,25 @@ public class InstallationService {
 
     @SuppressWarnings("unused")
     private void installMod(boolean check, DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) throws IOException {
+	if (mod.getDependencies() != null) {
+	    MC mc = null;
+	    MC mcdb = null;
+	    for (Dependency dependency : mod.getDependencies()) {
+		if (dependency instanceof MC) {
+		    mc = MC.class.cast(dependency);
+		    if (mc.getId() == null) {
+			mcdb = db.get(new MC(mc.getVersion()));
+			if (mcdb != null) {
+
+			}
+		    }
+		}
+	    }
+	    if (mc != null && mcdb != null) {
+		mod.getDependencies().remove(mc);
+		mod.getDependencies().add(mcdb);
+	    }
+	}
 	String archive = mod.getArchive();
 	String name = mod.getName();
 	String version = mod.getVersion();
