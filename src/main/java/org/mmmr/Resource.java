@@ -173,7 +173,7 @@ public class Resource implements Comparable<Resource>, PersistentObject {
 	this.include = include;
     }
 
-    protected void setMod(Mod mod) {
+    public void setMod(Mod mod) {
 	this.mod = mod;
     }
 

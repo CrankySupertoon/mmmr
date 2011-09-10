@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -38,7 +39,7 @@ import org.hibernate.annotations.Cascade;
 public class Mod implements Comparable<Mod>, PersistentObject {
     private String archive;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mod")
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mod")
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Dependency> dependencies;
 
@@ -49,6 +50,8 @@ public class Mod implements Comparable<Mod>, PersistentObject {
     private Long id;
 
     private Date installationDate;
+
+    private String mcVersionDependency;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
@@ -153,6 +156,11 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 	return this.installationDate;
     }
 
+    @XmlAttribute(name = "mc")
+    public String getMcVersionDependency() {
+	return mcVersionDependency;
+    }
+
     @XmlTransient
     public ModPack getModPack() {
 	return modPack;
@@ -216,6 +224,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     public void setInstallationDate(Date installationDate) {
 	this.installationDate = installationDate;
+    }
+
+    public void setMcVersionDependency(String mcVersionDependency) {
+	this.mcVersionDependency = mcVersionDependency;
     }
 
     protected void setModPack(ModPack modPack) {

@@ -1,9 +1,6 @@
 <mod archive="TooManyItems2011_07_01.zip" name="TooManyItems"
 	url="http://www.minecraftforum.net/topic/140684-18pr-toomanyitems-in-game-invedit-sep-9/page__hl__torch"
-	version="1.8">
-	<dependencies>
-		<mc version="1.7.3" />
-	</dependencies>
+	version="1.8"  mc="1.7.3">
 	<resources>
 		<resource sourcepath="./" targetpath="bin/minecraft.jar"/>
 	</resources>

@@ -1,9 +1,6 @@
 <mod archive="SinglePlayerCommands-MC1.7.3v2.11.1.zip" name="SinglePlayerCommands"
 	url="http://www.minecraftforum.net/topic/94310-173-single-player-commands-v2111-mcp-pack-updated/"
-	version="2.11.1">
-	<dependencies>
-		<mc version="1.7.3" />
-	</dependencies>
+	version="2.11.1" mc="1.7.3">
 	<resources>
 		<resource sourcepath="WorldEdit.jar" targetpath="bin/" />
 		<resource sourcepath="./" targetpath="bin/minecraft.jar" exclude="WorldEdit.jar" />

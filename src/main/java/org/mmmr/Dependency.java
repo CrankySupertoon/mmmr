@@ -6,13 +6,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
@@ -24,10 +21,9 @@ import org.hibernate.annotations.Cascade;
 /**
  * @author Jurgen
  */
+@XmlRootElement(name = "mod")
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(uniqueConstraints = { @UniqueConstraint(name = "dependency_name_version", columnNames = { "name", "version" }) })
-public abstract class Dependency implements Comparable<Dependency>, PersistentObject {
+public class Dependency implements Comparable<Dependency>, PersistentObject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -41,6 +37,8 @@ public abstract class Dependency implements Comparable<Dependency>, PersistentOb
     @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private Resource resource;
+
+    private String url;
 
     @Version
     private Integer ver;
@@ -79,6 +77,11 @@ public abstract class Dependency implements Comparable<Dependency>, PersistentOb
 	return resource;
     }
 
+    @XmlAttribute
+    public String getUrl() {
+	return url;
+    }
+
     @XmlTransient
     public Integer getVer() {
 	return this.ver;
@@ -98,7 +101,7 @@ public abstract class Dependency implements Comparable<Dependency>, PersistentOb
 	this.id = id;
     }
 
-    protected void setMod(Mod mod) {
+    public void setMod(Mod mod) {
 	this.mod = mod;
     }
 
@@ -108,6 +111,10 @@ public abstract class Dependency implements Comparable<Dependency>, PersistentOb
 
     protected void setResource(Resource resource) {
 	this.resource = resource;
+    }
+
+    public void setUrl(String url) {
+	this.url = url;
     }
 
     protected void setVer(Integer ver) {
@@ -120,6 +127,6 @@ public abstract class Dependency implements Comparable<Dependency>, PersistentOb
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("name", name).append("version", version).append("mod", mod).append("resource", resource).toString();
+	return new ToStringBuilder(this).append("name", name).append("version", version).toString();
     }
 }

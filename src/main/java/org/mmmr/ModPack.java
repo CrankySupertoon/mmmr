@@ -36,7 +36,6 @@ import org.hibernate.annotations.Cascade;
 @Table(uniqueConstraints = { @UniqueConstraint(name = "modpack_name_version", columnNames = { "name", "version" }) })
 public class ModPack implements Comparable<ModPack>, PersistentObject {
     private String description;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -45,6 +44,7 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private MC mc;
 
+    private String mcVersionDependency;
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "modPack")
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Mod> mods;
@@ -113,6 +113,11 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 	return mc;
     }
 
+    @XmlAttribute(name = "mc")
+    public String getMcVersionDependency() {
+	return mcVersionDependency;
+    }
+
     @XmlElementWrapper
     @XmlElementRef
     public List<Mod> getMods() {
@@ -155,6 +160,10 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 
     public void setMc(MC mc) {
 	this.mc = mc;
+    }
+
+    public void setMcVersionDependency(String mcVersionDependency) {
+	this.mcVersionDependency = mcVersionDependency;
     }
 
     public void setMods(List<Mod> mods) {

@@ -5,10 +5,21 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cascade;
 
 /**
@@ -16,14 +27,23 @@ import org.hibernate.annotations.Cascade;
  */
 @XmlRootElement(name = "mc")
 @Entity
-public class MC extends Dependency {
+@Table(uniqueConstraints = { @UniqueConstraint(name = "mc_version", columnNames = { "version" }) })
+public class MC implements Comparable<MC>, PersistentObject {
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mc")
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<MCFile> files;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Version
+    private Integer ver;
+
+    private String version;
+
     public MC() {
 	super();
-	setName("MC");
     }
 
     public MC(String version) {
@@ -38,21 +58,16 @@ public class MC extends Dependency {
 	file.setMc(this);
     }
 
+    public int compareTo(final MC other) {
+	return new CompareToBuilder().append(version, other.version).toComparison();
+    }
+
     @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
+    public boolean equals(final Object other) {
+	if (!(other instanceof MC))
 	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	MC other = (MC) obj;
-	if (this.getVersion() == null) {
-	    if (other.getVersion() != null)
-		return false;
-	} else if (!this.getVersion().equals(other.getVersion()))
-	    return false;
-	return true;
+	MC castOther = (MC) other;
+	return new EqualsBuilder().append(version, castOther.version).isEquals();
     }
 
     @XmlTransient
@@ -60,20 +75,44 @@ public class MC extends Dependency {
 	return this.files;
     }
 
+    @XmlTransient
+    public Long getId() {
+	return this.id;
+    }
+
+    @XmlTransient
+    public Integer getVer() {
+	return this.ver;
+    }
+
+    @XmlAttribute
+    public String getVersion() {
+	return version;
+    }
+
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((getVersion() == null) ? 0 : getVersion().hashCode());
-	return result;
+	return new HashCodeBuilder().append(version).toHashCode();
     }
 
     public void setFiles(List<MCFile> files) {
 	this.files = files;
     }
 
+    protected void setId(Long id) {
+	this.id = id;
+    }
+
+    protected void setVer(Integer ver) {
+	this.ver = ver;
+    }
+
+    public void setVersion(String version) {
+	this.version = version;
+    }
+
     @Override
     public String toString() {
-	return "MC [version=" + getVersion() + "]";
+	return new ToStringBuilder(this).appendSuper(super.toString()).append("version", version).toString();
     }
 }

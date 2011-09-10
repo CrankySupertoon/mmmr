@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 import org.mmmr.Dependency;
-import org.mmmr.MC;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.Resource;
@@ -41,22 +40,8 @@ public class InstallationService {
     @SuppressWarnings("unused")
     private void installMod(boolean check, DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) throws IOException {
 	if (mod.getDependencies() != null) {
-	    MC mc = null;
-	    MC mcdb = null;
 	    for (Dependency dependency : mod.getDependencies()) {
-		if (dependency instanceof MC) {
-		    mc = MC.class.cast(dependency);
-		    if (mc.getId() == null) {
-			mcdb = db.get(new MC(mc.getVersion()));
-			if (mcdb != null) {
-
-			}
-		    }
-		}
-	    }
-	    if (mc != null && mcdb != null) {
-		mod.getDependencies().remove(mc);
-		mod.getDependencies().add(mcdb);
+		dependency.setMod(mod);
 	    }
 	}
 	String archive = mod.getArchive();
@@ -69,6 +54,7 @@ public class InstallationService {
 	Map<File, File> toCopy = new HashMap<File, File>();
 	Map<File, Resource> fileResource = new HashMap<File, Resource>();
 	for (Resource resource : mod.getResources()) {
+	    resource.setMod(mod); // fix link when loaded from xml
 	    String source = resource.getSourcePath();
 	    String target = resource.getTargetPath();
 	    File from = new File(outdir, source).getCanonicalFile();
@@ -77,6 +63,8 @@ public class InstallationService {
 	    Pattern include = resource.getInclude() == null ? null : Pattern.compile(resource.getInclude());
 	    Pattern exclude = resource.getExclude() == null ? null : Pattern.compile(resource.getExclude());
 	    for (File fromFile : listRecursive(from)) {
+		if (fromFile.isDirectory())
+		    continue;
 		String relative = fromFile.getCanonicalFile().getAbsolutePath().substring(pos);
 		if (include != null) {
 		    if (!include.matcher(relative).find()) {
@@ -94,21 +82,19 @@ public class InstallationService {
 		fileResource.put(fromFile, resource);
 		for (MCFile existing : db.getAll(new MCFile(mcRelative))) {
 		    if (existing.getMc() != null) {
-			// System.out.println("\tMC " + existing.getMc().getVersion());
+			System.out.println("conflict MC: " + mcRelative);
 			conflicts.add("Minecraft v" + existing.getMc().getVersion());
 		    }
 		    if (existing.getResource() != null) {
 			if (existing.getResource().getMod() != null) {
-			    // System.out.println("\t" + existing.getResource().getMod().getName());
+			    System.out.println("conflict " + existing.getResource().getMod().getName() + ": " + mcRelative);
 			    conflicts.add(existing.getResource().getMod().getName() + " v" + existing.getResource().getMod().getVersion());
 			} else {
-			    // System.out.println("\t" + existing.getResource().getModPack().getName());
+			    System.out.println("conflict " + existing.getResource().getModPack().getName() + ": " + mcRelative);
 			    conflicts.add(existing.getResource().getModPack().getName() + " v" + existing.getResource().getModPack().getVersion());
 			}
 		    }
 		}
-		// System.out.println(fromFile);
-		// System.out.println("\t\t> " + toFile.getAbsolutePath());
 	    }
 	}
 	if (check) {
@@ -132,6 +118,8 @@ public class InstallationService {
 
     public void installMod(DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) throws IOException {
 	installMod(true, db, mod, mods, tmp, minecraftBaseFolder);
+	db.save(mod);
+	JOptionPane.showMessageDialog(null, "Mod installed.");
     }
 
     public void uninstallMod(DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) {

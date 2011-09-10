@@ -1,9 +1,6 @@
 <mod archive="[FileCopter]OptiFine_1.7.3_HD_G.zip" name="OptiFine_HD_G"
 	url="http://www.minecraftforum.net/topic/249637-173-optifine-hd-g-fps-boost/"
-	version="1.7.3">
-	<dependencies>
-		<mc version="1.7.3" />
-	</dependencies>
+	version="1.7.3" mc="1.7.3">
 	<resources>
 		<resource sourcepath="./" targetpath="bin/minecraft.jar" />
 	</resources>

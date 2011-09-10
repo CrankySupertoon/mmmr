@@ -85,6 +85,7 @@ public class MMMR implements StartMe {
 	ModPack yogbox = new ModPack("YogBox", "1.1");
 	yogbox.setDescription("YogBox_1.7.3_v1.1.zip");
 	yogbox.setMc(mc);
+	yogbox.setMcVersionDependency("1.7.3");
 
 	yogbox.addMod(new Mod("Single Player RPG Mod", "1.4a", "http://www.minecraftforum.net/topic/479017-173-single-player-rpg-mod-v14", "bin/minecraft.jar/rpgmod/"));
 	yogbox.addMod(new Mod("Millenaire", "1.3.1",

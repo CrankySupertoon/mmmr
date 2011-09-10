@@ -34,6 +34,7 @@ import javax.swing.JFileChooser;
  */
 public class IOMethods {
     private static long _(File source, File target) throws IOException {
+	target.getParentFile().mkdirs();
 	OutputStream out = target == null ? null : new FileOutputStream(target);
 	CheckedInputStream in = new CheckedInputStream(new FileInputStream(source), new CRC32());
 	byte[] buffer = new byte[1024 * 8];
@@ -203,6 +204,8 @@ public class IOMethods {
 
     public static void loadjarAtRuntime(File jar) throws SecurityException, NoSuchMethodException, IllegalArgumentException, MalformedURLException, IllegalAccessException,
 	    InvocationTargetException {
+	if ("false".equals(System.getProperty("nodload")))
+	    return;
 	URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 	Class<?> sysclass = URLClassLoader.class;
 	Method method = sysclass.getDeclaredMethod("addURL", URL.class);

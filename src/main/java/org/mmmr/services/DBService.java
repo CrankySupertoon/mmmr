@@ -14,7 +14,6 @@ import org.mmmr.Dependency;
 import org.mmmr.MC;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
-import org.mmmr.ModDependency;
 import org.mmmr.ModPack;
 import org.mmmr.PersistentObject;
 import org.mmmr.Resource;
@@ -41,7 +40,6 @@ public class DBService {
 	configuration.addAnnotatedClass(Dependency.class);
 	configuration.addAnnotatedClass(MCFile.class);
 	configuration.addAnnotatedClass(MC.class);
-	configuration.addAnnotatedClass(ModDependency.class);
 	configuration.addAnnotatedClass(Resource.class);
 	configuration.addAnnotatedClass(Mod.class);
 	configuration.addAnnotatedClass(ModPack.class);
