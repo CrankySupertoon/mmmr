@@ -174,7 +174,6 @@ public class StatusWindow extends JFrame {
     }
 
     public void setReadyToGoOn() {
-	quit.setEnabled(true);
 	goOn.setEnabled(true);
 	goOn.grabFocus();
     }

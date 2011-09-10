@@ -44,7 +44,7 @@ public class Config {
 
     private File mcResources;
 
-    private File minecraftJogboxBackup;
+    private File mcJogboxBackup;
 
     private File mods;
 
@@ -85,7 +85,7 @@ public class Config {
 	tmp = newDir(data, "tmp");
 	dbdir = new File(data, "db");
 	backupOriginalJar = newDir(backup, "minecraft.jar");
-	minecraftJogboxBackup = newDir(backup, "jogbox");
+	mcJogboxBackup = newDir(backup, "jogbox");
     }
 
     public File getBackup() {
@@ -148,8 +148,8 @@ public class Config {
 	return this.mcResources;
     }
 
-    public File getMinecraftJogboxBackup() {
-	return minecraftJogboxBackup;
+    public File getMcJogboxBackup() {
+	return mcJogboxBackup;
     }
 
     public File getMods() {

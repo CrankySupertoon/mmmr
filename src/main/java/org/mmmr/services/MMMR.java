@@ -6,6 +6,7 @@ import static org.mmmr.services.IOMethods.deleteDirectory;
 import static org.mmmr.services.IOMethods.downloadURL;
 import static org.mmmr.services.IOMethods.fileEquals;
 import static org.mmmr.services.IOMethods.list;
+import static org.mmmr.services.IOMethods.listRecursive;
 import static org.mmmr.services.IOMethods.selectFile;
 
 import java.io.File;
@@ -300,8 +301,8 @@ public class MMMR implements StartMe {
 
 			    JOptionPane.showMessageDialog(null, "After you installed the YogBox.\nContinue.");
 
-			    extract(cfg.getMcJar(), cfg.getMinecraftJogboxBackup());
-			    removeOriginalFiles(cfg.getMinecraftJogboxBackup().getAbsolutePath().length() + 1, cfg.getMinecraftJogboxBackup(), cfg.getBackupOriginalJar());
+			    extract(cfg.getMcJar(), cfg.getMcJogboxBackup());
+			    removeOriginalFiles(cfg.getMcJogboxBackup().getAbsolutePath().length() + 1, cfg.getMcJogboxBackup(), cfg.getBackupOriginalJar());
 
 			    ModCompilation jb = db.getOrCreate(new ModCompilation("YogBox", "1.1"));
 			    jb = initJogBox(cfg.getData());
@@ -356,10 +357,20 @@ public class MMMR implements StartMe {
 				}
 			    }
 			}
+			if (jb.getResources().size() == 0) {
+			    Resource resource = new Resource(":", ":");
+			    jb.addResource(resource);
+			    int pos = cfg.getMcJogboxBackup().getAbsolutePath().length() + 1;
+			    for (File file : listRecursive(cfg.getMcJogboxBackup())) {
+				if (file.isDirectory())
+				    continue;
+				String path = "bin/minecraft.jar/" + file.getAbsolutePath().substring(pos);
+				resource.addFile(new MCFile(path, new Date(file.lastModified()), crc32File(file)));
+			    }
+			}
 			db.save(jb);
 		    }
 		}
-		statusWindow.setReadyToGoOn();
 	    }
 
 	    allSuccess = mccheck && ybcheck;
@@ -369,6 +380,8 @@ public class MMMR implements StartMe {
 			JOptionPane.ERROR_MESSAGE)) {
 		    System.exit(0);
 		}
+	    } else {
+		statusWindow.setReadyToGoOn();
 	    }
 	}
     }

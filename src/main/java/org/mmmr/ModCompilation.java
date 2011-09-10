@@ -43,6 +43,9 @@ public class ModCompilation {
     @Column(nullable = false)
     private String name;
 
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Resource> resources;
+
     @Version
     private Integer ver;
 
@@ -51,7 +54,6 @@ public class ModCompilation {
 
     public ModCompilation() {
 	super();
-
     }
 
     public ModCompilation(String name, String version) {
@@ -64,6 +66,12 @@ public class ModCompilation {
 	if (getMods() == null)
 	    mods = new ArrayList<Mod>();
 	getMods().add(mod);
+    }
+
+    public void addResource(Resource resource) {
+	if (getResources() == null)
+	    resources = new ArrayList<Resource>();
+	getResources().add(resource);
     }
 
     @Override
@@ -114,6 +122,12 @@ public class ModCompilation {
 	return name;
     }
 
+    @XmlElementWrapper
+    @XmlElementRef
+    public List<Resource> getResources() {
+	return this.resources;
+    }
+
     @XmlTransient
     public Integer getVer() {
 	return this.ver;
@@ -152,17 +166,21 @@ public class ModCompilation {
     public void setName(String name) {
 	this.name = name;
     }
-
+    
+    public void setResources(List<Resource> resources) {
+	this.resources = resources;
+    }
+    
     protected void setVer(Integer ver) {
 	this.ver = ver;
     }
-
+    
     public void setVersion(String version) {
 	this.version = version;
     }
-
+    
     @Override
     public String toString() {
-	return "ModCompilation [mods=" + getMods() + ", name=" + getName() + ", description=" + getDescription() + ", version=" + getVersion() + ", mc=" + getMc() + "]";
+	return "ModCompilation [mods=" + getMods() + ", name=" + getName() + ", description=" + getDescription() + ", version=" + getVersion() + ", mc=" + getMc()  + ", resources=" + getResources() + "]";
     }
 }

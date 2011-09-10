@@ -174,7 +174,24 @@ public class IOMethods {
     public static boolean is64Bit() {
 	return "64".equals(System.getProperties().getProperty("sun.arch.data.model"));
     }
+    
+    public static List<File> listRecursive(File dir) {
+	List<File> all = new ArrayList<File>();
+	listRecursive(dir,all);
+	return all;
+    }
 
+    private static void listRecursive(File dir, List<File> all) {
+	File[] tmp = dir.listFiles();
+	if (tmp == null || tmp.length == 0) return;
+	for(File child : tmp) {
+	    all.add(child);
+	    if(child.isDirectory()) {
+		listRecursive(child, all);
+	    }
+	}
+    }
+    
     @SuppressWarnings("unchecked")
     public static List<File> list(File dir) {
 	File[] tmp = dir.listFiles();
