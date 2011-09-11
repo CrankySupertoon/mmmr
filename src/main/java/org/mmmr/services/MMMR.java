@@ -1,14 +1,5 @@
 package org.mmmr.services;
 
-import static org.mmmr.services.ArchiveService.extract;
-import static org.mmmr.services.IOMethods.crc32File;
-import static org.mmmr.services.IOMethods.deleteDirectory;
-import static org.mmmr.services.IOMethods.downloadURL;
-import static org.mmmr.services.IOMethods.fileEquals;
-import static org.mmmr.services.IOMethods.list;
-import static org.mmmr.services.IOMethods.listRecursive;
-import static org.mmmr.services.IOMethods.selectFile;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -40,10 +31,10 @@ public class MMMR implements StartMe {
 
     private void addContents(MC mc, String prefix, int pos, File fd) throws IOException {
 	if (fd.isFile()) {
-	    mc.addFile(new MCFile(prefix + fd.getAbsolutePath().substring(pos), new Date(fd.lastModified()), crc32File(fd)));
+	    mc.addFile(new MCFile(prefix + fd.getAbsolutePath().substring(pos), new Date(fd.lastModified()), IOMethods.crc32File(fd)));
 	}
-	for (File child : list(fd)) {
-	    addContents(mc, prefix, pos, child);
+	for (File child : IOMethods.list(fd)) {
+	    this.addContents(mc, prefix, pos, child);
 	}
     }
 
@@ -51,20 +42,27 @@ public class MMMR implements StartMe {
      * returns true if needs reinstalling
      */
     private boolean checkMCInstall() {
-	if (list(cfg.getMcBaseFolder()).size() == 0)
+	if (IOMethods.list(this.cfg.getMcBaseFolder()).size() == 0) {
 	    return true;
-	if (!new File(cfg.getThisFolder(), "Minecraft.exe").exists())
+	}
+	if (!new File(this.cfg.getThisFolder(), "Minecraft.exe").exists()) {
 	    return true;
-	if (!new File(cfg.getThisFolder(), "minecraft.jar").exists())
+	}
+	if (!new File(this.cfg.getThisFolder(), "minecraft.jar").exists()) {
 	    return true;
-	if (!new File(cfg.getMcBaseFolder(), "bin/minecraft.jar").exists())
+	}
+	if (!new File(this.cfg.getMcBaseFolder(), "bin/minecraft.jar").exists()) {
 	    return true;
-	if (!new File(cfg.getMcBaseFolder(), "bin/jinput.jar").exists())
+	}
+	if (!new File(this.cfg.getMcBaseFolder(), "bin/jinput.jar").exists()) {
 	    return true;
-	if (!new File(cfg.getMcBaseFolder(), "bin/lwjgl.jar").exists())
+	}
+	if (!new File(this.cfg.getMcBaseFolder(), "bin/lwjgl.jar").exists()) {
 	    return true;
-	if (!new File(cfg.getMcBaseFolder(), "bin/lwjgl_util.jar").exists())
+	}
+	if (!new File(this.cfg.getMcBaseFolder(), "bin/lwjgl_util.jar").exists()) {
 	    return true;
+	}
 
 	return false;
     }
@@ -166,14 +164,14 @@ public class MMMR implements StartMe {
 	if (source.isFile()) {
 	    String relativePath = source.getAbsolutePath().substring(s);
 	    File duplicate = new File(duplicateBase, relativePath);
-	    if (fileEquals(source, duplicate)) {
+	    if (IOMethods.fileEquals(source, duplicate)) {
 		System.out.println("delete backup duplicate " + relativePath);
 		source.delete();
 	    }
 
 	}
-	for (File child : list(source)) {
-	    removeOriginalFiles(s, child, duplicateBase);
+	for (File child : IOMethods.list(source)) {
+	    this.removeOriginalFiles(s, child, duplicateBase);
 	}
     }
 
@@ -192,25 +190,25 @@ public class MMMR implements StartMe {
 	DBService db;
 
 	try {
-	    statusWindow.getDbstatus().setStatus("Database and Hibernate: starting", null);
-	    db = DBService.getInstance(cfg);
-	    cfg.setDb(db);
-	    mc = db.getOrCreate(new MC("1.7.3"));
-	    statusWindow.getDbstatus().setStatus("Database and Hibernate: ready", true);
+	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: starting", null);
+	    db = DBService.getInstance(this.cfg);
+	    this.cfg.setDb(db);
+	    this.mc = db.getOrCreate(new MC("1.7.3"));
+	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: ready", true);
 	} catch (Exception e) {
-	    statusWindow.getDbstatus().setStatus("Database and Hibernate: starting failed", false);
+	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: starting failed", false);
 	    throw e;
 	}
 
 	XmlService xml;
 
 	try {
-	    statusWindow.getXmlstatus().setStatus("XML service: starting", null);
-	    xml = new XmlService(cfg.getData());
-	    cfg.setXml(xml);
-	    statusWindow.getXmlstatus().setStatus("XML service: ready", true);
+	    this.statusWindow.getXmlstatus().setStatus("XML service: starting", null);
+	    xml = new XmlService(this.cfg.getData());
+	    this.cfg.setXml(xml);
+	    this.statusWindow.getXmlstatus().setStatus("XML service: ready", true);
 	} catch (Exception e) {
-	    statusWindow.getXmlstatus().setStatus("XML service: starting failed", false);
+	    this.statusWindow.getXmlstatus().setStatus("XML service: starting failed", false);
 	    throw e;
 	}
 
@@ -220,62 +218,64 @@ public class MMMR implements StartMe {
 	    boolean mccheck = false;
 	    String error = "";
 
-	    if (checkMCInstall()) {
+	    if (this.checkMCInstall()) {
 		try {
 		    String url = "https://s3.amazonaws.com/MinecraftDownload/launcher/";
 		    String[] files = { "Minecraft.exe", "minecraft.jar", "Minecraft_Server.exe", "minecraft_server.jar" };
 		    int i = 0;
 		    for (; i < files.length; i++) {
-			statusWindow.getMcstatus().setStatus("Minecraft: downloading " + files[i], null);
+			this.statusWindow.getMcstatus().setStatus("Minecraft: downloading " + files[i], null);
 			try {
 			    error = "downloading " + files[i];
-			    downloadURL(new URL(url + files[i]), new File(cfg.getThisFolder(), files[i]));
+			    IOMethods.downloadURL(new URL(url + files[i]), new File(this.cfg.getThisFolder(), files[i]));
 			    error = "";
 			} catch (Exception e) {
 			    throw e;
 			}
 		    }
-		    statusWindow.getMcstatus().setStatus("Minecraft: downloaded", null);
+		    this.statusWindow.getMcstatus().setStatus("Minecraft: downloaded", null);
 		    JOptionPane.showMessageDialog(null, "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.");
-		    startMC(true);
-		    writeMCBat();
+		    this.startMC(true);
+		    this.writeMCBat();
 		    if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(null, "After you started Minecraft once.\nDid Minecraft run properly?", "",
 			    JOptionPane.YES_NO_OPTION)) {
 			error = "installing and running Minecraft";
-			deleteDirectory(cfg.getMcBaseFolder());
+			IOMethods.deleteDirectory(this.cfg.getMcBaseFolder());
 			for (i = 0; i < files.length; i++) {
-			    new File(cfg.getThisFolder(), files[i]).delete();
+			    new File(this.cfg.getThisFolder(), files[i]).delete();
 			}
 			throw new IOException("first run failed");
 		    }
-		    extract(cfg.getMcJar(), cfg.getBackupOriginalJar());
-		    if (!new File(cfg.getBackupOriginalJar(), "META-INF/MOJANG_C.SF").exists()) {
-			deleteDirectory(cfg.getBackupOriginalJar());
+		    ArchiveService.extract(this.cfg.getMcJar(), this.cfg.getBackupOriginalJar());
+		    if (!new File(this.cfg.getBackupOriginalJar(), "META-INF/MOJANG_C.SF").exists()) {
+			IOMethods.deleteDirectory(this.cfg.getBackupOriginalJar());
 			throw new RuntimeException("not a clean install");
 		    }
-		    statusWindow.getMcstatus().setStatus("Minecraft: ready", mccheck = true);
+		    this.statusWindow.getMcstatus().setStatus("Minecraft: ready", mccheck = true);
 		} catch (Exception e) {
-		    statusWindow.getMcstatus().setStatus("Minecraft: initialization failed", mccheck = false);
+		    this.statusWindow.getMcstatus().setStatus("Minecraft: initialization failed", mccheck = false);
 		}
 	    } else {
-		statusWindow.getMcstatus().setStatus("Minecraft: ready", mccheck = true);
+		this.statusWindow.getMcstatus().setStatus("Minecraft: ready", mccheck = true);
 	    }
 
 	    boolean ybcheck = false;
 
 	    if (mccheck) {
-		if (!cfg.getMcJarBackup().exists() && !"true".equals(cfg.getProperty("jogbox.ignore", "?"))) {
+		if (!this.cfg.getMcJarBackup().exists() && !"true".equals(this.cfg.getProperty("jogbox.ignore", "?"))) {
 		    if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, "Do you want to install YogBox?\nYou need to have it downloaded already.", "YogBox",
 			    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
 			try {
-			    File jbinstaller = selectFile(cfg.getThisFolder(), new javax.swing.filechooser.FileFilter() {
+			    File jbinstaller = IOMethods.selectFile(this.cfg.getThisFolder(), new javax.swing.filechooser.FileFilter() {
 				@Override
 				public boolean accept(File f) {
-				    if (f.isDirectory())
+				    if (f.isDirectory()) {
 					return true;
+				    }
 				    String name = f.getName().toLowerCase();
-				    if (!name.endsWith(".jar"))
+				    if (!name.endsWith(".jar")) {
 					return false;
+				    }
 				    return name.contains("yogbox") && name.contains("install") && !name.contains("uninstall");
 				}
 
@@ -285,8 +285,9 @@ public class MMMR implements StartMe {
 				}
 			    });
 
-			    if (jbinstaller == null)
+			    if (jbinstaller == null) {
 				throw new IOException("no file selected");
+			    }
 
 			    List<String> command = new ArrayList<String>();
 			    command.add("javaw.exe");
@@ -294,55 +295,55 @@ public class MMMR implements StartMe {
 			    command.add(jbinstaller.getAbsolutePath());
 			    System.out.println(command);
 			    ProcessBuilder pb = new ProcessBuilder(command);
-			    pb.environment().put("AppData", cfg.getThisFolder().getAbsolutePath());
-			    pb.environment().put("APPDATA", cfg.getThisFolder().getAbsolutePath());
+			    pb.environment().put("AppData", this.cfg.getThisFolder().getAbsolutePath());
+			    pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath());
 			    pb.start();
 
 			    JOptionPane.showMessageDialog(null, "After you installed the YogBox.\nContinue.");
 
-			    extract(cfg.getMcJar(), cfg.getMcJogboxBackup());
-			    removeOriginalFiles(cfg.getMcJogboxBackup().getAbsolutePath().length() + 1, cfg.getMcJogboxBackup(), cfg.getBackupOriginalJar());
+			    ArchiveService.extract(this.cfg.getMcJar(), this.cfg.getMcJogboxBackup());
+			    this.removeOriginalFiles(this.cfg.getMcJogboxBackup().getAbsolutePath().length() + 1, this.cfg.getMcJogboxBackup(), this.cfg.getBackupOriginalJar());
 
 			    ModPack jb = db.getOrCreate(new ModPack("YogBox", "1.1"));
-			    jb = initJogBox(cfg.getData());
+			    jb = this.initJogBox(this.cfg.getData());
 			    db.save(jb);
 
-			    File file = new File(cfg.getMods(), "YogBox_1.7.3_v1.1.zip.xml");
+			    File file = new File(this.cfg.getMods(), "YogBox_1.7.3_v1.1.zip.xml");
 			    xml.save(new FileOutputStream(file), jb);
 
 			    jb.setInstallationDate(new Date());
 			    db.save(jb);
-			    statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
-			    cfg.setProperty("jogbox.ignore", "false");
+			    this.statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
+			    this.cfg.setProperty("jogbox.ignore", "false");
 			} catch (Exception e) {
-			    statusWindow.getYbstatus().setStatus("YogBox: failed", ybcheck = false);
+			    this.statusWindow.getYbstatus().setStatus("YogBox: failed", ybcheck = false);
 			}
 		    } else {
-			statusWindow.getYbstatus().setStatus("YogBox: not installed", ybcheck = true);
-			cfg.setProperty("jogbox.ignore", "true");
+			this.statusWindow.getYbstatus().setStatus("YogBox: not installed", ybcheck = true);
+			this.cfg.setProperty("jogbox.ignore", "true");
 		    }
 		} else {
-		    if (!"true".equals(cfg.getProperty("jogbox.ignore", "?"))) {
-			statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
+		    if (!"true".equals(this.cfg.getProperty("jogbox.ignore", "?"))) {
+			this.statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
 		    } else {
-			statusWindow.getYbstatus().setStatus("YogBox: not installed", ybcheck = true);
+			this.statusWindow.getYbstatus().setStatus("YogBox: not installed", ybcheck = true);
 		    }
 		}
 	    }
 
 	    if (ybcheck) {
-		if (cfg.getMcJar().isFile()) {
-		    File minecraftZip = new File(cfg.getMcJar().getAbsolutePath() + ".zip");
-		    cfg.getMcJar().renameTo(minecraftZip);
-		    cfg.getMcJar().mkdirs();
-		    extract(minecraftZip, cfg.getMcJar());
+		if (this.cfg.getMcJar().isFile()) {
+		    File minecraftZip = new File(this.cfg.getMcJar().getAbsolutePath() + ".zip");
+		    this.cfg.getMcJar().renameTo(minecraftZip);
+		    this.cfg.getMcJar().mkdirs();
+		    ArchiveService.extract(minecraftZip, this.cfg.getMcJar());
 		}
-		if (mc.getFiles() == null || mc.getFiles().size() == 0) {
-		    addContents(mc, "bin/minecraft.jar/", cfg.getBackupOriginalJar().getAbsolutePath().length() + 1, cfg.getBackupOriginalJar());
-		    addContents(mc, cfg.getMcResources().getName() + "/", cfg.getMcResources().getAbsolutePath().length() + 1, cfg.getMcResources());
-		    db.save(mc);
+		if ((this.mc.getFiles() == null) || (this.mc.getFiles().size() == 0)) {
+		    this.addContents(this.mc, "bin/minecraft.jar/", this.cfg.getBackupOriginalJar().getAbsolutePath().length() + 1, this.cfg.getBackupOriginalJar());
+		    this.addContents(this.mc, this.cfg.getMcResources().getName() + "/", this.cfg.getMcResources().getAbsolutePath().length() + 1, this.cfg.getMcResources());
+		    db.save(this.mc);
 		}
-		if (!"true".equals(cfg.getProperty("jogbox.ignore", "?"))) {
+		if (!"true".equals(this.cfg.getProperty("jogbox.ignore", "?"))) {
 		    ModPack jb = db.get(new ModPack("YogBox", "1.1"));
 		    if (jb != null) {
 			for (Mod mod : jb.getMods()) {
@@ -350,7 +351,7 @@ public class MMMR implements StartMe {
 			    if (mod.getResourceCheck() == null) {
 				mod.setInstallationDate(now);
 			    } else {
-				File file = new File(cfg.getMcBaseFolder(), mod.getResourceCheck());
+				File file = new File(this.cfg.getMcBaseFolder(), mod.getResourceCheck());
 				if (file.exists()) {
 				    mod.setInstallationDate(now);
 				} else {
@@ -358,15 +359,16 @@ public class MMMR implements StartMe {
 				}
 			    }
 			}
-			if (jb.getResources() == null || jb.getResources().size() == 0) {
+			if ((jb.getResources() == null) || (jb.getResources().size() == 0)) {
 			    Resource resource = new Resource("*", "*");
 			    jb.addResource(resource);
-			    int pos = cfg.getMcJogboxBackup().getAbsolutePath().length() + 1;
-			    for (File file : listRecursive(cfg.getMcJogboxBackup())) {
-				if (file.isDirectory())
+			    int pos = this.cfg.getMcJogboxBackup().getAbsolutePath().length() + 1;
+			    for (File file : IOMethods.listRecursive(this.cfg.getMcJogboxBackup())) {
+				if (file.isDirectory()) {
 				    continue;
+				}
 				String path = "bin/minecraft.jar/" + file.getAbsolutePath().substring(pos);
-				resource.addFile(new MCFile(path, new Date(file.lastModified()), crc32File(file)));
+				resource.addFile(new MCFile(path, new Date(file.lastModified()), IOMethods.crc32File(file)));
 			    }
 			}
 			db.save(jb);
@@ -382,33 +384,33 @@ public class MMMR implements StartMe {
 		    System.exit(0);
 		}
 	    } else {
-		statusWindow.setReadyToGoOn();
+		this.statusWindow.setReadyToGoOn();
 	    }
 	}
     }
 
     private void startMC(boolean plain) throws IOException {
 	String commandline;
-	if (plain)
+	if (plain) {
 	    commandline = "javaw.exe -Xms1024m -Xmx1024m -jar minecraft.jar";
-	else {
-	    commandline = getMCCommandLine();
+	} else {
+	    commandline = this.getMCCommandLine();
 	}
 
 	List<String> command = new ArrayList<String>(Arrays.asList(commandline.split(" ")));
 	command.set(0, "C:/Program Files/Java/jre7/bin/" + command.get(0));
 	System.out.println(command);
 	ProcessBuilder pb = new ProcessBuilder(command);
-	pb.environment().put("AppData", cfg.getThisFolder().getAbsolutePath());
-	pb.environment().put("APPDATA", cfg.getThisFolder().getAbsolutePath());
+	pb.environment().put("AppData", this.cfg.getThisFolder().getAbsolutePath());
+	pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath());
 	@SuppressWarnings("unused")
 	Process javap = pb.start();
     }
 
     private void writeMCBat() throws IOException {
-	String commandline = getMCCommandLine();
-	FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft.bat"));
-	out.write(("SET APPDATA=" + cfg.getThisFolder().getAbsolutePath() + "\r\n" + commandline + "\r\npause").getBytes());
+	String commandline = this.getMCCommandLine();
+	FileOutputStream out = new FileOutputStream(new File(this.cfg.getThisFolder(), "start minecraft.bat"));
+	out.write(("SET APPDATA=" + this.cfg.getThisFolder().getAbsolutePath() + "\r\n" + commandline + "\r\npause").getBytes());
 	out.close();
     }
 }

@@ -1,10 +1,5 @@
 package org.mmmr.services;
 
-import static org.mmmr.services.IOMethods.downloadURL;
-import static org.mmmr.services.IOMethods.loadjarAtRuntime;
-import static org.mmmr.services.IOMethods.newDir;
-import static org.mmmr.services.IOMethods.unzip;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,7 +21,7 @@ public class DynamicLoading {
     public static void init(StatusPanel status, Config cfg) throws Exception {
 	String message = "";
 	try {
-	    newDir("data/libs");
+	    IOMethods.newDir("data/libs");
 
 	    String relative = null;
 	    {
@@ -39,8 +34,8 @@ public class DynamicLoading {
 		    status.setStatus("Program libraries: downloading " + zip.getName(), null);
 		    URL url = new URL(
 			    "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/s/project/se/sevenzipjbind/7-Zip-JBinding/4.65-1.04rc-extr-only/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
-		    downloadURL(url, zip);
-		    unzip(zip, cfg.getTmp());
+		    IOMethods.downloadURL(url, zip);
+		    IOMethods.unzip(zip, cfg.getTmp());
 		    {
 			File jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding.jar");
 			message = lib1.getName();
@@ -53,9 +48,9 @@ public class DynamicLoading {
 		    }
 		}
 		status.setStatus("Program libraries: loading " + lib1.getName(), null);
-		loadjarAtRuntime(lib1);
+		IOMethods.loadjarAtRuntime(lib1);
 		status.setStatus("Program libraries: loading " + lib2.getName(), null);
-		loadjarAtRuntime(lib2);
+		IOMethods.loadjarAtRuntime(lib2);
 	    }
 	    {
 		BufferedReader in = new BufferedReader(new InputStreamReader(DynamicLoading.class.getClassLoader().getResourceAsStream("libs.txt")));
@@ -65,18 +60,18 @@ public class DynamicLoading {
 		    relative = parts[1];
 		    File jar = new File(cfg.getLibs(), relative.substring(relative.lastIndexOf('/') + 1));
 		    message = jar.getName();
-		    if (!(jar.exists() && jar.length() == len)) {
+		    if (!(jar.exists() && (jar.length() == len))) {
 			status.setStatus("Program libraries: downloading " + jar.getName(), null);
-			URL url = new URL(MAVEN_REPO + relative);
+			URL url = new URL(DynamicLoading.MAVEN_REPO + relative);
 			try {
-			    downloadURL(url, jar);
+			    IOMethods.downloadURL(url, jar);
 			    if (jar.length() != len) {
 				jar.delete();
 				throw new IOException("length><" + len);
 			    }
 			} catch (Exception e) {
-			    url = new URL(MAVEN_REPO_MIRROR + relative);
-			    downloadURL(url, jar);
+			    url = new URL(DynamicLoading.MAVEN_REPO_MIRROR + relative);
+			    IOMethods.downloadURL(url, jar);
 			    if (jar.length() != len) {
 				jar.delete();
 				throw new IOException("length><" + len);
@@ -84,7 +79,7 @@ public class DynamicLoading {
 			}
 		    }
 		    status.setStatus("Program libraries: loading " + jar.getName(), null);
-		    loadjarAtRuntime(jar);
+		    IOMethods.loadjarAtRuntime(jar);
 		}
 		in.close();
 	    }
@@ -107,7 +102,7 @@ public class DynamicLoading {
 		String path = new File(cp).getAbsolutePath().replace('\\', '/');
 		if (path.startsWith(repo)) {
 		    String relative = path.substring(repo.length() + 1);
-		    URL url = new URL(MAVEN_REPO + relative);
+		    URL url = new URL(DynamicLoading.MAVEN_REPO + relative);
 		    System.out.println(url.openConnection().getContentLength() + "::" + url);
 		    out.write(url.openConnection().getContentLength() + "::" + relative + "\n");
 		}

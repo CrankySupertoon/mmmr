@@ -48,26 +48,29 @@ public class MC implements Comparable<MC>, PersistentObject {
 
     public MC(String version) {
 	this();
-	setVersion(version);
+	this.setVersion(version);
     }
 
     public void addFile(MCFile file) {
-	if (getFiles() == null)
-	    files = new ArrayList<MCFile>();
-	getFiles().add(file);
+	if (this.getFiles() == null) {
+	    this.files = new ArrayList<MCFile>();
+	}
+	this.getFiles().add(file);
 	file.setMc(this);
     }
 
+    @Override
     public int compareTo(final MC other) {
-	return new CompareToBuilder().append(version, other.version).toComparison();
+	return new CompareToBuilder().append(this.version, other.version).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof MC))
+	if (!(other instanceof MC)) {
 	    return false;
+	}
 	MC castOther = (MC) other;
-	return new EqualsBuilder().append(version, castOther.version).isEquals();
+	return new EqualsBuilder().append(this.version, castOther.version).isEquals();
     }
 
     @XmlTransient
@@ -75,6 +78,7 @@ public class MC implements Comparable<MC>, PersistentObject {
 	return this.files;
     }
 
+    @Override
     @XmlTransient
     public Long getId() {
 	return this.id;
@@ -87,12 +91,12 @@ public class MC implements Comparable<MC>, PersistentObject {
 
     @XmlAttribute
     public String getVersion() {
-	return version;
+	return this.version;
     }
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(version).toHashCode();
+	return new HashCodeBuilder().append(this.version).toHashCode();
     }
 
     public void setFiles(List<MCFile> files) {
@@ -113,6 +117,6 @@ public class MC implements Comparable<MC>, PersistentObject {
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).appendSuper(super.toString()).append("version", version).toString();
+	return new ToStringBuilder(this).appendSuper(super.toString()).append("version", this.version).toString();
     }
 }

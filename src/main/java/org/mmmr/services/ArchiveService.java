@@ -49,35 +49,37 @@ public class ArchiveService {
 	    this.inArchive = inArchive;
 	}
 
+	@Override
 	public ISequentialOutStream getStream(int i, ExtractAskMode extractAskMode) throws SevenZipException {
 	    this.index = i;
-	    skipExtraction = (Boolean) inArchive.getProperty(index, PropID.IS_FOLDER);
-	    if (skipExtraction || extractAskMode != ExtractAskMode.EXTRACT) {
+	    this.skipExtraction = (Boolean) this.inArchive.getProperty(this.index, PropID.IS_FOLDER);
+	    if (this.skipExtraction || (extractAskMode != ExtractAskMode.EXTRACT)) {
 		return null;
 	    }
 	    return new ISequentialOutStream() {
+		@Override
 		public int write(byte[] data) throws SevenZipException {
 		    try {
-			Object path = inArchive.getProperty(index, PropID.PATH);
-			if (!path.equals(current)) {
-			    if (out != null) {
-				out.flush();
-				out.close();
+			Object path = Callback.this.inArchive.getProperty(Callback.this.index, PropID.PATH);
+			if (!path.equals(Callback.this.current)) {
+			    if (Callback.this.out != null) {
+				Callback.this.out.flush();
+				Callback.this.out.close();
 			    }
-			    total = 0;
-			    crc32 = new CRC32();
-			    current = String.valueOf(path);
-			    File target = new File(outdir, String.valueOf(path));
+			    Callback.this.total = 0;
+			    Callback.this.crc32 = new CRC32();
+			    Callback.this.current = String.valueOf(path);
+			    File target = new File(Callback.this.outdir, String.valueOf(path));
 			    target.getParentFile().mkdirs();
-			    out = new BufferedOutputStream(new FileOutputStream(target));
+			    Callback.this.out = new BufferedOutputStream(new FileOutputStream(target));
 			}
 			try {
-			    out.write(data, 0, data.length);
-			    crc32.update(data, 0, data.length);
+			    Callback.this.out.write(data, 0, data.length);
+			    Callback.this.crc32.update(data, 0, data.length);
 			} catch (IOException ex) {
 			    throw new RuntimeException(ex);
 			}
-			total += data.length;
+			Callback.this.total += data.length;
 			return data.length;
 		    } catch (IOException ex) {
 			throw new RuntimeException(ex);
@@ -86,31 +88,35 @@ public class ArchiveService {
 	    };
 	}
 
+	@Override
 	public void prepareOperation(ExtractAskMode extractAskMode) throws SevenZipException {
 	    //
 	}
 
+	@Override
 	public void setCompleted(long completeValue) throws SevenZipException {
 	    //
 	}
 
+	@Override
 	public void setOperationResult(ExtractOperationResult extractOperationResult) throws SevenZipException {
-	    if (skipExtraction) {
+	    if (this.skipExtraction) {
 		return;
 	    }
 	    try {
-		out.flush();
-		out.close();
+		this.out.flush();
+		this.out.close();
 	    } catch (Exception ex) {
 		//
 	    }
 	    if (extractOperationResult != ExtractOperationResult.OK) {
 		System.err.println("Extraction error");
 	    } else {
-		System.out.println(Long.toHexString(crc32.getValue()).toUpperCase() + " | " + total + " | " + inArchive.getProperty(index, PropID.PATH));
+		System.out.println(Long.toHexString(this.crc32.getValue()).toUpperCase() + " | " + this.total + " | " + this.inArchive.getProperty(this.index, PropID.PATH));
 	    }
 	}
 
+	@Override
 	public void setTotal(long total) throws SevenZipException {
 	    //
 	}
@@ -150,9 +156,11 @@ public class ArchiveService {
 		}
 	    }
 	}
-	if (exception != null)
+	if (exception != null) {
 	    throw exception;
-	if (runtimeException != null)
+	}
+	if (runtimeException != null) {
 	    throw runtimeException;
+	}
     }
 }

@@ -105,29 +105,33 @@ public class Mod implements Comparable<Mod>, PersistentObject {
     }
 
     public void addDepencency(Dependency dependency) {
-	if (getDependencies() == null)
-	    dependencies = new ArrayList<Dependency>();
-	getDependencies().add(dependency);
+	if (this.getDependencies() == null) {
+	    this.dependencies = new ArrayList<Dependency>();
+	}
+	this.getDependencies().add(dependency);
 	dependency.setMod(this);
     }
 
     public void addResource(Resource resource) {
-	if (getResources() == null)
-	    resources = new ArrayList<Resource>();
-	getResources().add(resource);
+	if (this.getResources() == null) {
+	    this.resources = new ArrayList<Resource>();
+	}
+	this.getResources().add(resource);
 	resource.setMod(this);
     }
 
+    @Override
     public int compareTo(final Mod other) {
-	return new CompareToBuilder().append(name, other.name).append(version, other.version).toComparison();
+	return new CompareToBuilder().append(this.name, other.name).append(this.version, other.version).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof Mod))
+	if (!(other instanceof Mod)) {
 	    return false;
+	}
 	Mod castOther = (Mod) other;
-	return new EqualsBuilder().append(name, castOther.name).append(version, castOther.version).isEquals();
+	return new EqualsBuilder().append(this.name, castOther.name).append(this.version, castOther.version).isEquals();
     }
 
     @XmlAttribute
@@ -146,6 +150,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 	return this.description;
     }
 
+    @Override
     @XmlTransient
     public Long getId() {
 	return this.id;
@@ -158,12 +163,12 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     @XmlAttribute(name = "mc")
     public String getMcVersionDependency() {
-	return mcVersionDependency;
+	return this.mcVersionDependency;
     }
 
     @XmlTransient
     public ModPack getModPack() {
-	return modPack;
+	return this.modPack;
     }
 
     @XmlAttribute(required = true)
@@ -173,7 +178,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     @XmlElement(name = "resourcecheck")
     public String getResourceCheck() {
-	return resourceCheck;
+	return this.resourceCheck;
     }
 
     @XmlElementWrapper
@@ -184,7 +189,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     @XmlAttribute
     public String getUrl() {
-	return url;
+	return this.url;
     }
 
     @XmlTransient
@@ -199,11 +204,11 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(name).append(version).toHashCode();
+	return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
     }
 
     public boolean isInstalled() {
-	return getInstallationDate() != null;
+	return this.getInstallationDate() != null;
     }
 
     public void setArchive(String archive) {
@@ -260,7 +265,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("name", name).append("version", version).append("archive", archive).append("description", description)
-		.append("installationDate", installationDate).append("modPack", modPack).append("url", url).toString();
+	return new ToStringBuilder(this).append("name", this.name).append("version", this.version).append("archive", this.archive).append("description", this.description)
+		.append("installationDate", this.installationDate).append("modPack", this.modPack).append("url", this.url).toString();
     }
 }

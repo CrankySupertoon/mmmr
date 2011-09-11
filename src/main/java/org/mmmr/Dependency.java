@@ -45,18 +45,21 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
 
     private String version;
 
+    @Override
     public int compareTo(final Dependency other) {
-	return new CompareToBuilder().append(name, other.name).append(version, other.version).toComparison();
+	return new CompareToBuilder().append(this.name, other.name).append(this.version, other.version).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof Dependency))
+	if (!(other instanceof Dependency)) {
 	    return false;
+	}
 	Dependency castOther = (Dependency) other;
-	return new EqualsBuilder().append(name, castOther.name).append(version, castOther.version).isEquals();
+	return new EqualsBuilder().append(this.name, castOther.name).append(this.version, castOther.version).isEquals();
     }
 
+    @Override
     @XmlTransient
     public Long getId() {
 	return this.id;
@@ -64,22 +67,22 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
 
     @XmlTransient
     public Mod getMod() {
-	return mod;
+	return this.mod;
     }
 
     @XmlAttribute
     public String getName() {
-	return name;
+	return this.name;
     }
 
     @XmlTransient
     public Resource getResource() {
-	return resource;
+	return this.resource;
     }
 
     @XmlAttribute
     public String getUrl() {
-	return url;
+	return this.url;
     }
 
     @XmlTransient
@@ -89,12 +92,12 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
 
     @XmlAttribute
     public String getVersion() {
-	return version;
+	return this.version;
     }
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(name).append(version).toHashCode();
+	return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
     }
 
     protected void setId(Long id) {
@@ -127,6 +130,6 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("name", name).append("version", version).toString();
+	return new ToStringBuilder(this).append("name", this.name).append("version", this.version).toString();
     }
 }

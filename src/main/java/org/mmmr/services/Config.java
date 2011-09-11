@@ -1,8 +1,5 @@
 package org.mmmr.services;
 
-import static org.mmmr.services.IOMethods.newDir;
-import static org.mmmr.services.IOMethods.parseParams;
-
 import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,32 +59,33 @@ public class Config {
     public Config(String[] args, File thisFolder) throws IOException {
 	this.thisFolder = thisFolder;
 
-	parameterValues = parseParams(args);
+	this.parameterValues = IOMethods.parseParams(args);
 
 	// not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
 	// we use a locally installed minecraft so you can mod at your heart's content
-	mcBaseFolder = new File(thisFolder, ".minecraft");
+	this.mcBaseFolder = new File(thisFolder, ".minecraft");
 
-	mcBin = new File(mcBaseFolder, "bin");
-	mcMods = new File(mcBaseFolder, "mods");
-	mcResources = new File(mcBaseFolder, "resources");
-	mcJar = new File(mcBin, "minecraft.jar");
-	mcJarBackup = new File(mcBin, "minecraft.jar.backup");
+	this.mcBin = new File(this.mcBaseFolder, "bin");
+	this.mcMods = new File(this.mcBaseFolder, "mods");
+	this.mcResources = new File(this.mcBaseFolder, "resources");
+	this.mcJar = new File(this.mcBin, "minecraft.jar");
+	this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup");
 
-	data = newDir(thisFolder, "data");
+	this.data = IOMethods.newDir(thisFolder, "data");
 
-	cfg = newDir(data, "cfg");
-	properties = new Properties();
-	File file = new File(cfg, "config.properties");
-	if (file.exists())
-	    properties.load(new FileInputStream(file));
-	backup = newDir(data, "backup");
-	mods = newDir(data, "mods");
-	libs = newDir(data, "libs");
-	tmp = newDir(data, "tmp");
-	dbdir = new File(data, "db");
-	backupOriginalJar = newDir(backup, "minecraft.jar");
-	mcJogboxBackup = newDir(backup, "jogbox");
+	this.cfg = IOMethods.newDir(this.data, "cfg");
+	this.properties = new Properties();
+	File file = new File(this.cfg, "config.properties");
+	if (file.exists()) {
+	    this.properties.load(new FileInputStream(file));
+	}
+	this.backup = IOMethods.newDir(this.data, "backup");
+	this.mods = IOMethods.newDir(this.data, "mods");
+	this.libs = IOMethods.newDir(this.data, "libs");
+	this.tmp = IOMethods.newDir(this.data, "tmp");
+	this.dbdir = new File(this.data, "db");
+	this.backupOriginalJar = IOMethods.newDir(this.backup, "minecraft.jar");
+	this.mcJogboxBackup = IOMethods.newDir(this.backup, "jogbox");
     }
 
     public File getBackup() {
@@ -95,11 +93,11 @@ public class Config {
     }
 
     public File getBackupOriginalJar() {
-	return backupOriginalJar;
+	return this.backupOriginalJar;
     }
 
     public File getCfg() {
-	return cfg;
+	return this.cfg;
     }
 
     public File getData() {
@@ -107,7 +105,7 @@ public class Config {
     }
 
     public DBService getDb() {
-	return db;
+	return this.db;
     }
 
     public File getDbdir() {
@@ -115,15 +113,15 @@ public class Config {
     }
 
     public Font getFont() {
-	return font;
+	return this.font;
     }
 
     public Font getFont18() {
-	return font18;
+	return this.font18;
     }
 
     public File getLibs() {
-	return libs;
+	return this.libs;
     }
 
     public File getMcBaseFolder() {
@@ -143,7 +141,7 @@ public class Config {
     }
 
     public File getMcJogboxBackup() {
-	return mcJogboxBackup;
+	return this.mcJogboxBackup;
     }
 
     public File getMcMods() {
@@ -163,15 +161,15 @@ public class Config {
     }
 
     public String getProperty(String key, String defaultValue) throws IOException {
-	String value = properties.getProperty(key);
+	String value = this.properties.getProperty(key);
 	if (value == null) {
-	    value = setProperty(key, defaultValue);
+	    value = this.setProperty(key, defaultValue);
 	}
 	return value;
     }
 
     public File getThisFolder() {
-	return thisFolder;
+	return this.thisFolder;
     }
 
     public File getTmp() {
@@ -179,7 +177,7 @@ public class Config {
     }
 
     public XmlService getXml() {
-	return xml;
+	return this.xml;
     }
 
     public void setDb(DBService db) {
@@ -195,8 +193,8 @@ public class Config {
     }
 
     public String setProperty(String key, String value) throws IOException {
-	properties.put(key, value);
-	properties.store(new FileOutputStream(new File(cfg, "config.properties")), null);
+	this.properties.put(key, value);
+	this.properties.store(new FileOutputStream(new File(this.cfg, "config.properties")), null);
 	return value;
     }
 

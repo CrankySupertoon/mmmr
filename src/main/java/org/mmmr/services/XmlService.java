@@ -29,7 +29,7 @@ public class XmlService {
     private Unmarshaller unmarshaller;
 
     public XmlService(File data) throws JAXBException, SAXException, IOException {
-	init(data);
+	this.init(data);
     }
 
     void init(File data) throws JAXBException, SAXException, IOException {
@@ -46,20 +46,20 @@ public class XmlService {
 	});
 	SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	Schema schema = sf.newSchema(xsdfile);
-	marshaller = context.createMarshaller();
-	marshaller.setSchema(schema);
-	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-	unmarshaller = context.createUnmarshaller();
-	unmarshaller.setSchema(schema);
+	this.marshaller = context.createMarshaller();
+	this.marshaller.setSchema(schema);
+	this.marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	this.unmarshaller = context.createUnmarshaller();
+	this.unmarshaller.setSchema(schema);
     }
 
     public <T> T load(InputStream in, Class<T> type) throws JAXBException {
-	return type.cast(unmarshaller.unmarshal(in));
+	return type.cast(this.unmarshaller.unmarshal(in));
     }
 
     public <T> T save(OutputStream out, T object) throws JAXBException {
-	marshaller.marshal(object, out);
-	marshaller.marshal(object, System.out);
+	this.marshaller.marshal(object, out);
+	this.marshaller.marshal(object, System.out);
 	return object;
     }
 }

@@ -69,29 +69,33 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
     }
 
     public void addMod(Mod mod) {
-	if (getMods() == null)
-	    mods = new ArrayList<Mod>();
-	getMods().add(mod);
+	if (this.getMods() == null) {
+	    this.mods = new ArrayList<Mod>();
+	}
+	this.getMods().add(mod);
 	mod.setModPack(this);
     }
 
     public void addResource(Resource resource) {
-	if (getResources() == null)
-	    resources = new ArrayList<Resource>();
-	getResources().add(resource);
+	if (this.getResources() == null) {
+	    this.resources = new ArrayList<Resource>();
+	}
+	this.getResources().add(resource);
 	resource.setModPack(this);
     }
 
+    @Override
     public int compareTo(final ModPack other) {
-	return new CompareToBuilder().append(name, other.name).append(version, other.version).toComparison();
+	return new CompareToBuilder().append(this.name, other.name).append(this.version, other.version).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof ModPack))
+	if (!(other instanceof ModPack)) {
 	    return false;
+	}
 	ModPack castOther = (ModPack) other;
-	return new EqualsBuilder().append(name, castOther.name).append(version, castOther.version).isEquals();
+	return new EqualsBuilder().append(this.name, castOther.name).append(this.version, castOther.version).isEquals();
     }
 
     @XmlAttribute
@@ -99,6 +103,7 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 	return this.description;
     }
 
+    @Override
     @XmlTransient
     public Long getId() {
 	return this.id;
@@ -106,23 +111,23 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 
     @XmlTransient
     public Date getInstallationDate() {
-	return installationDate;
+	return this.installationDate;
     }
 
     @XmlAttribute(name = "mc")
     public String getMcVersionDependency() {
-	return mcVersionDependency;
+	return this.mcVersionDependency;
     }
 
     @XmlElementWrapper
     @XmlElementRef
     public List<Mod> getMods() {
-	return mods;
+	return this.mods;
     }
 
     @XmlAttribute(required = true)
     public String getName() {
-	return name;
+	return this.name;
     }
 
     @XmlElementWrapper
@@ -138,12 +143,12 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 
     @XmlAttribute(required = true)
     public String getVersion() {
-	return version;
+	return this.version;
     }
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(name).append(version).toHashCode();
+	return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
     }
 
     public void setDescription(String description) {
@@ -184,6 +189,7 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("name", name).append("installationDate", installationDate).append("version", version).append("description", description).toString();
+	return new ToStringBuilder(this).append("name", this.name).append("installationDate", this.installationDate).append("version", this.version)
+		.append("description", this.description).toString();
     }
 }

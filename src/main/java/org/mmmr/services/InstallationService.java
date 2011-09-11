@@ -1,10 +1,5 @@
 package org.mmmr.services;
 
-import static org.mmmr.services.ArchiveService.extract;
-import static org.mmmr.services.IOMethods.copyFile;
-import static org.mmmr.services.IOMethods.listRecursive;
-import static org.mmmr.services.IOMethods.newDir;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +26,7 @@ public class InstallationService {
 	int posmcb = minecraftBaseFolder.getAbsolutePath().length() + 1;
 	Date now = new Date();
 	for (Map.Entry<File, File> entry : toCopy.entrySet()) {
-	    long crc32 = copyFile(entry.getKey(), entry.getValue());
+	    long crc32 = IOMethods.copyFile(entry.getKey(), entry.getValue());
 	    String path = entry.getValue().getCanonicalFile().getAbsolutePath().substring(posmcb);
 	    fileResource.get(entry.getKey()).addFile(new MCFile(path, now, crc32));
 	}
@@ -49,8 +44,8 @@ public class InstallationService {
 	String archive = mod.getArchive();
 	String name = mod.getName();
 	String version = mod.getVersion();
-	File outdir = newDir(tmp, archive);
-	extract(new File(mods, archive), outdir);
+	File outdir = IOMethods.newDir(tmp, archive);
+	ArchiveService.extract(new File(mods, archive), outdir);
 	int posmcb = minecraftBaseFolder.getAbsolutePath().length() + 1;
 	Set<String> conflicts = new HashSet<String>();
 	Map<File, File> toCopy = new HashMap<File, File>();
@@ -74,9 +69,10 @@ public class InstallationService {
 		    excludes.add(Pattern.compile(exclude));
 		}
 	    }
-	    for (File fromFile : listRecursive(from)) {
-		if (fromFile.isDirectory())
+	    for (File fromFile : IOMethods.listRecursive(from)) {
+		if (fromFile.isDirectory()) {
 		    continue;
+		}
 		String relative = fromFile.getCanonicalFile().getAbsolutePath().substring(pos);
 		for (Pattern include : includes) {
 		    if (!include.matcher(relative).find()) {
@@ -117,23 +113,23 @@ public class InstallationService {
 		}
 		sb.append("\nInstall anyways?");
 		if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, sb.toString(), "Conflicts", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
-		    installMod(db, mod, minecraftBaseFolder, toCopy, fileResource);
+		    this.installMod(db, mod, minecraftBaseFolder, toCopy, fileResource);
 		}
 	    } else {
-		installMod(db, mod, minecraftBaseFolder, toCopy, fileResource);
+		this.installMod(db, mod, minecraftBaseFolder, toCopy, fileResource);
 	    }
 	} else {
-	    installMod(db, mod, minecraftBaseFolder, toCopy, fileResource);
+	    this.installMod(db, mod, minecraftBaseFolder, toCopy, fileResource);
 	}
 	tmp.delete();
     }
 
     public void installMod(DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) throws IOException {
-	installMod(true, db, mod, mods, tmp, minecraftBaseFolder);
+	this.installMod(true, db, mod, mods, tmp, minecraftBaseFolder);
     }
 
     private void installMod(DBService db, Mod mod, File minecraftBaseFolder, Map<File, File> toCopy, Map<File, Resource> fileResource) throws IOException {
-	copy(db, mod, fileResource, toCopy, minecraftBaseFolder);
+	this.copy(db, mod, fileResource, toCopy, minecraftBaseFolder);
 	db.save(mod);
 	JOptionPane.showMessageDialog(null, "Mod installed.");
     }

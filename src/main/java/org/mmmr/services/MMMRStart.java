@@ -1,8 +1,5 @@
 package org.mmmr.services;
 
-import static org.mmmr.services.IOMethods.downloadURL;
-import static org.mmmr.services.IOMethods.unzip;
-
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
@@ -50,8 +47,8 @@ public class MMMRStart {
 	try {
 	    FancySwing.lookAndFeel();
 	    Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
-	    adjustLogging(cfg);
-	    prepareFont(cfg);
+	    MMMRStart.adjustLogging(cfg);
+	    MMMRStart.prepareFont(cfg);
 	    StatusWindow statusWindow = new StatusWindow(cfg);
 	    statusWindow.setVisible(true);
 	    DynamicLoading.init(statusWindow.getLibstatus(), cfg);
@@ -74,8 +71,8 @@ public class MMMRStart {
 	    if (!fontfont.exists()) {
 		URL dejavu = new URL("http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip");
 		File file = new File(cfg.getTmp(), "dejavu-fonts-ttf-2.33.zip");
-		downloadURL(dejavu, file);
-		unzip(file, cfg.getCfg());
+		IOMethods.downloadURL(dejavu, file);
+		IOMethods.unzip(file, cfg.getCfg());
 	    }
 	    font = Font.createFont(Font.TRUETYPE_FONT, fontfont);
 	} catch (Exception e) {

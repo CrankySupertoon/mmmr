@@ -72,29 +72,33 @@ public class Resource implements Comparable<Resource>, PersistentObject {
     }
 
     public void addDependency(Dependency dependency) {
-	if (getDependencies() == null)
-	    dependencies = new ArrayList<Dependency>();
-	getDependencies().add(dependency);
+	if (this.getDependencies() == null) {
+	    this.dependencies = new ArrayList<Dependency>();
+	}
+	this.getDependencies().add(dependency);
 	dependency.setResource(this);
     }
 
     public void addFile(MCFile file) {
-	if (getFiles() == null)
-	    files = new ArrayList<MCFile>();
-	getFiles().add(file);
+	if (this.getFiles() == null) {
+	    this.files = new ArrayList<MCFile>();
+	}
+	this.getFiles().add(file);
 	file.setResource(this);
     }
 
+    @Override
     public int compareTo(final Resource other) {
-	return new CompareToBuilder().append(sourcePath, other.sourcePath).append(targetPath, other.targetPath).toComparison();
+	return new CompareToBuilder().append(this.sourcePath, other.sourcePath).append(this.targetPath, other.targetPath).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof Resource))
+	if (!(other instanceof Resource)) {
 	    return false;
+	}
 	Resource castOther = (Resource) other;
-	return new EqualsBuilder().append(sourcePath, castOther.sourcePath).append(targetPath, castOther.targetPath).isEquals();
+	return new EqualsBuilder().append(this.sourcePath, castOther.sourcePath).append(this.targetPath, castOther.targetPath).isEquals();
     }
 
     @XmlElementWrapper
@@ -113,6 +117,7 @@ public class Resource implements Comparable<Resource>, PersistentObject {
 	return this.files;
     }
 
+    @Override
     @XmlTransient
     public Long getId() {
 	return this.id;
@@ -125,12 +130,12 @@ public class Resource implements Comparable<Resource>, PersistentObject {
 
     @XmlTransient
     public Mod getMod() {
-	return mod;
+	return this.mod;
     }
 
     @XmlTransient
     public ModPack getModPack() {
-	return modPack;
+	return this.modPack;
     }
 
     @XmlAttribute(name = "sourcepath")
@@ -150,7 +155,7 @@ public class Resource implements Comparable<Resource>, PersistentObject {
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(sourcePath).append(targetPath).toHashCode();
+	return new HashCodeBuilder().append(this.sourcePath).append(this.targetPath).toHashCode();
     }
 
     public void setDependencies(List<Dependency> dependencies) {
@@ -195,7 +200,7 @@ public class Resource implements Comparable<Resource>, PersistentObject {
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("exclude", exclude).append("include", include).append("mod", mod).append("modPack", modPack).append("sourcePath", sourcePath)
-		.append("targetPath", targetPath).toString();
+	return new ToStringBuilder(this).append("exclude", this.exclude).append("include", this.include).append("mod", this.mod).append("modPack", this.modPack)
+		.append("sourcePath", this.sourcePath).append("targetPath", this.targetPath).toString();
     }
 }

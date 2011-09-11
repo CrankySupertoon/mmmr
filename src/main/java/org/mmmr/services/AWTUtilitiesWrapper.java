@@ -28,26 +28,26 @@ public class AWTUtilitiesWrapper {
     private static Class<?> translucencyClass;
 
     static {
-	init();
+	AWTUtilitiesWrapper.init();
     }
 
     static void init() {
 	try {
-	    awtUtilitiesClass = Class.forName("com.sun.awt.AWTUtilities");
-	    translucencyClass = Class.forName("com.sun.awt.AWTUtilities$Translucency");
-	    if (translucencyClass.isEnum()) {
-		Object[] kinds = translucencyClass.getEnumConstants();
+	    AWTUtilitiesWrapper.awtUtilitiesClass = Class.forName("com.sun.awt.AWTUtilities");
+	    AWTUtilitiesWrapper.translucencyClass = Class.forName("com.sun.awt.AWTUtilities$Translucency");
+	    if (AWTUtilitiesWrapper.translucencyClass.isEnum()) {
+		Object[] kinds = AWTUtilitiesWrapper.translucencyClass.getEnumConstants();
 		if (kinds != null) {
-		    PERPIXEL_TRANSPARENT = kinds[0];
-		    TRANSLUCENT = kinds[1];
-		    PERPIXEL_TRANSLUCENT = kinds[2];
+		    AWTUtilitiesWrapper.PERPIXEL_TRANSPARENT = kinds[0];
+		    AWTUtilitiesWrapper.TRANSLUCENT = kinds[1];
+		    AWTUtilitiesWrapper.PERPIXEL_TRANSLUCENT = kinds[2];
 		}
 	    }
-	    mIsTranslucencySupported = awtUtilitiesClass.getMethod("isTranslucencySupported", translucencyClass);
-	    mIsTranslucencyCapable = awtUtilitiesClass.getMethod("isTranslucencyCapable", GraphicsConfiguration.class);
-	    mSetWindowShape = awtUtilitiesClass.getMethod("setWindowShape", Window.class, Shape.class);
-	    mSetWindowOpacity = awtUtilitiesClass.getMethod("setWindowOpacity", Window.class, float.class);
-	    mSetWindowOpaque = awtUtilitiesClass.getMethod("setWindowOpaque", Window.class, boolean.class);
+	    AWTUtilitiesWrapper.mIsTranslucencySupported = AWTUtilitiesWrapper.awtUtilitiesClass.getMethod("isTranslucencySupported", AWTUtilitiesWrapper.translucencyClass);
+	    AWTUtilitiesWrapper.mIsTranslucencyCapable = AWTUtilitiesWrapper.awtUtilitiesClass.getMethod("isTranslucencyCapable", GraphicsConfiguration.class);
+	    AWTUtilitiesWrapper.mSetWindowShape = AWTUtilitiesWrapper.awtUtilitiesClass.getMethod("setWindowShape", Window.class, Shape.class);
+	    AWTUtilitiesWrapper.mSetWindowOpacity = AWTUtilitiesWrapper.awtUtilitiesClass.getMethod("setWindowOpacity", Window.class, float.class);
+	    AWTUtilitiesWrapper.mSetWindowOpaque = AWTUtilitiesWrapper.awtUtilitiesClass.getMethod("setWindowOpaque", Window.class, boolean.class);
 	} catch (NoSuchMethodException ex) {
 	    Logger.getLogger(AWTUtilitiesWrapper.class.getName()).log(Level.SEVERE, null, ex);
 	} catch (SecurityException ex) {
@@ -58,7 +58,7 @@ public class AWTUtilitiesWrapper {
     }
 
     private static boolean isSupported(Method method, Object kind) {
-	if (awtUtilitiesClass == null || method == null) {
+	if ((AWTUtilitiesWrapper.awtUtilitiesClass == null) || (method == null)) {
 	    return false;
 	}
 	try {
@@ -77,18 +77,18 @@ public class AWTUtilitiesWrapper {
     }
 
     public static boolean isTranslucencyCapable(GraphicsConfiguration gc) {
-	return isSupported(mIsTranslucencyCapable, gc);
+	return AWTUtilitiesWrapper.isSupported(AWTUtilitiesWrapper.mIsTranslucencyCapable, gc);
     }
 
     public static boolean isTranslucencySupported(Object kind) {
-	if (translucencyClass == null) {
+	if (AWTUtilitiesWrapper.translucencyClass == null) {
 	    return false;
 	}
-	return isSupported(mIsTranslucencySupported, kind);
+	return AWTUtilitiesWrapper.isSupported(AWTUtilitiesWrapper.mIsTranslucencySupported, kind);
     }
 
     private static void set(Method method, Window window, Object value) {
-	if (awtUtilitiesClass == null || method == null) {
+	if ((AWTUtilitiesWrapper.awtUtilitiesClass == null) || (method == null)) {
 	    return;
 	}
 	try {
@@ -103,14 +103,14 @@ public class AWTUtilitiesWrapper {
     }
 
     public static void setWindowOpacity(Window window, float opacity) {
-	set(mSetWindowOpacity, window, Float.valueOf(opacity));
+	AWTUtilitiesWrapper.set(AWTUtilitiesWrapper.mSetWindowOpacity, window, Float.valueOf(opacity));
     }
 
     public static void setWindowOpaque(Window window, boolean opaque) {
-	set(mSetWindowOpaque, window, Boolean.valueOf(opaque));
+	AWTUtilitiesWrapper.set(AWTUtilitiesWrapper.mSetWindowOpaque, window, Boolean.valueOf(opaque));
     }
 
     public static void setWindowShape(Window window, Shape shape) {
-	set(mSetWindowShape, window, shape);
+	AWTUtilitiesWrapper.set(AWTUtilitiesWrapper.mSetWindowShape, window, shape);
     }
 }

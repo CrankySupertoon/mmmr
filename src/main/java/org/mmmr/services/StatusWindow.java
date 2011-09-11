@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
 /**
  * @author Jurgen
@@ -28,25 +29,26 @@ public class StatusWindow extends JFrame {
 
 	public StatusPanel(String text, String iconPath) {
 	    super(new BorderLayout());
-	    setOpaque(false);
-	    statuslabel = new JLabel(text, getIcon(iconPath), SwingConstants.CENTER);
-	    statuslabel.setVerticalAlignment(SwingConstants.CENTER);
-	    statuslabel.setOpaque(false);
-	    statuslabel.setFont(cfg.getFont18());
-	    add(statuslabel, BorderLayout.CENTER);
+	    this.setOpaque(false);
+	    this.statuslabel = new JLabel(text, StatusWindow.getIcon(iconPath), SwingConstants.CENTER);
+	    this.statuslabel.setVerticalAlignment(SwingConstants.CENTER);
+	    this.statuslabel.setOpaque(false);
+	    this.statuslabel.setFont(StatusWindow.this.cfg.getFont18());
+	    this.add(this.statuslabel, BorderLayout.CENTER);
 	}
 
 	@Override
 	public void setEnabled(boolean enabled) {
 	    super.setEnabled(enabled);
-	    for (int i = 0; i < getComponentCount(); i++) {
-		getComponent(i).setEnabled(enabled);
+	    for (int i = 0; i < this.getComponentCount(); i++) {
+		this.getComponent(i).setEnabled(enabled);
 	    }
 	}
 
 	public void setStatus(String text, Boolean success) {
-	    statuslabel.setText(text);
-	    statuslabel.setIcon(success == null ? getIcon("images/bullet_yellow_x4.png") : success ? getIcon("images/bullet_green_x4.png") : getIcon("images/bullet_red_x4.png"));
+	    this.statuslabel.setText(text);
+	    this.statuslabel.setIcon(success == null ? StatusWindow.getIcon("images/bullet_yellow_x4.png") : success ? StatusWindow.getIcon("images/bullet_green_x4.png")
+		    : StatusWindow.getIcon("images/bullet_red_x4.png"));
 	}
     }
 
@@ -74,107 +76,107 @@ public class StatusWindow extends JFrame {
 
     public StatusWindow(final Config cfg) {
 	this.cfg = cfg;
-	setTitle("Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b");
+	this.setTitle("Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b");
 	JPanel contentPane = new JPanel();
 	contentPane.setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
-	getContentPane().add(contentPane);
-	JLabel label = new JLabel(getTitle());
+	this.getContentPane().add(contentPane);
+	JLabel label = new JLabel(this.getTitle());
 	label.setHorizontalAlignment(SwingConstants.CENTER);
 	label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
 	contentPane.add(label, BorderLayout.CENTER);
 	contentPane.setLayout(new GridLayout(-1, 1));
 	String bullet = "images/bullet_yellow_x4.png";
-	libstatus = new StatusPanel("Program libraries", bullet);
-	contentPane.add(libstatus);
-	dbstatus = new StatusPanel("Database and Hibernate", bullet);
-	contentPane.add(dbstatus);
-	xmlstatus = new StatusPanel("XML service", bullet);
-	contentPane.add(xmlstatus);
-	mcstatus = new StatusPanel("Minecraft", bullet);
-	contentPane.add(mcstatus);
-	ybstatus = new StatusPanel("YogBox", bullet);
-	contentPane.add(ybstatus);
-	goOn = new JButton("I'm ready to start adding mods :)");
-	goOn.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
-	goOn.addActionListener(new ActionListener() {
+	this.libstatus = new StatusPanel("Program libraries", bullet);
+	contentPane.add(this.libstatus);
+	this.dbstatus = new StatusPanel("Database and Hibernate", bullet);
+	contentPane.add(this.dbstatus);
+	this.xmlstatus = new StatusPanel("XML service", bullet);
+	contentPane.add(this.xmlstatus);
+	this.mcstatus = new StatusPanel("Minecraft", bullet);
+	contentPane.add(this.mcstatus);
+	this.ybstatus = new StatusPanel("YogBox", bullet);
+	contentPane.add(this.ybstatus);
+	this.goOn = new JButton("I'm ready to start adding mods :)");
+	this.goOn.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
+	this.goOn.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		new ManagerWindow(cfg).setVisible(true);
-		dispose();
+		StatusWindow.this.dispose();
 	    }
 	});
-	goOn.setEnabled(false);
-	quit = new JButton("Get me out of here :(");
-	quit.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
-	quit.addActionListener(new ActionListener() {
+	this.goOn.setEnabled(false);
+	this.quit = new JButton("Get me out of here :(");
+	this.quit.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
+	this.quit.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		dispose();
+		StatusWindow.this.dispose();
 	    }
 	});
 
-	goOn.setMinimumSize(new Dimension(300, 30));
-	quit.setMinimumSize(new Dimension(300, 30));
-	goOn.setPreferredSize(new Dimension(300, 30));
-	quit.setPreferredSize(new Dimension(300, 30));
-	goOn.setSize(new Dimension(300, 30));
-	quit.setSize(new Dimension(300, 30));
+	this.goOn.setMinimumSize(new Dimension(300, 30));
+	this.quit.setMinimumSize(new Dimension(300, 30));
+	this.goOn.setPreferredSize(new Dimension(300, 30));
+	this.quit.setPreferredSize(new Dimension(300, 30));
+	this.goOn.setSize(new Dimension(300, 30));
+	this.quit.setSize(new Dimension(300, 30));
 
 	JPanel btns = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	btns.add(goOn, null);
-	btns.add(quit, null);
+	btns.add(this.goOn, null);
+	btns.add(this.quit, null);
 	contentPane.add(btns);
 
-	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	contentPane.setDoubleBuffered(true);
 
-	setUndecorated(true);
+	this.setUndecorated(true);
 	FancySwing.translucent(this);
-	pack();
-	setSize(800, this.getHeight());
+	this.pack();
+	this.setSize(800, this.getHeight());
 	FancySwing.rounded(this);
-	setLocationRelativeTo(null);
-	setResizable(false);
+	this.setLocationRelativeTo(null);
+	this.setResizable(false);
     }
 
     public Config getCfg() {
-	return cfg;
+	return this.cfg;
     }
 
     public StatusPanel getDbstatus() {
-	return dbstatus;
+	return this.dbstatus;
     }
 
     public StatusPanel getLibstatus() {
-	return libstatus;
+	return this.libstatus;
     }
 
     public StatusPanel getMcstatus() {
-	return mcstatus;
+	return this.mcstatus;
     }
 
     public StatusPanel getXmlstatus() {
-	return xmlstatus;
+	return this.xmlstatus;
     }
 
     public StatusPanel getYbstatus() {
-	return ybstatus;
+	return this.ybstatus;
     }
 
     public void setDbBStatus(String text, Boolean success) {
-	dbstatus.setStatus(text, success);
+	this.dbstatus.setStatus(text, success);
     }
 
     public void setLibStatus(String text, Boolean success) {
-	libstatus.setStatus(text, success);
+	this.libstatus.setStatus(text, success);
     }
 
     public void setMcStatus(String text, Boolean success) {
-	mcstatus.setStatus(text, success);
+	this.mcstatus.setStatus(text, success);
     }
 
     public void setReadyToGoOn() {
-	goOn.setEnabled(true);
-	goOn.grabFocus();
+	this.goOn.setEnabled(true);
+	this.goOn.grabFocus();
     }
 }

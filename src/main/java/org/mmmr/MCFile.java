@@ -50,38 +50,41 @@ public class MCFile implements Comparable<MCFile>, PersistentObject {
 
     public MCFile(String path) {
 	this();
-	setPath(path);
+	this.setPath(path);
     }
 
     public MCFile(String path, Date modificationDate, long crc32) {
 	this();
-	setPath(path);
-	setModificationDate(modificationDate);
-	setCrc32(crc32);
+	this.setPath(path);
+	this.setModificationDate(modificationDate);
+	this.setCrc32(crc32);
     }
 
+    @Override
     public int compareTo(final MCFile other) {
-	return new CompareToBuilder().append(path, other.path).toComparison();
+	return new CompareToBuilder().append(this.path, other.path).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof MCFile))
+	if (!(other instanceof MCFile)) {
 	    return false;
+	}
 	MCFile castOther = (MCFile) other;
-	return new EqualsBuilder().append(path, castOther.path).isEquals();
+	return new EqualsBuilder().append(this.path, castOther.path).isEquals();
     }
 
     public long getCrc32() {
 	return this.crc32;
     }
 
+    @Override
     public Long getId() {
 	return this.id;
     }
 
     public MC getMc() {
-	return mc;
+	return this.mc;
     }
 
     public Date getModificationDate() {
@@ -94,7 +97,7 @@ public class MCFile implements Comparable<MCFile>, PersistentObject {
 
     @XmlTransient
     public Resource getResource() {
-	return resource;
+	return this.resource;
     }
 
     public Integer getVer() {
@@ -103,7 +106,7 @@ public class MCFile implements Comparable<MCFile>, PersistentObject {
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(path).toHashCode();
+	return new HashCodeBuilder().append(this.path).toHashCode();
     }
 
     public void setCrc32(long crc32) {
@@ -136,7 +139,7 @@ public class MCFile implements Comparable<MCFile>, PersistentObject {
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("path", path).append("crc32", crc32).append("mc", mc).append("modificationDate", modificationDate).append("resource", resource)
-		.toString();
+	return new ToStringBuilder(this).append("path", this.path).append("crc32", this.crc32).append("mc", this.mc).append("modificationDate", this.modificationDate)
+		.append("resource", this.resource).toString();
     }
 }

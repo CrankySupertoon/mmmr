@@ -34,23 +34,27 @@ import javax.swing.JFileChooser;
  */
 public class IOMethods {
     private static long _(File source, File target) throws IOException {
-	if (target != null)
+	if (target != null) {
 	    target.getParentFile().mkdirs();
+	}
 	OutputStream out = target == null ? null : new FileOutputStream(target);
 	CheckedInputStream in = new CheckedInputStream(new FileInputStream(source), new CRC32());
 	byte[] buffer = new byte[1024 * 8];
 	int read;
-	while ((read = in.read(buffer)) != -1)
-	    if (out != null)
+	while ((read = in.read(buffer)) != -1) {
+	    if (out != null) {
 		out.write(buffer, 0, read);
-	if (out != null)
+	    }
+	}
+	if (out != null) {
 	    out.close();
+	}
 	in.close();
 	return in.getChecksum().getValue();
     }
 
     public static long copyFile(File source, File target) throws IOException {
-	return _(source, target);
+	return IOMethods._(source, target);
     }
 
     public static String crc2string(long crc) {
@@ -58,17 +62,17 @@ public class IOMethods {
     }
 
     public static long crc32File(File source) throws IOException {
-	return _(source, null);
+	return IOMethods._(source, null);
     }
 
     public static boolean deleteDirectory(File path) {
 	if (path.exists()) {
 	    File[] files = path.listFiles();
-	    for (int i = 0; i < files.length; i++) {
-		if (files[i].isDirectory()) {
-		    deleteDirectory(files[i]);
+	    for (File file : files) {
+		if (file.isDirectory()) {
+		    IOMethods.deleteDirectory(file);
 		} else {
-		    files[i].delete();
+		    file.delete();
 		}
 	    }
 	}
@@ -95,7 +99,7 @@ public class IOMethods {
     }
 
     public static boolean fileEquals(File f1, File f2) throws IOException {
-	return f1.exists() && f2.exists() && f1.length() == f2.length() && crc32File(f1) == crc32File(f2);
+	return f1.exists() && f2.exists() && (f1.length() == f2.length()) && (IOMethods.crc32File(f1) == IOMethods.crc32File(f2));
     }
 
     /**
@@ -125,12 +129,14 @@ public class IOMethods {
 
     public static Collection<String> getAllJavaRuntimes() {
 	Collection<String> all = new HashSet<String>();
-	for (String opt : getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ"))
+	for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) {
 	    all.add(opt + "\\jre");
-	for (String opt : getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ"))
+	}
+	for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) {
 	    all.add(opt + "\\jre");
-	all.addAll(getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
-	all.addAll(getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
+	}
+	all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
+	all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
 	return all;
     }
 
@@ -141,11 +147,13 @@ public class IOMethods {
 	    final InputStream is = process.getInputStream();
 	    final StringWriter sw = new StringWriter();
 	    Thread reader = new Thread(new Runnable() {
+		@Override
 		public void run() {
 		    try {
 			int c;
-			while ((c = is.read()) != -1)
+			while ((c = is.read()) != -1) {
 			    sw.write(c);
+			}
 		    } catch (IOException e) {
 			e.printStackTrace();
 		    }
@@ -180,33 +188,36 @@ public class IOMethods {
     @SuppressWarnings("unchecked")
     public static List<File> list(File dir) {
 	File[] tmp = dir.listFiles();
-	if (tmp == null || tmp.length == 0)
+	if ((tmp == null) || (tmp.length == 0)) {
 	    return Collections.EMPTY_LIST;
+	}
 	return Arrays.asList(tmp);
     }
 
     public static List<File> listRecursive(File dir) {
 	List<File> all = new ArrayList<File>();
-	listRecursive(dir, all);
+	IOMethods.listRecursive(dir, all);
 	return all;
     }
 
     private static void listRecursive(File dir, List<File> all) {
 	File[] tmp = dir.listFiles();
-	if (tmp == null || tmp.length == 0)
+	if ((tmp == null) || (tmp.length == 0)) {
 	    return;
+	}
 	for (File child : tmp) {
 	    all.add(child);
 	    if (child.isDirectory()) {
-		listRecursive(child, all);
+		IOMethods.listRecursive(child, all);
 	    }
 	}
     }
 
     public static void loadjarAtRuntime(File jar) throws SecurityException, NoSuchMethodException, IllegalArgumentException, MalformedURLException, IllegalAccessException,
 	    InvocationTargetException {
-	if ("false".equals(System.getProperty("nodload")))
+	if ("false".equals(System.getProperty("nodload"))) {
 	    return;
+	}
 	URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 	Class<?> sysclass = URLClassLoader.class;
 	Method method = sysclass.getDeclaredMethod("addURL", URL.class);
@@ -216,8 +227,8 @@ public class IOMethods {
 
     public static void main(String[] args) {
 	try {
-	    Collection<String> all = getAllJavaRuntimes();
-	    getAllJavaInfo(all);
+	    Collection<String> all = IOMethods.getAllJavaRuntimes();
+	    IOMethods.getAllJavaInfo(all);
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	}
@@ -258,8 +269,9 @@ public class IOMethods {
 	JFileChooser fc = new JFileChooser(start);
 	fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	fc.setAcceptAllFileFilterUsed(false);
-	if (ff != null)
+	if (ff != null) {
 	    fc.addChoosableFileFilter(ff);
+	}
 	int returnVal = fc.showOpenDialog(null);
 	if (returnVal == JFileChooser.APPROVE_OPTION) {
 	    File file = fc.getSelectedFile();
@@ -274,8 +286,9 @@ public class IOMethods {
 	byte[] buffer = new byte[1024 * 8];
 	int read;
 	while ((ze = zis.getNextEntry()) != null) {
-	    if (ze.isDirectory())
+	    if (ze.isDirectory()) {
 		continue;
+	    }
 	    OutputStream fout = null;
 	    File file = new File(outdir, ze.getName());
 	    file.getParentFile().mkdirs();
