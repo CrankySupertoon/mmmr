@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import org.mmmr.services.FancySwing.MoveMouseListener;
+
 /**
  * @author Jurgen
  */
@@ -76,8 +78,9 @@ public class StatusWindow extends JFrame {
 
     public StatusWindow(final Config cfg) {
 	this.cfg = cfg;
-	this.setTitle("Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b");
+	this.setTitle(cfg.getTitle());
 	JPanel contentPane = new JPanel();
+	new MoveMouseListener(contentPane);
 	contentPane.setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
 	this.getContentPane().add(contentPane);
 	JLabel label = new JLabel(this.getTitle());
@@ -128,7 +131,6 @@ public class StatusWindow extends JFrame {
 	contentPane.add(btns);
 
 	this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	contentPane.setDoubleBuffered(true);
 
 	this.setUndecorated(true);
 	FancySwing.translucent(this);

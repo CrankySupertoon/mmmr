@@ -22,7 +22,7 @@ import org.mmmr.Resource;
 /**
  * @author Jurgen
  */
-public class MMMR implements StartMe {
+public class MMMR implements MMMRI {
     private Config cfg;
 
     private MC mc;
@@ -234,10 +234,10 @@ public class MMMR implements StartMe {
 			}
 		    }
 		    this.statusWindow.getMcstatus().setStatus("Minecraft: downloaded", null);
-		    JOptionPane.showMessageDialog(null, "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.");
+		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.");
 		    this.startMC(true);
 		    this.writeMCBat();
-		    if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(null, "After you started Minecraft once.\nDid Minecraft run properly?", "",
+		    if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), "After you started Minecraft once.\nDid Minecraft run properly?", "",
 			    JOptionPane.YES_NO_OPTION)) {
 			error = "installing and running Minecraft";
 			IOMethods.deleteDirectory(this.cfg.getMcBaseFolder());
@@ -263,8 +263,8 @@ public class MMMR implements StartMe {
 
 	    if (mccheck) {
 		if (!this.cfg.getMcJarBackup().exists() && !"true".equals(this.cfg.getProperty("jogbox.ignore", "?"))) {
-		    if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, "Do you want to install YogBox?\nYou need to have it downloaded already.", "YogBox",
-			    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+		    if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(),
+			    "Do you want to install YogBox?\nYou need to have it downloaded already.", "YogBox", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
 			try {
 			    File jbinstaller = IOMethods.selectFile(this.cfg.getThisFolder(), new javax.swing.filechooser.FileFilter() {
 				@Override
@@ -299,7 +299,7 @@ public class MMMR implements StartMe {
 			    pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath());
 			    pb.start();
 
-			    JOptionPane.showMessageDialog(null, "After you installed the YogBox.\nContinue.");
+			    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "After you installed the YogBox.\nContinue.");
 
 			    ArchiveService.extract(this.cfg.getMcJar(), this.cfg.getMcJogboxBackup());
 			    this.removeOriginalFiles(this.cfg.getMcJogboxBackup().getAbsolutePath().length() + 1, this.cfg.getMcJogboxBackup(), this.cfg.getBackupOriginalJar());
@@ -379,8 +379,8 @@ public class MMMR implements StartMe {
 	    allSuccess = mccheck && ybcheck;
 
 	    if (!allSuccess) {
-		if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(null, "Error during: " + error + "\nDo you want to try again?", "Error", JOptionPane.YES_NO_OPTION,
-			JOptionPane.ERROR_MESSAGE)) {
+		if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), "Error during: " + error + "\nDo you want to try again?", "Error",
+			JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE)) {
 		    System.exit(0);
 		}
 	    } else {

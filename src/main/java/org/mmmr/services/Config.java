@@ -55,6 +55,12 @@ public class Config {
     private File tmp;
 
     private XmlService xml;
+    
+    private String title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b";
+
+    public String getTitle() {
+        return title;
+    }
 
     public Config(String[] args, File thisFolder) throws IOException {
 	this.thisFolder = thisFolder;

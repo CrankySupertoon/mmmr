@@ -1,9 +1,11 @@
 package org.mmmr.services;
 
 /**
+ * interface needed because libraries (jars) are not loaded yet and MMR uses external classes
+ * 
  * @author Jurgen
  */
-public interface StartMe {
+public interface MMMRI {
     public abstract void setCfg(Config cfg);
 
     public abstract void setStatusWindow(StatusWindow statusWindow);

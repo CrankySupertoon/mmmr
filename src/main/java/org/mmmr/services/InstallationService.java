@@ -112,7 +112,8 @@ public class InstallationService {
 		    sb.append("    ").append(conflict).append("\n");
 		}
 		sb.append("\nInstall anyways?");
-		if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, sb.toString(), "Conflicts", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
+		if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), sb.toString(), "Conflicts", JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE)) {
 		    this.installMod(db, mod, minecraftBaseFolder, toCopy, fileResource);
 		}
 	    } else {
@@ -131,7 +132,7 @@ public class InstallationService {
     private void installMod(DBService db, Mod mod, File minecraftBaseFolder, Map<File, File> toCopy, Map<File, Resource> fileResource) throws IOException {
 	this.copy(db, mod, fileResource, toCopy, minecraftBaseFolder);
 	db.save(mod);
-	JOptionPane.showMessageDialog(null, "Mod installed.");
+	JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Mod installed.");
     }
 
     public void uninstallMod(DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) {

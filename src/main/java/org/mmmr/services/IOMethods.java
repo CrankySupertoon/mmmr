@@ -33,7 +33,7 @@ import javax.swing.JFileChooser;
  * @author Jurgen
  */
 public class IOMethods {
-    private static long _(File source, File target) throws IOException {
+    private static long _copy(File source, File target) throws IOException {
 	if (target != null) {
 	    target.getParentFile().mkdirs();
 	}
@@ -54,7 +54,7 @@ public class IOMethods {
     }
 
     public static long copyFile(File source, File target) throws IOException {
-	return IOMethods._(source, target);
+	return IOMethods._copy(source, target);
     }
 
     public static String crc2string(long crc) {
@@ -62,7 +62,7 @@ public class IOMethods {
     }
 
     public static long crc32File(File source) throws IOException {
-	return IOMethods._(source, null);
+	return IOMethods._copy(source, null);
     }
 
     public static boolean deleteDirectory(File path) {
@@ -159,7 +159,7 @@ public class IOMethods {
 		    }
 		}
 	    });
-
+	    reader.setDaemon(true);
 	    reader.start();
 	    process.waitFor();
 	    reader.join();

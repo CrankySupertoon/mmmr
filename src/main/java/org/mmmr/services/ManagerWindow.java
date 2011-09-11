@@ -25,6 +25,7 @@ import org.apache.log4j.Appender;
 import org.apache.log4j.Level;
 import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.Mod;
+import org.mmmr.services.FancySwing.MoveMouseListener;
 
 /**
  * @author Jurgen
@@ -67,11 +68,12 @@ public class ManagerWindow extends JFrame {
 
     public ManagerWindow(Config cfg) {
 	this.cfg = cfg;
-	this.setTitle("Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b");
+	this.setTitle(cfg.getTitle());
 	this.setUndecorated(true);
 	Container cp = this.getContentPane();
 	JPanel panel = new JPanel(new GridLayout(-1, 1));
 	panel.setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
+	new MoveMouseListener(panel);
 	cp.add(panel, BorderLayout.CENTER);
 	cp = panel;
 	JLabel label = new JLabel(this.getTitle());
@@ -106,7 +108,7 @@ public class ManagerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
-		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
+		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
 	    cp.add(comp);
@@ -140,7 +142,7 @@ public class ManagerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
-		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
+		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
 	    cp.add(comp);
@@ -152,7 +154,7 @@ public class ManagerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
-		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
+		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
 	    cp.add(comp);
@@ -164,7 +166,7 @@ public class ManagerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
-		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
+		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
 	    cp.add(comp);
@@ -176,7 +178,7 @@ public class ManagerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
-		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
+		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
 	    cp.add(comp);
@@ -189,8 +191,8 @@ public class ManagerWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 		    try {
 			Level[] levels = { Level.TRACE, Level.DEBUG, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF };
-			Level level = Level.class.cast(JOptionPane.showInputDialog(null, "Choose logging level", "Logging", JOptionPane.QUESTION_MESSAGE, null, levels,
-				org.apache.log4j.Logger.getRootLogger().getLevel()));
+			Level level = Level.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Choose logging level", "Logging", JOptionPane.QUESTION_MESSAGE,
+				null, levels, org.apache.log4j.Logger.getRootLogger().getLevel()));
 			if (level != null) {
 			    ManagerWindow.this.cfg.setProperty("logging.level", String.valueOf(level));
 			    org.apache.log4j.Logger.getRootLogger().setLevel(level);
@@ -236,8 +238,8 @@ public class ManagerWindow extends JFrame {
 		}
 		options.add(new ModOption(availablemod));
 	    }
-	    ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(null, "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE, null,
-		    options.toArray(), options.get(0)));
+	    ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version", "Select a version",
+		    JOptionPane.QUESTION_MESSAGE, null, options.toArray(), options.get(0)));
 	    if (selected != null) {
 		this.iserv.installMod(this.cfg.getDb(), selected.getMod(), this.cfg.getMods(), this.cfg.getTmp(), this.cfg.getMcBaseFolder());
 	    }
@@ -272,8 +274,8 @@ public class ManagerWindow extends JFrame {
 	    }
 	    ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
 	    ModOption selected = installedOption == null ? selectionValues[0] : installedOption;
-	    selected = ModOption.class.cast(JOptionPane
-		    .showInputDialog(null, "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE, null, selectionValues, selected));
+	    selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE, null,
+		    selectionValues, selected));
 	    if (selected != null) {
 		Mod mod = ModOption.class.cast(selected).getMod();
 		if (installed != null) {

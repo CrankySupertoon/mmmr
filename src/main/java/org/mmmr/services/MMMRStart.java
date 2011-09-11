@@ -52,7 +52,7 @@ public class MMMRStart {
 	    StatusWindow statusWindow = new StatusWindow(cfg);
 	    statusWindow.setVisible(true);
 	    DynamicLoading.init(statusWindow.getLibstatus(), cfg);
-	    StartMe starter = StartMe.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance());
+	    MMMRI starter = MMMRI.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance());
 	    starter.setCfg(cfg);
 	    starter.setStatusWindow(statusWindow);
 	    starter.start(args);
