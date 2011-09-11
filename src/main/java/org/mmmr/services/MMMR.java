@@ -84,7 +84,6 @@ public class MMMR implements StartMe {
     private ModPack initJogBox(File data) throws FileNotFoundException, JAXBException {
 	ModPack yogbox = new ModPack("YogBox", "1.1");
 	yogbox.setDescription("YogBox_1.7.3_v1.1.zip");
-	yogbox.setMc(mc);
 	yogbox.setMcVersionDependency("1.7.3");
 
 	yogbox.addMod(new Mod("Single Player RPG Mod", "1.4a", "http://www.minecraftforum.net/topic/479017-173-single-player-rpg-mod-v14", "bin/minecraft.jar/rpgmod/"));
@@ -311,6 +310,8 @@ public class MMMR implements StartMe {
 			    File file = new File(cfg.getMods(), "YogBox_1.7.3_v1.1.zip.xml");
 			    xml.save(new FileOutputStream(file), jb);
 
+			    jb.setInstallationDate(new Date());
+			    db.save(jb);
 			    statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
 			    cfg.setProperty("jogbox.ignore", "false");
 			} catch (Exception e) {

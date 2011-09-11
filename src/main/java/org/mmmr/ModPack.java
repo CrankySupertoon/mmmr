@@ -1,22 +1,20 @@
 package org.mmmr;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,11 +38,9 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
-    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
-    private MC mc;
-
+    private Date installationDate;
     private String mcVersionDependency;
+
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "modPack")
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<Mod> mods;
@@ -108,9 +104,9 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 	return this.id;
     }
 
-    @XmlElement
-    public MC getMc() {
-	return mc;
+    @XmlTransient
+    public Date getInstallationDate() {
+	return installationDate;
     }
 
     @XmlAttribute(name = "mc")
@@ -158,8 +154,8 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 	this.id = id;
     }
 
-    public void setMc(MC mc) {
-	this.mc = mc;
+    public void setInstallationDate(Date installationDate) {
+	this.installationDate = installationDate;
     }
 
     public void setMcVersionDependency(String mcVersionDependency) {
@@ -188,6 +184,6 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("name", name).append("version", version).append("description", description).append("mc", mc).toString();
+	return new ToStringBuilder(this).append("name", name).append("installationDate", installationDate).append("version", version).append("description", description).toString();
     }
 }
