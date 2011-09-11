@@ -79,7 +79,7 @@ public class ManagerWindow extends JFrame {
 	cp.add(label);
 	addActions(cp);
 	JButton quit = new JButton("Get me out of here :(");
-	quit.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
+	quit.setFont(cfg.getFont18());
 	quit.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
@@ -99,23 +99,24 @@ public class ManagerWindow extends JFrame {
 
     private void addActions(Container cp) {
 	{
-	    JButton comp = new JButton("Install OptiFine (performance mod & HD texture enabler)");
-	    comp.setFont(cfg.getFont18());
-	    comp.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		    performanceMod();
-		}
-	    });
-	    cp.add(comp);
-	}
-	{
 	    JButton comp = new JButton("Change startup configuration (performance related)");
 	    comp.setFont(cfg.getFont18());
 	    comp.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
+		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
+		}
+	    });
+	    cp.add(comp);
+	}
+	{
+	    JButton comp = new JButton("Install OptiFine (performance mod & HD texture enabler)");
+	    comp.setFont(cfg.getFont18());
+	    comp.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    performanceMod();
 		}
 	    });
 	    cp.add(comp);
@@ -138,6 +139,7 @@ public class ManagerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
+		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
 		}
 	    });
 	    cp.add(comp);
@@ -149,6 +151,19 @@ public class ManagerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		    // TODO
+		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
+		}
+	    });
+	    cp.add(comp);
+	}
+	{
+	    JButton comp = new JButton("Backup and restore worlds/stats/etc");
+	    comp.setFont(cfg.getFont18());
+	    comp.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		    // TODO
+		    JOptionPane.showMessageDialog(null, "Not implemented yet.");
 		}
 	    });
 	    cp.add(comp);
