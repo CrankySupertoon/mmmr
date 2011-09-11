@@ -99,6 +99,11 @@ public class DBService {
 	return results.get(0);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> List<T> hql(String hql, Class<T> returnType) {
+	return session.createQuery(hql).list();
+    }
+
     public <T extends PersistentObject> T save(T object) {
 	Transaction tx = session.beginTransaction();
 	if (object.getId() == null)
