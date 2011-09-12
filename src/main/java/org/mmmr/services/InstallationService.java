@@ -65,12 +65,12 @@ public class InstallationService {
 	    List<Pattern> excludes = new ArrayList<Pattern>();
 	    if (resource.getInclude() != null) {
 		for (String include : resource.getInclude().split(",")) {
-		    includes.add(Pattern.compile(include,Pattern.CASE_INSENSITIVE));
+		    includes.add(Pattern.compile(include, Pattern.CASE_INSENSITIVE));
 		}
 	    }
 	    if (resource.getExclude() != null) {
 		for (String exclude : resource.getExclude().split(",")) {
-		    excludes.add(Pattern.compile(exclude,Pattern.CASE_INSENSITIVE));
+		    excludes.add(Pattern.compile(exclude, Pattern.CASE_INSENSITIVE));
 		}
 	    }
 	    for (File fromFile : IOMethods.listRecursive(from)) {
