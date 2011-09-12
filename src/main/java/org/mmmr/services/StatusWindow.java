@@ -78,6 +78,7 @@ public class StatusWindow extends JFrame {
 
     public StatusWindow(final Config cfg) {
 	this.cfg = cfg;
+	this.setIconImage(cfg.getIcon().getImage());
 	this.setTitle(cfg.getTitle());
 	RoundedPanel mainpanel = new RoundedPanel(new GridLayout(-1, 1));
 	mainpanel.setShady(false);

@@ -66,6 +66,7 @@ public class ManagerWindow extends JFrame {
 
     public ManagerWindow(Config cfg) {
 	this.cfg = cfg;
+	this.setIconImage(cfg.getIcon().getImage());
 	this.setTitle(cfg.getTitle());
 	this.setUndecorated(true);
 	RoundedPanel mainpanel = new RoundedPanel(new GridLayout(-1, 1));

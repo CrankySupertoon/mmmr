@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.ImageIcon;
+
 /**
  * @author Jurgen
  */
@@ -56,10 +58,15 @@ public class Config {
 
     private XmlService xml;
 
-    private String title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b";
+    private String title;
+
+    private ImageIcon icon;
 
     public Config(String[] args, File thisFolder) throws IOException {
 	this.thisFolder = thisFolder;
+
+	this.icon = new ImageIcon(Config.class.getResource("images/icon.png"));
+	this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b";
 
 	this.parameterValues = IOMethods.parseParams(args);
 
@@ -120,6 +127,10 @@ public class Config {
 
     public Font getFont18() {
 	return this.font18;
+    }
+
+    public ImageIcon getIcon() {
+	return this.icon;
     }
 
     public File getLibs() {
