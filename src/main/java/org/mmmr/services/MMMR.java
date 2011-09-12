@@ -193,7 +193,7 @@ public class MMMR implements MMMRI {
 	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: starting", null);
 	    db = DBService.getInstance(this.cfg);
 	    this.cfg.setDb(db);
-	    this.mc = db.getOrCreate(new MC("1.7.3"));
+	    this.mc = db.getOrCreate(new MC(cfg.getMcVersion()));
 	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: ready", true);
 	} catch (Exception e) {
 	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: starting failed", false);
@@ -414,38 +414,3 @@ public class MMMR implements MMMRI {
 	out.close();
     }
 }
-//
-// File minecraftOriginalBackup = newDir(backup, "original");
-// if (minecraftOriginalBackup.listFiles() == null)
-// extract(mcJarBackup, new File(minecraftOriginalBackup,
-// "minecraft.jar"));
-//
-// File minecraftJogboxBackup = newDir(backup, "jogbox");
-// if (minecraftJogboxBackup.listFiles() == null)
-// extract(mcJar, new File(minecraftJogboxBackup, "minecraft.jar"));
-//
-// if (!new File(minecraftJogboxBackup,
-// "minecraft_jogbox_jar_compare.log").exists()) {
-// File p1 = new File(minecraftOriginalBackup, "minecraft.jar");
-// File p2 = new File(minecraftJogboxBackup, "minecraft.jar");
-// BufferedWriter p3 = new BufferedWriter(new FileWriter(new
-// File(minecraftJogboxBackup,
-// "minecraft_jogbox_jar_compare.log")));
-// compare(p1, p2, p1, p2, p3);
-// p3.flush();
-// p3.close();
-// }
-// if (mcJar.isFile()) {
-// File minecraftZip = new File(mcJar.getAbsolutePath() + ".zip");
-// mcJar.renameTo(minecraftZip);
-// mcJar.mkdirs();
-// extract(minecraftZip, mcJar);
-// }
-//
-// InstallationService is = new InstallationService();
-// File modxml = new File(mods,
-// "[FileCopter]OptiFine_1.7.3_HD_MT_G2.xml");
-// Mod modToInstall = x.load(new FileInputStream(modxml),
-// Mod.class);
-// is.installMod(db, modToInstall, mods, tmp, mcBaseFolder);
-// is.uninstallMod(db, modToInstall, mods, tmp, mcBaseFolder);

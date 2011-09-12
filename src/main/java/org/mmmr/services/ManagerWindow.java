@@ -231,7 +231,14 @@ public class ManagerWindow extends JFrame {
 	    List<ModOption> options = new ArrayList<ModOption>();
 	    for (File modxml : modxmls) {
 		Mod availablemod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
+		// mod not fit for mc version
+		if (availablemod.getMcVersionDependency() != null && !availablemod.getMcVersionDependency().contains("?")) {
+		    if (!availablemod.getMcVersionDependency().equals(cfg.getMcVersion())) {
+			continue;
+		    }
+		}
 		Mod installedmod = this.cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
+		// mod already installed
 		if ((installedmod != null) && installedmod.isInstalled()) {
 		    continue;
 		}

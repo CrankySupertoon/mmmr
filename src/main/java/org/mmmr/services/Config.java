@@ -50,6 +50,8 @@ public class Config {
 
     private File mcResources;
 
+    private String mcVersion;
+
     private File mods;
 
     private Map<String, String> parameterValues;
@@ -68,7 +70,8 @@ public class Config {
 	this.thisFolder = thisFolder;
 
 	this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/icon.png"));
-	this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b";
+	this.mcVersion = "1.7.3";
+	this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft " + mcVersion;
 
 	this.parameterValues = IOMethods.parseParams(args);
 
@@ -170,6 +173,10 @@ public class Config {
 
     public File getMcResources() {
 	return this.mcResources;
+    }
+
+    public String getMcVersion() {
+	return mcVersion;
     }
 
     public File getMods() {
