@@ -65,7 +65,7 @@ public class Config {
     public Config(String[] args, File thisFolder) throws IOException {
 	this.thisFolder = thisFolder;
 
-	this.icon = new ImageIcon(Config.class.getResource("images/icon.png"));
+	this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/icon.png"));
 	this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft 1.7.3b";
 
 	this.parameterValues = IOMethods.parseParams(args);
