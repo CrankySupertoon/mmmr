@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -31,14 +32,16 @@ public class FancySwing {
 	    target.addMouseMotionListener(this);
 	}
 
-	public JFrame getFrame(Container target) {
-	    if (target instanceof JFrame) {
-		return (JFrame) target;
+	public Window getFrame(Container target) {
+	    if (target == null)
+		return null;
+	    if (target instanceof Window) {
+		return (Window) target;
 	    }
 	    return this.getFrame(target.getParent());
 	}
 
-	Point getScreenLocation(MouseEvent e) {
+	Point getScreenLocation(MouseEvent e) {	    
 	    Point cursor = e.getPoint();
 	    Point target_location = this.target.getLocationOnScreen();
 	    return new Point((int) (target_location.getX() + cursor.getX()), (int) (target_location.getY() + cursor.getY()));
@@ -52,7 +55,7 @@ public class FancySwing {
 	public void mouseDragged(MouseEvent e) {
 	    Point current = this.getScreenLocation(e);
 	    Point offset = new Point((int) current.getX() - (int) this.start_drag.getX(), (int) current.getY() - (int) this.start_drag.getY());
-	    JFrame frame = this.getFrame(this.target);
+	    Window frame = this.getFrame(this.target);
 	    Point new_location = new Point((int) (this.start_loc.getX() + offset.getX()), (int) (this.start_loc.getY() + offset.getY()));
 	    frame.setLocation(new_location);
 	}
@@ -72,7 +75,9 @@ public class FancySwing {
 	@Override
 	public void mousePressed(MouseEvent e) {
 	    this.start_drag = this.getScreenLocation(e);
-	    this.start_loc = this.getFrame(this.target).getLocation();
+	    Window frame = this.getFrame(this.target);
+	    if(frame==null) return;
+	    this.start_loc = frame.getLocation();
 	}
 
 	@Override
@@ -97,10 +102,10 @@ public class FancySwing {
 	}
     }
 
-    public static void rounded(JFrame w) {
+    public static void rounded(Window w) {
 	if (AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilitiesWrapper.PERPIXEL_TRANSPARENT)) {
 	    try {
-		Shape shape = new RoundRectangle2D.Float(0, 0, w.getWidth(), w.getHeight(), 40, 40);
+		Shape shape = new RoundRectangle2D.Float(0, 0, w.getWidth(), w.getHeight(), 20, 20);
 		AWTUtilitiesWrapper.setWindowShape(w, shape);
 	    } catch (Exception e) {
 		e.printStackTrace();
@@ -108,10 +113,13 @@ public class FancySwing {
 	}
     }
 
-    public static void translucent(JFrame w) {
+    public static void translucent(Window w) {
+	translucent(w,.93f);
+    }
+    public static void translucent(Window w, Float f) {
 	if (AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
 	    try {
-		AWTUtilitiesWrapper.setWindowOpacity(w, 0.93f);
+		AWTUtilitiesWrapper.setWindowOpacity(w, f);
 	    } catch (Exception e) {
 		e.printStackTrace();
 	    }
