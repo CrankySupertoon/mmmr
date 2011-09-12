@@ -14,8 +14,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import com.sun.awt.AWTUtilities;
-
 /**
  * http://java.sun.com/developer/technicalArticles/GUI/translucent_shaped_windows/
  * 
@@ -120,8 +118,9 @@ public class FancySwing {
 	FancySwing.translucent(w, .93f);
     }
 
+    @SuppressWarnings("restriction")
     public static void translucent(Window w, Float f) {
-	if (AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
+	if (AWTUtilitiesWrapper.isTranslucencySupported(com.sun.awt.AWTUtilities.Translucency.TRANSLUCENT)) {
 	    try {
 		AWTUtilitiesWrapper.setWindowOpacity(w, f);
 	    } catch (Exception e) {

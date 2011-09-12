@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -70,6 +71,7 @@ public class ManagerWindow extends JFrame {
 	this.setTitle(cfg.getTitle());
 	this.setUndecorated(true);
 	RoundedPanel mainpanel = new RoundedPanel(new GridLayout(-1, 1));
+	mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 	mainpanel.setShady(false);
 	new MoveMouseListener(mainpanel);
 	this.getContentPane().add(mainpanel, BorderLayout.CENTER);

@@ -83,7 +83,7 @@ public class StatusWindow extends JFrame {
 	RoundedPanel mainpanel = new RoundedPanel(new GridLayout(-1, 1));
 	mainpanel.setShady(false);
 	new MoveMouseListener(mainpanel);
-	mainpanel.setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
+	mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 	this.getContentPane().add(mainpanel);
 	JLabel label = new JLabel(this.getTitle());
 	label.setHorizontalAlignment(SwingConstants.CENTER);
