@@ -27,15 +27,15 @@ public class DBService {
 
     public static DBService getInstance(Config cfg) throws IOException, ClassNotFoundException {
 	if (DBService.instance == null) {
-	    DBService.instance = new DBService(cfg.getDbdir());
+	    DBService.instance = new DBService(cfg);
 	}
 	return DBService.instance;
     }
 
     private Session session = null;
 
-    public DBService(File dbdir) throws IOException, ClassNotFoundException {
-	System.setProperty("derby.stream.error.file", new File(dbdir, "derby.log").getAbsolutePath());
+    public DBService(Config cfg) throws IOException, ClassNotFoundException {
+	System.setProperty("derby.stream.error.file", new File(cfg.getLogs(), "derby.log").getAbsolutePath());
 
 	AnnotationConfiguration configuration = new AnnotationConfiguration();
 	configuration.addAnnotatedClass(Dependency.class);
@@ -52,7 +52,7 @@ public class DBService {
 	properties.setProperty("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
 	// embedded server can only be opened by 1 program
 	properties.setProperty("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver");
-	String url = "jdbc:derby:" + dbdir.getAbsolutePath() + ";create=" + !dbdir.exists();
+	String url = "jdbc:derby:" + cfg.getData().getAbsolutePath() + ";create=" + !cfg.getData().exists();
 	System.out.println(url);
 	properties.setProperty("hibernate.connection.url", url);
 	configuration.setProperties(properties);

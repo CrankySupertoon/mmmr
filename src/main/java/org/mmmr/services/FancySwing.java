@@ -20,9 +20,9 @@ import javax.swing.UIManager;
  */
 public class FancySwing {
     public static class MoveMouseListener implements MouseListener, MouseMotionListener {
-	JComponent target;
 	Point start_drag;
 	Point start_loc;
+	JComponent target;
 
 	public MoveMouseListener(JComponent target) {
 	    this.target = target;

@@ -30,7 +30,11 @@ public class Config {
 
     private Font font18;
 
+    private ImageIcon icon;
+
     private File libs;
+
+    private File logs;
 
     private File mcBaseFolder;
 
@@ -54,13 +58,11 @@ public class Config {
 
     private File thisFolder;
 
+    private String title;
+
     private File tmp;
 
     private XmlService xml;
-
-    private String title;
-
-    private ImageIcon icon;
 
     public Config(String[] args, File thisFolder) throws IOException {
 	this.thisFolder = thisFolder;
@@ -92,6 +94,7 @@ public class Config {
 	this.mods = IOMethods.newDir(this.data, "mods");
 	this.libs = IOMethods.newDir(this.data, "libs");
 	this.tmp = IOMethods.newDir(this.data, "tmp");
+	this.logs = IOMethods.newDir(this.data, "logs");
 	this.dbdir = new File(this.data, "db");
 	this.backupOriginalJar = IOMethods.newDir(this.backup, "minecraft.jar");
 	this.mcJogboxBackup = IOMethods.newDir(this.backup, "jogbox");
@@ -135,6 +138,10 @@ public class Config {
 
     public File getLibs() {
 	return this.libs;
+    }
+
+    public File getLogs() {
+	return logs;
     }
 
     public File getMcBaseFolder() {

@@ -16,24 +16,24 @@ import javax.swing.JPanel;
 public class RoundedPanel extends JPanel {
     private static final long serialVersionUID = 6974828771572501794L;
 
-    /** Stroke size. it is recommended to set it to 1 for better view */
-    protected int strokeSize = 1;
-
-    /** Color of shadow */
-    protected Color shadowColor = Color.black;
-
-    /** Sets if it drops shadow */
-    protected boolean shady = true;
-    /** Sets if it has an High Quality view */
-    protected boolean highQuality = true;
     /** Double values for Horizzontal and Vertical radius of corner arcs */
     protected Dimension arcs = new Dimension(20, 20);
+
+    /** Sets if it has an High Quality view */
+    protected boolean highQuality = true;
+
+    /** The transparency value of shadow. ( 0 - 255) */
+    protected int shadowAlpha = 150;
+    /** Color of shadow */
+    protected Color shadowColor = Color.black;
     /** Distance between border of shadow and border of opaque panel */
     protected int shadowGap = 5;
     /** The offset of shadow. */
     protected int shadowOffset = 4;
-    /** The transparency value of shadow. ( 0 - 255) */
-    protected int shadowAlpha = 150;
+    /** Sets if it drops shadow */
+    protected boolean shady = true;
+    /** Stroke size. it is recommended to set it to 1 for better view */
+    protected int strokeSize = 1;
 
     public RoundedPanel() {
 	super();
