@@ -33,15 +33,16 @@ public class FancySwing {
 	}
 
 	public Window getFrame(Container target) {
-	    if (target == null)
+	    if (target == null) {
 		return null;
+	    }
 	    if (target instanceof Window) {
 		return (Window) target;
 	    }
 	    return this.getFrame(target.getParent());
 	}
 
-	Point getScreenLocation(MouseEvent e) {	    
+	Point getScreenLocation(MouseEvent e) {
 	    Point cursor = e.getPoint();
 	    Point target_location = this.target.getLocationOnScreen();
 	    return new Point((int) (target_location.getX() + cursor.getX()), (int) (target_location.getY() + cursor.getY()));
@@ -76,7 +77,9 @@ public class FancySwing {
 	public void mousePressed(MouseEvent e) {
 	    this.start_drag = this.getScreenLocation(e);
 	    Window frame = this.getFrame(this.target);
-	    if(frame==null) return;
+	    if (frame == null) {
+		return;
+	    }
 	    this.start_loc = frame.getLocation();
 	}
 
@@ -114,8 +117,9 @@ public class FancySwing {
     }
 
     public static void translucent(Window w) {
-	translucent(w,.93f);
+	FancySwing.translucent(w, .93f);
     }
+
     public static void translucent(Window w, Float f) {
 	if (AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
 	    try {

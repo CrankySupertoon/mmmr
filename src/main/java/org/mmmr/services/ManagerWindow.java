@@ -13,12 +13,10 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.apache.log4j.Appender;
@@ -70,17 +68,15 @@ public class ManagerWindow extends JFrame {
 	this.cfg = cfg;
 	this.setTitle(cfg.getTitle());
 	this.setUndecorated(true);
-	Container cp = this.getContentPane();
-	JPanel panel = new JPanel(new GridLayout(-1, 1));
-	panel.setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
-	new MoveMouseListener(panel);
-	cp.add(panel, BorderLayout.CENTER);
-	cp = panel;
+	RoundedPanel mainpanel = new RoundedPanel(new GridLayout(-1, 1));
+	mainpanel.setShady(false);
+	new MoveMouseListener(mainpanel);
+	this.getContentPane().add(mainpanel, BorderLayout.CENTER);
 	JLabel label = new JLabel(this.getTitle());
 	label.setHorizontalAlignment(SwingConstants.CENTER);
 	label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
-	cp.add(label);
-	this.addActions(cp);
+	mainpanel.add(label);
+	this.addActions(mainpanel);
 	JButton quit = new JButton("Get me out of here :(");
 	quit.setFont(cfg.getFont18());
 	quit.addActionListener(new ActionListener() {
@@ -89,7 +85,7 @@ public class ManagerWindow extends JFrame {
 		ManagerWindow.this.dispose();
 	    }
 	});
-	cp.add(quit);
+	mainpanel.add(quit);
 	this.setLocationRelativeTo(null);
 	this.setResizable(false);
 	FancySwing.translucent(this);
@@ -100,7 +96,7 @@ public class ManagerWindow extends JFrame {
 	this.setVisible(true);
     }
 
-    private void addActions(Container cp) {
+    private void addActions(Container mainpanel) {
 	{
 	    JButton comp = new JButton("Change startup configuration (performance related)");
 	    comp.setFont(this.cfg.getFont18());
@@ -111,7 +107,7 @@ public class ManagerWindow extends JFrame {
 		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
-	    cp.add(comp);
+	    mainpanel.add(comp);
 	}
 	{
 	    JButton comp = new JButton("Install OptiFine (performance mod & HD texture enabler)");
@@ -122,7 +118,7 @@ public class ManagerWindow extends JFrame {
 		    ManagerWindow.this.performanceMod();
 		}
 	    });
-	    cp.add(comp);
+	    mainpanel.add(comp);
 	}
 	{
 	    JButton comp = new JButton("Install mods");
@@ -133,7 +129,7 @@ public class ManagerWindow extends JFrame {
 		    ManagerWindow.this.installMods();
 		}
 	    });
-	    cp.add(comp);
+	    mainpanel.add(comp);
 	}
 	{
 	    JButton comp = new JButton("Uninstall mods");
@@ -145,7 +141,7 @@ public class ManagerWindow extends JFrame {
 		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
-	    cp.add(comp);
+	    mainpanel.add(comp);
 	}
 	{
 	    JButton comp = new JButton("Change mod order and resolve conflicts");
@@ -157,7 +153,7 @@ public class ManagerWindow extends JFrame {
 		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
-	    cp.add(comp);
+	    mainpanel.add(comp);
 	}
 	{
 	    JButton comp = new JButton("Change sex");
@@ -169,7 +165,7 @@ public class ManagerWindow extends JFrame {
 		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
-	    cp.add(comp);
+	    mainpanel.add(comp);
 	}
 	{
 	    JButton comp = new JButton("Backup and restore worlds/stats/etc");
@@ -181,7 +177,7 @@ public class ManagerWindow extends JFrame {
 		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
 		}
 	    });
-	    cp.add(comp);
+	    mainpanel.add(comp);
 	}
 	{
 	    JButton comp = new JButton("Change MMMR logging level");
@@ -208,7 +204,7 @@ public class ManagerWindow extends JFrame {
 		    }
 		}
 	    });
-	    cp.add(comp);
+	    mainpanel.add(comp);
 	}
     }
 

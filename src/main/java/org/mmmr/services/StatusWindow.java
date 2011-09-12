@@ -79,26 +79,26 @@ public class StatusWindow extends JFrame {
     public StatusWindow(final Config cfg) {
 	this.cfg = cfg;
 	this.setTitle(cfg.getTitle());
-	JPanel contentPane = new JPanel();
-	new MoveMouseListener(contentPane);
-	contentPane.setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
-	this.getContentPane().add(contentPane);
+	RoundedPanel mainpanel = new RoundedPanel(new GridLayout(-1, 1));
+	mainpanel.setShady(false);
+	new MoveMouseListener(mainpanel);
+	mainpanel.setBorder(BorderFactory.createEmptyBorder(25, 50, 25, 50));
+	this.getContentPane().add(mainpanel);
 	JLabel label = new JLabel(this.getTitle());
 	label.setHorizontalAlignment(SwingConstants.CENTER);
 	label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
-	contentPane.add(label, BorderLayout.CENTER);
-	contentPane.setLayout(new GridLayout(-1, 1));
+	mainpanel.add(label, BorderLayout.CENTER);
 	String bullet = "images/bullet_yellow_x4.png";
 	this.libstatus = new StatusPanel("Program libraries", bullet);
-	contentPane.add(this.libstatus);
+	mainpanel.add(this.libstatus);
 	this.dbstatus = new StatusPanel("Database and Hibernate", bullet);
-	contentPane.add(this.dbstatus);
+	mainpanel.add(this.dbstatus);
 	this.xmlstatus = new StatusPanel("XML service", bullet);
-	contentPane.add(this.xmlstatus);
+	mainpanel.add(this.xmlstatus);
 	this.mcstatus = new StatusPanel("Minecraft", bullet);
-	contentPane.add(this.mcstatus);
+	mainpanel.add(this.mcstatus);
 	this.ybstatus = new StatusPanel("YogBox", bullet);
-	contentPane.add(this.ybstatus);
+	mainpanel.add(this.ybstatus);
 	this.goOn = new JButton("I'm ready to start adding mods :)");
 	this.goOn.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
 	this.goOn.addActionListener(new ActionListener() {
@@ -128,7 +128,7 @@ public class StatusWindow extends JFrame {
 	JPanel btns = new JPanel(new FlowLayout(FlowLayout.CENTER));
 	btns.add(this.goOn, null);
 	btns.add(this.quit, null);
-	contentPane.add(btns);
+	mainpanel.add(btns);
 
 	this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 

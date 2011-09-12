@@ -6,6 +6,7 @@ import java.awt.Color;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 public class Test {
     public static void main(String[] args) {
@@ -17,7 +18,7 @@ public class Test {
 	    panel.setBackground((Color) UIManager.get("ToolTip.background"));
 	    w.getContentPane().add(panel, BorderLayout.CENTER);
 	    w.setUndecorated(true);
-	    w.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	    w.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	    w.setSize(200, 100);
 	    w.setLocationRelativeTo(null);
 	    FancySwing.translucent(w, .85f);
