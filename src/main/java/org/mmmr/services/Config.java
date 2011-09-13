@@ -186,6 +186,10 @@ public class Config {
     public Map<String, String> getParameterValues() {
 	return this.parameterValues;
     }
+    
+    public String getProperty(String key) throws IOException {
+	return this.properties.getProperty(key);
+    }
 
     public String getProperty(String key, String defaultValue) throws IOException {
 	String value = this.properties.getProperty(key);

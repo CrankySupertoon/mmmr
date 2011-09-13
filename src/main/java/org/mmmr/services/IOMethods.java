@@ -215,9 +215,6 @@ public class IOMethods {
 
     public static void loadjarAtRuntime(File jar) throws SecurityException, NoSuchMethodException, IllegalArgumentException, MalformedURLException, IllegalAccessException,
 	    InvocationTargetException {
-	if ("false".equals(System.getProperty("nodload"))) {
-	    return;
-	}
 	URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 	Class<?> sysclass = URLClassLoader.class;
 	Method method = sysclass.getDeclaredMethod("addURL", URL.class);

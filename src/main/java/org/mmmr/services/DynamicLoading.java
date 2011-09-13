@@ -47,10 +47,12 @@ public class DynamicLoading {
 			jarFrom.renameTo(lib2);
 		    }
 		}
-		status.setStatus("Program libraries: loading " + lib1.getName(), null);
-		IOMethods.loadjarAtRuntime(lib1);
-		status.setStatus("Program libraries: loading " + lib2.getName(), null);
-		IOMethods.loadjarAtRuntime(lib2);
+		if (cfg.getProperty("console") != null) {
+		    status.setStatus("Program libraries: loading " + lib1.getName(), null);
+		    IOMethods.loadjarAtRuntime(lib1);
+		    status.setStatus("Program libraries: loading " + lib2.getName(), null);
+		    IOMethods.loadjarAtRuntime(lib2);
+		}
 	    }
 	    {
 		BufferedReader in = new BufferedReader(new InputStreamReader(DynamicLoading.class.getClassLoader().getResourceAsStream("libs.txt")));
@@ -78,8 +80,10 @@ public class DynamicLoading {
 			    }
 			}
 		    }
-		    status.setStatus("Program libraries: loading " + jar.getName(), null);
-		    IOMethods.loadjarAtRuntime(jar);
+		    if (cfg.getProperty("console") != null) {
+			status.setStatus("Program libraries: loading " + jar.getName(), null);
+			IOMethods.loadjarAtRuntime(jar);
+		    }
 		}
 		in.close();
 	    }
