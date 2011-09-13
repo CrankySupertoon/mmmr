@@ -1,0 +1,6 @@
+set APPDATA=C:\Minecraft
+start /high javaw -Xmx256M -Djava.library.path=bin/natives -cp bin/minecraft.jar;bin/jinput.jar;bin/lwjgl.jar;bin/lwjgl_util.jar net.minecraft.client.Minecraft <username> <password>
+
+
+
+http://www.minecraftforum.net/topic/249637-173-optifine-hd-g-fps-boost/page__pid__7628425__st__4338
