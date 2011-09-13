@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -33,6 +35,19 @@ import javax.swing.JFileChooser;
  * @author Jurgen
  */
 public class IOMethods {
+    static class MemInfo {
+	public final long memtotmb;
+	public final long memfreemb;
+	public final double memusage;
+
+	public MemInfo(long memtotmb, long memfreemb, double memusage) {
+	    super();
+	    this.memtotmb = memtotmb;
+	    this.memfreemb = memfreemb;
+	    this.memusage = memusage;
+	}
+    }
+
     private static long _copy(File source, File target) throws IOException {
 	if (target != null) {
 	    target.getParentFile().mkdirs();
@@ -138,6 +153,15 @@ public class IOMethods {
 	all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
 	all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
 	return all;
+    }
+
+    @SuppressWarnings("restriction")
+    public static MemInfo getMemInfo() {
+	com.sun.management.OperatingSystemMXBean o = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getPlatformMXBeans(OperatingSystemMXBean.class).get(0);
+	long memtotmb = o.getTotalPhysicalMemorySize() / 1024 / 1024;
+	long memfreemb = o.getFreePhysicalMemorySize() / 1024 / 1024;
+	double memusage = (double) (memtotmb - memfreemb) / memtotmb;
+	return new MemInfo(memtotmb, memfreemb, memusage);
     }
 
     public static List<String> getRegValue(String path, String key, String type) {
@@ -248,7 +272,11 @@ public class IOMethods {
 	if (args != null) {
 	    for (String arg : args) {
 		if (arg.indexOf('=') == -1) {
-		    parameterValues.put(arg, "true");
+		    if (arg.startsWith("-")) {
+			parameterValues.put(arg.substring(1), "true");
+		    } else {
+			parameterValues.put(arg, "true");
+		    }
 		} else {
 		    String[] kv = arg.split("=");
 		    if (kv[0].startsWith("-")) {

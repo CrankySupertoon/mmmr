@@ -47,6 +47,9 @@ public class MMMRStart {
 	try {
 	    FancySwing.lookAndFeel();
 	    Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
+	    System.out.println(cfg.getParameterValue("dev"));
+	    System.out.println(cfg.getParameterValue("console"));
+	    System.exit(0);
 	    MMMRStart.adjustLogging(cfg);
 	    MMMRStart.prepareFont(cfg);
 	    StatusWindow statusWindow = new StatusWindow(cfg);

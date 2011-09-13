@@ -183,10 +183,10 @@ public class Config {
 	return this.mods;
     }
 
-    public Map<String, String> getParameterValues() {
-	return this.parameterValues;
+    public String getParameterValue(String key) {
+	return this.parameterValues.get(key);
     }
-    
+
     public String getProperty(String key) throws IOException {
 	return this.properties.getProperty(key);
     }
