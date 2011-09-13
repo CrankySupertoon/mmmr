@@ -65,6 +65,8 @@ public class ManagerWindow extends JFrame {
 
     private InstallationService iserv = new InstallationService();
 
+    private JavaOptionsWindow javaOptionsWindow;
+
     public ManagerWindow(Config cfg) {
 	this.cfg = cfg;
 	this.setIconImage(cfg.getIcon().getImage());
@@ -106,8 +108,17 @@ public class ManagerWindow extends JFrame {
 	    comp.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		    // TODO
-		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
+		    try {
+			if (ManagerWindow.this.javaOptionsWindow == null) {
+			    ManagerWindow.this.javaOptionsWindow = new JavaOptionsWindow(ManagerWindow.this.cfg);
+			    ManagerWindow.this.javaOptionsWindow.packColumns();
+			    ManagerWindow.this.javaOptionsWindow.setLocationRelativeTo(null);
+			}
+			ManagerWindow.this.javaOptionsWindow.selectDefault();
+			ManagerWindow.this.javaOptionsWindow.setVisible(true);
+		    } catch (Exception e2) {
+			e2.printStackTrace();
+		    }
 		}
 	    });
 	    mainpanel.add(comp);
@@ -232,8 +243,8 @@ public class ManagerWindow extends JFrame {
 	    for (File modxml : modxmls) {
 		Mod availablemod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
 		// mod not fit for mc version
-		if (availablemod.getMcVersionDependency() != null && !availablemod.getMcVersionDependency().contains("?")) {
-		    if (!availablemod.getMcVersionDependency().equals(cfg.getMcVersion())) {
+		if ((availablemod.getMcVersionDependency() != null) && !availablemod.getMcVersionDependency().contains("?")) {
+		    if (!availablemod.getMcVersionDependency().equals(this.cfg.getMcVersion())) {
 			continue;
 		    }
 		}

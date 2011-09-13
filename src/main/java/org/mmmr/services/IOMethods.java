@@ -1,10 +1,12 @@
 package org.mmmr.services;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
@@ -36,8 +38,8 @@ import javax.swing.JFileChooser;
  */
 public class IOMethods {
     static class MemInfo {
-	public final long memtotmb;
 	public final long memfreemb;
+	public final long memtotmb;
 	public final double memusage;
 
 	public MemInfo(long memtotmb, long memfreemb, double memusage) {
@@ -288,6 +290,34 @@ public class IOMethods {
 	    }
 	}
 	return parameterValues;
+    }
+
+    public static List<String> process(boolean capture, boolean log, String... command) throws IOException {
+	List<String> lines = new ArrayList<String>();
+	ProcessBuilder pb = new ProcessBuilder(command);
+	pb.redirectErrorStream(true);
+	Process p = pb.start();
+
+	if (capture) {
+	    InputStream is = p.getInputStream();
+	    InputStreamReader isr = new InputStreamReader(is);
+	    BufferedReader br = new BufferedReader(isr);
+	    String line;
+
+	    while ((line = br.readLine()) != null) {
+		if (capture) {
+		    lines.add(line);
+		}
+
+		if (log) {
+		    System.out.println(line);
+		}
+	    }
+
+	    is.close();
+	}
+
+	return lines;
     }
 
     public static File selectFile(File start, javax.swing.filechooser.FileFilter ff) {

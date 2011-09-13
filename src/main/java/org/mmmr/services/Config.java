@@ -40,6 +40,8 @@ public class Config {
 
     private File mcBin;
 
+    private String mcCommandline;
+
     private File mcJar;
 
     private File mcJarBackup;
@@ -71,7 +73,8 @@ public class Config {
 
 	this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/icon.png"));
 	this.mcVersion = "1.7.3";
-	this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft " + mcVersion;
+	this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft " + this.mcVersion;
+	this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar";
 
 	this.parameterValues = IOMethods.parseParams(args);
 
@@ -144,7 +147,7 @@ public class Config {
     }
 
     public File getLogs() {
-	return logs;
+	return this.logs;
     }
 
     public File getMcBaseFolder() {
@@ -153,6 +156,10 @@ public class Config {
 
     public File getMcBin() {
 	return this.mcBin;
+    }
+
+    public String getMcCommandline() {
+	return this.mcCommandline;
     }
 
     public File getMcJar() {
@@ -176,7 +183,7 @@ public class Config {
     }
 
     public String getMcVersion() {
-	return mcVersion;
+	return this.mcVersion;
     }
 
     public File getMods() {
@@ -225,6 +232,10 @@ public class Config {
 
     public void setFont18(Font font18) {
 	this.font18 = font18;
+    }
+
+    public void setMcCommandline(String mcCommandline) {
+	this.mcCommandline = mcCommandline;
     }
 
     public String setProperty(String key, String value) throws IOException {

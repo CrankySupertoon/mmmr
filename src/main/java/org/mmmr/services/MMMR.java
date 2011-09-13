@@ -23,6 +23,20 @@ import org.mmmr.Resource;
  * @author Jurgen
  */
 public class MMMR implements MMMRI {
+    public static void writeMCBat(Config cfg) throws IOException {
+	String commandline = cfg.getMcCommandline();
+	{
+	    FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft console.bat"));
+	    out.write(("SET APPDATA=" + cfg.getThisFolder().getAbsolutePath() + "\r\n" + commandline + "\r\npause").getBytes());
+	    out.close();
+	}
+	{
+	    FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft no-console.bat"));
+	    out.write(("SET APPDATA=" + cfg.getThisFolder().getAbsolutePath() + "\r\n" + commandline.replaceAll("java.exe", "javaw.exe")).getBytes());
+	    out.close();
+	}
+    }
+
     private Config cfg;
 
     private MC mc;
@@ -65,18 +79,6 @@ public class MMMR implements MMMRI {
 	}
 
 	return false;
-    }
-
-    private String getMCCommandLine() {
-	int xmx = (int) (1024 * 1.5);
-	int xms = xmx;
-	String commandline = "java.exe -Xms"
-		+ xms
-		+ "M -Xmx"
-		+ xmx
-		+ "m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc -jar "
-		+ "minecraft.jar";
-	return commandline;
     }
 
     private ModPack initJogBox(File data) throws FileNotFoundException, JAXBException {
@@ -193,7 +195,7 @@ public class MMMR implements MMMRI {
 	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: starting", null);
 	    db = DBService.getInstance(this.cfg);
 	    this.cfg.setDb(db);
-	    this.mc = db.getOrCreate(new MC(cfg.getMcVersion()));
+	    this.mc = db.getOrCreate(new MC(this.cfg.getMcVersion()));
 	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: ready", true);
 	} catch (Exception e) {
 	    this.statusWindow.getDbstatus().setStatus("Database and Hibernate: starting failed", false);
@@ -236,7 +238,7 @@ public class MMMR implements MMMRI {
 		    this.statusWindow.getMcstatus().setStatus("Minecraft: downloaded", null);
 		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.");
 		    this.startMC(true);
-		    this.writeMCBat();
+		    MMMR.writeMCBat(this.cfg);
 		    if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), "After you started Minecraft once.\nDid Minecraft run properly?", "",
 			    JOptionPane.YES_NO_OPTION)) {
 			error = "installing and running Minecraft";
@@ -394,7 +396,7 @@ public class MMMR implements MMMRI {
 	if (plain) {
 	    commandline = "javaw.exe -Xms1024m -Xmx1024m -jar minecraft.jar";
 	} else {
-	    commandline = this.getMCCommandLine();
+	    commandline = this.cfg.getMcCommandline();
 	}
 
 	List<String> command = new ArrayList<String>(Arrays.asList(commandline.split(" ")));
@@ -405,12 +407,5 @@ public class MMMR implements MMMRI {
 	pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath());
 	@SuppressWarnings("unused")
 	Process javap = pb.start();
-    }
-
-    private void writeMCBat() throws IOException {
-	String commandline = this.getMCCommandLine();
-	FileOutputStream out = new FileOutputStream(new File(this.cfg.getThisFolder(), "start minecraft.bat"));
-	out.write(("SET APPDATA=" + this.cfg.getThisFolder().getAbsolutePath() + "\r\n" + commandline + "\r\npause").getBytes());
-	out.close();
     }
 }

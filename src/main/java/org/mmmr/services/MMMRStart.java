@@ -49,7 +49,6 @@ public class MMMRStart {
 	    Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
 	    System.out.println(cfg.getParameterValue("dev"));
 	    System.out.println(cfg.getParameterValue("console"));
-	    System.exit(0);
 	    MMMRStart.adjustLogging(cfg);
 	    MMMRStart.prepareFont(cfg);
 	    StatusWindow statusWindow = new StatusWindow(cfg);
@@ -82,7 +81,7 @@ public class MMMRStart {
 	    e.printStackTrace();
 	    font = new JLabel().getFont();
 	}
-	cfg.setFont(font);
+	cfg.setFont(font.deriveFont(182));
 	Font font18 = font.deriveFont(18f);
 	cfg.setFont18(font18);
     }
