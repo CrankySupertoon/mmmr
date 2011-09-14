@@ -320,6 +320,7 @@ public class MMMR implements MMMRI {
 			    db.save(jb);
 			    this.statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
 			    this.cfg.setProperty("jogbox.ignore", "false");
+			    // TODO delete install log
 			} catch (Exception e) {
 			    this.statusWindow.getYbstatus().setStatus("YogBox: failed", ybcheck = false);
 			}

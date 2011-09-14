@@ -57,7 +57,7 @@ public class JavaOptionsWindow extends JFrame {
 
     private Color green = Color.GREEN.darker();
 
-    private String[] options = ("-Xms{MIN}m -Xmx{MAX}m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc")
+    private String[] options = ("-Xms{MIN}m -Xmx{MAX}m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc -XX:+UseCompressedOops")
 	    .split(" ");
 
     private Color red = Color.RED.darker();
@@ -141,9 +141,9 @@ public class JavaOptionsWindow extends JFrame {
 	    max = 2048;
 	}
 
-	String[] names = { "JRE", "64bit", "Xms", "Xmx", "client", "UseConcMarkSweepGC", "DisableExplicitGC", "UseAdaptiveGCBoundary", "MaxGCPauseMillis", "UseGCOverheadLimit",
-		"SurvivorRatio", "Xnoclassgc", "UseSSE", "Xincgc" };
-	this.columnNames.addAll(Arrays.asList(names));
+	this.columnNames.add("JRE");
+	this.columnNames.add("64bit");
+	this.columnNames.addAll(Arrays.asList(options));
 
 	for (String[] jreinfo : IOMethods.getAllJavaInfo(IOMethods.getAllJavaRuntimes())) {
 	    String jre = jreinfo[0];
