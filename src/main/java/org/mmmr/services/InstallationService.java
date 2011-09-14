@@ -22,8 +22,8 @@ import org.mmmr.Resource;
  * @author Jurgen
  */
 public class InstallationService {
-    private void copy(DBService db, Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored, File minecraftBaseFolder) throws IOException {
-	int posmcb = minecraftBaseFolder.getAbsolutePath().length() + 1;
+    private void copy(Config cfg, Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
+	int posmcb = cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
 	Date now = new Date();
 	for (Map.Entry<File, File> entry : toCopy.entrySet()) {
 	    if (ignored.contains(entry.getKey())) {
@@ -34,7 +34,7 @@ public class InstallationService {
 	    fileResource.get(entry.getKey()).addFile(new MCFile(path, now, crc32));
 	}
 	mod.setInstallationDate(now);
-	db.save(mod);
+	cfg.getDb().save(mod);
     }
 
     @SuppressWarnings("unused")
@@ -141,9 +141,9 @@ public class InstallationService {
     }
 
     private void installMod(Config cfg, Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
-	this.copy(cfg.getDb(), mod, fileResource, toCopy, ignored, cfg.getMcBaseFolder());
+	this.copy(cfg, mod, fileResource, toCopy, ignored);
 	cfg.getDb().save(mod);
-	JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Mod installed.");
+	JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Mod installed.", "", JOptionPane.INFORMATION_MESSAGE, cfg.getIcon());
     }
 
     public void uninstallMod(Config cfg, Mod mod) {

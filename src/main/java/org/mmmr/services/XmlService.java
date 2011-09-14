@@ -28,13 +28,13 @@ public class XmlService {
 
     private Unmarshaller unmarshaller;
 
-    public XmlService(File data) throws JAXBException, SAXException, IOException {
-	this.init(data);
+    public XmlService(Config cfg) throws JAXBException, SAXException, IOException {
+	this.init(cfg);
     }
 
-    void init(File data) throws JAXBException, SAXException, IOException {
+    void init(Config cfg) throws JAXBException, SAXException, IOException {
 	String contextPath = Mod.class.getPackage().getName();
-	final File xsdfile = new File(data, contextPath + ".xsd");
+	final File xsdfile = new File(cfg.getData(), contextPath + ".xsd");
 	JAXBContext context = JAXBContext.newInstance(contextPath);
 	context.generateSchema(new SchemaOutputResolver() {
 	    @Override

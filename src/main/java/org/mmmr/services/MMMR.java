@@ -206,7 +206,7 @@ public class MMMR implements MMMRI {
 
 	try {
 	    this.statusWindow.getXmlstatus().setStatus("XML service: starting", null);
-	    xml = new XmlService(this.cfg.getData());
+	    xml = new XmlService(this.cfg);
 	    this.cfg.setXml(xml);
 	    this.statusWindow.getXmlstatus().setStatus("XML service: ready", true);
 	} catch (Exception e) {
@@ -236,11 +236,12 @@ public class MMMR implements MMMRI {
 			}
 		    }
 		    this.statusWindow.getMcstatus().setStatus("Minecraft: downloaded", null);
-		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.");
+		    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.",
+			    "", JOptionPane.INFORMATION_MESSAGE, this.cfg.getIcon());
 		    this.startMC(true);
 		    MMMR.writeMCBat(this.cfg);
 		    if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), "After you started Minecraft once.\nDid Minecraft run properly?", "",
-			    JOptionPane.YES_NO_OPTION)) {
+			    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon())) {
 			error = "installing and running Minecraft";
 			IOMethods.deleteDirectory(this.cfg.getMcBaseFolder());
 			for (i = 0; i < files.length; i++) {
@@ -266,7 +267,8 @@ public class MMMR implements MMMRI {
 	    if (mccheck) {
 		if (!this.cfg.getMcJarBackup().exists() && !"true".equals(this.cfg.getProperty("jogbox.ignore", "?"))) {
 		    if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(),
-			    "Do you want to install YogBox?\nYou need to have it downloaded already.", "YogBox", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+			    "Do you want to install YogBox?\nYou need to have it downloaded already.", "YogBox", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+			    this.cfg.getIcon())) {
 			try {
 			    File jbinstaller = IOMethods.selectFile(this.cfg.getThisFolder(), new javax.swing.filechooser.FileFilter() {
 				@Override
@@ -301,7 +303,8 @@ public class MMMR implements MMMRI {
 			    pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath());
 			    pb.start();
 
-			    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "After you installed the YogBox.\nContinue.");
+			    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "After you installed the YogBox.\nContinue.", "", JOptionPane.INFORMATION_MESSAGE,
+				    this.cfg.getIcon());
 
 			    ArchiveService.extract(this.cfg.getMcJar(), this.cfg.getMcJogboxBackup());
 			    this.removeOriginalFiles(this.cfg.getMcJogboxBackup().getAbsolutePath().length() + 1, this.cfg.getMcJogboxBackup(), this.cfg.getBackupOriginalJar());
@@ -382,7 +385,7 @@ public class MMMR implements MMMRI {
 
 	    if (!allSuccess) {
 		if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), "Error during: " + error + "\nDo you want to try again?", "Error",
-			JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE)) {
+			JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, this.cfg.getIcon())) {
 		    System.exit(0);
 		}
 	    } else {

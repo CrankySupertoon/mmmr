@@ -5,6 +5,9 @@ import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Jurgen
+ */
 public class ExceptionAndLogHandler {
     private static final Logger logger = LoggerFactory.getLogger(ExceptionAndLogHandler.class);
 

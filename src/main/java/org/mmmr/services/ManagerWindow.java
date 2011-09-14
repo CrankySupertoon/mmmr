@@ -202,7 +202,7 @@ public class ManagerWindow extends JFrame {
 		    try {
 			Level[] levels = { Level.TRACE, Level.DEBUG, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF };
 			Level level = Level.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Choose logging level", "Logging", JOptionPane.QUESTION_MESSAGE,
-				null, levels, org.apache.log4j.Logger.getRootLogger().getLevel()));
+				ManagerWindow.this.cfg.getIcon(), levels, org.apache.log4j.Logger.getRootLogger().getLevel()));
 			if (level != null) {
 			    ManagerWindow.this.cfg.setProperty("logging.level", String.valueOf(level));
 			    org.apache.log4j.Logger.getRootLogger().setLevel(level);
@@ -256,7 +256,7 @@ public class ManagerWindow extends JFrame {
 		options.add(new ModOption(availablemod));
 	    }
 	    ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version", "Select a version",
-		    JOptionPane.QUESTION_MESSAGE, null, options.toArray(), options.get(0)));
+		    JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon(), options.toArray(), options.get(0)));
 	    if (selected != null) {
 		this.iserv.installMod(this.cfg, selected.getMod());
 	    }
@@ -291,8 +291,8 @@ public class ManagerWindow extends JFrame {
 	    }
 	    ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
 	    ModOption selected = installedOption == null ? selectionValues[0] : installedOption;
-	    selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE, null,
-		    selectionValues, selected));
+	    selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version", "Select a version", JOptionPane.QUESTION_MESSAGE,
+		    this.cfg.getIcon(), selectionValues, selected));
 	    if (selected != null) {
 		Mod mod = ModOption.class.cast(selected).getMod();
 		if (installed != null) {
