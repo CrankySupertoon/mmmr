@@ -15,6 +15,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
@@ -35,14 +38,23 @@ public class JavaOptionsWindow extends JFrame {
 	    Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	    this.setFont(JavaOptionsWindow.this.cfg.getFont18().deriveFont(10f));
 	    if ("y".equals(value)) {
-		this.setBackground(JavaOptionsWindow.this.green);
+		if (isSelected) {
+		    this.setBackground(JavaOptionsWindow.this.greenSelected);
+		} else {
+		    this.setBackground(JavaOptionsWindow.this.green);
+		}
 		this.setForeground(Color.white);
+		setHorizontalTextPosition(SwingConstants.CENTER);
 	    }
 	    if ("n".equals(value)) {
-		this.setBackground(JavaOptionsWindow.this.red);
+		if (isSelected) {
+		    this.setBackground(JavaOptionsWindow.this.redSelected);
+		} else {
+		    this.setBackground(JavaOptionsWindow.this.red);
+		}
 		this.setForeground(Color.white);
+		setHorizontalTextPosition(SwingConstants.CENTER);
 	    }
-
 	    return renderer;
 	}
     }
@@ -55,16 +67,26 @@ public class JavaOptionsWindow extends JFrame {
 
     private Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 
-    private Color green = Color.GREEN.darker();
+    private Color green;
+
+    private Color greenSelected;
 
     private String[] options = ("-Xms{MIN}m -Xmx{MAX}m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc -XX:+UseCompressedOops")
 	    .split(" ");
 
-    private Color red = Color.RED.darker();
+    private Color red;
+
+    private Color redSelected;
 
     private JTable table;
 
     public JavaOptionsWindow(final Config cfg) throws HeadlessException, IOException {
+	Color selectionColor = Color.class.cast(UIManager.get("Table.selectionBackground"));
+	red = Color.RED.darker();
+	redSelected = new Color(Math.max(red.getRed(), selectionColor.getRed()),Math.max(red.getGreen(), selectionColor.getGreen()),Math.max(red.getRed(), selectionColor.getBlue()));
+	green = Color.GREEN.darker();
+	greenSelected = new Color(Math.min(green.getRed(), selectionColor.getRed()),Math.min(green.getGreen(), selectionColor.getGreen()),Math.min(green.getRed(), selectionColor.getBlue()));
+
 	this.cfg = cfg;
 	this.setIconImage(cfg.getIcon().getImage());
 	this.setTitle(cfg.getTitle());
@@ -157,14 +179,16 @@ public class JavaOptionsWindow extends JFrame {
 		_max = Math.min(max, 1024);
 	    }
 
-	    String[] options = ("-Xms" + _min + "m -Xmx" + _max + "m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc")
-		    .split(" ");
+	    String[] opts = new String[options.length];
+	    System.arraycopy(options, 0, opts, 0, options.length);
+	    opts[0] = opts[0].replaceAll("\\Q{MIN}\\E", "" + _min);
+	    opts[1] = opts[1].replaceAll("\\Q{MAX}\\E", "" + _max);
 
 	    Vector<Object> row = new Vector<Object>();
 	    row.add(jre);
 	    row.add(_64 ? "y" : "n");
-	    for (int i = 0; i < options.length; i++) {
-		String option = options[i];
+	    for (int i = 0; i < opts.length; i++) {
+		String option = opts[i];
 		boolean result = IOMethods.process(true, false, jre + "/bin/java.exe", option, "-version").get(0).toLowerCase().startsWith("java version");
 		if (i == 0) {
 		    if (result) {
