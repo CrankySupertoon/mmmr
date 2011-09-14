@@ -53,7 +53,7 @@ public class DBService {
 	// embedded server can only be opened by 1 program
 	properties.setProperty("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver");
 	String url = "jdbc:derby:" + cfg.getDbdir().getAbsolutePath() + ";create=" + !cfg.getDbdir().exists();
-	System.out.println(url);
+	ExceptionAndLogHandler.log(url);
 	properties.setProperty("hibernate.connection.url", url);
 	configuration.setProperties(properties);
 	SessionFactory sessionFactory = configuration.buildSessionFactory();

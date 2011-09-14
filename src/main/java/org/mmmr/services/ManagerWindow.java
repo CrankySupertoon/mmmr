@@ -116,8 +116,8 @@ public class ManagerWindow extends JFrame {
 			}
 			ManagerWindow.this.javaOptionsWindow.selectDefault();
 			ManagerWindow.this.javaOptionsWindow.setVisible(true);
-		    } catch (Exception e2) {
-			e2.printStackTrace();
+		    } catch (Exception ex) {
+			ExceptionAndLogHandler.log(ex);
 		    }
 		}
 	    });
@@ -213,8 +213,8 @@ public class ManagerWindow extends JFrame {
 				filter.setLevelMin(level);
 			    }
 			}
-		    } catch (Exception e2) {
-			e2.printStackTrace();
+		    } catch (Exception ex) {
+			ExceptionAndLogHandler.log(ex);
 		    }
 		}
 	    });
@@ -258,10 +258,10 @@ public class ManagerWindow extends JFrame {
 	    ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version", "Select a version",
 		    JOptionPane.QUESTION_MESSAGE, null, options.toArray(), options.get(0)));
 	    if (selected != null) {
-		this.iserv.installMod(this.cfg.getDb(), selected.getMod(), this.cfg.getMods(), this.cfg.getTmp(), this.cfg.getMcBaseFolder());
+		this.iserv.installMod(this.cfg, selected.getMod());
 	    }
-	} catch (Exception e) {
-	    e.printStackTrace();
+	} catch (Exception ex) {
+	    ExceptionAndLogHandler.log(ex);
 	}
     }
 
@@ -299,15 +299,15 @@ public class ManagerWindow extends JFrame {
 		    if (mod.equals(installed)) {
 			// already installed, nothing to do
 		    } else {
-			this.iserv.uninstallMod(this.cfg.getDb(), installed, this.cfg.getMods(), this.cfg.getTmp(), this.cfg.getMcBaseFolder());
-			this.iserv.installMod(this.cfg.getDb(), mod, this.cfg.getMods(), this.cfg.getTmp(), this.cfg.getMcBaseFolder());
+			this.iserv.uninstallMod(this.cfg, installed);
+			this.iserv.installMod(this.cfg, mod);
 		    }
 		} else {
-		    this.iserv.installMod(this.cfg.getDb(), mod, this.cfg.getMods(), this.cfg.getTmp(), this.cfg.getMcBaseFolder());
+		    this.iserv.installMod(this.cfg, mod);
 		}
 	    }
-	} catch (Exception e2) {
-	    e2.printStackTrace();
+	} catch (Exception ex) {
+	    ExceptionAndLogHandler.log(ex);
 	}
     }
 }

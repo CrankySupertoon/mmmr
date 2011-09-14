@@ -110,9 +110,9 @@ public class ArchiveService {
 		//
 	    }
 	    if (extractOperationResult != ExtractOperationResult.OK) {
-		System.err.println("Extraction error");
+		ExceptionAndLogHandler.log(new RuntimeException("Extraction error"));
 	    } else {
-		System.out.println(Long.toHexString(this.crc32.getValue()).toUpperCase() + " | " + this.total + " | " + this.inArchive.getProperty(this.index, PropID.PATH));
+		// (Long.toHexString(this.crc32.getValue()).toUpperCase() + " | " + this.total + " | " + this.inArchive.getProperty(this.index, PropID.PATH));
 	    }
 	}
 

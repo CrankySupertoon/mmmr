@@ -98,8 +98,8 @@ public class FancySwing {
     public static void lookAndFeel() {
 	try {
 	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	} catch (Exception e) {
-	    e.printStackTrace();
+	} catch (Exception ex) {
+	    ExceptionAndLogHandler.log(ex);
 	}
     }
 
@@ -108,8 +108,8 @@ public class FancySwing {
 	    try {
 		Shape shape = new RoundRectangle2D.Float(0, 0, w.getWidth(), w.getHeight(), 20, 20);
 		AWTUtilitiesWrapper.setWindowShape(w, shape);
-	    } catch (Exception e) {
-		e.printStackTrace();
+	    } catch (Exception ex) {
+		ExceptionAndLogHandler.log(ex);
 	    }
 	}
     }
@@ -123,8 +123,8 @@ public class FancySwing {
 	if (AWTUtilitiesWrapper.isTranslucencySupported(com.sun.awt.AWTUtilities.Translucency.TRANSLUCENT)) {
 	    try {
 		AWTUtilitiesWrapper.setWindowOpacity(w, f);
-	    } catch (Exception e) {
-		e.printStackTrace();
+	    } catch (Exception ex) {
+		ExceptionAndLogHandler.log(ex);
 	    }
 	}
     }

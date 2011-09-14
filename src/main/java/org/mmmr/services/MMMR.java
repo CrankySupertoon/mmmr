@@ -167,7 +167,7 @@ public class MMMR implements MMMRI {
 	    String relativePath = source.getAbsolutePath().substring(s);
 	    File duplicate = new File(duplicateBase, relativePath);
 	    if (IOMethods.fileEquals(source, duplicate)) {
-		System.out.println("delete backup duplicate " + relativePath);
+		// ("delete backup duplicate " + relativePath);
 		source.delete();
 	    }
 
@@ -295,7 +295,7 @@ public class MMMR implements MMMRI {
 			    command.add("javaw.exe");
 			    command.add("-jar");
 			    command.add(jbinstaller.getAbsolutePath());
-			    System.out.println(command);
+			    ExceptionAndLogHandler.log(command);
 			    ProcessBuilder pb = new ProcessBuilder(command);
 			    pb.environment().put("AppData", this.cfg.getThisFolder().getAbsolutePath());
 			    pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath());
@@ -357,7 +357,7 @@ public class MMMR implements MMMRI {
 				if (file.exists()) {
 				    mod.setInstallationDate(now);
 				} else {
-				    System.out.println("mod not installed: " + mod);
+				    ExceptionAndLogHandler.log("mod not installed: " + mod);
 				}
 			    }
 			}
@@ -400,8 +400,8 @@ public class MMMR implements MMMRI {
 	}
 
 	List<String> command = new ArrayList<String>(Arrays.asList(commandline.split(" ")));
-	command.set(0, "C:/Program Files/Java/jre7/bin/" + command.get(0));
-	System.out.println(command);
+	command.set(0, command.get(0));
+	ExceptionAndLogHandler.log(command);
 	ProcessBuilder pb = new ProcessBuilder(command);
 	pb.environment().put("AppData", this.cfg.getThisFolder().getAbsolutePath());
 	pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath());

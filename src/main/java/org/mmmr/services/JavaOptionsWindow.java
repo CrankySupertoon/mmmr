@@ -105,8 +105,8 @@ public class JavaOptionsWindow extends JFrame {
 			MMMR.writeMCBat(cfg);
 		    }
 		    JavaOptionsWindow.this.dispose();
-		} catch (Exception e2) {
-		    e2.printStackTrace();
+		} catch (Exception ex) {
+		    ExceptionAndLogHandler.log(ex);
 		}
 	    }
 	});
@@ -228,8 +228,8 @@ public class JavaOptionsWindow extends JFrame {
 		    }
 		}
 	    }
-	} catch (Exception e) {
-	    e.printStackTrace();
+	} catch (Exception ex) {
+	    ExceptionAndLogHandler.log(ex);
 	}
     }
 

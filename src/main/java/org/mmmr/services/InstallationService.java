@@ -38,7 +38,7 @@ public class InstallationService {
     }
 
     @SuppressWarnings("unused")
-    private void installMod(boolean check, DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) throws IOException {
+    private void installMod(Config cfg, boolean check, Mod mod) throws IOException {
 	if (mod.getDependencies() != null) {
 	    for (Dependency dependency : mod.getDependencies()) {
 		dependency.setMod(mod);
@@ -47,9 +47,9 @@ public class InstallationService {
 	String archive = mod.getArchive();
 	String name = mod.getName();
 	String version = mod.getVersion();
-	File outdir = IOMethods.newDir(tmp, archive);
-	ArchiveService.extract(new File(mods, archive), outdir);
-	int posmcb = minecraftBaseFolder.getAbsolutePath().length() + 1;
+	File outdir = IOMethods.newDir(cfg.getTmp(), archive);
+	ArchiveService.extract(new File(cfg.getMods(), archive), outdir);
+	int posmcb = cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
 	Set<String> conflicts = new HashSet<String>();
 	Map<File, File> toCopy = new HashMap<File, File>();
 	List<File> ignored = new ArrayList<File>();
@@ -59,7 +59,7 @@ public class InstallationService {
 	    String source = resource.getSourcePath();
 	    String target = resource.getTargetPath();
 	    File from = new File(outdir, source).getCanonicalFile();
-	    File to = new File(minecraftBaseFolder, target).getCanonicalFile();
+	    File to = new File(cfg.getMcBaseFolder(), target).getCanonicalFile();
 	    int pos = from.getCanonicalFile().getAbsolutePath().length() + 1;
 	    List<Pattern> includes = new ArrayList<Pattern>();
 	    List<Pattern> excludes = new ArrayList<Pattern>();
@@ -97,19 +97,19 @@ public class InstallationService {
 		String mcRelative = toFile.getCanonicalFile().getAbsolutePath().substring(posmcb);
 		toCopy.put(fromFile, toFile);
 		fileResource.put(fromFile, resource);
-		for (MCFile existing : db.getAll(new MCFile(mcRelative))) {
+		for (MCFile existing : cfg.getDb().getAll(new MCFile(mcRelative))) {
 		    if (existing.getMc() != null) {
-			System.out.println("conflict MC: " + mcRelative);
+			// ("conflict MC: " + mcRelative);
 			// this doesn't interest us now as almost all mods change mc class files
 			// conflicts.add("Minecraft v" + existing.getMc().getVersion());
 		    }
 		    // TODO conflicted files should be ordered as the are installed by mod(pack)s
 		    if (existing.getResource() != null) {
 			if (existing.getResource().getMod() != null) {
-			    System.out.println("conflict " + existing.getResource().getMod().getName() + ": " + mcRelative);
+			    ExceptionAndLogHandler.log("conflict " + existing.getResource().getMod().getName() + ": " + mcRelative);
 			    conflicts.add(existing.getResource().getMod().getName() + " v" + existing.getResource().getMod().getVersion());
 			} else {
-			    System.out.println("conflict " + existing.getResource().getModPack().getName() + ": " + mcRelative);
+			    ExceptionAndLogHandler.log("conflict " + existing.getResource().getModPack().getName() + ": " + mcRelative);
 			    conflicts.add(existing.getResource().getModPack().getName() + " v" + existing.getResource().getModPack().getVersion());
 			}
 		    }
@@ -124,29 +124,29 @@ public class InstallationService {
 		}
 		sb.append("\nInstall anyways?");
 		if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), sb.toString(), "Conflicts", JOptionPane.YES_NO_OPTION,
-			JOptionPane.WARNING_MESSAGE)) {
-		    this.installMod(db, mod, minecraftBaseFolder, toCopy, ignored, fileResource);
+			JOptionPane.WARNING_MESSAGE, cfg.getIcon())) {
+		    this.installMod(cfg, mod, toCopy, ignored, fileResource);
 		}
 	    } else {
-		this.installMod(db, mod, minecraftBaseFolder, toCopy, ignored, fileResource);
+		this.installMod(cfg, mod, toCopy, ignored, fileResource);
 	    }
 	} else {
-	    this.installMod(db, mod, minecraftBaseFolder, toCopy, ignored, fileResource);
+	    this.installMod(cfg, mod, toCopy, ignored, fileResource);
 	}
-	tmp.delete();
+	cfg.getTmp().delete();
     }
 
-    public void installMod(DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) throws IOException {
-	this.installMod(true, db, mod, mods, tmp, minecraftBaseFolder);
+    public void installMod(Config cfg, Mod mod) throws IOException {
+	this.installMod(cfg, true, mod);
     }
 
-    private void installMod(DBService db, Mod mod, File minecraftBaseFolder, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
-	this.copy(db, mod, fileResource, toCopy, ignored, minecraftBaseFolder);
-	db.save(mod);
+    private void installMod(Config cfg, Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
+	this.copy(cfg.getDb(), mod, fileResource, toCopy, ignored, cfg.getMcBaseFolder());
+	cfg.getDb().save(mod);
 	JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Mod installed.");
     }
 
-    public void uninstallMod(DBService db, Mod mod, File mods, File tmp, File minecraftBaseFolder) {
+    public void uninstallMod(Config cfg, Mod mod) {
 	//
     }
 }

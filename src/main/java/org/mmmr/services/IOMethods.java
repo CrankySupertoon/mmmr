@@ -97,7 +97,7 @@ public class IOMethods {
     }
 
     public static void downloadURL(URL url, File target) throws IOException {
-	System.out.println(url);
+	ExceptionAndLogHandler.log(url);
 	URLConnection conn = url.openConnection();
 	conn.setAllowUserInteraction(false);
 	conn.setConnectTimeout(30 * 1000);
@@ -180,8 +180,8 @@ public class IOMethods {
 			while ((c = is.read()) != -1) {
 			    sw.write(c);
 			}
-		    } catch (IOException e) {
-			e.printStackTrace();
+		    } catch (IOException ex) {
+			ExceptionAndLogHandler.log(ex);
 		    }
 		}
 	    });
@@ -201,8 +201,8 @@ public class IOMethods {
 		}
 	    }
 	    return results;
-	} catch (Exception e) {
-	    e.printStackTrace();
+	} catch (Exception ex) {
+	    ExceptionAndLogHandler.log(ex);
 	    return null;
 	}
     }
@@ -253,7 +253,7 @@ public class IOMethods {
 	    Collection<String> all = IOMethods.getAllJavaRuntimes();
 	    IOMethods.getAllJavaInfo(all);
 	} catch (Exception ex) {
-	    ex.printStackTrace();
+	    ExceptionAndLogHandler.log(ex);
 	}
     }
 
@@ -310,7 +310,7 @@ public class IOMethods {
 		}
 
 		if (log) {
-		    System.out.println(line);
+		    ExceptionAndLogHandler.log(line);
 		}
 	    }
 

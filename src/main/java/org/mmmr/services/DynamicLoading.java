@@ -47,7 +47,7 @@ public class DynamicLoading {
 			jarFrom.renameTo(lib2);
 		    }
 		}
-		if (cfg.getParameterValue("console") != null) {
+		if (cfg.getParameterValue("dev") != null) {
 		    status.setStatus("Program libraries: loading " + lib1.getName(), null);
 		    IOMethods.loadjarAtRuntime(lib1);
 		    status.setStatus("Program libraries: loading " + lib2.getName(), null);
@@ -80,7 +80,7 @@ public class DynamicLoading {
 			    }
 			}
 		    }
-		    if (cfg.getParameterValue("console") != null) {
+		    if (cfg.getParameterValue("dev") != null) {
 			status.setStatus("Program libraries: loading " + jar.getName(), null);
 			IOMethods.loadjarAtRuntime(jar);
 		    }
@@ -113,7 +113,7 @@ public class DynamicLoading {
 	    }
 	    out.close();
 	} catch (Exception ex) {
-	    ex.printStackTrace();
+	    ExceptionAndLogHandler.log(ex);
 	}
     }
 

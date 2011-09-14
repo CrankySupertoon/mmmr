@@ -47,8 +47,6 @@ public class MMMRStart {
 	try {
 	    FancySwing.lookAndFeel();
 	    Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
-	    System.out.println(cfg.getParameterValue("dev"));
-	    System.out.println(cfg.getParameterValue("console"));
 	    MMMRStart.adjustLogging(cfg);
 	    MMMRStart.prepareFont(cfg);
 	    StatusWindow statusWindow = new StatusWindow(cfg);
@@ -58,8 +56,8 @@ public class MMMRStart {
 	    starter.setCfg(cfg);
 	    starter.setStatusWindow(statusWindow);
 	    starter.start(args);
-	} catch (Exception e) {
-	    e.printStackTrace();
+	} catch (Exception ex) {
+	    ExceptionAndLogHandler.log(ex);
 	}
     }
 
@@ -77,8 +75,8 @@ public class MMMRStart {
 		IOMethods.unzip(file, cfg.getCfg());
 	    }
 	    font = Font.createFont(Font.TRUETYPE_FONT, fontfont);
-	} catch (Exception e) {
-	    e.printStackTrace();
+	} catch (Exception ex) {
+	    ExceptionAndLogHandler.log(ex);
 	    font = new JLabel().getFont();
 	}
 	cfg.setFont(font.deriveFont(182));
