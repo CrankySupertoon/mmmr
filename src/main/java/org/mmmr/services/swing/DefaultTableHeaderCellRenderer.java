@@ -74,6 +74,7 @@ public class DefaultTableHeaderCellRenderer extends DefaultTableCellRenderer {
      *            the column index
      * @return the SortKey, or null if the column is unsorted
      */
+    @SuppressWarnings("rawtypes")
     protected SortKey getSortKey(JTable table, int column) {
 	RowSorter rowSorter = table.getRowSorter();
 	if (rowSorter == null) {
