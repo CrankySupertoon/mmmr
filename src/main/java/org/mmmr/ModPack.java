@@ -34,11 +34,13 @@ import org.hibernate.annotations.Cascade;
 @Table(uniqueConstraints = { @UniqueConstraint(name = "modpack_name_version", columnNames = { "name", "version" }) })
 public class ModPack implements Comparable<ModPack>, PersistentObject {
     private String description;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Date installationDate;
+
     private String mcVersionDependency;
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "modPack")
@@ -59,137 +61,137 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
     private String version;
 
     public ModPack() {
-	super();
+        super();
     }
 
     public ModPack(String name, String version) {
-	this();
-	this.name = name;
-	this.version = version;
+        this();
+        this.name = name;
+        this.version = version;
     }
 
     public void addMod(Mod mod) {
-	if (this.getMods() == null) {
-	    this.mods = new ArrayList<Mod>();
-	}
-	this.getMods().add(mod);
-	mod.setModPack(this);
+        if (this.getMods() == null) {
+            this.mods = new ArrayList<Mod>();
+        }
+        this.getMods().add(mod);
+        mod.setModPack(this);
     }
 
     public void addResource(Resource resource) {
-	if (this.getResources() == null) {
-	    this.resources = new ArrayList<Resource>();
-	}
-	this.getResources().add(resource);
-	resource.setModPack(this);
+        if (this.getResources() == null) {
+            this.resources = new ArrayList<Resource>();
+        }
+        this.getResources().add(resource);
+        resource.setModPack(this);
     }
 
     @Override
     public int compareTo(final ModPack other) {
-	return new CompareToBuilder().append(this.name, other.name).append(this.version, other.version).toComparison();
+        return new CompareToBuilder().append(this.name, other.name).append(this.version, other.version).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof ModPack)) {
-	    return false;
-	}
-	ModPack castOther = (ModPack) other;
-	return new EqualsBuilder().append(this.name, castOther.name).append(this.version, castOther.version).isEquals();
+        if (!(other instanceof ModPack)) {
+            return false;
+        }
+        ModPack castOther = (ModPack) other;
+        return new EqualsBuilder().append(this.name, castOther.name).append(this.version, castOther.version).isEquals();
     }
 
     @XmlAttribute
     public String getDescription() {
-	return this.description;
+        return this.description;
     }
 
     @Override
     @XmlTransient
     public Long getId() {
-	return this.id;
+        return this.id;
     }
 
     @XmlTransient
     public Date getInstallationDate() {
-	return this.installationDate;
+        return this.installationDate;
     }
 
     @XmlAttribute(name = "mc")
     public String getMcVersionDependency() {
-	return this.mcVersionDependency;
+        return this.mcVersionDependency;
     }
 
     @XmlElementWrapper
     @XmlElementRef
     public List<Mod> getMods() {
-	return this.mods;
+        return this.mods;
     }
 
     @XmlAttribute(required = true)
     public String getName() {
-	return this.name;
+        return this.name;
     }
 
     @XmlElementWrapper
     @XmlElementRef
     public List<Resource> getResources() {
-	return this.resources;
+        return this.resources;
     }
 
     @XmlTransient
     public Integer getVer() {
-	return this.ver;
+        return this.ver;
     }
 
     @XmlAttribute(required = true)
     public String getVersion() {
-	return this.version;
+        return this.version;
     }
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
+        return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
     protected void setId(Long id) {
-	this.id = id;
+        this.id = id;
     }
 
     public void setInstallationDate(Date installationDate) {
-	this.installationDate = installationDate;
+        this.installationDate = installationDate;
     }
 
     public void setMcVersionDependency(String mcVersionDependency) {
-	this.mcVersionDependency = mcVersionDependency;
+        this.mcVersionDependency = mcVersionDependency;
     }
 
     public void setMods(List<Mod> mods) {
-	this.mods = mods;
+        this.mods = mods;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public void setResources(List<Resource> resources) {
-	this.resources = resources;
+        this.resources = resources;
     }
 
     protected void setVer(Integer ver) {
-	this.ver = ver;
+        this.ver = ver;
     }
 
     public void setVersion(String version) {
-	this.version = version;
+        this.version = version;
     }
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("name", this.name).append("installationDate", this.installationDate).append("version", this.version)
-		.append("description", this.description).toString();
+        return new ToStringBuilder(this).append("name", this.name).append("installationDate", this.installationDate).append("version", this.version)
+                .append("description", this.description).toString();
     }
 }

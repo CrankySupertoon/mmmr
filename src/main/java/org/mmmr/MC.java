@@ -43,80 +43,80 @@ public class MC implements Comparable<MC>, PersistentObject {
     private String version;
 
     public MC() {
-	super();
+        super();
     }
 
     public MC(String version) {
-	this();
-	this.setVersion(version);
+        this();
+        this.setVersion(version);
     }
 
     public void addFile(MCFile file) {
-	if (this.getFiles() == null) {
-	    this.files = new ArrayList<MCFile>();
-	}
-	this.getFiles().add(file);
-	file.setMc(this);
+        if (this.getFiles() == null) {
+            this.files = new ArrayList<MCFile>();
+        }
+        this.getFiles().add(file);
+        file.setMc(this);
     }
 
     @Override
     public int compareTo(final MC other) {
-	return new CompareToBuilder().append(this.version, other.version).toComparison();
+        return new CompareToBuilder().append(this.version, other.version).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof MC)) {
-	    return false;
-	}
-	MC castOther = (MC) other;
-	return new EqualsBuilder().append(this.version, castOther.version).isEquals();
+        if (!(other instanceof MC)) {
+            return false;
+        }
+        MC castOther = (MC) other;
+        return new EqualsBuilder().append(this.version, castOther.version).isEquals();
     }
 
     @XmlTransient
     public List<MCFile> getFiles() {
-	return this.files;
+        return this.files;
     }
 
     @Override
     @XmlTransient
     public Long getId() {
-	return this.id;
+        return this.id;
     }
 
     @XmlTransient
     public Integer getVer() {
-	return this.ver;
+        return this.ver;
     }
 
     @XmlAttribute
     public String getVersion() {
-	return this.version;
+        return this.version;
     }
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(this.version).toHashCode();
+        return new HashCodeBuilder().append(this.version).toHashCode();
     }
 
     public void setFiles(List<MCFile> files) {
-	this.files = files;
+        this.files = files;
     }
 
     protected void setId(Long id) {
-	this.id = id;
+        this.id = id;
     }
 
     protected void setVer(Integer ver) {
-	this.ver = ver;
+        this.ver = ver;
     }
 
     public void setVersion(String version) {
-	this.version = version;
+        this.version = version;
     }
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).appendSuper(super.toString()).append("version", this.version).toString();
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("version", this.version).toString();
     }
 }

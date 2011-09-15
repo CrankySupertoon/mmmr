@@ -19,102 +19,103 @@ public class DynamicLoading {
     private static final String MAVEN_REPO_MIRROR = "http://uk.maven.org/maven2";
 
     public static void init(StatusPanel status, Config cfg) throws Exception {
-	String message = "";
-	try {
-	    IOMethods.newDir("data/libs");
+        String message = "";
+        try {
+            IOMethods.newDir("data/libs");
 
-	    String relative = null;
-	    {
-		File lib1 = new File(cfg.getLibs(), "sevenzipjbinding.jar");
-		File lib2 = new File(cfg.getLibs(), "sevenzipjbinding-AllWindows.jar");
+            String relative = null;
+            {
+                File lib1 = new File(cfg.getLibs(), "sevenzipjbinding.jar");
+                File lib2 = new File(cfg.getLibs(), "sevenzipjbinding-AllWindows.jar");
 
-		if (!lib1.exists() || !lib2.exists()) {
-		    File zip = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
-		    message = zip.getName();
-		    status.setStatus("Program libraries: downloading " + zip.getName(), null);
-		    URL url = new URL(
-			    "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/s/project/se/sevenzipjbind/7-Zip-JBinding/4.65-1.04rc-extr-only/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
-		    IOMethods.downloadURL(url, zip);
-		    IOMethods.unzip(zip, cfg.getTmp());
-		    {
-			File jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding.jar");
-			message = lib1.getName();
-			jarFrom.renameTo(lib1);
-		    }
-		    {
-			File jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding-AllWindows.jar");
-			message = lib2.getName();
-			jarFrom.renameTo(lib2);
-		    }
-		}
-		if (cfg.getParameterValue("dev") != null) {
-		    status.setStatus("Program libraries: loading " + lib1.getName(), null);
-		    IOMethods.loadjarAtRuntime(lib1);
-		    status.setStatus("Program libraries: loading " + lib2.getName(), null);
-		    IOMethods.loadjarAtRuntime(lib2);
-		}
-	    }
-	    {
-		BufferedReader in = new BufferedReader(new InputStreamReader(DynamicLoading.class.getClassLoader().getResourceAsStream("libs.txt")));
-		while ((relative = in.readLine()) != null) {
-		    String[] parts = relative.split("::");
-		    long len = Long.parseLong(parts[0]);
-		    relative = parts[1];
-		    File jar = new File(cfg.getLibs(), relative.substring(relative.lastIndexOf('/') + 1));
-		    message = jar.getName();
-		    if (!(jar.exists() && (jar.length() == len))) {
-			status.setStatus("Program libraries: downloading " + jar.getName(), null);
-			URL url = new URL(DynamicLoading.MAVEN_REPO + relative);
-			try {
-			    IOMethods.downloadURL(url, jar);
-			    if (jar.length() != len) {
-				jar.delete();
-				throw new IOException("length><" + len);
-			    }
-			} catch (Exception e) {
-			    url = new URL(DynamicLoading.MAVEN_REPO_MIRROR + relative);
-			    IOMethods.downloadURL(url, jar);
-			    if (jar.length() != len) {
-				jar.delete();
-				throw new IOException("length><" + len);
-			    }
-			}
-		    }
-		    if (cfg.getParameterValue("dev") != null) {
-			status.setStatus("Program libraries: loading " + jar.getName(), null);
-			IOMethods.loadjarAtRuntime(jar);
-		    }
-		}
-		in.close();
-	    }
-	    status.setStatus("Program libraries: ready", true);
-	} catch (Exception ex) {
-	    status.setStatus("Program libraries: loading failed: " + message, false);
-	    throw ex;
-	}
+                if (!lib1.exists() || !lib2.exists()) {
+                    File zip = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
+                    message = zip.getName();
+                    status.setStatus("Program libraries: downloading " + zip.getName(), null);
+                    URL url = new URL(
+                            "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/s/project/se/sevenzipjbind/7-Zip-JBinding/4.65-1.04rc-extr-only/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
+                    IOMethods.downloadURL(url, zip);
+                    IOMethods.unzip(zip, cfg.getTmp());
+                    {
+                        File jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding.jar");
+                        message = lib1.getName();
+                        jarFrom.renameTo(lib1);
+                    }
+                    {
+                        File jarFrom = new File(cfg.getTmp(),
+                                "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding-AllWindows.jar");
+                        message = lib2.getName();
+                        jarFrom.renameTo(lib2);
+                    }
+                }
+                if (cfg.getParameterValue("dev") != null) {
+                    status.setStatus("Program libraries: loading " + lib1.getName(), null);
+                    IOMethods.loadjarAtRuntime(lib1);
+                    status.setStatus("Program libraries: loading " + lib2.getName(), null);
+                    IOMethods.loadjarAtRuntime(lib2);
+                }
+            }
+            {
+                BufferedReader in = new BufferedReader(new InputStreamReader(DynamicLoading.class.getClassLoader().getResourceAsStream("libs.txt")));
+                while ((relative = in.readLine()) != null) {
+                    String[] parts = relative.split("::");
+                    long len = Long.parseLong(parts[0]);
+                    relative = parts[1];
+                    File jar = new File(cfg.getLibs(), relative.substring(relative.lastIndexOf('/') + 1));
+                    message = jar.getName();
+                    if (!(jar.exists() && (jar.length() == len))) {
+                        status.setStatus("Program libraries: downloading " + jar.getName(), null);
+                        URL url = new URL(DynamicLoading.MAVEN_REPO + relative);
+                        try {
+                            IOMethods.downloadURL(url, jar);
+                            if (jar.length() != len) {
+                                jar.delete();
+                                throw new IOException("length><" + len);
+                            }
+                        } catch (Exception e) {
+                            url = new URL(DynamicLoading.MAVEN_REPO_MIRROR + relative);
+                            IOMethods.downloadURL(url, jar);
+                            if (jar.length() != len) {
+                                jar.delete();
+                                throw new IOException("length><" + len);
+                            }
+                        }
+                    }
+                    if (cfg.getParameterValue("dev") != null) {
+                        status.setStatus("Program libraries: loading " + jar.getName(), null);
+                        IOMethods.loadjarAtRuntime(jar);
+                    }
+                }
+                in.close();
+            }
+            status.setStatus("Program libraries: ready", true);
+        } catch (Exception ex) {
+            status.setStatus("Program libraries: loading failed: " + message, false);
+            throw ex;
+        }
     }
 
     public static void main(String[] args) {
-	try {
-	    BufferedWriter out = new BufferedWriter(new FileWriter(new File("src/main/resources/libs.txt")));
-	    String M2_REPO = System.getenv("M2_REPO");
-	    if (M2_REPO == null) {
-		// FIXME via home directory + .m
-	    }
-	    String repo = new File(M2_REPO + "/repository").getAbsolutePath().replace('\\', '/');
-	    for (String cp : System.getProperty("java.class.path").split(";")) {
-		String path = new File(cp).getAbsolutePath().replace('\\', '/');
-		if (path.startsWith(repo)) {
-		    String relative = path.substring(repo.length() + 1);
-		    URL url = new URL(DynamicLoading.MAVEN_REPO + relative);
-		    System.out.println(url.openConnection().getContentLength() + "::" + url);
-		    out.write(url.openConnection().getContentLength() + "::" + relative + "\n");
-		}
-	    }
-	    out.close();
-	} catch (Exception ex) {
-	    ExceptionAndLogHandler.log(ex);
-	}
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(new File("src/main/resources/libs.txt")));
+            String M2_REPO = System.getenv("M2_REPO");
+            if (M2_REPO == null) {
+                // FIXME via home directory + .m
+            }
+            String repo = new File(M2_REPO + "/repository").getAbsolutePath().replace('\\', '/');
+            for (String cp : System.getProperty("java.class.path").split(";")) {
+                String path = new File(cp).getAbsolutePath().replace('\\', '/');
+                if (path.startsWith(repo)) {
+                    String relative = path.substring(repo.length() + 1);
+                    URL url = new URL(DynamicLoading.MAVEN_REPO + relative);
+                    System.out.println(url.openConnection().getContentLength() + "::" + url);
+                    out.write(url.openConnection().getContentLength() + "::" + relative + "\n");
+                }
+            }
+            out.close();
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
+        }
     }
 
 }

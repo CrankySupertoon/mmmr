@@ -69,182 +69,182 @@ public class Config {
     private XmlService xml;
 
     public Config(String[] args, File thisFolder) throws IOException {
-	this.thisFolder = thisFolder;
+        this.thisFolder = thisFolder;
 
-	this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/icon.png"));
-	this.mcVersion = "1.7.3";
-	this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft " + this.mcVersion;
-	this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar";
+        this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/icon.png"));
+        this.mcVersion = "1.7.3";
+        this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft " + this.mcVersion;
+        this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar";
 
-	this.parameterValues = IOMethods.parseParams(args);
+        this.parameterValues = IOMethods.parseParams(args);
 
-	// not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
-	// we use a locally installed minecraft so you can mod at your heart's content
-	this.mcBaseFolder = new File(thisFolder, ".minecraft");
+        // not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
+        // we use a locally installed minecraft so you can mod at your heart's content
+        this.mcBaseFolder = new File(thisFolder, ".minecraft");
 
-	this.mcBin = new File(this.mcBaseFolder, "bin");
-	this.mcMods = new File(this.mcBaseFolder, "mods");
-	this.mcResources = new File(this.mcBaseFolder, "resources");
-	this.mcJar = new File(this.mcBin, "minecraft.jar");
-	this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup");
+        this.mcBin = new File(this.mcBaseFolder, "bin");
+        this.mcMods = new File(this.mcBaseFolder, "mods");
+        this.mcResources = new File(this.mcBaseFolder, "resources");
+        this.mcJar = new File(this.mcBin, "minecraft.jar");
+        this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup");
 
-	this.data = IOMethods.newDir(thisFolder, "data");
+        this.data = IOMethods.newDir(thisFolder, "data");
 
-	this.cfg = IOMethods.newDir(this.data, "cfg");
-	this.properties = new Properties();
-	File file = new File(this.cfg, "config.properties");
-	if (file.exists()) {
-	    this.properties.load(new FileInputStream(file));
-	}
-	this.backup = IOMethods.newDir(this.data, "backup");
-	this.mods = IOMethods.newDir(this.data, "mods");
-	this.libs = IOMethods.newDir(this.data, "libs");
-	this.tmp = IOMethods.newDir(this.data, "tmp");
-	this.logs = IOMethods.newDir(this.data, "logs");
-	this.dbdir = new File(this.data, "db");
-	this.backupOriginalJar = IOMethods.newDir(this.backup, "minecraft.jar");
-	this.mcJogboxBackup = IOMethods.newDir(this.backup, "jogbox");
+        this.cfg = IOMethods.newDir(this.data, "cfg");
+        this.properties = new Properties();
+        File file = new File(this.cfg, "config.properties");
+        if (file.exists()) {
+            this.properties.load(new FileInputStream(file));
+        }
+        this.backup = IOMethods.newDir(this.data, "backup");
+        this.mods = IOMethods.newDir(this.data, "mods");
+        this.libs = IOMethods.newDir(this.data, "libs");
+        this.tmp = IOMethods.newDir(this.data, "tmp");
+        this.logs = IOMethods.newDir(this.data, "logs");
+        this.dbdir = new File(this.data, "db");
+        this.backupOriginalJar = IOMethods.newDir(this.backup, "minecraft.jar");
+        this.mcJogboxBackup = IOMethods.newDir(this.backup, "jogbox");
     }
 
     public File getBackup() {
-	return this.backup;
+        return this.backup;
     }
 
     public File getBackupOriginalJar() {
-	return this.backupOriginalJar;
+        return this.backupOriginalJar;
     }
 
     public File getCfg() {
-	return this.cfg;
+        return this.cfg;
     }
 
     public File getData() {
-	return this.data;
+        return this.data;
     }
 
     public DBService getDb() {
-	return this.db;
+        return this.db;
     }
 
     public File getDbdir() {
-	return this.dbdir;
+        return this.dbdir;
     }
 
     public Font getFont() {
-	return this.font;
+        return this.font;
     }
 
     public Font getFont18() {
-	return this.font18;
+        return this.font18;
     }
 
     public ImageIcon getIcon() {
-	return this.icon;
+        return this.icon;
     }
 
     public File getLibs() {
-	return this.libs;
+        return this.libs;
     }
 
     public File getLogs() {
-	return this.logs;
+        return this.logs;
     }
 
     public File getMcBaseFolder() {
-	return this.mcBaseFolder;
+        return this.mcBaseFolder;
     }
 
     public File getMcBin() {
-	return this.mcBin;
+        return this.mcBin;
     }
 
     public String getMcCommandline() {
-	return this.mcCommandline;
+        return this.mcCommandline;
     }
 
     public File getMcJar() {
-	return this.mcJar;
+        return this.mcJar;
     }
 
     public File getMcJarBackup() {
-	return this.mcJarBackup;
+        return this.mcJarBackup;
     }
 
     public File getMcJogboxBackup() {
-	return this.mcJogboxBackup;
+        return this.mcJogboxBackup;
     }
 
     public File getMcMods() {
-	return this.mcMods;
+        return this.mcMods;
     }
 
     public File getMcResources() {
-	return this.mcResources;
+        return this.mcResources;
     }
 
     public String getMcVersion() {
-	return this.mcVersion;
+        return this.mcVersion;
     }
 
     public File getMods() {
-	return this.mods;
+        return this.mods;
     }
 
     public String getParameterValue(String key) {
-	return this.parameterValues.get(key);
+        return this.parameterValues.get(key);
     }
 
     public String getProperty(String key) throws IOException {
-	return this.properties.getProperty(key);
+        return this.properties.getProperty(key);
     }
 
     public String getProperty(String key, String defaultValue) throws IOException {
-	String value = this.properties.getProperty(key);
-	if (value == null) {
-	    value = this.setProperty(key, defaultValue);
-	}
-	return value;
+        String value = this.properties.getProperty(key);
+        if (value == null) {
+            value = this.setProperty(key, defaultValue);
+        }
+        return value;
     }
 
     public File getThisFolder() {
-	return this.thisFolder;
+        return this.thisFolder;
     }
 
     public String getTitle() {
-	return this.title;
+        return this.title;
     }
 
     public File getTmp() {
-	return this.tmp;
+        return this.tmp;
     }
 
     public XmlService getXml() {
-	return this.xml;
+        return this.xml;
     }
 
     public void setDb(DBService db) {
-	this.db = db;
+        this.db = db;
     }
 
     public void setFont(Font font) {
-	this.font = font;
+        this.font = font;
     }
 
     public void setFont18(Font font18) {
-	this.font18 = font18;
+        this.font18 = font18;
     }
 
     public void setMcCommandline(String mcCommandline) {
-	this.mcCommandline = mcCommandline;
+        this.mcCommandline = mcCommandline;
     }
 
     public String setProperty(String key, String value) throws IOException {
-	this.properties.put(key, value);
-	this.properties.store(new FileOutputStream(new File(this.cfg, "config.properties")), null);
-	return value;
+        this.properties.put(key, value);
+        this.properties.store(new FileOutputStream(new File(this.cfg, "config.properties")), null);
+        return value;
     }
 
     public void setXml(XmlService xml) {
-	this.xml = xml;
+        this.xml = xml;
     }
 }

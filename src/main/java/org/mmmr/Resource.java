@@ -62,145 +62,145 @@ public class Resource implements Comparable<Resource>, PersistentObject {
     private Integer ver;
 
     public Resource() {
-	super();
+        super();
     }
 
     public Resource(String sourcePath, String targetPath) {
-	this();
-	this.sourcePath = sourcePath;
-	this.targetPath = targetPath;
+        this();
+        this.sourcePath = sourcePath;
+        this.targetPath = targetPath;
     }
 
     public void addDependency(Dependency dependency) {
-	if (this.getDependencies() == null) {
-	    this.dependencies = new ArrayList<Dependency>();
-	}
-	this.getDependencies().add(dependency);
-	dependency.setResource(this);
+        if (this.getDependencies() == null) {
+            this.dependencies = new ArrayList<Dependency>();
+        }
+        this.getDependencies().add(dependency);
+        dependency.setResource(this);
     }
 
     public void addFile(MCFile file) {
-	if (this.getFiles() == null) {
-	    this.files = new ArrayList<MCFile>();
-	}
-	this.getFiles().add(file);
-	file.setResource(this);
+        if (this.getFiles() == null) {
+            this.files = new ArrayList<MCFile>();
+        }
+        this.getFiles().add(file);
+        file.setResource(this);
     }
 
     @Override
     public int compareTo(final Resource other) {
-	return new CompareToBuilder().append(this.sourcePath, other.sourcePath).append(this.targetPath, other.targetPath).toComparison();
+        return new CompareToBuilder().append(this.sourcePath, other.sourcePath).append(this.targetPath, other.targetPath).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof Resource)) {
-	    return false;
-	}
-	Resource castOther = (Resource) other;
-	return new EqualsBuilder().append(this.sourcePath, castOther.sourcePath).append(this.targetPath, castOther.targetPath).isEquals();
+        if (!(other instanceof Resource)) {
+            return false;
+        }
+        Resource castOther = (Resource) other;
+        return new EqualsBuilder().append(this.sourcePath, castOther.sourcePath).append(this.targetPath, castOther.targetPath).isEquals();
     }
 
     @XmlElementWrapper
     @XmlElementRef
     public List<Dependency> getDependencies() {
-	return this.dependencies;
+        return this.dependencies;
     }
 
     @XmlAttribute
     public String getExclude() {
-	return this.exclude;
+        return this.exclude;
     }
 
     @XmlTransient
     public List<MCFile> getFiles() {
-	return this.files;
+        return this.files;
     }
 
     @Override
     @XmlTransient
     public Long getId() {
-	return this.id;
+        return this.id;
     }
 
     @XmlAttribute
     public String getInclude() {
-	return this.include;
+        return this.include;
     }
 
     @XmlTransient
     public Mod getMod() {
-	return this.mod;
+        return this.mod;
     }
 
     @XmlTransient
     public ModPack getModPack() {
-	return this.modPack;
+        return this.modPack;
     }
 
     @XmlAttribute(name = "sourcepath")
     public String getSourcePath() {
-	return this.sourcePath;
+        return this.sourcePath;
     }
 
     @XmlAttribute(name = "targetpath")
     public String getTargetPath() {
-	return this.targetPath;
+        return this.targetPath;
     }
 
     @XmlTransient
     public Integer getVer() {
-	return this.ver;
+        return this.ver;
     }
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(this.sourcePath).append(this.targetPath).toHashCode();
+        return new HashCodeBuilder().append(this.sourcePath).append(this.targetPath).toHashCode();
     }
 
     public void setDependencies(List<Dependency> dependencies) {
-	this.dependencies = dependencies;
+        this.dependencies = dependencies;
     }
 
     public void setExclude(String exclude) {
-	this.exclude = exclude;
+        this.exclude = exclude;
     }
 
     public void setFiles(List<MCFile> files) {
-	this.files = files;
+        this.files = files;
     }
 
     protected void setId(Long id) {
-	this.id = id;
+        this.id = id;
     }
 
     public void setInclude(String include) {
-	this.include = include;
+        this.include = include;
     }
 
     public void setMod(Mod mod) {
-	this.mod = mod;
+        this.mod = mod;
     }
 
     protected void setModPack(ModPack modPack) {
-	this.modPack = modPack;
+        this.modPack = modPack;
     }
 
     public void setSourcePath(String sourcePath) {
-	this.sourcePath = sourcePath;
+        this.sourcePath = sourcePath;
     }
 
     public void setTargetPath(String targetPath) {
-	this.targetPath = targetPath;
+        this.targetPath = targetPath;
     }
 
     protected void setVer(Integer ver) {
-	this.ver = ver;
+        this.ver = ver;
     }
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("exclude", this.exclude).append("include", this.include).append("mod", this.mod).append("modPack", this.modPack)
-		.append("sourcePath", this.sourcePath).append("targetPath", this.targetPath).toString();
+        return new ToStringBuilder(this).append("exclude", this.exclude).append("include", this.include).append("mod", this.mod)
+                .append("modPack", this.modPack).append("sourcePath", this.sourcePath).append("targetPath", this.targetPath).toString();
     }
 }

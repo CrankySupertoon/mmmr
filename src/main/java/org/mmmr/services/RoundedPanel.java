@@ -24,32 +24,37 @@ public class RoundedPanel extends JPanel {
 
     /** The transparency value of shadow. ( 0 - 255) */
     protected int shadowAlpha = 150;
+
     /** Color of shadow */
     protected Color shadowColor = Color.black;
+
     /** Distance between border of shadow and border of opaque panel */
     protected int shadowGap = 5;
+
     /** The offset of shadow. */
     protected int shadowOffset = 4;
+
     /** Sets if it drops shadow */
     protected boolean shady = true;
+
     /** Stroke size. it is recommended to set it to 1 for better view */
     protected int strokeSize = 1;
 
     public RoundedPanel() {
-	super();
-	this.setOpaque(false);
+        super();
+        this.setOpaque(false);
     }
 
     public RoundedPanel(boolean isDoubleBuffered) {
-	super(isDoubleBuffered);
+        super(isDoubleBuffered);
     }
 
     public RoundedPanel(LayoutManager layout) {
-	super(layout);
+        super(layout);
     }
 
     public RoundedPanel(LayoutManager layout, boolean isDoubleBuffered) {
-	super(layout, isDoubleBuffered);
+        super(layout, isDoubleBuffered);
     }
 
     /**
@@ -58,7 +63,7 @@ public class RoundedPanel extends JPanel {
      * @return the value of arcs
      */
     public Dimension getArcs() {
-	return this.arcs;
+        return this.arcs;
     }
 
     /**
@@ -67,7 +72,7 @@ public class RoundedPanel extends JPanel {
      * @return the value of shadowAlpha
      */
     public int getShadowAlpha() {
-	return this.shadowAlpha;
+        return this.shadowAlpha;
     }
 
     /**
@@ -76,7 +81,7 @@ public class RoundedPanel extends JPanel {
      * @return a Color object.
      */
     public Color getShadowColor() {
-	return this.shadowColor;
+        return this.shadowColor;
     }
 
     /**
@@ -85,7 +90,7 @@ public class RoundedPanel extends JPanel {
      * @return the value of shadowGap
      */
     public int getShadowGap() {
-	return this.shadowGap;
+        return this.shadowGap;
     }
 
     /**
@@ -94,7 +99,7 @@ public class RoundedPanel extends JPanel {
      * @return the value of shadowOffset
      */
     public int getShadowOffset() {
-	return this.shadowOffset;
+        return this.shadowOffset;
     }
 
     /**
@@ -103,7 +108,7 @@ public class RoundedPanel extends JPanel {
      * @return the value of size.
      */
     public float getStrokeSize() {
-	return this.strokeSize;
+        return this.strokeSize;
     }
 
     /**
@@ -112,7 +117,7 @@ public class RoundedPanel extends JPanel {
      * @return <b>TRUE</b> if it is HQ ; <b>FALSE</b> Otherwise
      */
     public boolean isHighQuality() {
-	return this.highQuality;
+        return this.highQuality;
     }
 
     /**
@@ -121,135 +126,127 @@ public class RoundedPanel extends JPanel {
      * @return <b>TRUE</b> if it drops shadow ; <b>FALSE</b> Otherwise
      */
     public boolean isShady() {
-	return this.shady;
+        return this.shady;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-	super.paintComponent(g);
-	int width = this.getWidth();
-	int height = this.getHeight();
-	int shadowGap = this.shadowGap;
-	Color shadowColorA = new Color(this.shadowColor.getRed(), this.shadowColor.getGreen(), this.shadowColor.getBlue(), this.shadowAlpha);
-	Graphics2D graphics = (Graphics2D) g;
+        super.paintComponent(g);
+        int width = this.getWidth();
+        int height = this.getHeight();
+        int shadowGap = this.shadowGap;
+        Color shadowColorA = new Color(this.shadowColor.getRed(), this.shadowColor.getGreen(), this.shadowColor.getBlue(), this.shadowAlpha);
+        Graphics2D graphics = (Graphics2D) g;
 
-	// Sets antialiasing if HQ.
-	if (this.highQuality) {
-	    graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	}
+        // Sets antialiasing if HQ.
+        if (this.highQuality) {
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
 
-	// Draws shadow borders if any.
-	if (this.shady) {
-	    graphics.setColor(shadowColorA);
-	    graphics.fillRoundRect(this.shadowOffset,// X position
-		    this.shadowOffset,// Y position
-		    width - this.strokeSize - this.shadowOffset, // width
-		    height - this.strokeSize - this.shadowOffset, // height
-		    this.arcs.width, this.arcs.height);// arc Dimension
-	} else {
-	    shadowGap = 1;
-	}
+        // Draws shadow borders if any.
+        if (this.shady) {
+            graphics.setColor(shadowColorA);
+            graphics.fillRoundRect(this.shadowOffset,// X position
+                    this.shadowOffset,// Y position
+                    width - this.strokeSize - this.shadowOffset, // width
+                    height - this.strokeSize - this.shadowOffset, // height
+                    this.arcs.width, this.arcs.height);// arc Dimension
+        } else {
+            shadowGap = 1;
+        }
 
-	// Draws the rounded opaque panel with borders.
-	graphics.setColor(this.getBackground());
-	graphics.fillRoundRect(0, 0, width - shadowGap, height - shadowGap, this.arcs.width, this.arcs.height);
-	graphics.setColor(this.getForeground());
-	graphics.setStroke(new BasicStroke(this.strokeSize));
-	graphics.drawRoundRect(0, 0, width - shadowGap, height - shadowGap, this.arcs.width, this.arcs.height);
+        // Draws the rounded opaque panel with borders.
+        graphics.setColor(this.getBackground());
+        graphics.fillRoundRect(0, 0, width - shadowGap, height - shadowGap, this.arcs.width, this.arcs.height);
+        graphics.setColor(this.getForeground());
+        graphics.setStroke(new BasicStroke(this.strokeSize));
+        graphics.drawRoundRect(0, 0, width - shadowGap, height - shadowGap, this.arcs.width, this.arcs.height);
 
-	// Sets strokes to default, is better.
-	graphics.setStroke(new BasicStroke());
+        // Sets strokes to default, is better.
+        graphics.setStroke(new BasicStroke());
     }
 
     /**
      * Set the value of arcs
      * 
-     * @param arcs
-     *            new value of arcs
+     * @param arcs new value of arcs
      */
     public void setArcs(Dimension arcs) {
-	this.arcs = arcs;
+        this.arcs = arcs;
     }
 
     /**
      * Sets whether this component has High Quality or not
      * 
-     * @param highQuality
-     *            if <b>TRUE</b>, set this component to HQ
+     * @param highQuality if <b>TRUE</b>, set this component to HQ
      */
     public void setHighQuality(boolean highQuality) {
-	this.highQuality = highQuality;
+        this.highQuality = highQuality;
     }
 
     /**
      * Set the value of shadowAlpha
      * 
-     * @param shadowAlpha
-     *            new value of shadowAlpha
+     * @param shadowAlpha new value of shadowAlpha
      */
     public void setShadowAlpha(int shadowAlpha) {
-	if ((shadowAlpha >= 0) && (shadowAlpha <= 255)) {
-	    this.shadowAlpha = shadowAlpha;
-	} else {
-	    this.shadowAlpha = 255;
-	}
+        if ((shadowAlpha >= 0) && (shadowAlpha <= 255)) {
+            this.shadowAlpha = shadowAlpha;
+        } else {
+            this.shadowAlpha = 255;
+        }
     }
 
     /**
      * Sets the Color of shadow
      * 
-     * @param shadowColor
-     *            Color of shadow
+     * @param shadowColor Color of shadow
      */
     public void setShadowColor(Color shadowColor) {
-	this.shadowColor = shadowColor;
+        this.shadowColor = shadowColor;
     }
 
     /**
      * Set the value of shadowGap
      * 
-     * @param shadowGap
-     *            new value of shadowGap
+     * @param shadowGap new value of shadowGap
      */
     public void setShadowGap(int shadowGap) {
-	if (shadowGap >= 1) {
-	    this.shadowGap = shadowGap;
-	} else {
-	    this.shadowGap = 1;
-	}
+        if (shadowGap >= 1) {
+            this.shadowGap = shadowGap;
+        } else {
+            this.shadowGap = 1;
+        }
     }
 
     /**
      * Set the value of shadowOffset
      * 
-     * @param shadowOffset
-     *            new value of shadowOffset
+     * @param shadowOffset new value of shadowOffset
      */
     public void setShadowOffset(int shadowOffset) {
-	if (shadowOffset >= 1) {
-	    this.shadowOffset = shadowOffset;
-	} else {
-	    this.shadowOffset = 1;
-	}
+        if (shadowOffset >= 1) {
+            this.shadowOffset = shadowOffset;
+        } else {
+            this.shadowOffset = 1;
+        }
     }
 
     /**
      * Sets whether this component drops shadow
      * 
-     * @param shady
-     *            if <b>TRUE</b>, it draws shadow
+     * @param shady if <b>TRUE</b>, it draws shadow
      */
     public void setShady(boolean shady) {
-	this.shady = shady;
+        this.shady = shady;
     }
 
     /**
      * Sets the stroke size value.
      * 
-     * @param strokeSize
-     *            stroke size value
+     * @param strokeSize stroke size value
      */
     public void setStrokeSize(int strokeSize) {
-	this.strokeSize = strokeSize;
+        this.strokeSize = strokeSize;
     }
 }

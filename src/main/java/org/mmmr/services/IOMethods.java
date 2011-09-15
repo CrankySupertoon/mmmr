@@ -38,320 +38,323 @@ import javax.swing.JFileChooser;
  */
 public class IOMethods {
     static class MemInfo {
-	public final long memfreemb;
-	public final long memtotmb;
-	public final double memusage;
+        public final long memfreemb;
 
-	public MemInfo(long memtotmb, long memfreemb, double memusage) {
-	    super();
-	    this.memtotmb = memtotmb;
-	    this.memfreemb = memfreemb;
-	    this.memusage = memusage;
-	}
+        public final long memtotmb;
+
+        public final double memusage;
+
+        public MemInfo(long memtotmb, long memfreemb, double memusage) {
+            super();
+            this.memtotmb = memtotmb;
+            this.memfreemb = memfreemb;
+            this.memusage = memusage;
+        }
     }
 
     private static long _copy(File source, File target) throws IOException {
-	if (target != null) {
-	    target.getParentFile().mkdirs();
-	}
-	OutputStream out = target == null ? null : new FileOutputStream(target);
-	CheckedInputStream in = new CheckedInputStream(new FileInputStream(source), new CRC32());
-	byte[] buffer = new byte[1024 * 8];
-	int read;
-	while ((read = in.read(buffer)) != -1) {
-	    if (out != null) {
-		out.write(buffer, 0, read);
-	    }
-	}
-	if (out != null) {
-	    out.close();
-	}
-	in.close();
-	return in.getChecksum().getValue();
+        if (target != null) {
+            target.getParentFile().mkdirs();
+        }
+        OutputStream out = target == null ? null : new FileOutputStream(target);
+        CheckedInputStream in = new CheckedInputStream(new FileInputStream(source), new CRC32());
+        byte[] buffer = new byte[1024 * 8];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            if (out != null) {
+                out.write(buffer, 0, read);
+            }
+        }
+        if (out != null) {
+            out.close();
+        }
+        in.close();
+        return in.getChecksum().getValue();
     }
 
     public static long copyFile(File source, File target) throws IOException {
-	return IOMethods._copy(source, target);
+        return IOMethods._copy(source, target);
     }
 
     public static String crc2string(long crc) {
-	return Long.toHexString(crc).toUpperCase();
+        return Long.toHexString(crc).toUpperCase();
     }
 
     public static long crc32File(File source) throws IOException {
-	return IOMethods._copy(source, null);
+        return IOMethods._copy(source, null);
     }
 
     public static boolean deleteDirectory(File path) {
-	if (path.exists()) {
-	    File[] files = path.listFiles();
-	    for (File file : files) {
-		if (file.isDirectory()) {
-		    IOMethods.deleteDirectory(file);
-		} else {
-		    file.delete();
-		}
-	    }
-	}
-	return (path.delete());
+        if (path.exists()) {
+            File[] files = path.listFiles();
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    IOMethods.deleteDirectory(file);
+                } else {
+                    file.delete();
+                }
+            }
+        }
+        return (path.delete());
     }
 
     public static void downloadURL(URL url, File target) throws IOException {
-	ExceptionAndLogHandler.log(url);
-	URLConnection conn = url.openConnection();
-	conn.setAllowUserInteraction(false);
-	conn.setConnectTimeout(30 * 1000);
-	conn.setDefaultUseCaches(true);
-	conn.setReadTimeout(30 * 1000);
-	conn.setUseCaches(true);
-	InputStream uin = conn.getInputStream();
-	OutputStream fout = new FileOutputStream(target);
-	byte[] buffer = new byte[1024 * 8];
-	int read;
-	while ((read = uin.read(buffer)) > 0) {
-	    fout.write(buffer, 0, read);
-	}
-	fout.close();
-	uin.close();
+        ExceptionAndLogHandler.log(url);
+        URLConnection conn = url.openConnection();
+        conn.setAllowUserInteraction(false);
+        conn.setConnectTimeout(30 * 1000);
+        conn.setDefaultUseCaches(true);
+        conn.setReadTimeout(30 * 1000);
+        conn.setUseCaches(true);
+        InputStream uin = conn.getInputStream();
+        OutputStream fout = new FileOutputStream(target);
+        byte[] buffer = new byte[1024 * 8];
+        int read;
+        while ((read = uin.read(buffer)) > 0) {
+            fout.write(buffer, 0, read);
+        }
+        fout.close();
+        uin.close();
     }
 
     public static boolean fileEquals(File f1, File f2) throws IOException {
-	return f1.exists() && f2.exists() && (f1.length() == f2.length()) && (IOMethods.crc32File(f1) == IOMethods.crc32File(f2));
+        return f1.exists() && f2.exists() && (f1.length() == f2.length()) && (IOMethods.crc32File(f1) == IOMethods.crc32File(f2));
     }
 
     /**
      * list of java runtime options containing per record: absolute path to jre, java version, java 64 bit (boolean as text)
      */
     public static List<String[]> getAllJavaInfo(Collection<String> all) throws IOException {
-	List<String[]> info = new ArrayList<String[]>();
-	for (String option : all) {
-	    ProcessBuilder pb = new ProcessBuilder(option + "/bin/java.exe", "-version");
-	    pb.redirectErrorStream(true);
-	    Process p = pb.start();
-	    InputStream in = p.getInputStream();
-	    StringBuilder sb = new StringBuilder();
-	    int c;
-	    while ((c = in.read()) != -1) {
-		sb.append((char) c);
-	    }
-	    String text = sb.toString().toLowerCase();
-	    boolean _64bit = text.contains("64-bit");
-	    int pos = text.indexOf("java version \"") + 1;
-	    String version = text.substring(pos + 13, text.indexOf("\"", pos + 15));
+        List<String[]> info = new ArrayList<String[]>();
+        for (String option : all) {
+            ProcessBuilder pb = new ProcessBuilder(option + "/bin/java.exe", "-version");
+            pb.redirectErrorStream(true);
+            Process p = pb.start();
+            InputStream in = p.getInputStream();
+            StringBuilder sb = new StringBuilder();
+            int c;
+            while ((c = in.read()) != -1) {
+                sb.append((char) c);
+            }
+            String text = sb.toString().toLowerCase();
+            boolean _64bit = text.contains("64-bit");
+            int pos = text.indexOf("java version \"") + 1;
+            String version = text.substring(pos + 13, text.indexOf("\"", pos + 15));
 
-	    info.add(new String[] { option, version, String.valueOf(_64bit) });
-	}
-	return info;
+            info.add(new String[] { option, version, String.valueOf(_64bit) });
+        }
+        return info;
     }
 
     public static Collection<String> getAllJavaRuntimes() {
-	Collection<String> all = new HashSet<String>();
-	for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) {
-	    all.add(opt + "\\jre");
-	}
-	for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) {
-	    all.add(opt + "\\jre");
-	}
-	all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
-	all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
-	return all;
+        Collection<String> all = new HashSet<String>();
+        for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) {
+            all.add(opt + "\\jre");
+        }
+        for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) {
+            all.add(opt + "\\jre");
+        }
+        all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
+        all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
+        return all;
     }
 
     @SuppressWarnings("restriction")
     public static MemInfo getMemInfo() {
-	com.sun.management.OperatingSystemMXBean o = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getPlatformMXBeans(OperatingSystemMXBean.class).get(0);
-	long memtotmb = o.getTotalPhysicalMemorySize() / 1024 / 1024;
-	long memfreemb = o.getFreePhysicalMemorySize() / 1024 / 1024;
-	double memusage = (double) (memtotmb - memfreemb) / memtotmb;
-	return new MemInfo(memtotmb, memfreemb, memusage);
+        com.sun.management.OperatingSystemMXBean o = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getPlatformMXBeans(
+                OperatingSystemMXBean.class).get(0);
+        long memtotmb = o.getTotalPhysicalMemorySize() / 1024 / 1024;
+        long memfreemb = o.getFreePhysicalMemorySize() / 1024 / 1024;
+        double memusage = (double) (memtotmb - memfreemb) / memtotmb;
+        return new MemInfo(memtotmb, memfreemb, memusage);
     }
 
     public static List<String> getRegValue(String path, String key, String type) {
-	try {
-	    String command = "reg query \"" + path + "\" /s /v " + key;
-	    Process process = Runtime.getRuntime().exec(command);
-	    final InputStream is = process.getInputStream();
-	    final StringWriter sw = new StringWriter();
-	    Thread reader = new Thread(new Runnable() {
-		@Override
-		public void run() {
-		    try {
-			int c;
-			while ((c = is.read()) != -1) {
-			    sw.write(c);
-			}
-		    } catch (IOException ex) {
-			ExceptionAndLogHandler.log(ex);
-		    }
-		}
-	    });
-	    reader.setDaemon(true);
-	    reader.start();
-	    process.waitFor();
-	    reader.join();
+        try {
+            String command = "reg query \"" + path + "\" /s /v " + key;
+            Process process = Runtime.getRuntime().exec(command);
+            final InputStream is = process.getInputStream();
+            final StringWriter sw = new StringWriter();
+            Thread reader = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        int c;
+                        while ((c = is.read()) != -1) {
+                            sw.write(c);
+                        }
+                    } catch (IOException ex) {
+                        ExceptionAndLogHandler.log(ex);
+                    }
+                }
+            });
+            reader.setDaemon(true);
+            reader.start();
+            process.waitFor();
+            reader.join();
 
-	    String result = sw.toString();
-	    StringTokenizer st = new StringTokenizer(result, "\r\n");
-	    List<String> results = new ArrayList<String>();
-	    while (st.hasMoreTokens()) {
-		String token = st.nextToken().trim();
-		if (token.startsWith(key)) {
-		    token = token.substring(token.indexOf(type) + type.length()).trim();
-		    results.add(token);
-		}
-	    }
-	    return results;
-	} catch (Exception ex) {
-	    ExceptionAndLogHandler.log(ex);
-	    return null;
-	}
+            String result = sw.toString();
+            StringTokenizer st = new StringTokenizer(result, "\r\n");
+            List<String> results = new ArrayList<String>();
+            while (st.hasMoreTokens()) {
+                String token = st.nextToken().trim();
+                if (token.startsWith(key)) {
+                    token = token.substring(token.indexOf(type) + type.length()).trim();
+                    results.add(token);
+                }
+            }
+            return results;
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
+            return null;
+        }
     }
 
     public static boolean is64Bit() {
-	return "64".equals(System.getProperties().getProperty("sun.arch.data.model"));
+        return "64".equals(System.getProperties().getProperty("sun.arch.data.model"));
     }
 
     @SuppressWarnings("unchecked")
     public static List<File> list(File dir) {
-	File[] tmp = dir.listFiles();
-	if ((tmp == null) || (tmp.length == 0)) {
-	    return Collections.EMPTY_LIST;
-	}
-	return Arrays.asList(tmp);
+        File[] tmp = dir.listFiles();
+        if ((tmp == null) || (tmp.length == 0)) {
+            return Collections.EMPTY_LIST;
+        }
+        return Arrays.asList(tmp);
     }
 
     public static List<File> listRecursive(File dir) {
-	List<File> all = new ArrayList<File>();
-	IOMethods.listRecursive(dir, all);
-	return all;
+        List<File> all = new ArrayList<File>();
+        IOMethods.listRecursive(dir, all);
+        return all;
     }
 
     private static void listRecursive(File dir, List<File> all) {
-	File[] tmp = dir.listFiles();
-	if ((tmp == null) || (tmp.length == 0)) {
-	    return;
-	}
-	for (File child : tmp) {
-	    all.add(child);
-	    if (child.isDirectory()) {
-		IOMethods.listRecursive(child, all);
-	    }
-	}
+        File[] tmp = dir.listFiles();
+        if ((tmp == null) || (tmp.length == 0)) {
+            return;
+        }
+        for (File child : tmp) {
+            all.add(child);
+            if (child.isDirectory()) {
+                IOMethods.listRecursive(child, all);
+            }
+        }
     }
 
-    public static void loadjarAtRuntime(File jar) throws SecurityException, NoSuchMethodException, IllegalArgumentException, MalformedURLException, IllegalAccessException,
-	    InvocationTargetException {
-	URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-	Class<?> sysclass = URLClassLoader.class;
-	Method method = sysclass.getDeclaredMethod("addURL", URL.class);
-	method.setAccessible(true);
-	method.invoke(sysloader, new Object[] { jar.toURI().toURL() });
+    public static void loadjarAtRuntime(File jar) throws SecurityException, NoSuchMethodException, IllegalArgumentException, MalformedURLException,
+            IllegalAccessException, InvocationTargetException {
+        URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Class<?> sysclass = URLClassLoader.class;
+        Method method = sysclass.getDeclaredMethod("addURL", URL.class);
+        method.setAccessible(true);
+        method.invoke(sysloader, new Object[] { jar.toURI().toURL() });
     }
 
     public static void main(String[] args) {
-	try {
-	    Collection<String> all = IOMethods.getAllJavaRuntimes();
-	    IOMethods.getAllJavaInfo(all);
-	} catch (Exception ex) {
-	    ExceptionAndLogHandler.log(ex);
-	}
+        try {
+            Collection<String> all = IOMethods.getAllJavaRuntimes();
+            IOMethods.getAllJavaInfo(all);
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
+        }
     }
 
     public static File newDir(File parent, String relative) {
-	File newfile = new File(parent, relative);
-	newfile.mkdirs();
-	return newfile;
+        File newfile = new File(parent, relative);
+        newfile.mkdirs();
+        return newfile;
     }
 
     public static File newDir(String relative) {
-	File newfile = new File(relative);
-	newfile.mkdirs();
-	return newfile;
+        File newfile = new File(relative);
+        newfile.mkdirs();
+        return newfile;
     }
 
     public static Map<String, String> parseParams(String[] args) {
-	Map<String, String> parameterValues = new HashMap<String, String>();
-	if (args != null) {
-	    for (String arg : args) {
-		if (arg.indexOf('=') == -1) {
-		    if (arg.startsWith("-")) {
-			parameterValues.put(arg.substring(1), "true");
-		    } else {
-			parameterValues.put(arg, "true");
-		    }
-		} else {
-		    String[] kv = arg.split("=");
-		    if (kv[0].startsWith("-")) {
-			parameterValues.put(kv[0].substring(1), kv[1]);
-		    } else {
-			parameterValues.put(kv[0], kv[1]);
-		    }
-		}
-	    }
-	}
-	return parameterValues;
+        Map<String, String> parameterValues = new HashMap<String, String>();
+        if (args != null) {
+            for (String arg : args) {
+                if (arg.indexOf('=') == -1) {
+                    if (arg.startsWith("-")) {
+                        parameterValues.put(arg.substring(1), "true");
+                    } else {
+                        parameterValues.put(arg, "true");
+                    }
+                } else {
+                    String[] kv = arg.split("=");
+                    if (kv[0].startsWith("-")) {
+                        parameterValues.put(kv[0].substring(1), kv[1]);
+                    } else {
+                        parameterValues.put(kv[0], kv[1]);
+                    }
+                }
+            }
+        }
+        return parameterValues;
     }
 
     public static List<String> process(boolean capture, boolean log, String... command) throws IOException {
-	List<String> lines = new ArrayList<String>();
-	ProcessBuilder pb = new ProcessBuilder(command);
-	pb.redirectErrorStream(true);
-	Process p = pb.start();
+        List<String> lines = new ArrayList<String>();
+        ProcessBuilder pb = new ProcessBuilder(command);
+        pb.redirectErrorStream(true);
+        Process p = pb.start();
 
-	if (capture) {
-	    InputStream is = p.getInputStream();
-	    InputStreamReader isr = new InputStreamReader(is);
-	    BufferedReader br = new BufferedReader(isr);
-	    String line;
+        if (capture) {
+            InputStream is = p.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
 
-	    while ((line = br.readLine()) != null) {
-		if (capture) {
-		    lines.add(line);
-		}
+            while ((line = br.readLine()) != null) {
+                if (capture) {
+                    lines.add(line);
+                }
 
-		if (log) {
-		    ExceptionAndLogHandler.log(line);
-		}
-	    }
+                if (log) {
+                    ExceptionAndLogHandler.log(line);
+                }
+            }
 
-	    is.close();
-	}
+            is.close();
+        }
 
-	return lines;
+        return lines;
     }
 
     public static File selectFile(File start, javax.swing.filechooser.FileFilter ff) {
-	JFileChooser fc = new JFileChooser(start);
-	fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-	fc.setAcceptAllFileFilterUsed(false);
-	if (ff != null) {
-	    fc.addChoosableFileFilter(ff);
-	}
-	int returnVal = fc.showOpenDialog(null);
-	if (returnVal == JFileChooser.APPROVE_OPTION) {
-	    File file = fc.getSelectedFile();
-	    return file;
-	}
-	return null;
+        JFileChooser fc = new JFileChooser(start);
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fc.setAcceptAllFileFilterUsed(false);
+        if (ff != null) {
+            fc.addChoosableFileFilter(ff);
+        }
+        int returnVal = fc.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            return file;
+        }
+        return null;
     }
 
     public static void unzip(File zip, File outdir) throws IOException {
-	ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
-	ZipEntry ze;
-	byte[] buffer = new byte[1024 * 8];
-	int read;
-	while ((ze = zis.getNextEntry()) != null) {
-	    if (ze.isDirectory()) {
-		continue;
-	    }
-	    OutputStream fout = null;
-	    File file = new File(outdir, ze.getName());
-	    file.getParentFile().mkdirs();
-	    fout = new FileOutputStream(file);
-	    while ((read = zis.read(buffer)) != -1) {
-		fout.write(buffer, 0, read);
-	    }
-	    fout.close();
-	}
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
+        ZipEntry ze;
+        byte[] buffer = new byte[1024 * 8];
+        int read;
+        while ((ze = zis.getNextEntry()) != null) {
+            if (ze.isDirectory()) {
+                continue;
+            }
+            OutputStream fout = null;
+            File file = new File(outdir, ze.getName());
+            file.getParentFile().mkdirs();
+            fout = new FileOutputStream(file);
+            while ((read = zis.read(buffer)) != -1) {
+                fout.write(buffer, 0, read);
+            }
+            fout.close();
+        }
     }
 }

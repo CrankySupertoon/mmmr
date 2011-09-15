@@ -47,89 +47,89 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
 
     @Override
     public int compareTo(final Dependency other) {
-	return new CompareToBuilder().append(this.name, other.name).append(this.version, other.version).toComparison();
+        return new CompareToBuilder().append(this.name, other.name).append(this.version, other.version).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof Dependency)) {
-	    return false;
-	}
-	Dependency castOther = (Dependency) other;
-	return new EqualsBuilder().append(this.name, castOther.name).append(this.version, castOther.version).isEquals();
+        if (!(other instanceof Dependency)) {
+            return false;
+        }
+        Dependency castOther = (Dependency) other;
+        return new EqualsBuilder().append(this.name, castOther.name).append(this.version, castOther.version).isEquals();
     }
 
     @Override
     @XmlTransient
     public Long getId() {
-	return this.id;
+        return this.id;
     }
 
     @XmlTransient
     public Mod getMod() {
-	return this.mod;
+        return this.mod;
     }
 
     @XmlAttribute
     public String getName() {
-	return this.name;
+        return this.name;
     }
 
     @XmlTransient
     public Resource getResource() {
-	return this.resource;
+        return this.resource;
     }
 
     @XmlAttribute
     public String getUrl() {
-	return this.url;
+        return this.url;
     }
 
     @XmlTransient
     public Integer getVer() {
-	return this.ver;
+        return this.ver;
     }
 
     @XmlAttribute
     public String getVersion() {
-	return this.version;
+        return this.version;
     }
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
+        return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
     }
 
     protected void setId(Long id) {
-	this.id = id;
+        this.id = id;
     }
 
     public void setMod(Mod mod) {
-	this.mod = mod;
+        this.mod = mod;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     protected void setResource(Resource resource) {
-	this.resource = resource;
+        this.resource = resource;
     }
 
     public void setUrl(String url) {
-	this.url = url;
+        this.url = url;
     }
 
     protected void setVer(Integer ver) {
-	this.ver = ver;
+        this.ver = ver;
     }
 
     public void setVersion(String version) {
-	this.version = version;
+        this.version = version;
     }
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("name", this.name).append("version", this.version).toString();
+        return new ToStringBuilder(this).append("name", this.name).append("version", this.version).toString();
     }
 }

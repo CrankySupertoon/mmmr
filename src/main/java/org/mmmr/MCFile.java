@@ -45,101 +45,101 @@ public class MCFile implements Comparable<MCFile>, PersistentObject {
     private Integer ver;
 
     public MCFile() {
-	super();
+        super();
     }
 
     public MCFile(String path) {
-	this();
-	this.setPath(path);
+        this();
+        this.setPath(path);
     }
 
     public MCFile(String path, Date modificationDate, long crc32) {
-	this();
-	this.setPath(path);
-	this.setModificationDate(modificationDate);
-	this.setCrc32(crc32);
+        this();
+        this.setPath(path);
+        this.setModificationDate(modificationDate);
+        this.setCrc32(crc32);
     }
 
     @Override
     public int compareTo(final MCFile other) {
-	return new CompareToBuilder().append(this.path, other.path).toComparison();
+        return new CompareToBuilder().append(this.path, other.path).toComparison();
     }
 
     @Override
     public boolean equals(final Object other) {
-	if (!(other instanceof MCFile)) {
-	    return false;
-	}
-	MCFile castOther = (MCFile) other;
-	return new EqualsBuilder().append(this.path, castOther.path).isEquals();
+        if (!(other instanceof MCFile)) {
+            return false;
+        }
+        MCFile castOther = (MCFile) other;
+        return new EqualsBuilder().append(this.path, castOther.path).isEquals();
     }
 
     public long getCrc32() {
-	return this.crc32;
+        return this.crc32;
     }
 
     @Override
     public Long getId() {
-	return this.id;
+        return this.id;
     }
 
     public MC getMc() {
-	return this.mc;
+        return this.mc;
     }
 
     public Date getModificationDate() {
-	return this.modificationDate;
+        return this.modificationDate;
     }
 
     public String getPath() {
-	return this.path;
+        return this.path;
     }
 
     @XmlTransient
     public Resource getResource() {
-	return this.resource;
+        return this.resource;
     }
 
     public Integer getVer() {
-	return this.ver;
+        return this.ver;
     }
 
     @Override
     public int hashCode() {
-	return new HashCodeBuilder().append(this.path).toHashCode();
+        return new HashCodeBuilder().append(this.path).toHashCode();
     }
 
     public void setCrc32(long crc32) {
-	this.crc32 = crc32;
+        this.crc32 = crc32;
     }
 
     protected void setId(Long id) {
-	this.id = id;
+        this.id = id;
     }
 
     protected void setMc(MC mc) {
-	this.mc = mc;
+        this.mc = mc;
     }
 
     public void setModificationDate(Date modificationDate) {
-	this.modificationDate = modificationDate;
+        this.modificationDate = modificationDate;
     }
 
     public void setPath(String path) {
-	this.path = path.replace('\\', '/').replaceAll("//", "/");
+        this.path = path.replace('\\', '/').replaceAll("//", "/");
     }
 
     protected void setResource(Resource resource) {
-	this.resource = resource;
+        this.resource = resource;
     }
 
     protected void setVer(Integer ver) {
-	this.ver = ver;
+        this.ver = ver;
     }
 
     @Override
     public String toString() {
-	return new ToStringBuilder(this).append("path", this.path).append("crc32", this.crc32).append("mc", this.mc).append("modificationDate", this.modificationDate)
-		.append("resource", this.resource).toString();
+        return new ToStringBuilder(this).append("path", this.path).append("crc32", this.crc32).append("mc", this.mc)
+                .append("modificationDate", this.modificationDate).append("resource", this.resource).toString();
     }
 }
