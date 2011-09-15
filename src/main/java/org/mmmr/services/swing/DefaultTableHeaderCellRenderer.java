@@ -58,6 +58,7 @@ public class DefaultTableHeaderCellRenderer extends DefaultTableCellRenderer {
                     return UIManager.getIcon("Table.ascendingSortIcon");
                 case DESCENDING:
                     return UIManager.getIcon("Table.descendingSortIcon");
+                case UNSORTED:
             }
         }
         return null;
@@ -71,7 +72,7 @@ public class DefaultTableHeaderCellRenderer extends DefaultTableCellRenderer {
      * @return the SortKey, or null if the column is unsorted
      */
     @SuppressWarnings("rawtypes")
-    protected SortKey getSortKey(JTable table, int column) {
+    protected SortKey getSortKey(JTable table, @SuppressWarnings("unused") int column) {
         RowSorter rowSorter = table.getRowSorter();
         if (rowSorter == null) {
             return null;

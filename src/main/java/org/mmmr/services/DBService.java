@@ -102,7 +102,7 @@ public class DBService {
         return results.get(0);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
     public <T> List<T> hql(String hql, Class<T> returnType) {
         return this.session.createQuery(hql).list();
     }

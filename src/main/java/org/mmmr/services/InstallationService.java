@@ -146,6 +146,7 @@ public class InstallationService {
         JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Mod installed.", "", JOptionPane.INFORMATION_MESSAGE, cfg.getIcon());
     }
 
+    @SuppressWarnings("unused")
     public void uninstallMod(Config cfg, Mod mod) {
         //
     }

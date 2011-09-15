@@ -43,12 +43,12 @@ public class MMMR implements MMMRI {
 
     private StatusWindow statusWindow;
 
-    private void addContents(MC mc, String prefix, int pos, File fd) throws IOException {
+    private void addContents(String prefix, int pos, File fd) throws IOException {
         if (fd.isFile()) {
-            mc.addFile(new MCFile(prefix + fd.getAbsolutePath().substring(pos), new Date(fd.lastModified()), IOMethods.crc32File(fd)));
+            this.mc.addFile(new MCFile(prefix + fd.getAbsolutePath().substring(pos), new Date(fd.lastModified()), IOMethods.crc32File(fd)));
         }
         for (File child : IOMethods.list(fd)) {
-            this.addContents(mc, prefix, pos, child);
+            this.addContents(prefix, pos, child);
         }
     }
 
@@ -81,7 +81,7 @@ public class MMMR implements MMMRI {
         return false;
     }
 
-    private ModPack initJogBox(File data) throws FileNotFoundException, JAXBException {
+    private ModPack initJogBox(@SuppressWarnings("unused") File data) throws FileNotFoundException, JAXBException {
         ModPack yogbox = new ModPack("YogBox", "1.1");
         yogbox.setDescription("YogBox_1.7.3_v1.1.zip");
         yogbox.setMcVersionDependency("1.7.3");
@@ -373,9 +373,9 @@ public class MMMR implements MMMRI {
                     ArchiveService.extract(minecraftZip, this.cfg.getMcJar());
                 }
                 if ((this.mc.getFiles() == null) || (this.mc.getFiles().size() == 0)) {
-                    this.addContents(this.mc, "bin/minecraft.jar/", this.cfg.getBackupOriginalJar().getAbsolutePath().length() + 1,
+                    this.addContents("bin/minecraft.jar/", this.cfg.getBackupOriginalJar().getAbsolutePath().length() + 1,
                             this.cfg.getBackupOriginalJar());
-                    this.addContents(this.mc, this.cfg.getMcResources().getName() + "/", this.cfg.getMcResources().getAbsolutePath().length() + 1,
+                    this.addContents(this.cfg.getMcResources().getName() + "/", this.cfg.getMcResources().getAbsolutePath().length() + 1,
                             this.cfg.getMcResources());
                     db.save(this.mc);
                 }

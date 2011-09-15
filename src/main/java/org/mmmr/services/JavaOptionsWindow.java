@@ -35,8 +35,8 @@ public class JavaOptionsWindow extends JFrame {
         private static final long serialVersionUID = -9161606663652528876L;
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        public Component getTableCellRendererComponent(JTable jtable, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component renderer = super.getTableCellRendererComponent(jtable, value, isSelected, hasFocus, row, column);
             if (JavaOptionsWindow.this.cfg != null) {
                 this.setFont(JavaOptionsWindow.this.cfg.getFont18().deriveFont(10f));
             }
@@ -104,9 +104,9 @@ public class JavaOptionsWindow extends JFrame {
         mainpanel.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
         this.getContentPane().add(mainpanel);
 
-        final JTable table = this.getOptions();
-        mainpanel.add(table, BorderLayout.CENTER);
-        mainpanel.add(table.getTableHeader(), BorderLayout.NORTH);
+        final JTable jtable = this.getOptions();
+        mainpanel.add(jtable, BorderLayout.CENTER);
+        mainpanel.add(jtable.getTableHeader(), BorderLayout.NORTH);
 
         JButton quit = new JButton("Select an option and click here.");
         if (cfg != null) {
@@ -116,16 +116,16 @@ public class JavaOptionsWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if ((cfg != null) && (table.getSelectedRow() != -1)) {
+                    if ((cfg != null) && (jtable.getSelectedRow() != -1)) {
                         StringBuilder sb = new StringBuilder();
-                        String jre = String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 0));
+                        String jre = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 0));
                         sb.append("\"").append(jre).append("\\bin\\java.exe\"");
-                        String min = String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 2));
+                        String min = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 2));
                         sb.append(" ").append(JavaOptionsWindow.this.options[0].replaceAll("\\Q{MIN}\\E", min));
-                        String max = String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 3));
+                        String max = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 3));
                         sb.append(" ").append(JavaOptionsWindow.this.options[1].replaceAll("\\Q{MAX}\\E", max));
                         for (int i = 4; i < JavaOptionsWindow.this.options.length + 1; i++) {
-                            boolean optionAvailable = "y".equals(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), i)));
+                            boolean optionAvailable = "y".equals(String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), i)));
                             if (optionAvailable) {
                                 sb.append(" ").append(JavaOptionsWindow.this.options[i - 1]);
                             }

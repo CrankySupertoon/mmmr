@@ -115,6 +115,7 @@ public class VerticalTableHeaderCellRenderer extends DefaultTableHeaderCellRende
                     return VerticalSortIcon.ASCENDING;
                 case DESCENDING:
                     return VerticalSortIcon.DESCENDING;
+                case UNSORTED:
             }
         }
         return null;

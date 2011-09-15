@@ -32,14 +32,14 @@ public class FancySwing {
             target.addMouseMotionListener(this);
         }
 
-        public Window getFrame(Container target) {
-            if (target == null) {
+        public Window getFrame(Container container) {
+            if (container == null) {
                 return null;
             }
-            if (target instanceof Window) {
-                return (Window) target;
+            if (container instanceof Window) {
+                return (Window) container;
             }
-            return this.getFrame(target.getParent());
+            return this.getFrame(container.getParent());
         }
 
         Point getScreenLocation(MouseEvent e) {
@@ -50,6 +50,7 @@ public class FancySwing {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            //
         }
 
         @Override
@@ -63,14 +64,17 @@ public class FancySwing {
 
         @Override
         public void mouseEntered(MouseEvent e) {
+            //
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
+            //
         }
 
         @Override
         public void mouseMoved(MouseEvent e) {
+            //
         }
 
         @Override
@@ -85,6 +89,7 @@ public class FancySwing {
 
         @Override
         public void mouseReleased(MouseEvent e) {
+            //
         }
     }
 

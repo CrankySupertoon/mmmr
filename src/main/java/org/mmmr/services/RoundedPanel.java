@@ -134,6 +134,7 @@ public class RoundedPanel extends JPanel {
         super.paintComponent(g);
         int width = this.getWidth();
         int height = this.getHeight();
+        @SuppressWarnings("hiding")
         int shadowGap = this.shadowGap;
         Color shadowColorA = new Color(this.shadowColor.getRed(), this.shadowColor.getGreen(), this.shadowColor.getBlue(), this.shadowAlpha);
         Graphics2D graphics = (Graphics2D) g;

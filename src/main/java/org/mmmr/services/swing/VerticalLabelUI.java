@@ -41,9 +41,8 @@ public class VerticalLabelUI extends BasicLabelUI {
     public static ComponentUI createUI(JComponent c) {
         if (System.getSecurityManager() != null) {
             return VerticalLabelUI.SAFE_VERTICAL_LABEL_UI;
-        } else {
-            return VerticalLabelUI.verticalLabelUI;
         }
+        return VerticalLabelUI.verticalLabelUI;
     }
 
     private boolean clockwise = false;
@@ -59,6 +58,7 @@ public class VerticalLabelUI extends BasicLabelUI {
      * Constructs a <code>VerticalLabelUI</code> with the default anticlockwise rotation
      */
     public VerticalLabelUI() {
+        //
     }
 
     /**
