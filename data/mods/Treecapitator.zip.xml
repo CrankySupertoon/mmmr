@@ -1,0 +1,7 @@
+<mod archive="Treecapitator.zip" name="Treecapitator"
+	url="http://www.minecraftforum.net/topic/124117-v173-18-daftpvfs-mods-18-treecapitator-will-update-the-others-soon/#treecapitator"
+	version="1.8"  mc="1.8.1">
+	<resources>
+		<resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+	</resources>
+</mod>

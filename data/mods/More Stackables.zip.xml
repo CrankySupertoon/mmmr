@@ -1,0 +1,7 @@
+<mod archive="More Stackables.zip" name="More Stackables"
+	url="http://www.minecraftforum.net/topic/75440-"
+	version="1.8" mc="1.8.1">
+	<resources>
+		<resource sourcepath="./" targetpath="bin/minecraft.jar" />
+	</resources>
+</mod>

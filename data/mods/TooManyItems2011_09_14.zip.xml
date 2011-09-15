@@ -1,6 +1,6 @@
-<mod archive="TooManyItems2011_09_13.zip" name="TooManyItems"
+<mod archive="TooManyItems2011_09_14.zip" name="TooManyItems"
 	url="http://www.minecraftforum.net/topic/140684-"
-	version="1.9"  mc="1.8pr2">
+	version="1.9"  mc="1.8.1">
 	<resources>
 		<resource sourcepath="./" targetpath="bin/minecraft.jar"/>
 	</resources>
