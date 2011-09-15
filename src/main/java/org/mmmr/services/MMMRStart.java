@@ -17,13 +17,15 @@ import org.apache.log4j.varia.LevelRangeFilter;
  */
 public class MMMRStart {
     private static void adjustLogging(Config cfg) throws IOException {
+	Level level;
 	String levelstr = cfg.getProperty("logging.level", "?");
 	if (!"?".equals(levelstr)) {
-	    Level level;
 	    if ("TRACE".equals(levelstr)) {
 		level = Level.TRACE;
 	    } else if ("DEBUG".equals(levelstr)) {
 		level = Level.DEBUG;
+	    } else if ("INFO".equals(levelstr)) {
+		level = Level.INFO;
 	    } else if ("WARN".equals(levelstr)) {
 		level = Level.WARN;
 	    } else if ("ERROR".equals(levelstr)) {
@@ -33,13 +35,15 @@ public class MMMRStart {
 	    } else {
 		level = Level.OFF;
 	    }
-	    org.apache.log4j.Logger.getRootLogger().setLevel(level);
-	    Enumeration<?> allAppenders = org.apache.log4j.Logger.getRootLogger().getAllAppenders();
-	    while (allAppenders.hasMoreElements()) {
-		Appender appender = Appender.class.cast(allAppenders.nextElement());
-		LevelRangeFilter filter = LevelRangeFilter.class.cast(appender.getFilter());
-		filter.setLevelMin(level);
-	    }
+	} else {
+	    level = Level.INFO;
+	}
+	org.apache.log4j.Logger.getRootLogger().setLevel(level);
+	Enumeration<?> allAppenders = org.apache.log4j.Logger.getRootLogger().getAllAppenders();
+	while (allAppenders.hasMoreElements()) {
+	    Appender appender = Appender.class.cast(allAppenders.nextElement());
+	    LevelRangeFilter filter = LevelRangeFilter.class.cast(appender.getFilter());
+	    filter.setLevelMin(level);
 	}
     }
 
