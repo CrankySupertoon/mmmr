@@ -17,8 +17,9 @@ import java.util.logging.Logger;
 //isTranslucencySupported = AWTUtilitiesWrapper.isTranslucencySupported(AWTUtilitiesWrapper.PERPIXEL_TRANSLUCENT);
 
 /**
- * 
  * @author Anthony Petrov
+ * 
+ * @see http://java.sun.com/developer/technicalArticles/GUI/translucent_shaped_windows/
  */
 public class AWTUtilitiesWrapper {
 

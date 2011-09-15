@@ -23,4 +23,5 @@ public class ExceptionAndLogHandler {
     public static void log(Object object) {
 	ExceptionAndLogHandler.logger.debug("{}", object);
     }
+
 }

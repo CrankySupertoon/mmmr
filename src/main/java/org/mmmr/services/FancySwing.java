@@ -92,7 +92,7 @@ public class FancySwing {
 		return JFrame.class.cast(frame);
 	    }
 	}
-	throw new IllegalArgumentException();
+	return null;
     }
 
     public static void lookAndFeel() {

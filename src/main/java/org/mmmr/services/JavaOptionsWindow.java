@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -16,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -36,7 +37,9 @@ public class JavaOptionsWindow extends JFrame {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 	    Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-	    this.setFont(JavaOptionsWindow.this.cfg.getFont18().deriveFont(10f));
+	    if (JavaOptionsWindow.this.cfg != null) {
+		this.setFont(JavaOptionsWindow.this.cfg.getFont18().deriveFont(10f));
+	    }
 	    if ("y".equals(value)) {
 		if (isSelected) {
 		    this.setBackground(JavaOptionsWindow.this.greenSelected);
@@ -44,7 +47,7 @@ public class JavaOptionsWindow extends JFrame {
 		    this.setBackground(JavaOptionsWindow.this.green);
 		}
 		this.setForeground(Color.white);
-		setHorizontalTextPosition(SwingConstants.CENTER);
+		this.setHorizontalTextPosition(SwingConstants.CENTER);
 	    }
 	    if ("n".equals(value)) {
 		if (isSelected) {
@@ -53,7 +56,7 @@ public class JavaOptionsWindow extends JFrame {
 		    this.setBackground(JavaOptionsWindow.this.red);
 		}
 		this.setForeground(Color.white);
-		setHorizontalTextPosition(SwingConstants.CENTER);
+		this.setHorizontalTextPosition(SwingConstants.CENTER);
 	    }
 	    return renderer;
 	}
@@ -82,14 +85,18 @@ public class JavaOptionsWindow extends JFrame {
 
     public JavaOptionsWindow(final Config cfg) throws HeadlessException, IOException {
 	Color selectionColor = Color.class.cast(UIManager.get("Table.selectionBackground"));
-	red = Color.RED.darker();
-	redSelected = new Color(Math.max(red.getRed(), selectionColor.getRed()),Math.max(red.getGreen(), selectionColor.getGreen()),Math.max(red.getRed(), selectionColor.getBlue()));
-	green = Color.GREEN.darker();
-	greenSelected = new Color(Math.min(green.getRed(), selectionColor.getRed()),Math.min(green.getGreen(), selectionColor.getGreen()),Math.min(green.getRed(), selectionColor.getBlue()));
+	this.red = Color.RED.darker();
+	this.redSelected = selectionColor == null ? this.red : new Color(Math.max(this.red.getRed(), selectionColor.getRed()), Math.max(this.red.getGreen(),
+		selectionColor.getGreen()), Math.max(this.red.getRed(), selectionColor.getBlue()));
+	this.green = Color.GREEN.darker();
+	this.greenSelected = selectionColor == null ? this.green : new Color(Math.min(this.green.getRed(), selectionColor.getRed()), Math.min(this.green.getGreen(),
+		selectionColor.getGreen()), Math.min(this.green.getRed(), selectionColor.getBlue()));
 
 	this.cfg = cfg;
-	this.setIconImage(cfg.getIcon().getImage());
-	this.setTitle(cfg.getTitle());
+	if (cfg != null) {
+	    this.setIconImage(cfg.getIcon().getImage());
+	    this.setTitle(cfg.getTitle());
+	}
 
 	RoundedPanel mainpanel = new RoundedPanel(new BorderLayout());
 	mainpanel.setShady(false);
@@ -102,12 +109,14 @@ public class JavaOptionsWindow extends JFrame {
 	mainpanel.add(table.getTableHeader(), BorderLayout.NORTH);
 
 	JButton quit = new JButton("Select an option and click here.");
-	quit.setFont(cfg.getFont18());
+	if (cfg != null) {
+	    quit.setFont(cfg.getFont18());
+	}
 	quit.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		try {
-		    if (table.getSelectedRow() != -1) {
+		    if ((cfg != null) && (table.getSelectedRow() != -1)) {
 			StringBuilder sb = new StringBuilder();
 			String jre = String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 0));
 			sb.append("\"").append(jre).append("\\bin\\java.exe\"");
@@ -165,7 +174,7 @@ public class JavaOptionsWindow extends JFrame {
 
 	this.columnNames.add("JRE");
 	this.columnNames.add("64bit");
-	this.columnNames.addAll(Arrays.asList(options));
+	this.columnNames.addAll(Arrays.asList(this.options));
 
 	for (String[] jreinfo : IOMethods.getAllJavaInfo(IOMethods.getAllJavaRuntimes())) {
 	    String jre = jreinfo[0];
@@ -179,17 +188,24 @@ public class JavaOptionsWindow extends JFrame {
 		_max = Math.min(max, 1024);
 	    }
 
-	    String[] opts = new String[options.length];
-	    System.arraycopy(options, 0, opts, 0, options.length);
+	    String[] opts = new String[this.options.length];
+	    System.arraycopy(this.options, 0, opts, 0, this.options.length);
 	    opts[0] = opts[0].replaceAll("\\Q{MIN}\\E", "" + _min);
 	    opts[1] = opts[1].replaceAll("\\Q{MAX}\\E", "" + _max);
 
 	    Vector<Object> row = new Vector<Object>();
+	    int success = 0;
 	    row.add(jre);
+	    if (_64) {
+		success++;
+	    }
 	    row.add(_64 ? "y" : "n");
 	    for (int i = 0; i < opts.length; i++) {
 		String option = opts[i];
 		boolean result = IOMethods.process(true, false, jre + "/bin/java.exe", option, "-version").get(0).toLowerCase().startsWith("java version");
+		if (result) {
+		    success++;
+		}
 		if (i == 0) {
 		    if (result) {
 			row.add("" + _min);
@@ -206,8 +222,45 @@ public class JavaOptionsWindow extends JFrame {
 		    row.add((result ? "y" : "n"));
 		}
 	    }
+	    row.add(jreinfo[1]);
+	    row.add(success);
 	    this.data.add(row);
 	}
+
+	Collections.sort(this.data, new Comparator<Vector<Object>>() {
+
+	    @Override
+	    public int compare(Vector<Object> o1, Vector<Object> o2) {
+		int s1 = Integer.parseInt(String.valueOf(o1.lastElement()));
+		int s2 = Integer.parseInt(String.valueOf(o2.lastElement()));
+
+		if (s1 != s2) {
+		    return s2 - s1;
+		}
+
+		int x1 = Integer.parseInt(String.valueOf(o1.get(3)));
+		int x2 = Integer.parseInt(String.valueOf(o2.get(3)));
+
+		if (x1 != x2) {
+		    return x2 - x1;
+		}
+
+		boolean d1 = String.valueOf(o1.get(0)).toLowerCase().contains("jdk");
+		boolean d2 = String.valueOf(o2.get(0)).toLowerCase().contains("jdk");
+
+		if (d1 && !d2) {
+		    return 1;
+		}
+		if (!d1 && d2) {
+		    return -1;
+		}
+
+		String v1 = String.valueOf(o1.get(o1.size() - 2));
+		String v2 = String.valueOf(o2.get(o2.size() - 2));
+
+		return v2.compareTo(v1);
+	    }
+	});
 
 	DefaultTableModel model = new DefaultTableModel(this.data, this.columnNames) {
 	    private static final long serialVersionUID = 7182945794160936753L;
