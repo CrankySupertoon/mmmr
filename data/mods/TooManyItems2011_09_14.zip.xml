@@ -1,6 +1,9 @@
 <mod archive="TooManyItems2011_09_14.zip" name="TooManyItems"
 	url="http://www.minecraftforum.net/topic/140684-"
 	version="1.9"  mc="1.8.1">
+	<dependencies>
+		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+	</dependencies>	
 	<resources>
 		<resource sourcepath="./" targetpath="bin/minecraft.jar"/>
 	</resources>
