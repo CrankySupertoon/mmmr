@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<modpack description="YogBox_1.7.3_v1.1.zip" mc="1.7.3" name="YogBox" version="1.1">
+    <mods>
+        <mod name="Single Player RPG Mod" url="http://www.minecraftforum.net/topic/479017-173-single-player-rpg-mod-v14" version="1.4a">
+            <resourcecheck>bin/minecraft.jar/rpgmod/</resourcecheck>
+        </mod>
+        <mod name="Millenaire" url="http://www.minecraftforum.net/topic/227822-173-millenaire-npc-village-132-large-pesant-house-indian-guard-towers-norman-fort/" version="1.3.1">
+            <resourcecheck>millenaire/</resourcecheck>
+        </mod>
+        <mod name="Somnia" url="http://www.minecraftforum.net/topic/162771-173-somnia-v13-sspmltfc-compatibility-fixes-for-dynamic-lights-and-seasons-mod/" version="1.3">
+            <resourcecheck>bin/minecraft.jar/mod_Somnia.class</resourcecheck>
+        </mod>
+        <mod name="Rei's Minimap" url="http://www.minecraftforum.net/topic/482147-173-aug25-reis-minimap-v18/" version="1.8">
+            <resourcecheck>mods/rei_minimap/</resourcecheck>
+        </mod>
+        <mod name="Baby Animals" url="http://www.minecraftforum.net/topic/190053-173-baby-animals-v175-mobml/" version="1.7.5">
+            <resourcecheck>mods/BabyAnimals_v1_75.zip</resourcecheck>
+        </mod>
+        <mod name="Mo' Creatures" url="http://www.minecraftforum.net/topic/81771-v173-mo-creatures-v2122-with-kitties-mice-and-rats/" version="2.12.2">
+            <resourcecheck>mods/mocreatures/</resourcecheck>
+        </mod>
+        <mod name="More Health" url="http://www.minecraftforum.net/topic/115172-v173-noheros-mods-more-health-v75-extras-chance-sword-v15/#health" version="7.5">
+            <resourcecheck>mods/moreHealth/</resourcecheck>
+        </mod>
+        <mod name="DaftPVF's mods: Web Generation" url="http://www.minecraftforum.net/topic/124117-v173-daftpvfs-mods/#web_generation" version="?">
+            <resourcecheck>mods/Web Generation.zip</resourcecheck>
+        </mod>
+        <mod name="DaftPVF's mods: Treecapitator" url="http://www.minecraftforum.net/topic/124117-v173-daftpvfs-mods/#treecapitator" version="?">
+            <resourcecheck>mods/Treecapitator.zip</resourcecheck>
+        </mod>
+        <mod name="DaftPVF's mods: Starting Inventory" url="http://www.minecraftforum.net/topic/124117-v173-daftpvfs-mods/#starting_inventory" version="?">
+            <resourcecheck>mods/Starting Inventory.zip</resourcecheck>
+        </mod>
+        <mod name="Risugami's Mods: Shelf Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7.3">
+            <resourcecheck>mods/Shelf.zip</resourcecheck>
+        </mod>
+        <mod name="Risugami's Mods: Recipe Book Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7.3">
+            <resourcecheck>mods/Recipe Book.zip</resourcecheck>
+        </mod>
+        <mod name="Mystic Mods: Mystic Ruins" url="http://www.minecraftforum.net/topic/303729-173-mystic-mods-dungeons-ruins-ores-vines-stones/" version="0.3">
+            <resourcecheck>mods/Mystic_Ruins_v03.zip</resourcecheck>
+        </mod>
+        <mod name="DaftPVF's mods: Floating Ruins" url="http://www.minecraftforum.net/topic/124117-v173-daftpvfs-mods/#floating_ruins" version="?">
+            <resourcecheck>mods/Floating Ruins.zip</resourcecheck>
+        </mod>
+        <mod name="Elemental Creepers" url="http://www.minecraftforum.net/topic/498342-173-elemental-creepers-v13-smp-support/" version="1.2.3">
+            <resourcecheck>mods/ElementalCreepers_v1.2.3.zip</resourcecheck>
+        </mod>
+        <mod name="DaftPVF's mods: Crystal Wing" url="http://www.minecraftforum.net/topic/124117-v173-daftpvfs-mods/#crystal_wing" version="?">
+            <resourcecheck>mods/Crystal Wing.zip</resourcecheck>
+        </mod>
+        <mod name="Hogofwar's Bone Mods: Bone Torch" url="http://www.minecraftforum.net/topic/190980-173-hogofwars-bone-mods/#torch" version="?">
+            <resourcecheck>mods/BoneTorch.zip</resourcecheck>
+        </mod>
+        <mod name="Hogofwar's Bone Mods: Magical Bone Sticks" url="http://www.minecraftforum.net/topic/190980-173-hogofwars-bone-mods/#bone" version="?">
+            <resourcecheck>mods/BoneSticks.zip</resourcecheck>
+        </mod>
+        <mod name="Proper Fence Behavior" url="http://www.minecraftforum.net/topic/404530-173proper-fence-behaviour-for-mobs/" version="1.7.3">
+            <resourcecheck>bin/minecraft.jar/mod_FenceFix.class</resourcecheck>
+        </mod>
+        <mod name="The Seasons Mod" url="http://www.minecraftforum.net/topic/499733-173134the-seasons-mod/" version="1.34">
+            <resourcecheck>bin/minecraft.jar/nandonalt/Seasons/</resourcecheck>
+        </mod>
+        <mod name="Mystic Mods: Mystic Ores" url="http://www.minecraftforum.net/topic/303729-173-mystic-mods-dungeons-ruins-ores-vines-stones/" version="0.4">
+            <resourcecheck>bin/minecraft.jar/mysticores/</resourcecheck>
+        </mod>
+        <mod name="Scokeev9's mods: Randomite)" url="http://www.minecraftforum.net/topic/228940-173scokeev9-premiumwood-v144-12-more-thanks-for-250000-dls/#randomite" version="4.0">
+            <resourcecheck>bin/minecraft.jar/scokeev/randomite.png</resourcecheck>
+        </mod>
+        <mod name="DaftPVF's mods: Slime Armor" url="http://www.minecraftforum.net/topic/124117-v173-daftpvfs-mods/#slime_boots" version="?">
+            <resourcecheck>bin/minecraft.jar/daftpvf/slimeBoots.png</resourcecheck>
+        </mod>
+        <mod name="DaftPVF's mods: Score" url="http://www.minecraftforum.net/topic/124117-v173-daftpvfs-mods/#score" version="?">
+            <resourcecheck>bin/minecraft.jar/mod_score.class</resourcecheck>
+        </mod>
+        <mod name="Risugami's Mods: Elemental Arrows Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7.3">
+            <resourcecheck>bin/minecraft.jar/mod_Arrows.class</resourcecheck>
+        </mod>
+        <mod name="Risugami's Mods: More Stackables Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7_01">
+            <resourcecheck>bin/minecraft.jar/mod_Stackables.class</resourcecheck>
+        </mod>
+        <mod name="Risugami's Mods: ModLoader Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7.3">
+            <resourcecheck>bin/minecraft.jar/ModLoader.class</resourcecheck>
+        </mod>
+        <mod name="SteamCraft: Airship" url="http://www.steam-craft.com/airship" version="2.5.1?">
+            <resourcecheck>mods/airshipV2.51.1.7.3.zip</resourcecheck>
+        </mod>
+        <mod name="Peaceful Pack" url="http://www.minecraftforum.net/topic/368468-173-peaceful-pack-v3/" version="3">
+            <resourcecheck>bin/minecraft.jar/mod_PeacefulPack.class</resourcecheck>
+        </mod>
+        <mod name="Inventory Tweaks" url="http://www.minecraftforum.net/topic/323444-173spsmp-inventory-tweaks-130-august-16/" version="1.22">
+            <resourcecheck>bin/minecraft.jar/mod_InvTweaks.class</resourcecheck>
+        </mod>
+        <mod name="Convenient Inventory Mod" url="http://www.minecraftforum.net/topic/504091-v173-convenient-inventory-19/" version="1.9">
+            <resourcecheck>bin/minecraft.jar/ConvenientInventory.class</resourcecheck>
+        </mod>
+        <mod name="Ninja Ghost" url="http://yogiverse.com/showthread.php?11841-YogBox-A-carefully-chosen-compilation-of-good-mods" version="1.1">
+            <resourcecheck>bin/minecraft.jar/mod_Ghost.class</resourcecheck>
+        </mod>
+        <mod name="Israphel" url="http://yogiverse.com/showthread.php?11841-YogBox-A-carefully-chosen-compilation-of-good-mods" version="1.1">
+            <resourcecheck>bin/minecraft.jar/mod_Ifix.class</resourcecheck>
+        </mod>
+        <mod name="Tree, Nether, Pyramid and Floating Dungeons" url="http://www.minecraftforum.net/topic/388302-173-tree-nether-pyramid-and-floating-dungeons-v4/" version="4">
+            <resourcecheck>bin/minecraft.jar/mod_netherdungeon.class</resourcecheck>
+        </mod>
+        <mod name="Pfaeff's Mod" url="http://www.minecraftforum.net/topic/200272-v173-pfaeffs-mod-ssp-v083-allocator-jump-pad-and-more/" version="0.8.3?">
+            <resourcecheck>mods/Pfaeff.zip</resourcecheck>
+        </mod>
+        <mod name="Scokeev9's mods: BiomeWater" url="http://www.minecraftforum.net/topic/228940-173scokeev9-premiumwood-v144-12-more-thanks-for-250000-dls/#water" version="3.0?">
+            <resourcecheck>bin/minecraft.jar/oh.class</resourcecheck>
+        </mod>
+        <mod name="Scokeev9's mods: ScotTools API and Fix)" url="http://www.minecraftforum.net/topic/228940-173scokeev9-premiumwood-v144-12-more-thanks-for-250000-dls/#tools" version="10.1?">
+            <resourcecheck>bin/minecraft.jar/ScotTools.class</resourcecheck>
+        </mod>
+        <mod name="ModOptionsAPI" url="http://www.minecraftforum.net/topic/191591-v173-moapi-modoptionsapi-textkey-options-07/" version="0.7?">
+            <resourcecheck>bin/minecraft.jar/modoptionsapi</resourcecheck>
+        </mod>
+        <mod name="GuiAPI" url="http://www.minecraftforum.net/topic/91544-173jul-8-lahwrans-mods-zanmini-worldeditgui-guiapi-no-more-adfly/#SettingsAPI" version="0.10.4">
+            <resourcecheck>bin/minecraft.jar/WidgetClassicWindow.class</resourcecheck>
+        </mod>
+        <mod name="Risugami's Mods: AudioMod Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7_01">
+            <resourcecheck>bin/minecraft.jar/ibxm/</resourcecheck>
+        </mod>
+        <mod name="Risugami's Mods: Death Chest Beta" url="http://www.minecraftforum.net/topic/75440-v173-risugamis-mods-recipe-book-updated/" version="1.7_01"/>
+        <mod name="Biome Caves" url="http://www.minecraftforum.net/topic/311162-173-biome-caves-ice-and-sand-dungeons-v3/" version="3?">
+            <resourcecheck>bin/minecraft.jar/mod_Icecave.class</resourcecheck>
+        </mod>
+        <mod name="Buried Treasures" url="http://www.minecraftforum.net/topic/151762-v15-01-buried-treasures-33-thanks-ncrawler/" version="3.3?"/>
+        <mod name="Doors open Doors tweak" url="http://forums.somethingawful.com/showthread.php?threadid=3383735&amp;amp;userid=0&amp;perpage=40&amp;pagenumber=552#post393496394" version="?"/>
+        <mod name="Mystic Mods: Mystic Stones" url="http://www.minecraftforum.net/topic/303729-173-mystic-mods-dungeons-ruins-ores-vines-stones/" version="0.4?"/>
+        <mod name="SteamCraft: Pirate" url="http://www.steam-craft.com/pirate" version="1.7.3"/>
+    </mods>
+</modpack>

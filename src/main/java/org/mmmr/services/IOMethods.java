@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -33,6 +32,8 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.JFileChooser;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
  * @author Jurgen
  */
@@ -44,11 +45,22 @@ public class IOMethods {
 
         public final double memusage;
 
+        private transient String toString;
+
         public MemInfo(long memtotmb, long memfreemb, double memusage) {
             super();
             this.memtotmb = memtotmb;
             this.memfreemb = memfreemb;
             this.memusage = memusage;
+        }
+
+        @Override
+        public String toString() {
+            if (this.toString == null) {
+                this.toString = new ToStringBuilder(this).appendSuper(super.toString()).append("memfreemb", this.memfreemb)
+                        .append("memtotmb", this.memtotmb).append("memusage", this.memusage).toString();
+            }
+            return this.toString;
         }
     }
 
@@ -161,8 +173,7 @@ public class IOMethods {
 
     @SuppressWarnings("restriction")
     public static MemInfo getMemInfo() {
-        com.sun.management.OperatingSystemMXBean o = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getPlatformMXBeans(
-                OperatingSystemMXBean.class).get(0);
+        com.sun.management.OperatingSystemMXBean o = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         long memtotmb = o.getTotalPhysicalMemorySize() / 1024 / 1024;
         long memfreemb = o.getFreePhysicalMemorySize() / 1024 / 1024;
         double memusage = (double) (memtotmb - memfreemb) / memtotmb;
@@ -253,6 +264,8 @@ public class IOMethods {
 
     public static void main(String[] args) {
         try {
+            System.out.println(IOMethods.getMemInfo());
+
             Collection<String> all = IOMethods.getAllJavaRuntimes();
             IOMethods.getAllJavaInfo(all);
         } catch (Exception ex) {

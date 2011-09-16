@@ -2,62 +2,26 @@ package org.mmmr.services;
 
 import java.awt.Font;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.util.Enumeration;
 
 import javax.swing.JLabel;
-
-import org.apache.log4j.Appender;
-import org.apache.log4j.Level;
-import org.apache.log4j.varia.LevelRangeFilter;
 
 /**
  * @author Jurgen
  */
 public class MMMRStart {
-    private static void adjustLogging(Config cfg) throws IOException {
-        Level level;
-        String levelstr = cfg.getProperty("logging.level", "?");
-        if (!"?".equals(levelstr)) {
-            if ("TRACE".equals(levelstr)) {
-                level = Level.TRACE;
-            } else if ("DEBUG".equals(levelstr)) {
-                level = Level.DEBUG;
-            } else if ("INFO".equals(levelstr)) {
-                level = Level.INFO;
-            } else if ("WARN".equals(levelstr)) {
-                level = Level.WARN;
-            } else if ("ERROR".equals(levelstr)) {
-                level = Level.ERROR;
-            } else if ("FATAL".equals(levelstr)) {
-                level = Level.FATAL;
-            } else {
-                level = Level.OFF;
-            }
-        } else {
-            level = Level.INFO;
-        }
-        org.apache.log4j.Logger.getRootLogger().setLevel(level);
-        Enumeration<?> allAppenders = org.apache.log4j.Logger.getRootLogger().getAllAppenders();
-        while (allAppenders.hasMoreElements()) {
-            Appender appender = Appender.class.cast(allAppenders.nextElement());
-            LevelRangeFilter filter = LevelRangeFilter.class.cast(appender.getFilter());
-            filter.setLevelMin(level);
-        }
-    }
 
     public static void main(String[] args) {
         try {
             FancySwing.lookAndFeel();
             Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
-            MMMRStart.adjustLogging(cfg);
             MMMRStart.prepareFont(cfg);
             StatusWindow statusWindow = new StatusWindow(cfg);
             statusWindow.setVisible(true);
             DynamicLoading.init(statusWindow.getLibstatus(), cfg);
             MMMRI starter = MMMRI.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance());
             starter.setCfg(cfg);
+            starter.adjustLogging();
             starter.setStatusWindow(statusWindow);
             starter.start(args);
         } catch (Exception ex) {
