@@ -15,8 +15,6 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLConnection;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,13 +22,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.swing.JFileChooser;
 
@@ -40,9 +35,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author Jurgen
  */
 public class IOMethods {
-    public static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.getDefault());
-
-    static class MemInfo {
+    public static class MemInfo {
         public final long memfreemb;
 
         public final long memtotmb;
@@ -112,29 +105,6 @@ public class IOMethods {
             }
         }
         return (path.delete());
-    }
-
-    public static void downloadURL(URL url, File target) throws IOException {
-        ExceptionAndLogHandler.log(url);
-        URLConnection conn = url.openConnection();
-        conn.setAllowUserInteraction(false);
-        conn.setConnectTimeout(30 * 1000);
-        conn.setDefaultUseCaches(true);
-        conn.setReadTimeout(30 * 1000);
-        conn.setUseCaches(true);
-        int total = conn.getContentLength();
-        int dl = 0;
-        InputStream uin = conn.getInputStream();
-        OutputStream fout = new FileOutputStream(target);
-        byte[] buffer = new byte[1024 * 8];
-        int read;
-        while ((read = uin.read(buffer)) > 0) {
-            fout.write(buffer, 0, read);
-            dl += read;
-            System.out.println(NUMBER_FORMAT.format(dl) + "/" + NUMBER_FORMAT.format(total));
-        }
-        fout.close();
-        uin.close();
     }
 
     public static boolean fileEquals(File f1, File f2) throws IOException {
@@ -263,22 +233,12 @@ public class IOMethods {
 
     public static void loadjarAtRuntime(File jar) throws SecurityException, NoSuchMethodException, IllegalArgumentException, MalformedURLException,
             IllegalAccessException, InvocationTargetException {
+        System.out.println("loading " + jar.getName());
         URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Class<?> sysclass = URLClassLoader.class;
         Method method = sysclass.getDeclaredMethod("addURL", URL.class);
         method.setAccessible(true);
         method.invoke(sysloader, new Object[] { jar.toURI().toURL() });
-    }
-
-    public static void main(String[] args) {
-        try {
-            System.out.println(IOMethods.getMemInfo());
-
-            Collection<String> all = IOMethods.getAllJavaRuntimes();
-            IOMethods.getAllJavaInfo(all);
-        } catch (Exception ex) {
-            ExceptionAndLogHandler.log(ex);
-        }
     }
 
     public static File newDir(File parent, String relative) {
@@ -357,25 +317,5 @@ public class IOMethods {
             return file;
         }
         return null;
-    }
-
-    public static void unzip(File zip, File outdir) throws IOException {
-        ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
-        ZipEntry ze;
-        byte[] buffer = new byte[1024 * 8];
-        int read;
-        while ((ze = zis.getNextEntry()) != null) {
-            if (ze.isDirectory()) {
-                continue;
-            }
-            OutputStream fout = null;
-            File file = new File(outdir, ze.getName());
-            file.getParentFile().mkdirs();
-            fout = new FileOutputStream(file);
-            while ((read = zis.read(buffer)) != -1) {
-                fout.write(buffer, 0, read);
-            }
-            fout.close();
-        }
     }
 }

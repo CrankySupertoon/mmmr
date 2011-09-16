@@ -5,6 +5,19 @@
 	<artifactId>mmmr</artifactId>
 	<version>0.1b</version>
 	<dependencies>
+		<!-- keep this first so it downloads this dependencies first -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.1.2</version>
+		</dependency>	
+		<!-- the this one se we can do logging like it should -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.13</version>
+		</dependency>
+		<!-- rest of denpendencies -->
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
@@ -33,11 +46,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.13</version>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.6.2</version>
@@ -62,8 +70,7 @@
 						</manifest>
 					</archive>
 				</configuration>
-			</plugin>
-			
+			</plugin>			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

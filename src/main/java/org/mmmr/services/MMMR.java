@@ -8,20 +8,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBException;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.Level;
-import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.MC;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.ModPack;
 import org.mmmr.Resource;
+import org.mmmr.services.swing.FancySwing;
+import org.mmmr.services.swing.StatusWindow;
 
 /**
  * @author Jurgen
@@ -53,38 +51,6 @@ public class MMMR implements MMMRI {
         }
         for (File child : IOMethods.list(fd)) {
             this.addContents(prefix, pos, child);
-        }
-    }
-
-    @Override
-    public void adjustLogging() throws IOException {
-        Level level;
-        String levelstr = this.cfg.getProperty("logging.level", "?");
-        if (!"?".equals(levelstr)) {
-            if ("TRACE".equals(levelstr)) {
-                level = Level.TRACE;
-            } else if ("DEBUG".equals(levelstr)) {
-                level = Level.DEBUG;
-            } else if ("INFO".equals(levelstr)) {
-                level = Level.INFO;
-            } else if ("WARN".equals(levelstr)) {
-                level = Level.WARN;
-            } else if ("ERROR".equals(levelstr)) {
-                level = Level.ERROR;
-            } else if ("FATAL".equals(levelstr)) {
-                level = Level.FATAL;
-            } else {
-                level = Level.OFF;
-            }
-        } else {
-            level = Level.INFO;
-        }
-        org.apache.log4j.Logger.getRootLogger().setLevel(level);
-        Enumeration<?> allAppenders = org.apache.log4j.Logger.getRootLogger().getAllAppenders();
-        while (allAppenders.hasMoreElements()) {
-            Appender appender = Appender.class.cast(allAppenders.nextElement());
-            LevelRangeFilter filter = LevelRangeFilter.class.cast(appender.getFilter());
-            filter.setLevelMin(level);
         }
     }
 
@@ -290,7 +256,7 @@ public class MMMR implements MMMRI {
                         this.statusWindow.getMcstatus().setStatus("Minecraft: downloading " + files[i], null);
                         try {
                             error = "downloading " + files[i];
-                            IOMethods.downloadURL(new URL(url + files[i]), new File(this.cfg.getThisFolder(), files[i]));
+                            DownloadingService.downloadURL(new URL(url + files[i]), new File(this.cfg.getThisFolder(), files[i]));
                             error = "";
                         } catch (Exception e) {
                             throw e;

@@ -1,6 +1,6 @@
 package org.mmmr.services;
 
-import java.io.IOException;
+import org.mmmr.services.swing.StatusWindow;
 
 /**
  * interface needed because libraries (jars) are not loaded yet and MMR uses external classes
@@ -8,8 +8,6 @@ import java.io.IOException;
  * @author Jurgen
  */
 public interface MMMRI {
-    public abstract void adjustLogging() throws IOException;
-
     public abstract void setCfg(Config cfg);
 
     public abstract void setStatusWindow(StatusWindow statusWindow);

@@ -1,7 +1,7 @@
 /*
  * To change this template, choose Tools | Templates and open the template in the editor.
  */
-package org.mmmr.services;
+package org.mmmr.services.swing;
 
 import java.awt.GraphicsConfiguration;
 import java.awt.Shape;

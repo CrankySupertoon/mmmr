@@ -6,6 +6,9 @@ import java.net.URL;
 
 import javax.swing.JLabel;
 
+import org.mmmr.services.swing.FancySwing;
+import org.mmmr.services.swing.StatusWindow;
+
 /**
  * @author Jurgen
  */
@@ -21,7 +24,7 @@ public class MMMRStart {
             DynamicLoading.init(statusWindow.getLibstatus(), cfg);
             MMMRI starter = MMMRI.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance());
             starter.setCfg(cfg);
-            starter.adjustLogging();
+            ExceptionAndLogHandler.adjustLogging(cfg);
             starter.setStatusWindow(statusWindow);
             starter.start(args);
         } catch (Exception ex) {
@@ -40,8 +43,8 @@ public class MMMRStart {
                 URL dejavu = new URL(
                         "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip");
                 File file = new File(cfg.getTmp(), "dejavu-fonts-ttf-2.33.zip");
-                IOMethods.downloadURL(dejavu, file);
-                IOMethods.unzip(file, cfg.getCfg());
+                DownloadingService.downloadURL(dejavu, file);
+                ArchiveService.extract(file, cfg.getCfg());
             }
             font = Font.createFont(Font.TRUETYPE_FONT, fontfont);
         } catch (Exception ex) {

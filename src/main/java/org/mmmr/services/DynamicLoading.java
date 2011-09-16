@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.mmmr.services.StatusWindow.StatusPanel;
+import org.mmmr.services.swing.StatusListener;
 
 /**
  * @author Jurgen
@@ -18,7 +18,7 @@ public class DynamicLoading {
 
     private static final String MAVEN_REPO_MIRROR = "http://uk.maven.org/maven2";
 
-    public static void init(StatusPanel status, Config cfg) throws Exception {
+    public static void init(StatusListener status, Config cfg) throws Exception {
         String message = "";
         try {
             IOMethods.newDir("data/libs");
@@ -34,8 +34,8 @@ public class DynamicLoading {
                     status.setStatus("Program libraries: downloading " + zip.getName(), null);
                     URL url = new URL(
                             "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/s/project/se/sevenzipjbind/7-Zip-JBinding/4.65-1.04rc-extr-only/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
-                    IOMethods.downloadURL(url, zip);
-                    IOMethods.unzip(zip, cfg.getTmp());
+                    DownloadingService.downloadURL(url, zip);
+                    ArchiveService.extract(zip, cfg.getTmp());
                     {
                         File jarFrom = new File(cfg.getTmp(), "sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding.jar");
                         message = lib1.getName();
@@ -48,7 +48,8 @@ public class DynamicLoading {
                         jarFrom.renameTo(lib2);
                     }
                 }
-                if (cfg.getParameterValue("dev") != null) {
+
+                if (cfg.getParameterValue("dev") == null) {
                     status.setStatus("Program libraries: loading " + lib1.getName(), null);
                     IOMethods.loadjarAtRuntime(lib1);
                     status.setStatus("Program libraries: loading " + lib2.getName(), null);
@@ -67,21 +68,21 @@ public class DynamicLoading {
                         status.setStatus("Program libraries: downloading " + jar.getName(), null);
                         URL url = new URL(DynamicLoading.MAVEN_REPO + relative);
                         try {
-                            IOMethods.downloadURL(url, jar);
+                            DownloadingService.downloadURL(url, jar);
                             if (jar.length() != len) {
                                 jar.delete();
                                 throw new IOException("length><" + len);
                             }
                         } catch (Exception e) {
                             url = new URL(DynamicLoading.MAVEN_REPO_MIRROR + relative);
-                            IOMethods.downloadURL(url, jar);
+                            DownloadingService.downloadURL(url, jar);
                             if (jar.length() != len) {
                                 jar.delete();
                                 throw new IOException("length><" + len);
                             }
                         }
                     }
-                    if (cfg.getParameterValue("dev") != null) {
+                    if (cfg.getParameterValue("dev") == null) {
                         status.setStatus("Program libraries: loading " + jar.getName(), null);
                         IOMethods.loadjarAtRuntime(jar);
                     }

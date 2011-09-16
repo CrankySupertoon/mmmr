@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -14,6 +16,15 @@ import javax.swing.ImageIcon;
  * @author Jurgen
  */
 public class Config {
+    public static final Locale LOCALE;
+
+    public static final NumberFormat NUMBER_FORMAT;
+
+    static {
+        LOCALE = Locale.getDefault();
+        NUMBER_FORMAT = NumberFormat.getNumberInstance(Config.LOCALE);
+    }
+
     private File backup;
 
     private File backupOriginalJar;

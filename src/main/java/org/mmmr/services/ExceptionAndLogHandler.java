@@ -1,7 +1,16 @@
 package org.mmmr.services;
 
+import java.io.IOException;
+
+import org.mmmr.services.impl.ExceptionAndLogHandlerSimple;
+import org.mmmr.services.interfaces.ExceptionAndLogHandlerI;
+
 public class ExceptionAndLogHandler {
     private static ExceptionAndLogHandlerI exceptionAndLogHandler = new ExceptionAndLogHandlerSimple();
+
+    public static void adjustLogging(Config cfg) throws IOException {
+        ExceptionAndLogHandler.exceptionAndLogHandler.adjustLogging(cfg);
+    }
 
     private static ExceptionAndLogHandlerI getExceptionAndLogHandler() {
         if (ExceptionAndLogHandler.exceptionAndLogHandler instanceof ExceptionAndLogHandlerSimple) {

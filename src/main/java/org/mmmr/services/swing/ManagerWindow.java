@@ -1,4 +1,4 @@
-package org.mmmr.services;
+package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -24,7 +24,10 @@ import org.apache.log4j.Appender;
 import org.apache.log4j.Level;
 import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.Mod;
-import org.mmmr.services.FancySwing.MoveMouseListener;
+import org.mmmr.services.Config;
+import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.InstallationService;
+import org.mmmr.services.swing.FancySwing.MoveMouseListener;
 
 /**
  * @author Jurgen

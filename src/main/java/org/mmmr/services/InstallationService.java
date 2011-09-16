@@ -17,6 +17,7 @@ import org.mmmr.Dependency;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.Resource;
+import org.mmmr.services.swing.FancySwing;
 
 /**
  * @author Jurgen

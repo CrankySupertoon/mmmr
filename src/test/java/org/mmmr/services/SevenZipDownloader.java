@@ -16,8 +16,8 @@ public class SevenZipDownloader {
             File zip = new File("./data/tmp/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
             URL url = new URL(
                     "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/s/project/se/sevenzipjbind/7-Zip-JBinding/4.65-1.04rc-extr-only/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows.zip");
-            IOMethods.downloadURL(url, zip);
-            IOMethods.unzip(zip, new File("data/tmp/"));
+            DownloadingService.downloadURL(url, zip);
+            ArchiveService.extract(zip, new File("data/tmp/"));
 
             File jarFrom = new File("data/tmp/sevenzipjbinding-4.65-1.04-rc-extr-only-AllWindows/lib/sevenzipjbinding.jar");
             File jarTo = new File("data/libs/sevenzipjbinding.jar");

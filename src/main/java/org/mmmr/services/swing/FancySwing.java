@@ -1,4 +1,4 @@
-package org.mmmr.services;
+package org.mmmr.services.swing;
 
 import java.awt.Container;
 import java.awt.Frame;
@@ -13,6 +13,8 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import org.mmmr.services.ExceptionAndLogHandler;
 
 /**
  * http://java.sun.com/developer/technicalArticles/GUI/translucent_shaped_windows/
@@ -104,6 +106,7 @@ public class FancySwing {
 
     public static void lookAndFeel() {
         try {
+            // UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);

@@ -1,4 +1,4 @@
-package org.mmmr.services;
+package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -18,13 +18,14 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import org.mmmr.services.FancySwing.MoveMouseListener;
+import org.mmmr.services.Config;
+import org.mmmr.services.swing.FancySwing.MoveMouseListener;
 
 /**
  * @author Jurgen
  */
 public class StatusWindow extends JFrame {
-    public class StatusPanel extends JPanel {
+    public class StatusPanel extends JPanel implements StatusListener {
         private static final long serialVersionUID = 6282395518853882621L;
 
         private JLabel statuslabel;
@@ -39,6 +40,10 @@ public class StatusWindow extends JFrame {
             this.add(this.statuslabel, BorderLayout.CENTER);
         }
 
+        /**
+         * 
+         * @see javax.swing.JComponent#setEnabled(boolean)
+         */
         @Override
         public void setEnabled(boolean enabled) {
             super.setEnabled(enabled);
@@ -47,6 +52,11 @@ public class StatusWindow extends JFrame {
             }
         }
 
+        /**
+         * 
+         * @see org.mmmr.services.swing.StatusListener#setStatus(java.lang.String, java.lang.Boolean)
+         */
+        @Override
         public void setStatus(String text, Boolean success) {
             this.statuslabel.setText(text);
             this.statuslabel.setIcon(success == null ? StatusWindow.getIcon("images/bullet_yellow_x4.png") : success ? StatusWindow

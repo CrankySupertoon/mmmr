@@ -1,4 +1,4 @@
-package org.mmmr.services;
+package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,9 +26,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import org.mmmr.services.FancySwing.MoveMouseListener;
+import org.mmmr.services.Config;
+import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.IOMethods;
 import org.mmmr.services.IOMethods.MemInfo;
-import org.mmmr.services.swing.VerticalTableHeaderCellRenderer;
+import org.mmmr.services.MMMR;
+import org.mmmr.services.swing.FancySwing.MoveMouseListener;
 
 public class JavaOptionsWindow extends JFrame {
     private class CellRenderer extends DefaultTableCellRenderer {
@@ -63,6 +66,16 @@ public class JavaOptionsWindow extends JFrame {
     }
 
     private static final long serialVersionUID = -2617077870487045855L;
+
+    public static void main(String[] args) {
+        try {
+            JavaOptionsWindow javaOptionsWindow = new JavaOptionsWindow(null);
+            javaOptionsWindow.packColumns();
+            javaOptionsWindow.setVisible(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     private Config cfg;
 

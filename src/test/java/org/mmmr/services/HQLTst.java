@@ -9,7 +9,7 @@ import org.mmmr.MCFile;
  * 
  * @author Jurgen
  */
-public class HQLTest {
+public class HQLTst {
     public static void main(String[] args) {
         try {
             Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
