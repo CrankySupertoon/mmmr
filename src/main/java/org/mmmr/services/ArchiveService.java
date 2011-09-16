@@ -18,7 +18,7 @@ public class ArchiveService {
             try {
                 ArchiveService.archiveService = (ArchiveServiceI) Class.forName("org.mmmr.services.impl.ArchiveService7Zip").newInstance();
             } catch (Throwable ex) {
-                //
+                System.out.println(ex);
             }
         }
         return ArchiveService.archiveService;

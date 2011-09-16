@@ -17,10 +17,10 @@ public class DownloadingService {
     private static DownloadingServiceI getDownloadingService() {
         if (DownloadingService.downloadingService instanceof DownloadingServiceSimple) {
             try {
-                DownloadingService.downloadingService = (DownloadingServiceI) Class.forName("org.mmmr.services.DownloadingServiceHttpClient")
+                DownloadingService.downloadingService = (DownloadingServiceI) Class.forName("org.mmmr.services.impl.DownloadingServiceHttpClient")
                         .newInstance();
             } catch (Throwable ex) {
-                //
+                System.out.println(ex);
             }
         }
         return DownloadingService.downloadingService;
