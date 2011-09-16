@@ -8,7 +8,8 @@ public class ExceptionAndLogHandler {
             try {
                 ExceptionAndLogHandler.exceptionAndLogHandler = (ExceptionAndLogHandlerI) Class.forName(
                         "org.mmmr.services.ExceptionAndLogHandlerLog4j").newInstance();
-            } catch (Exception ex) {
+                ExceptionAndLogHandler.exceptionAndLogHandler.log("log4j over slf4j");
+            } catch (Throwable ex) {
                 //
             }
         }

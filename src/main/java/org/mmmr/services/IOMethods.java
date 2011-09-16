@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.zip.CRC32;
@@ -38,6 +40,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author Jurgen
  */
 public class IOMethods {
+    public static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.getDefault());
+
     static class MemInfo {
         public final long memfreemb;
 
@@ -118,12 +122,16 @@ public class IOMethods {
         conn.setDefaultUseCaches(true);
         conn.setReadTimeout(30 * 1000);
         conn.setUseCaches(true);
+        int total = conn.getContentLength();
+        int dl = 0;
         InputStream uin = conn.getInputStream();
         OutputStream fout = new FileOutputStream(target);
         byte[] buffer = new byte[1024 * 8];
         int read;
         while ((read = uin.read(buffer)) > 0) {
             fout.write(buffer, 0, read);
+            dl += read;
+            System.out.println(NUMBER_FORMAT.format(dl) + "/" + NUMBER_FORMAT.format(total));
         }
         fout.close();
         uin.close();
