@@ -1,0 +1,10 @@
+<mod archive="InvTweaks-1.31Beta-1.8.1.zip" name="Inventory Tweaks"
+	url="http://www.minecraftforum.net/topic/323444-"
+	version="1.31" mc="1.8.1">
+	<dependencies>
+		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+	</dependencies>	
+	<resources>
+		<resource sourcepath="./" targetpath="bin/minecraft.jar" exclude="doc" />
+	</resources>
+</mod>
