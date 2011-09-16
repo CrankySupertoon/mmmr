@@ -72,7 +72,7 @@ public class Config {
         this.thisFolder = thisFolder;
 
         this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/icon.png"));
-        this.mcVersion = "1.7.3";
+        this.mcVersion = "1.8.1";
         this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft " + this.mcVersion;
         this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar";
 
