@@ -245,19 +245,23 @@ public class ManagerWindow extends JFrame {
             });
             List<ModOption> options = new ArrayList<ModOption>();
             for (File modxml : modxmls) {
-                Mod availablemod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
-                // mod not fit for mc version
-                if ((availablemod.getMcVersionDependency() != null) && !availablemod.getMcVersionDependency().contains("?")) {
-                    if (!availablemod.getMcVersionDependency().equals(this.cfg.getMcVersion())) {
+                try {
+                    Mod availablemod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
+                    // mod not fit for mc version
+                    if ((availablemod.getMcVersionDependency() != null) && !availablemod.getMcVersionDependency().contains("?")) {
+                        if (!availablemod.getMcVersionDependency().equals(this.cfg.getMcVersion())) {
+                            continue;
+                        }
+                    }
+                    Mod installedmod = this.cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
+                    // mod already installed
+                    if ((installedmod != null) && installedmod.isInstalled()) {
                         continue;
                     }
+                    options.add(new ModOption(availablemod));
+                } catch (Exception ex) {
+                    ExceptionAndLogHandler.log(ex);
                 }
-                Mod installedmod = this.cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
-                // mod already installed
-                if ((installedmod != null) && installedmod.isInstalled()) {
-                    continue;
-                }
-                options.add(new ModOption(availablemod));
             }
             ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version",
                     "Select a version", JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon(), options.toArray(), options.get(0)));
@@ -292,6 +296,11 @@ public class ManagerWindow extends JFrame {
                     installedOption = modoption;
                 }
                 options.add(modoption);
+            }
+            if (options.size() == 0) {
+                JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "No compatible OptiFine mod configuration found.", "OptiFine",
+                        JOptionPane.INFORMATION_MESSAGE, this.cfg.getIcon());
+                return;
             }
             ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
             ModOption selected = installedOption == null ? selectionValues[0] : installedOption;

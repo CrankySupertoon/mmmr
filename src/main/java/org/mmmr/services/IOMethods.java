@@ -108,7 +108,8 @@ public class IOMethods {
     }
 
     public static boolean fileEquals(File f1, File f2) throws IOException {
-        return f1.exists() && f2.exists() && (f1.length() == f2.length()) && (IOMethods.crc32File(f1) == IOMethods.crc32File(f2));
+        return (f1.isDirectory() && f2.isDirectory())
+                || (f1.exists() && f2.exists() && (f1.length() == f2.length()) && (IOMethods.crc32File(f1) == IOMethods.crc32File(f2)));
     }
 
     /**
