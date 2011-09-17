@@ -27,9 +27,13 @@ import java.util.StringTokenizer;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.mmmr.services.swing.FancySwing;
 
 /**
  * @author Jurgen
@@ -318,5 +322,55 @@ public class IOMethods {
             return file;
         }
         return null;
+    }
+
+    public static boolean showConfirmation(Config cfg, String title, String message) {
+        JOptionPane jop = new JOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
+        JDialog dialog = jop.createDialog(FancySwing.getCurrentFrame(), title);
+        if (cfg != null) {
+            dialog.setIconImage(cfg.getIcon().getImage());
+        }
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
+        dialog.dispose();
+        return jop.getValue().equals(JOptionPane.YES_OPTION);
+    }
+
+    public static void showInformation(Config cfg, String title, String message) {
+        JOptionPane jop = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        JDialog dialog = jop.createDialog(FancySwing.getCurrentFrame(), title);
+        if (cfg != null) {
+            dialog.setIconImage(cfg.getIcon().getImage());
+        }
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
+        dialog.dispose();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T showOptions(Config cfg, String title, String message, T[] options, T selected) {
+        JOptionPane pane = new JOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, null, null);
+        pane.setWantsInput(true);
+        pane.setSelectionValues(options);
+        pane.setInitialSelectionValue(selected);
+        JDialog dialog = pane.createDialog(FancySwing.getCurrentFrame(), title);
+        if (cfg != null) {
+            dialog.setIconImage(cfg.getIcon().getImage());
+        }
+        pane.selectInitialValue();
+        dialog.setVisible(true);
+        dialog.dispose();
+        return (T) pane.getInputValue();
+    }
+
+    public static void showWarning(Config cfg, String title, String message) {
+        JOptionPane jop = new JOptionPane(message, JOptionPane.ERROR_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        JDialog dialog = jop.createDialog(FancySwing.getCurrentFrame(), title);
+        if (cfg != null) {
+            dialog.setIconImage(cfg.getIcon().getImage());
+        }
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
+        dialog.dispose();
     }
 }

@@ -17,7 +17,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import org.apache.log4j.Appender;
@@ -26,6 +25,7 @@ import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.IOMethods;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.swing.FancySwing.MoveMouseListener;
 
@@ -106,7 +106,7 @@ public class ManagerWindow extends JFrame {
 
     private void addActions(Container mainpanel) {
         {
-            JButton comp = new JButton("Change startup configuration (performance related)");
+            JButton comp = new JButton("Change startup configuration (performance related).");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
@@ -127,7 +127,7 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Install OptiFine (performance mod & HD texture enabler)");
+            JButton comp = new JButton("Install OptiFine (performance mod & HD texture enabler).");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
@@ -138,7 +138,7 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Install mods");
+            JButton comp = new JButton("Install mods.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
@@ -149,64 +149,61 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Uninstall mods");
+            JButton comp = new JButton("Uninstall mods.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // TODO
-                    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
+                    IOMethods.showWarning(ManagerWindow.this.cfg, "Uninstall mods.", "Not implemented yet.");
                 }
             });
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Change mod order and resolve conflicts");
+            JButton comp = new JButton("Change mod order and resolve conflicts.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // TODO
-                    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
+                    IOMethods.showWarning(ManagerWindow.this.cfg, "Change mod order and resolve conflicts.", "Not implemented yet.");
                 }
             });
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Change sex");
+            JButton comp = new JButton("Change sex.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // TODO
-                    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
+                    IOMethods.showWarning(ManagerWindow.this.cfg, "Change sex.", "Not implemented yet.");
+
                 }
             });
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Backup and restore worlds/stats/etc");
+            JButton comp = new JButton("Backup and restore worlds/stats/etc.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // TODO
-                    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Not implemented yet.");
+                    IOMethods.showWarning(ManagerWindow.this.cfg, "Backup and restore worlds/stats/etc.", "Not implemented yet.");
+
                 }
             });
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Change MMMR logging level");
+            JButton comp = new JButton("Change MMMR logging level.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         Level[] levels = { Level.TRACE, Level.DEBUG, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF };
-                        Level level = Level.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Choose logging level", "Logging",
-                                JOptionPane.QUESTION_MESSAGE, ManagerWindow.this.cfg.getIcon(), levels, org.apache.log4j.Logger.getRootLogger()
-                                        .getLevel()));
+                        Level level = IOMethods.showOptions(ManagerWindow.this.cfg, "Choose logging level.", "Choose logging level.", levels,
+                                org.apache.log4j.Logger.getRootLogger().getLevel());
                         if (level != null) {
                             ManagerWindow.this.cfg.setProperty("logging.level", String.valueOf(level));
                             org.apache.log4j.Logger.getRootLogger().setLevel(level);
@@ -264,12 +261,11 @@ public class ManagerWindow extends JFrame {
                 }
             }
             if (options.size() == 0) {
-                JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "No compatible not-installed mods found.", "Install mods",
-                        JOptionPane.INFORMATION_MESSAGE, this.cfg.getIcon());
+                IOMethods.showInformation(this.cfg, "Install mods.", "No compatible not-installed mods found.");
                 return;
             }
-            ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version:", "Install mods",
-                    JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon(), options.toArray(), options.get(0)));
+            ModOption selected = IOMethods.showOptions(this.cfg, "Install mods.", "Select a version:",
+                    options.toArray(new ModOption[options.size()]), options.get(0));
             if (selected != null) {
                 this.iserv.installMod(this.cfg, selected.getMod());
             }
@@ -303,14 +299,12 @@ public class ManagerWindow extends JFrame {
                 options.add(modoption);
             }
             if (options.size() == 0) {
-                JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "No compatible OptiFine mod configuration found.", "OptiFine",
-                        JOptionPane.INFORMATION_MESSAGE, this.cfg.getIcon());
+                IOMethods.showInformation(this.cfg, "OptiFine.", "No compatible OptiFine mod configuration found.");
                 return;
             }
             ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
             ModOption selected = installedOption == null ? selectionValues[0] : installedOption;
-            selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version", "Select a version",
-                    JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon(), selectionValues, selected));
+            selected = IOMethods.showOptions(this.cfg, "OptiFine.", "Select a version.", selectionValues, selected);
             if (selected != null) {
                 Mod mod = ModOption.class.cast(selected).getMod();
                 if (installed != null) {

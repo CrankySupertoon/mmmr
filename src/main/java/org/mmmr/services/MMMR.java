@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBException;
 
 import org.mmmr.MC;
@@ -18,7 +17,6 @@ import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.ModPack;
 import org.mmmr.Resource;
-import org.mmmr.services.swing.FancySwing;
 import org.mmmr.services.swing.StatusWindow;
 
 /**
@@ -263,14 +261,11 @@ public class MMMR implements MMMRI {
                         }
                     }
                     this.statusWindow.getMcstatus().setStatus("Minecraft: downloaded", null);
-                    JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(),
-                            "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.", "",
-                            JOptionPane.INFORMATION_MESSAGE, this.cfg.getIcon());
+                    IOMethods.showInformation(this.cfg, "Minecraft.",
+                            "Minecraft will now start up.\nLog in and let it update all files.\nClick Ok to start Minecraft.");
                     this.startMC(true);
                     MMMR.writeMCBat(this.cfg);
-                    if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(),
-                            "After you started Minecraft once.\nDid Minecraft run properly?", "", JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon())) {
+                    if (!IOMethods.showConfirmation(this.cfg, "Minecraft.", "After you started Minecraft once.\nDid Minecraft run properly?")) {
                         error = "installing and running Minecraft";
                         IOMethods.deleteDirectory(this.cfg.getMcBaseFolder());
                         for (i = 0; i < files.length; i++) {
@@ -295,9 +290,7 @@ public class MMMR implements MMMRI {
 
             if (mccheck) {
                 if (!this.cfg.getMcJarBackup().exists() && !"true".equals(this.cfg.getProperty("jogbox.ignore", "?"))) {
-                    if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(),
-                            "Do you want to install YogBox?\nYou need to have it downloaded already.", "YogBox", JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon())) {
+                    if (IOMethods.showConfirmation(this.cfg, "YogBox.", "Do you want to install YogBox?\nYou need to have it downloaded already.")) {
                         try {
                             File jbinstaller = IOMethods.selectFile(this.cfg.getThisFolder(), new javax.swing.filechooser.FileFilter() {
                                 @Override
@@ -332,8 +325,7 @@ public class MMMR implements MMMRI {
                             pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath());
                             pb.start();
 
-                            JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "After you installed the YogBox.\nContinue.", "",
-                                    JOptionPane.INFORMATION_MESSAGE, this.cfg.getIcon());
+                            IOMethods.showInformation(this.cfg, "YogBox.", "After you installed the YogBox.\nContinue.");
 
                             ArchiveService.extract(this.cfg.getMcJar(), this.cfg.getMcJogboxBackup());
                             this.removeOriginalFiles(this.cfg.getMcJogboxBackup().getAbsolutePath().length() + 1, this.cfg.getMcJogboxBackup(),
@@ -417,8 +409,7 @@ public class MMMR implements MMMRI {
             allSuccess = mccheck && ybcheck;
 
             if (!allSuccess) {
-                if (JOptionPane.NO_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), "Error during: " + error
-                        + "\nDo you want to try again?", "Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, this.cfg.getIcon())) {
+                if (!IOMethods.showConfirmation(this.cfg, "Error.", "Error during: " + error + "\nDo you want to try again?")) {
                     System.exit(0);
                 }
             } else {

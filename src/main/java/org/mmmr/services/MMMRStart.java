@@ -2,6 +2,9 @@ package org.mmmr.services;
 
 import java.awt.Font;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.swing.JLabel;
@@ -15,14 +18,43 @@ import org.mmmr.services.swing.StatusWindow;
  */
 public class MMMRStart {
 
+    private static void checkBat(Config cfg) throws IOException {
+        File bnc = new File("start minecraft no-console.bat");
+        if (!bnc.exists()) {
+            InputStream in = MMMRStart.class.getResourceAsStream("bat/start minecraft no-console.bat");
+            byte[] buffer = new byte[in.available()];
+            in.read(buffer);
+            in.close();
+            FileOutputStream bnco = new FileOutputStream(bnc);
+            bnco.write(buffer);
+            bnco.close();
+        }
+        File nc = new File("start minecraft console.bat");
+        if (!nc.exists()) {
+            InputStream in = MMMRStart.class.getResourceAsStream("bat/start minecraft console.bat");
+            byte[] buffer = new byte[in.available()];
+            in.read(buffer);
+            in.close();
+            FileOutputStream bnco = new FileOutputStream(nc);
+            bnco.write(buffer);
+            bnco.close();
+        }
+        if ((cfg.getParameterValue("console") == null) && (cfg.getParameterValue("dev") == null)) {
+            IOMethods.showInformation(cfg, "Running Minecraft Mod Manager Reloaded",
+                    "Start with Batch File 'start minecraft console' or 'start minecraft no-console'");
+            throw new IllegalArgumentException();
+        }
+    }
+
     public static void main(String[] args) {
         try {
             FancySwing.lookAndFeel();
+            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
+            MMMRStart.checkBat(cfg);
             ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
             toolTipManager.setInitialDelay(100);
             toolTipManager.setReshowDelay(100);
-            toolTipManager.setDismissDelay(5000);
-            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
+            toolTipManager.setDismissDelay(7500);
             MMMRStart.prepareFont(cfg);
             StatusWindow statusWindow = new StatusWindow(cfg);
             statusWindow.setVisible(true);

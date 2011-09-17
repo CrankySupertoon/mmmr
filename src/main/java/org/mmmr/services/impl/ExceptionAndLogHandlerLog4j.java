@@ -3,14 +3,12 @@ package org.mmmr.services.impl;
 import java.io.IOException;
 import java.util.Enumeration;
 
-import javax.swing.JOptionPane;
-
 import org.apache.log4j.Appender;
 import org.apache.log4j.Level;
 import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.services.Config;
+import org.mmmr.services.IOMethods;
 import org.mmmr.services.interfaces.ExceptionAndLogHandlerI;
-import org.mmmr.services.swing.FancySwing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +58,7 @@ public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
     @Override
     public void handle(Config cfg, String title, String message, Exception ex) {
         this.log(ex);
-        JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), message, title, JOptionPane.ERROR_MESSAGE, cfg.getIcon());
+        IOMethods.showWarning(cfg, title, message);
     }
 
     /**

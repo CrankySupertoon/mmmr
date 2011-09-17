@@ -2,11 +2,9 @@ package org.mmmr.services.impl;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
-
 import org.mmmr.services.Config;
+import org.mmmr.services.IOMethods;
 import org.mmmr.services.interfaces.ExceptionAndLogHandlerI;
-import org.mmmr.services.swing.FancySwing;
 
 public class ExceptionAndLogHandlerSimple implements ExceptionAndLogHandlerI {
     /**
@@ -26,7 +24,7 @@ public class ExceptionAndLogHandlerSimple implements ExceptionAndLogHandlerI {
     @Override
     public void handle(Config cfg, String title, String message, Exception ex) {
         this.log(ex);
-        JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), message, title, JOptionPane.ERROR_MESSAGE, cfg.getIcon());
+        IOMethods.showWarning(cfg, title, message);
     }
 
     /**

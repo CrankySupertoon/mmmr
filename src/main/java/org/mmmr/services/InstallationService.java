@@ -11,13 +11,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.swing.JOptionPane;
-
 import org.mmmr.Dependency;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.Resource;
-import org.mmmr.services.swing.FancySwing;
 
 /**
  * @author Jurgen
@@ -124,8 +121,7 @@ public class InstallationService {
                     sb.append("    ").append(conflict).append("\n");
                 }
                 sb.append("\nInstall anyways?");
-                if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(FancySwing.getCurrentFrame(), sb.toString(), "Conflicts",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, cfg.getIcon())) {
+                if (IOMethods.showConfirmation(cfg, "Conflicts.", sb.toString())) {
                     this.installMod(cfg, mod, toCopy, ignored, fileResource);
                 }
             } else {
@@ -144,7 +140,7 @@ public class InstallationService {
     private void installMod(Config cfg, Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
         this.copy(cfg, mod, fileResource, toCopy, ignored);
         cfg.getDb().save(mod);
-        JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "Mod installed.", "", JOptionPane.INFORMATION_MESSAGE, cfg.getIcon());
+        IOMethods.showInformation(cfg, "Install mods.", "Mod installed.");
     }
 
     @SuppressWarnings("unused")
