@@ -110,7 +110,8 @@ public class Config {
         this.backup = IOMethods.newDir(this.data, "backup");
         this.mods = IOMethods.newDir(this.data, "mods");
         this.libs = IOMethods.newDir(this.data, "libs");
-        this.tmp = IOMethods.newDir(this.data, "tmp");
+        this.tmp = new File(System.getProperty("java.io.tmpdir"));
+        this.tmp.deleteOnExit();
         this.logs = IOMethods.newDir(this.data, "logs");
         this.dbdir = new File(this.data, "db");
         this.backupOriginalJar = IOMethods.newDir(this.backup, "minecraft.jar");
