@@ -106,8 +106,12 @@ public class FancySwing {
 
     public static void lookAndFeel() {
         try {
-            // UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            try {
+                UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            } catch (Exception ex) {
+                ExceptionAndLogHandler.log(ex);
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);
         }

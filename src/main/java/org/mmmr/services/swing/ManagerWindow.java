@@ -113,7 +113,7 @@ public class ManagerWindow extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     try {
                         if (ManagerWindow.this.javaOptionsWindow == null) {
-                            ManagerWindow.this.javaOptionsWindow = new JavaOptionsWindow(ManagerWindow.this.cfg);
+                            ManagerWindow.this.javaOptionsWindow = new JavaOptionsWindow(ManagerWindow.this.cfg, ManagerWindow.this.getSize());
                             ManagerWindow.this.javaOptionsWindow.packColumns();
                             ManagerWindow.this.javaOptionsWindow.setLocationRelativeTo(null);
                         }
@@ -263,8 +263,13 @@ public class ManagerWindow extends JFrame {
                     ExceptionAndLogHandler.log(ex);
                 }
             }
-            ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version",
-                    "Select a version", JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon(), options.toArray(), options.get(0)));
+            if (options.size() == 0) {
+                JOptionPane.showMessageDialog(FancySwing.getCurrentFrame(), "No compatible not-installed mods found.", "Install mods",
+                        JOptionPane.INFORMATION_MESSAGE, this.cfg.getIcon());
+                return;
+            }
+            ModOption selected = ModOption.class.cast(JOptionPane.showInputDialog(FancySwing.getCurrentFrame(), "Select a version:", "Install mods",
+                    JOptionPane.QUESTION_MESSAGE, this.cfg.getIcon(), options.toArray(), options.get(0)));
             if (selected != null) {
                 this.iserv.installMod(this.cfg, selected.getMod());
             }

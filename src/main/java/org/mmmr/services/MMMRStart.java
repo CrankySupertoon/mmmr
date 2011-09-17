@@ -5,6 +5,7 @@ import java.io.File;
 import java.net.URL;
 
 import javax.swing.JLabel;
+import javax.swing.ToolTipManager;
 
 import org.mmmr.services.swing.FancySwing;
 import org.mmmr.services.swing.StatusWindow;
@@ -17,6 +18,10 @@ public class MMMRStart {
     public static void main(String[] args) {
         try {
             FancySwing.lookAndFeel();
+            ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
+            toolTipManager.setInitialDelay(100);
+            toolTipManager.setReshowDelay(100);
+            toolTipManager.setDismissDelay(5000);
             Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
             MMMRStart.prepareFont(cfg);
             StatusWindow statusWindow = new StatusWindow(cfg);

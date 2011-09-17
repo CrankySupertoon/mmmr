@@ -59,8 +59,8 @@ public class StatusWindow extends JFrame {
         @Override
         public void setStatus(String text, Boolean success) {
             this.statuslabel.setText(text);
-            this.statuslabel.setIcon(success == null ? StatusWindow.getIcon("images/bullet_yellow_x4.png") : success ? StatusWindow
-                    .getIcon("images/bullet_green_x4.png") : StatusWindow.getIcon("images/bullet_red_x4.png"));
+            this.statuslabel.setIcon(success == null ? StatusWindow.getIcon("images/waiting.png") : success ? StatusWindow.getIcon("images/ok.png")
+                    : StatusWindow.getIcon("images/nok.png"));
         }
     }
 
@@ -99,7 +99,7 @@ public class StatusWindow extends JFrame {
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
         mainpanel.add(label, BorderLayout.CENTER);
-        String bullet = "images/bullet_yellow_x4.png";
+        String bullet = "images/waiting.png";
         this.libstatus = new StatusPanel("Program libraries", bullet);
         mainpanel.add(this.libstatus);
         this.dbstatus = new StatusPanel("Database and Hibernate", bullet);

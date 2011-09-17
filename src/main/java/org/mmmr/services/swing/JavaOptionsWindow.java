@@ -3,19 +3,25 @@ package org.mmmr.services.swing;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -23,8 +29,10 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
@@ -39,7 +47,10 @@ public class JavaOptionsWindow extends JFrame {
 
         @Override
         public Component getTableCellRendererComponent(JTable jtable, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component renderer = super.getTableCellRendererComponent(jtable, value, isSelected, hasFocus, row, column);
+            JLabel renderer = (JLabel) super.getTableCellRendererComponent(jtable, value, isSelected, hasFocus, row, column);
+            if (value != null) {
+                renderer.setToolTipText(String.valueOf(value));
+            }
             if (JavaOptionsWindow.this.cfg != null) {
                 this.setFont(JavaOptionsWindow.this.cfg.getFont18().deriveFont(10f));
             }
@@ -65,17 +76,48 @@ public class JavaOptionsWindow extends JFrame {
         }
     }
 
-    private static final long serialVersionUID = -2617077870487045855L;
+    @SuppressWarnings("rawtypes")
+    public class ColumnHeaderToolTips extends MouseMotionAdapter {
+        // Current column whose tooltip is being displayed.
+        // This variable is used to minimize the calls to setToolTipText().
+        TableColumn curCol;
 
-    public static void main(String[] args) {
-        try {
-            JavaOptionsWindow javaOptionsWindow = new JavaOptionsWindow(null);
-            javaOptionsWindow.packColumns();
-            javaOptionsWindow.setVisible(true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        // Maps TableColumn objects to tooltips
+
+        Map tips = new HashMap();
+
+        @Override
+        public void mouseMoved(MouseEvent evt) {
+            TableColumn col = null;
+            JTableHeader header = (JTableHeader) evt.getSource();
+            @SuppressWarnings("hiding")
+            JTable table = header.getTable();
+            TableColumnModel colModel = table.getColumnModel();
+            int vColIndex = colModel.getColumnIndexAtX(evt.getX());
+
+            // Return if not clicked on any column header
+            if (vColIndex >= 0) {
+                col = colModel.getColumn(vColIndex);
+            }
+
+            if (col != this.curCol) {
+                header.setToolTipText((String) this.tips.get(col));
+                this.curCol = col;
+            }
+        }
+
+        // If tooltip is null, removes any tooltip text.
+        @SuppressWarnings("unchecked")
+        public void setToolTip(TableColumn col, String tooltip) {
+            if (tooltip == null) {
+                this.tips.remove(col);
+            } else {
+                this.tips.put(col, tooltip);
+            }
         }
     }
+
+    private static final long serialVersionUID = -2617077870487045855L;
 
     private Config cfg;
 
@@ -96,7 +138,7 @@ public class JavaOptionsWindow extends JFrame {
 
     private JTable table;
 
-    public JavaOptionsWindow(final Config cfg) throws HeadlessException, IOException {
+    public JavaOptionsWindow(final Config cfg, Dimension preferredSize) throws HeadlessException, IOException {
         Color selectionColor = Color.class.cast(UIManager.get("Table.selectionBackground"));
         this.red = Color.RED.darker();
         this.redSelected = selectionColor == null ? this.red : new Color(Math.max(this.red.getRed(), selectionColor.getRed()), Math.max(
@@ -161,7 +203,7 @@ public class JavaOptionsWindow extends JFrame {
         this.setUndecorated(true);
         FancySwing.translucent(this);
         this.pack();
-        this.setSize(800, this.getHeight());
+        this.setSize(preferredSize);
         FancySwing.rounded(this);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -286,13 +328,20 @@ public class JavaOptionsWindow extends JFrame {
         };
         this.table = new JTable(model);
 
+        ColumnHeaderToolTips tips = new ColumnHeaderToolTips();
         TableCellRenderer headerRenderer = new VerticalTableHeaderCellRenderer();
         Enumeration<TableColumn> columns = this.table.getColumnModel().getColumns();
+        int index = 0;
         while (columns.hasMoreElements()) {
             TableColumn tc = columns.nextElement();
             tc.setHeaderRenderer(headerRenderer);
             tc.setCellRenderer(new CellRenderer());
+            tips.setToolTip(tc, this.columnNames.get(index++));
         }
+        JTableHeader tableHeader = this.table.getTableHeader();
+        tableHeader.addMouseMotionListener(tips);
+        tableHeader.setReorderingAllowed(false);
+        tableHeader.setResizingAllowed(false);
 
         return this.table;
     }
