@@ -1,0 +1,10 @@
+<mod archive="minecraft-mipmap-20-dev.zip" name="Mip-mapping patch"
+	url="http://www.minecraftforum.net/topic/121092-"
+	version="1.8" mc="1.8.1">
+	<dependencies>
+		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+	</dependencies>	
+	<resources>
+		<resource sourcepath="./" targetpath="bin/minecraft.jar" />
+	</resources>
+</mod>
