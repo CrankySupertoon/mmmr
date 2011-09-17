@@ -30,7 +30,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -156,10 +155,12 @@ public class JavaOptionsWindow extends JFrame {
         RoundedPanel mainpanel = new RoundedPanel(new BorderLayout());
         mainpanel.setShady(false);
         new MoveMouseListener(mainpanel);
-        mainpanel.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
+        mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         this.getContentPane().add(mainpanel);
 
         final JTable jtable = this.getOptions();
+        jtable.setBorder(BorderFactory.createRaisedBevelBorder());
+        jtable.getTableHeader().setBorder(BorderFactory.createRaisedBevelBorder());
         mainpanel.add(jtable, BorderLayout.CENTER);
         mainpanel.add(jtable.getTableHeader(), BorderLayout.NORTH);
 
@@ -329,7 +330,7 @@ public class JavaOptionsWindow extends JFrame {
         this.table = new JTable(model);
 
         ColumnHeaderToolTips tips = new ColumnHeaderToolTips();
-        TableCellRenderer headerRenderer = new VerticalTableHeaderCellRenderer();
+        VerticalTableHeaderCellRenderer headerRenderer = new VerticalTableHeaderCellRenderer();
         Enumeration<TableColumn> columns = this.table.getColumnModel().getColumns();
         int index = 0;
         while (columns.hasMoreElements()) {

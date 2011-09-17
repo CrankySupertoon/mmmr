@@ -19,9 +19,9 @@ import org.mmmr.services.swing.StatusWindow;
 public class MMMRStart {
 
     private static void checkBat(Config cfg) throws IOException {
-        File bnc = new File("start minecraft no-console.bat");
+        File bnc = new File("start MMMR no-console.bat");
         if (!bnc.exists()) {
-            InputStream in = MMMRStart.class.getResourceAsStream("bat/start minecraft no-console.bat");
+            InputStream in = MMMRStart.class.getClassLoader().getResourceAsStream("bat/start MMMR no-console.bat");
             byte[] buffer = new byte[in.available()];
             in.read(buffer);
             in.close();
@@ -29,9 +29,9 @@ public class MMMRStart {
             bnco.write(buffer);
             bnco.close();
         }
-        File nc = new File("start minecraft console.bat");
+        File nc = new File("start MMMR console.bat");
         if (!nc.exists()) {
-            InputStream in = MMMRStart.class.getResourceAsStream("bat/start minecraft console.bat");
+            InputStream in = MMMRStart.class.getClassLoader().getResourceAsStream("bat/start MMMR console.bat");
             byte[] buffer = new byte[in.available()];
             in.read(buffer);
             in.close();
