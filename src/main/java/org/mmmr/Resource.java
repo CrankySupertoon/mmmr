@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessOrder;
+import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -27,7 +29,8 @@ import org.hibernate.annotations.Cascade;
 /**
  * @author Jurgen
  */
-@XmlRootElement
+@XmlRootElement(name = "resource")
+@XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @Entity
 public class Resource implements Comparable<Resource>, PersistentObject {
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "resource")

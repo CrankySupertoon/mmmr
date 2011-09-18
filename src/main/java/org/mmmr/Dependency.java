@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessOrder;
+import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -22,6 +24,7 @@ import org.hibernate.annotations.Cascade;
  * @author Jurgen
  */
 @XmlRootElement(name = "mod")
+@XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @Entity
 public class Dependency implements Comparable<Dependency>, PersistentObject {
     @Id

@@ -40,6 +40,9 @@ import org.mmmr.services.IOMethods.MemInfo;
 import org.mmmr.services.MMMR;
 import org.mmmr.services.swing.FancySwing.MoveMouseListener;
 
+/**
+ * @author Jurgen
+ */
 public class JavaOptionsWindow extends JFrame {
     private class CellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = -9161606663652528876L;

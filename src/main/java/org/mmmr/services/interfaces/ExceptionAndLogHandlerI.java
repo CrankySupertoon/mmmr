@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.mmmr.services.Config;
 
+/**
+ * @author Jurgen
+ */
 public interface ExceptionAndLogHandlerI {
     public abstract void adjustLogging(Config cfg) throws IOException;
 

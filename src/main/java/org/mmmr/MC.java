@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessOrder;
+import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -26,6 +28,7 @@ import org.hibernate.annotations.Cascade;
  * @author Jurgen
  */
 @XmlRootElement(name = "mc")
+@XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "mc_version", columnNames = { "version" }) })
 public class MC implements Comparable<MC>, PersistentObject {

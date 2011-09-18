@@ -32,7 +32,7 @@ public class XmlService {
         this.init(cfg);
     }
 
-    void init(Config cfg) throws JAXBException, SAXException, IOException {
+    private void init(Config cfg) throws JAXBException, SAXException, IOException {
         String contextPath = Mod.class.getPackage().getName();
         final File xsdfile = new File(cfg.getData(), contextPath + ".xsd");
         JAXBContext context = JAXBContext.newInstance(contextPath);

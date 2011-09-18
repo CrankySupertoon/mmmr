@@ -7,6 +7,9 @@ import java.net.URL;
 import org.mmmr.services.impl.DownloadingServiceSimple;
 import org.mmmr.services.interfaces.DownloadingServiceI;
 
+/**
+ * @author Jurgen
+ */
 public class DownloadingService {
     private static DownloadingServiceI downloadingService = new DownloadingServiceSimple();
 

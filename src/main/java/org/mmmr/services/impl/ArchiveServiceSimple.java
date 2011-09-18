@@ -10,6 +10,9 @@ import java.util.zip.ZipInputStream;
 
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
+/**
+ * @author Jurgen
+ */
 public class ArchiveServiceSimple implements ArchiveServiceI {
     @Override
     public void extract(File archive, File out) throws IOException {

@@ -6,6 +6,9 @@ import java.io.IOException;
 import org.mmmr.services.impl.ArchiveServiceSimple;
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
+/**
+ * @author Jurgen
+ */
 public class ArchiveService {
     private static ArchiveServiceI archiveService = new ArchiveServiceSimple();
 
@@ -23,5 +26,4 @@ public class ArchiveService {
         }
         return ArchiveService.archiveService;
     }
-
 }

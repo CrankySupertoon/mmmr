@@ -139,6 +139,16 @@ public class InstallationService {
 
     private void installMod(Config cfg, Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
         this.copy(cfg, mod, fileResource, toCopy, ignored);
+        Integer max1 = cfg.getDb().hql("select max(installOrder) from Mod", Integer.class).get(0);
+        Integer max2 = cfg.getDb().hql("select max(installOrder) from ModPack", Integer.class).get(0);
+        if (max1 == null) {
+            max1 = 0;
+        }
+        if (max2 == null) {
+            max2 = 0;
+        }
+        int max = Math.max(max1, max2) + 1;
+        mod.setInstallOrder(max);
         cfg.getDb().save(mod);
         IOMethods.showInformation(cfg, "Install mods.", "Mod installed.");
     }

@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessOrder;
+import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -30,6 +32,7 @@ import org.hibernate.annotations.Cascade;
  * @author Jurgen
  */
 @XmlRootElement(name = "modpack")
+@XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "modpack_name_version", columnNames = { "name", "version" }) })
 public class ModPack implements Comparable<ModPack>, PersistentObject {
@@ -40,6 +43,8 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
     private Long id;
 
     private Date installationDate;
+
+    private int installOrder;
 
     private String mcVersionDependency;
 
@@ -116,6 +121,11 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
         return this.installationDate;
     }
 
+    @XmlTransient
+    public int getInstallOrder() {
+        return this.installOrder;
+    }
+
     @XmlAttribute(name = "mc")
     public String getMcVersionDependency() {
         return this.mcVersionDependency;
@@ -163,6 +173,10 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 
     public void setInstallationDate(Date installationDate) {
         this.installationDate = installationDate;
+    }
+
+    public void setInstallOrder(int installOrder) {
+        this.installOrder = installOrder;
     }
 
     public void setMcVersionDependency(String mcVersionDependency) {

@@ -16,6 +16,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.mmmr.services.Config;
 import org.mmmr.services.interfaces.DownloadingServiceI;
 
+/**
+ * @author Jurgen
+ */
 public class DownloadingServiceHttpClient implements DownloadingServiceI {
     @Override
     public void downloadURL(URL url, File target) throws IOException {

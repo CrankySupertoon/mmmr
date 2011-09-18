@@ -5,6 +5,9 @@ import java.io.IOException;
 import org.mmmr.services.impl.ExceptionAndLogHandlerSimple;
 import org.mmmr.services.interfaces.ExceptionAndLogHandlerI;
 
+/**
+ * @author Jurgen
+ */
 public class ExceptionAndLogHandler {
     private static ExceptionAndLogHandlerI exceptionAndLogHandler = new ExceptionAndLogHandlerSimple();
 

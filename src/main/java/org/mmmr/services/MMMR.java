@@ -339,6 +339,7 @@ public class MMMR implements MMMRI {
                             xml.save(new FileOutputStream(file), jb);
 
                             jb.setInstallationDate(new Date());
+                            jb.setInstallOrder(1);
                             db.save(jb);
                             this.statusWindow.getYbstatus().setStatus("YogBox: ready", ybcheck = true);
                             this.cfg.setProperty("jogbox.ignore", "false");

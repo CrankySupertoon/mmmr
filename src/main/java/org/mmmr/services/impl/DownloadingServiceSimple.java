@@ -12,6 +12,9 @@ import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.interfaces.DownloadingServiceI;
 
+/**
+ * @author Jurgen
+ */
 public class DownloadingServiceSimple implements DownloadingServiceI {
     @Override
     public void downloadURL(URL url, File target) throws IOException {

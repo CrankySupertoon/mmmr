@@ -17,8 +17,7 @@ import javax.swing.UIManager;
 import org.mmmr.services.ExceptionAndLogHandler;
 
 /**
- * http://java.sun.com/developer/technicalArticles/GUI/translucent_shaped_windows/
- * 
+ * @see http://java.sun.com/developer/technicalArticles/GUI/translucent_shaped_windows/
  */
 public class FancySwing {
     public static class MoveMouseListener implements MouseListener, MouseMotionListener {

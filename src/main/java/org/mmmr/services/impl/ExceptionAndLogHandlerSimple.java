@@ -6,6 +6,9 @@ import org.mmmr.services.Config;
 import org.mmmr.services.IOMethods;
 import org.mmmr.services.interfaces.ExceptionAndLogHandlerI;
 
+/**
+ * @author Jurgen
+ */
 public class ExceptionAndLogHandlerSimple implements ExceptionAndLogHandlerI {
     /**
      * 
