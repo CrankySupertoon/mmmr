@@ -19,11 +19,10 @@ import net.sf.sevenzipjbinding.SevenZipException;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.SevenZipDownloader;
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
 /**
- * add data/libs/sevenzipjbinding.jar and data/libs/sevenzipjbinding-AllWindows.jar to the classpath after running {@link SevenZipDownloader}
+ * add data/libs/sevenzipjbinding.jar and data/libs/sevenzipjbinding-AllWindows.jar to the classpath after running SevenZipDownloader
  * 
  * @author Jurgen
  */

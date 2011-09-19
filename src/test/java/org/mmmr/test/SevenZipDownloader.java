@@ -1,7 +1,10 @@
-package org.mmmr.services;
+package org.mmmr.test;
 
 import java.io.File;
 import java.net.URL;
+
+import org.mmmr.services.ArchiveService;
+import org.mmmr.services.DownloadingService;
 
 /**
  * download 7zip buinding liberaries, standalone,for use in development

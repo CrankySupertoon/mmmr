@@ -1,8 +1,10 @@
-package org.mmmr.services;
+package org.mmmr.test;
 
 import java.io.File;
 
 import org.mmmr.MCFile;
+import org.mmmr.services.Config;
+import org.mmmr.services.DBService;
 
 /**
  * test hql fast

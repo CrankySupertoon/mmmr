@@ -1,7 +1,9 @@
-package org.mmmr.services;
+package org.mmmr.test;
 
 import java.io.File;
 import java.util.Scanner;
+
+import org.mmmr.services.IOMethods;
 
 /**
  * @author Jurgen
