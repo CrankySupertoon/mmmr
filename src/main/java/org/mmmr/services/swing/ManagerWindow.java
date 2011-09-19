@@ -156,7 +156,7 @@ public class ManagerWindow extends JFrame {
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    IOMethods.showWarning(ManagerWindow.this.cfg, "Uninstall mods.", "Not implemented yet.");
+                    new ModOptionsWindow(ManagerWindow.this.cfg).setVisible(true);
                 }
             });
             mainpanel.add(comp);
