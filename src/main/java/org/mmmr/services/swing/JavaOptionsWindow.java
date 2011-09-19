@@ -41,9 +41,9 @@ import org.mmmr.services.IOMethods;
 import org.mmmr.services.IOMethods.MemInfo;
 import org.mmmr.services.MMMR;
 import org.mmmr.services.swing.common.FancySwing;
+import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
 import org.mmmr.services.swing.common.VerticalTableHeaderCellRenderer;
-import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 
 /**
  * @author Jurgen

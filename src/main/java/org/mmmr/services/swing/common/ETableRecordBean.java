@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+/**
+ * @author jdlandsh
+ */
 public class ETableRecordBean implements ETableRecord {
     protected Object object;
 
@@ -24,7 +27,7 @@ public class ETableRecordBean implements ETableRecord {
 
     /**
      * 
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableRecord#get(int)
+     * @see org.mmmr.services.swing.common.ETableRecord#get(int)
      */
     @Override
     public Object get(int column) {
@@ -44,7 +47,7 @@ public class ETableRecordBean implements ETableRecord {
 
     /**
      * 
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableRecord#getBean()
+     * @see org.mmmr.services.swing.common.ETableRecord#getBean()
      */
     @Override
     public Object getBean() {
@@ -53,7 +56,7 @@ public class ETableRecordBean implements ETableRecord {
 
     /**
      * 
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableRecord#getStringValue(int)
+     * @see org.mmmr.services.swing.common.ETableRecord#getStringValue(int)
      */
     @Override
     public String getStringValue(int column) {
@@ -63,7 +66,7 @@ public class ETableRecordBean implements ETableRecord {
 
     /**
      * 
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableRecord#set(int, java.lang.Object)
+     * @see org.mmmr.services.swing.common.ETableRecord#set(int, java.lang.Object)
      */
     @Override
     public void set(int column, Object newValue) {
@@ -80,7 +83,7 @@ public class ETableRecordBean implements ETableRecord {
 
     /**
      * 
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableRecord#size()
+     * @see org.mmmr.services.swing.common.ETableRecord#size()
      */
     @Override
     public int size() {
@@ -88,6 +91,7 @@ public class ETableRecordBean implements ETableRecord {
     }
 
     /**
+     * 
      * @see java.lang.Object#toString()
      */
     @Override

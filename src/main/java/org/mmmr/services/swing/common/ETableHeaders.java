@@ -6,7 +6,7 @@ import java.util.Vector;
 import ca.odell.glazedlists.gui.WritableTableFormat;
 
 /**
- * J_DOC
+ * @author jdlandsh
  */
 public class ETableHeaders implements WritableTableFormat<ETableRecord> {
     protected final List<String> columnNames = new Vector<String>();

@@ -12,7 +12,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +33,7 @@ import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.SortedList;
 import ca.odell.glazedlists.gui.AbstractTableComparatorChooser;
+import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.matchers.AbstractMatcherEditor;
 import ca.odell.glazedlists.matchers.Matcher;
 import ca.odell.glazedlists.swing.EventSelectionModel;
@@ -41,145 +41,275 @@ import ca.odell.glazedlists.swing.EventTableModel;
 import ca.odell.glazedlists.swing.TableComparatorChooser;
 
 /**
- * J_DOC
- * 
  * @author jdlandsh
  */
 public class ETable extends JTable implements ETableI {
-    /**
-     * J_DOC
-     */
-    protected class FilterPopup extends JWindow {
-        /** serialVersionUID */
-        private static final long serialVersionUID = 5033445579635687866L;
-
-        protected JTextField popupTextfield = new JTextField();
-
-        protected int popupForColumn = -1;
-
-        protected Map<Integer, String> popupFilters = new HashMap<Integer, String>();
-
+    protected class EFiltering {
         /**
-         * Instantieer een nieuwe FilterPopup
-         * 
-         * @param frame
+         * J_DOC
          */
-        public FilterPopup(Frame frame) {
-            super(frame);
+        protected class FilterPopup extends JWindow {
+            /**
+             * J_DOC
+             */
+            protected class RecordMatcher implements Matcher<ETableRecord> {
+                protected final Pattern pattern;
 
-            this.popupTextfield.setBackground(new Color(246, 243, 149));
-            this.getContentPane().add(this.popupTextfield, BorderLayout.CENTER);
-            this.popupTextfield.setFocusTraversalKeysEnabled(false);
-            this.popupTextfield.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusLost(FocusEvent e) {
-                    FilterPopup.this.setVisible(false);
+                protected final int column;
+
+                /**
+                 * Instantieer een nieuwe RecordMatcher
+                 * 
+                 * @param column
+                 * @param text
+                 */
+                protected RecordMatcher(int column, String text) {
+                    this.column = column;
+                    this.pattern = text == null ? null : Pattern.compile(text, Pattern.CASE_INSENSITIVE);
                 }
-            });
-            this.popupTextfield.addKeyListener(new KeyAdapter() {
+
+                /**
+                 * @see ca.odell.glazedlists.matchers.Matcher#matches(java.lang.Object)
+                 */
                 @Override
-                public void keyReleased(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        // preview filtering
-                        System.out.println("preview filter " + FilterPopup.this.popupTextfield.getText());
-                        ETable.this.matcherEditor.fire(new RecordMatcher(FilterPopup.this.popupForColumn, FilterPopup.this.popupTextfield.getText()));
-                    } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                        // revert filtering, close
-                        System.out.println("revert filter");
-                        ETable.this.matcherEditor.fire(new RecordMatcher(FilterPopup.this.popupForColumn, FilterPopup.this.popupFilters
-                                .get(FilterPopup.this.popupForColumn)));
-                        FilterPopup.this.setVisible(false);
-                    } else if (e.getKeyCode() == KeyEvent.VK_TAB) {
-                        // commit filtering
-                        System.out.println("filter " + FilterPopup.this.popupTextfield.getText());
-                        ETable.this.matcherEditor.fire(new RecordMatcher(FilterPopup.this.popupForColumn, FilterPopup.this.popupTextfield.getText()));
-                        FilterPopup.this.popupFilters.put(FilterPopup.this.popupForColumn, FilterPopup.this.popupTextfield.getText());
-                        FilterPopup.this.setVisible(false);
-                    } else {
-                        //
+                public boolean matches(ETableRecord item) {
+                    if (this.pattern == null) {
+                        return true;
                     }
+                    String value = item.getStringValue(this.column);
+                    if (value == null) {
+                        return false;
+                    }
+                    return this.pattern.matcher(value).find();
                 }
-            });
+            }
+
+            /** serialVersionUID */
+            private static final long serialVersionUID = 5033445579635687866L;
+
+            protected JTextField popupTextfield = new JTextField();
+
+            protected int popupForColumn = -1;
+
+            protected Map<Integer, String> popupFilters = new HashMap<Integer, String>();
+
+            /**
+             * Instantieer een nieuwe FilterPopup
+             * 
+             * @param frame
+             */
+            protected FilterPopup(Frame frame) {
+                super(frame);
+
+                this.popupTextfield.setBackground(new Color(246, 243, 149));
+                this.getContentPane().add(this.popupTextfield, BorderLayout.CENTER);
+                this.popupTextfield.setFocusTraversalKeysEnabled(false);
+                this.popupTextfield.addFocusListener(new FocusAdapter() {
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        FilterPopup.this.setVisible(false);
+                    }
+                });
+                this.popupTextfield.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                            // preview filtering
+                            System.out.println("preview filter " + FilterPopup.this.popupTextfield.getText());
+                            ETable.this.filtering.matcherEditor.fire(new RecordMatcher(FilterPopup.this.popupForColumn,
+                                    FilterPopup.this.popupTextfield.getText()));
+                        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                            // revert filtering, close
+                            System.out.println("revert filter");
+                            ETable.this.filtering.matcherEditor.fire(new RecordMatcher(FilterPopup.this.popupForColumn, FilterPopup.this.popupFilters
+                                    .get(FilterPopup.this.popupForColumn)));
+                            FilterPopup.this.setVisible(false);
+                        } else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                            // commit filtering
+                            System.out.println("filter " + FilterPopup.this.popupTextfield.getText());
+                            ETable.this.filtering.matcherEditor.fire(new RecordMatcher(FilterPopup.this.popupForColumn,
+                                    FilterPopup.this.popupTextfield.getText()));
+                            FilterPopup.this.popupFilters.put(FilterPopup.this.popupForColumn, FilterPopup.this.popupTextfield.getText());
+                            FilterPopup.this.setVisible(false);
+                        } else {
+                            //
+                        }
+                    }
+                });
+            }
+
+            /**
+             * J_DOC
+             * 
+             * @param p
+             */
+            protected void activate(Point p) {
+                this.popupForColumn = ETable.this.getTableHeader().columnAtPoint(p);
+                String filter = this.popupFilters.get(this.popupForColumn);
+                this.popupTextfield.setText(filter);
+                Rectangle headerRect = ETable.this.getTableHeader().getHeaderRect(this.popupForColumn);
+                Point pt = ETable.this.getLocationOnScreen();
+                pt.translate(headerRect.x - 1, -headerRect.height - 1);
+                this.setLocation(pt);
+                this.setSize(headerRect.width, headerRect.height);
+                this.toFront();
+                this.setVisible(true);
+                this.requestFocusInWindow();
+                this.popupTextfield.requestFocusInWindow();
+            }
+
+            /**
+             * J_DOC
+             */
+            public void clear() {
+                this.popupFilters.clear();
+                this.popupForColumn = -1;
+            }
         }
 
         /**
          * J_DOC
-         * 
-         * @param p
          */
-        public void activate(Point p) {
-            this.popupForColumn = ETable.this.getTableHeader().columnAtPoint(p);
-            String filter = this.popupFilters.get(this.popupForColumn);
-            this.popupTextfield.setText(filter);
-            Rectangle headerRect = ETable.this.getTableHeader().getHeaderRect(this.popupForColumn);
-            Point pt = ETable.this.getLocationOnScreen();
-            pt.translate(headerRect.x - 1, -headerRect.height - 1);
-            this.setLocation(pt);
-            this.setSize(headerRect.width, headerRect.height);
-            this.toFront();
-            this.setVisible(true);
-            this.requestFocusInWindow();
-            this.popupTextfield.requestFocusInWindow();
+        protected class FilterPopupActivate extends MouseAdapter {
+            /**
+             * 
+             * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                ETable.this.filtering.mouseClicked(e);
+            }
         }
 
-        /**
-         * J_DOC
-         */
-        public void clear() {
-            this.popupFilters.clear();
-            this.popupForColumn = -1;
-        }
-    }
+        protected RecordMatcherEditor matcherEditor;
 
-    /**
-     * J_DOC
-     */
-    protected class FilterPopupActivate extends MouseAdapter {
-        /**
-         * 
-         * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-         */
-        @Override
-        public void mouseClicked(MouseEvent e) {
+        protected FilterList<ETableRecord> filteredRecords;
+
+        protected FilterPopup filterPopup;
+
+        protected EventList<ETableRecord> source;
+
+        protected EFiltering(EventList<ETableRecord> source) {
+            this.source = source;
+            if (!ETable.this.cfg.isFilterable()) {
+                return;
+            }
+            this.matcherEditor = new RecordMatcherEditor();
+            this.filteredRecords = new FilterList<ETableRecord>(source, this.matcherEditor);
+        }
+
+        protected void clear() {
+            if (!ETable.this.cfg.isFilterable()) {
+                return;
+            }
+            this.getFilterPopup().clear();
+        }
+
+        protected FilterPopup getFilterPopup() {
+            if (!ETable.this.cfg.isFilterable()) {
+                return null;
+            }
+            if (this.filterPopup == null) {
+                this.filterPopup = new FilterPopup(ETable.this.getFrame(ETable.this));
+            }
+            return this.filterPopup;
+        }
+
+        protected EventList<ETableRecord> getRecords() {
+            if (!ETable.this.cfg.isFilterable()) {
+                return this.source;
+            }
+            return this.filteredRecords;
+        }
+
+        protected void install() {
+            if (!ETable.this.cfg.isFilterable()) {
+                return;
+            }
+            ETable.this.getTableHeader().addMouseListener(new FilterPopupActivate());
+        }
+
+        protected void mouseClicked(MouseEvent e) {
+            if (!ETable.this.cfg.isFilterable()) {
+                return;
+            }
             if ((e.getClickCount() == 1) && (e.getButton() == MouseEvent.BUTTON3)) {
-                ETable.this.getFilterPopup().activate(e.getPoint());
+                this.getFilterPopup().activate(e.getPoint());
             }
+        }
+
+    }
+
+    protected class ESorting {
+        protected TableComparatorChooser<ETableRecord> tableSorter;
+
+        protected SortedList<ETableRecord> sortedRecords;
+
+        protected EventList<ETableRecord> source;
+
+        protected ESorting(EventList<ETableRecord> source) {
+            this.source = source;
+            if (!ETable.this.cfg.isSortable()) {
+                return;
+            }
+            this.sortedRecords = new SortedList<ETableRecord>(source, null);
+        }
+
+        protected void dispose() {
+            if (!ETable.this.cfg.isSortable()) {
+                return;
+            }
+            this.tableSorter.dispose();
+        }
+
+        protected EventList<ETableRecord> getRecords() {
+            if (!ETable.this.cfg.isSortable()) {
+                return this.source;
+            }
+            return this.sortedRecords;
+        }
+
+        protected void install() {
+            if (!ETable.this.cfg.isSortable()) {
+                return;
+            }
+            this.tableSorter = TableComparatorChooser.install(ETable.this, this.sortedRecords, AbstractTableComparatorChooser.MULTIPLE_COLUMN_MOUSE,
+                    ETable.this.tableFormat);
+        }
+
+        protected void sort(int col) {
+            if (!ETable.this.cfg.isSortable()) {
+                return;
+            }
+            this.tableSorter.clearComparator();
+            this.tableSorter.appendComparator(col, 0, false);
+
+        }
+
+        protected void unsort() {
+            if (!ETable.this.cfg.isSortable()) {
+                return;
+            }
+            this.tableSorter.clearComparator();
         }
     }
 
-    /**
-     * J_DOC
-     */
-    protected class RecordMatcher implements Matcher<ETableRecord> {
-        protected final Pattern pattern;
+    protected class ETableModel extends EventTableModel<ETableRecord> {
+        private static final long serialVersionUID = -8936359559294414836L;
 
-        protected final int column;
+        protected ETableModel(EventList<ETableRecord> source, TableFormat<? super ETableRecord> tableFormat) {
+            super(source, tableFormat);
 
-        /**
-         * Instantieer een nieuwe RecordMatcher
-         * 
-         * @param column
-         * @param text
-         */
-        public RecordMatcher(int column, String text) {
-            this.column = column;
-            this.pattern = text == null ? null : Pattern.compile(text, Pattern.CASE_INSENSITIVE);
         }
 
         /**
-         * @see ca.odell.glazedlists.matchers.Matcher#matches(java.lang.Object)
+         * 
+         * @see ca.odell.glazedlists.swing.EventTableModel#getColumnClass(int)
          */
         @Override
-        public boolean matches(ETableRecord item) {
-            if (this.pattern == null) {
-                return true;
-            }
-            String value = item.getStringValue(this.column);
-            if (value == null) {
-                return false;
-            }
-            return this.pattern.matcher(value).find();
-        }
+        public Class<?> getColumnClass(int columnIndex) {
+            return ETable.this.tableFormat.getColumnClass(columnIndex);
+        };
     }
 
     /**
@@ -194,66 +324,41 @@ public class ETable extends JTable implements ETableI {
     /** serialVersionUID */
     private static final long serialVersionUID = 6515690492295488815L;
 
-    protected EventList<ETableRecord> records;
+    protected final EventList<ETableRecord> records;
 
-    protected SortedList<ETableRecord> sortedRecords;
+    protected final EventTableModel<ETableRecord> tableModel;
 
-    protected FilterList<ETableRecord> filteredRecords;
+    protected final EventSelectionModel<ETableRecord> selectionModel;
 
-    protected EventTableModel<ETableRecord> tableModel;
+    protected final EFiltering filtering;
 
-    protected EventSelectionModel<ETableRecord> selectionModel;
+    protected final ESorting sorting;
+
+    protected final ETableConfig cfg;
 
     protected ETableHeaders tableFormat;
 
-    protected TableComparatorChooser<ETableRecord> tableSorter;
-
-    protected FilterPopup filterPopup = null;
-
-    protected RecordMatcherEditor matcherEditor;
-
-    /**
-     * Instantieer een nieuwe ETable
-     */
-    protected ETable() {
-        this(false);
-    }
-
-    /**
-     * Instantieer een nieuwe ETable
-     * 
-     * @param threadSafe
-     */
-    protected ETable(boolean threadSafe) {
-        this.records = (threadSafe ? GlazedLists.threadSafeList(new BasicEventList<ETableRecord>()) : new BasicEventList<ETableRecord>());
-        this.sortedRecords = new SortedList<ETableRecord>(this.records, null);
+    public ETable(ETableConfig cfg) {
+        this.cfg = cfg;
+        cfg.lock();
+        this.records = (cfg.isThreadSafe() ? GlazedLists.threadSafeList(new BasicEventList<ETableRecord>()) : new BasicEventList<ETableRecord>());
+        this.sorting = new ESorting(this.records);
         this.tableFormat = new ETableHeaders();
-        this.matcherEditor = new RecordMatcherEditor();
-        this.filteredRecords = new FilterList<ETableRecord>(this.sortedRecords, this.matcherEditor);
-        this.tableModel = new EventTableModel<ETableRecord>(this.filteredRecords, this.tableFormat) {
-            private static final long serialVersionUID = -8936359559294414836L;
-
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return ETable.this.tableFormat.getColumnClass(columnIndex);
-            };
-        };
+        this.filtering = new EFiltering(this.sorting.getRecords());
+        this.tableModel = new ETableModel(this.filtering.getRecords(), this.tableFormat);
         this.setModel(this.tableModel);
-
         this.selectionModel = new EventSelectionModel<ETableRecord>(this.records);
         this.selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         this.setColumnSelectionAllowed(true);
         this.setRowSelectionAllowed(true);
         this.setSelectionModel(this.selectionModel);
-
-        this.tableSorter = TableComparatorChooser.install(this, this.sortedRecords, AbstractTableComparatorChooser.MULTIPLE_COLUMN_MOUSE,
-                this.tableFormat);
-
-        this.getTableHeader().addMouseListener(new FilterPopupActivate());
+        this.sorting.install();
+        this.filtering.install();
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#addRecord(be.ugent.oasis.tools.hqlbuilder.ETable.ETableRecord)
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#addRecord(org.mmmr.services.swing.common.ETableRecord)
      */
     @Override
     public void addRecord(final ETableRecord record) {
@@ -261,7 +366,8 @@ public class ETable extends JTable implements ETableI {
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#addRecords(java.util.Collection)
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#addRecords(java.util.Collection)
      */
     @Override
     public void addRecords(final Collection<ETableRecord> r) {
@@ -269,14 +375,15 @@ public class ETable extends JTable implements ETableI {
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#clear()
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#clear()
      */
     @Override
     public void clear() {
         this.records.clear();
-        this.tableSorter.dispose();
+        this.sorting.dispose();
         this.tableModel.setTableFormat(new ETableHeaders());
-        this.getFilterPopup().clear();
+        this.filtering.clear();
     }
 
     /**
@@ -296,15 +403,17 @@ public class ETable extends JTable implements ETableI {
                 // int realIndex = columnModel.getColumn(index).getModelIndex();
                 String headerValue = String.valueOf(this.columnModel.getColumn(index).getHeaderValue());
 
-                String filter = ETable.this.getFilterPopup().popupFilters.get(index);
+                if (ETable.this.cfg.isFilterable()) {
+                    String filter = ETable.this.filtering.getFilterPopup().popupFilters.get(index);
 
-                if ((filter != null) && (filter.trim().length() > 0)) {
-                    headerValue += "<br/>" + "filter: '" + filter + "'";
-                } else {
-                    headerValue += "<br/>" + "no filter";
+                    if ((filter != null) && (filter.trim().length() > 0)) {
+                        headerValue += "<br/>" + "filter: '" + filter + "'";
+                    } else {
+                        headerValue += "<br/>" + "no filter";
+                    }
+
+                    headerValue += "<br/><br/>right click to edit filter<br/>enter to preview filter<br/>tab to accept filter";
                 }
-
-                headerValue += "<br/><br/>right click to edit filter<br/>enter to preview filter<br/>tab to accept filter";
 
                 return "<html><body>" + headerValue + "</body></html>";
             }
@@ -318,6 +427,9 @@ public class ETable extends JTable implements ETableI {
      */
     public ETableI getEventSafe() {
         final ETable table = this;
+        if (this.cfg.isThreadSafe()) {
+            return table;
+        }
         javassist.util.proxy.ProxyFactory f = new javassist.util.proxy.ProxyFactory();
         f.setInterfaces(new Class[] { ETableI.class });
         javassist.util.proxy.MethodHandler mi = new javassist.util.proxy.MethodHandler() {
@@ -368,19 +480,6 @@ public class ETable extends JTable implements ETableI {
     /**
      * J_DOC
      * 
-     * @return
-     */
-    protected FilterPopup getFilterPopup() {
-        if (this.filterPopup == null) {
-            this.filterPopup = new FilterPopup(this.getFrame(this));
-        }
-
-        return this.filterPopup;
-    }
-
-    /**
-     * J_DOC
-     * 
      * @param comp
      * @return
      */
@@ -395,11 +494,12 @@ public class ETable extends JTable implements ETableI {
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#getRecordAtVisualRow(int)
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#getRecordAtVisualRow(int)
      */
     @Override
     public ETableRecord getRecordAtVisualRow(int i) {
-        return this.filteredRecords.get(i);
+        return this.filtering.getRecords().get(i);
     }
 
     /**
@@ -458,7 +558,8 @@ public class ETable extends JTable implements ETableI {
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#removeAllRecords()
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#removeAllRecords()
      */
     @Override
     public void removeAllRecords() {
@@ -466,7 +567,8 @@ public class ETable extends JTable implements ETableI {
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#removeRecord(be.ugent.oasis.tools.hqlbuilder.ETable.ETableRecord)
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#removeRecord(org.mmmr.services.swing.common.ETableRecord)
      */
     @Override
     public void removeRecord(final ETableRecord record) {
@@ -474,83 +576,41 @@ public class ETable extends JTable implements ETableI {
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#removeRecordAtVisualRow(int)
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#removeRecordAtVisualRow(int)
      */
     @Override
     public void removeRecordAtVisualRow(final int i) {
-        this.records.remove(this.sortedRecords.get(i));
+        this.records.remove(this.sorting.getRecords().get(i));
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#setHeaders(be.ugent.oasis.tools.hqlbuilder.ETable.ETableHeaders)
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#setHeaders(org.mmmr.services.swing.common.ETableHeaders)
      */
     @Override
     public void setHeaders(final ETableHeaders headers) {
-        this.tableSorter.dispose();
-        this.tableModel.setTableFormat(headers);
-        this.tableSorter = TableComparatorChooser.install(ETable.this, this.sortedRecords, AbstractTableComparatorChooser.MULTIPLE_COLUMN_MOUSE,
-                headers);
         this.tableFormat = headers;
+        this.sorting.dispose();
+        this.tableModel.setTableFormat(headers);
+        this.sorting.install();
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#sort(int)
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#sort(int)
      */
     @Override
     public void sort(final int col) {
-        this.tableSorter.clearComparator();
-        this.tableSorter.appendComparator(col, 0, false);
-    }
-
-    public void test() {
-        if (this.getColumnSelectionAllowed() && !this.getRowSelectionAllowed()) {
-            // Column selection is enabled
-            // Get the indices of the selected columns
-            int[] vColIndices = this.getSelectedColumns();
-            System.out.println("cols:" + Arrays.toString(vColIndices));
-        } else if (!this.getColumnSelectionAllowed() && this.getRowSelectionAllowed()) {
-            // Row selection is enabled
-            // Get the indices of the selected rows
-            int[] rowIndices = this.getSelectedRows();
-            System.out.println("cols:" + Arrays.toString(rowIndices));
-        } else if (this.getCellSelectionEnabled()) {
-            // Individual cell selection is enabled
-
-            // In SINGLE_SELECTION mode, the selected cell can be retrieved using
-            // setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            @SuppressWarnings("unused")
-            int rowIndex = this.getSelectedRow();
-            @SuppressWarnings("unused")
-            int colIndex = this.getSelectedColumn();
-
-            // In the other modes, the set of selected cells can be retrieved using
-            // setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-            // setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-            // Get the min and max ranges of selected cells
-            int rowIndexStart = this.getSelectedRow();
-            int rowIndexEnd = this.getSelectionModel().getMaxSelectionIndex();
-            int colIndexStart = this.getSelectedColumn();
-            int colIndexEnd = this.getColumnModel().getSelectionModel().getMaxSelectionIndex();
-
-            // Check each cell in the range
-            for (int r = rowIndexStart; r <= rowIndexEnd; r++) {
-                for (int c = colIndexStart; c <= colIndexEnd; c++) {
-                    if (this.isCellSelected(r, c)) {
-                        // cell is selected
-                        System.out.println("cell:(" + c + "," + r + ")");
-                        System.out.println(this.getEventSafe().getRecordAtVisualRow(r).get(c));
-                    }
-                }
-            }
-        }
+        this.sorting.sort(col);
     }
 
     /**
-     * @see be.ugent.oasis.tools.hqlbuilder.ETableI#unsort()
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#unsort()
      */
     @Override
     public void unsort() {
-        this.tableSorter.clearComparator();
+        this.sorting.unsort();
     }
 }

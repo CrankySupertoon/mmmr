@@ -2,6 +2,9 @@ package org.mmmr.services.swing.common;
 
 import java.util.Collection;
 
+/**
+ * @author jdlandsh
+ */
 public interface ETableI {
     public abstract void addRecord(final ETableRecord record);
 

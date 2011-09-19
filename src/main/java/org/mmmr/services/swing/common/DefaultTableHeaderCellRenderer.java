@@ -25,10 +25,6 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author Darryl
  */
 public class DefaultTableHeaderCellRenderer extends DefaultTableCellRenderer {
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = 973311335209692592L;
 
     /**

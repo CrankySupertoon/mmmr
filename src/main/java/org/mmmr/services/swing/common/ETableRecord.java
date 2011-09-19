@@ -1,7 +1,9 @@
 package org.mmmr.services.swing.common;
 
+/**
+ * @author jdlandsh
+ */
 public interface ETableRecord {
-
     public abstract Object get(int column);
 
     public abstract Object getBean();
