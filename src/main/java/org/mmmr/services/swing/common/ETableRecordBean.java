@@ -96,6 +96,6 @@ public class ETableRecordBean implements ETableRecord {
      */
     @Override
     public String toString() {
-        return "" + this.object;
+        return String.valueOf(this.object);
     }
 }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -20,9 +21,12 @@ public class Config {
 
     public static final NumberFormat NUMBER_FORMAT;
 
+    public static final DateFormat DATE_FORMAT;
+
     static {
         LOCALE = Locale.getDefault();
         NUMBER_FORMAT = NumberFormat.getNumberInstance(Config.LOCALE);
+        DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Config.LOCALE);
     }
 
     private File backup;

@@ -167,6 +167,11 @@ public class Mod implements Comparable<Mod>, PersistentObject {
     }
 
     @XmlTransient
+    public Boolean getInstalled() {
+        return this.isInstalled();
+    }
+
+    @XmlTransient
     public int getInstallOrder() {
         return this.installOrder;
     }
@@ -217,7 +222,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
     }
 
-    public boolean isInstalled() {
+    public Boolean isInstalled() {
         return this.getInstallationDate() != null;
     }
 
@@ -239,6 +244,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     public void setInstallationDate(Date installationDate) {
         this.installationDate = installationDate;
+    }
+
+    public void setInstalled(Boolean installed) {
+        this.setInstallationDate(installed ? new Date() : null);
     }
 
     public void setInstallOrder(int installOrder) {

@@ -151,7 +151,7 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Uninstall mods.");
+            JButton comp = new JButton("(Un)install mods and change order.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
@@ -162,12 +162,12 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Change mod order and resolve conflicts.");
+            JButton comp = new JButton("Resolve mod conflicts.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    IOMethods.showWarning(ManagerWindow.this.cfg, "Change mod order and resolve conflicts.", "Not implemented yet.");
+                    IOMethods.showWarning(ManagerWindow.this.cfg, "Resolve mod conflicts.", "Not implemented yet.");
                 }
             });
             mainpanel.add(comp);
@@ -237,6 +237,9 @@ public class ManagerWindow extends JFrame {
                         return false;
                     }
                     if (name.toLowerCase().contains("yogbox")) {
+                        return false;
+                    }
+                    if (name.toLowerCase().contains("gender")) {
                         return false;
                     }
                     return true;

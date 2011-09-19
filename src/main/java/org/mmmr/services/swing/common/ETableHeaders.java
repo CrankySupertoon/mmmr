@@ -1,14 +1,16 @@
 package org.mmmr.services.swing.common;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
+import ca.odell.glazedlists.gui.AdvancedTableFormat;
 import ca.odell.glazedlists.gui.WritableTableFormat;
 
 /**
  * @author jdlandsh
  */
-public class ETableHeaders implements WritableTableFormat<ETableRecord> {
+public class ETableHeaders implements WritableTableFormat<ETableRecord>, AdvancedTableFormat<ETableRecord> {
     protected final List<String> columnNames = new Vector<String>();
 
     @SuppressWarnings("rawtypes")
@@ -60,16 +62,31 @@ public class ETableHeaders implements WritableTableFormat<ETableRecord> {
     }
 
     /**
-     * J_DOC
      * 
-     * @param columnIndex
-     * @return
+     * @see ca.odell.glazedlists.gui.AdvancedTableFormat#getColumnClass(int)
      */
+    @Override
     public Class<?> getColumnClass(int columnIndex) {
         if (this.columnNames.size() == 0) {
             return Object.class;
         }
-        return this.columnClasses.get(columnIndex);
+        Class<?> clas = this.columnClasses.get(columnIndex);
+        // System.out.println("ETableHeaders.getColumnClass(" + columnIndex + ")=" + clas);
+        return clas;
+    }
+
+    /**
+     * 
+     * @see ca.odell.glazedlists.gui.AdvancedTableFormat#getColumnComparator(int)
+     */
+    @Override
+    public Comparator<?> getColumnComparator(int column) {
+        return new Comparator<Object>() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                return 0;
+            }
+        };
     }
 
     /**

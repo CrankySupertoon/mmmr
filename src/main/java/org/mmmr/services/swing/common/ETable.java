@@ -21,8 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.swing.DropMode;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
@@ -32,6 +34,8 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import org.apache.commons.lang.StringUtils;
 
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
@@ -50,7 +54,7 @@ import ca.odell.glazedlists.swing.TableComparatorChooser;
 /**
  * @author jdlandsh
  */
-public class ETable extends JTable implements ETableI {
+public class ETable extends JTable implements ETableI, Reorderable {
     protected class EFiltering {
         /**
          * J_DOC
@@ -306,7 +310,6 @@ public class ETable extends JTable implements ETableI {
 
         protected ETableModel(EventList<ETableRecord> source, TableFormat<? super ETableRecord> tableFormat) {
             super(source, tableFormat);
-
         }
 
         /**
@@ -315,7 +318,9 @@ public class ETable extends JTable implements ETableI {
          */
         @Override
         public Class<?> getColumnClass(int columnIndex) {
-            return ETable.this.tableFormat.getColumnClass(columnIndex);
+            Class<?> clas = ETable.this.tableFormat.getColumnClass(columnIndex);
+            // System.out.println("ETableModel.getColumnClass(" + columnIndex + ")=" + clas);
+            return clas;
         };
     }
 
@@ -442,6 +447,11 @@ public class ETable extends JTable implements ETableI {
         if (this.cfg.isVertical()) {
             this.getTableHeader().setDefaultRenderer(new VerticalHeaderRenderer());
         }
+        if (this.cfg.isDraggable()) {
+            this.setDragEnabled(true);
+            this.setDropMode(DropMode.INSERT_ROWS);
+            this.setTransferHandler(new TableRowTransferHandler(this));
+        }
         this.records = (this.cfg.isThreadSafe() ? GlazedLists.threadSafeList(new BasicEventList<ETableRecord>()) : new BasicEventList<ETableRecord>());
         this.sorting = new ESorting(this.records);
         this.tableFormat = new ETableHeaders();
@@ -522,6 +532,17 @@ public class ETable extends JTable implements ETableI {
             }
         };
         return jTableHeader;
+    }
+
+    /**
+     * 
+     * @see javax.swing.JTable#getColumnClass(int)
+     */
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        Class<?> clas = super.getColumnClass(columnIndex);
+        // System.out.println("ETableHeaders.getColumnClass(" + columnIndex + ")=" + clas);
+        return clas;
     }
 
     /**
@@ -608,24 +629,6 @@ public class ETable extends JTable implements ETableI {
 
     /**
      * 
-     * @see javax.swing.JTable#getToolTipText(java.awt.event.MouseEvent)
-     */
-    @Override
-    public String getToolTipText(MouseEvent e) {
-        try {
-            java.awt.Point p = e.getPoint();
-            int rowIndex = this.rowAtPoint(p);
-            int colIndex = this.columnAtPoint(p);
-            int realColumnIndex = this.convertColumnIndexToModel(colIndex);
-
-            return String.valueOf(this.getModel().getValueAt(rowIndex, realColumnIndex));
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            return null;
-        }
-    }
-
-    /**
-     * 
      * @see javax.swing.JTable#isCellEditable(int, int)
      */
     @Override
@@ -672,6 +675,26 @@ public class ETable extends JTable implements ETableI {
 
     /**
      * 
+     * @see javax.swing.JTable#prepareRenderer(javax.swing.table.TableCellRenderer, int, int)
+     */
+    @Override
+    public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
+        Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+        if (c instanceof JLabel) {
+            String text = JLabel.class.cast(
+                    TableCellRenderer.class.cast(c).getTableCellRendererComponent(this, this.getValueAt(rowIndex, vColIndex), false, false, rowIndex,
+                            vColIndex)).getText();
+            if (StringUtils.isNotBlank(text)) {
+                JLabel.class.cast(c).setToolTipText(text);
+            } else {
+                JLabel.class.cast(c).setToolTipText(null);
+            }
+        }
+        return c;
+    }
+
+    /**
+     * 
      * @see org.mmmr.services.swing.common.ETableI#removeAllRecords()
      */
     @Override
@@ -695,6 +718,17 @@ public class ETable extends JTable implements ETableI {
     @Override
     public void removeRecordAtVisualRow(final int i) {
         this.records.remove(this.sorting.getRecords().get(i));
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.swing.common.Reorderable#reorder(int, int)
+     */
+    @Override
+    public void reorder(int fromIndex, int toIndex) {
+        ETableRecord record = this.getRecordAtVisualRow(fromIndex);
+        this.removeRecord(record);
+        this.records.add(toIndex, record);
     }
 
     /**

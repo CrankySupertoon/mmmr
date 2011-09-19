@@ -20,12 +20,14 @@ public class ETableConfig {
 
     protected boolean vertical;
 
+    protected boolean draggable;
+
     public ETableConfig() {
         super();
     }
 
     public ETableConfig(boolean threadSafe, boolean sortable, boolean filterable, boolean editable, boolean reorderable, boolean resizable,
-            boolean vertical) {
+            boolean vertical, boolean draggable) {
         super();
         this.threadSafe = threadSafe;
         this.sortable = sortable;
@@ -34,6 +36,11 @@ public class ETableConfig {
         this.reorderable = reorderable;
         this.resizable = resizable;
         this.vertical = vertical;
+        this.draggable = draggable;
+    }
+
+    public boolean isDraggable() {
+        return this.draggable;
     }
 
     public boolean isEditable() {
@@ -70,6 +77,10 @@ public class ETableConfig {
 
     public void lock() {
         this.setLocked(true);
+    }
+
+    public void setDraggable(boolean draggable) {
+        this.draggable = draggable;
     }
 
     public void setEditable(boolean editable) {
