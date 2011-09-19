@@ -80,9 +80,6 @@ public class VerticalTableHeaderCellRenderer extends DefaultTableHeaderCellRende
         }
     }
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -8056800967359875820L;
 
     /**

@@ -4,7 +4,7 @@ package org.mmmr.services.swing.common;
  * @author jdlandsh
  */
 public class ETableConfig {
-    protected boolean threadSafe;
+    protected boolean threadSafe = true;
 
     protected boolean sortable;
 
@@ -12,11 +12,32 @@ public class ETableConfig {
 
     protected boolean locked;
 
-    public ETableConfig(boolean threadSafe, boolean sortable, boolean filterable) {
+    protected boolean editable;
+
+    protected boolean reorderable;
+
+    protected boolean resizable;
+
+    protected boolean vertical;
+
+    public ETableConfig() {
+        super();
+    }
+
+    public ETableConfig(boolean threadSafe, boolean sortable, boolean filterable, boolean editable, boolean reorderable, boolean resizable,
+            boolean vertical) {
         super();
         this.threadSafe = threadSafe;
         this.sortable = sortable;
         this.filterable = filterable;
+        this.editable = editable;
+        this.reorderable = reorderable;
+        this.resizable = resizable;
+        this.vertical = vertical;
+    }
+
+    public boolean isEditable() {
+        return this.editable;
     }
 
     public boolean isFilterable() {
@@ -27,6 +48,14 @@ public class ETableConfig {
         return this.locked;
     }
 
+    public boolean isReorderable() {
+        return this.reorderable;
+    }
+
+    public boolean isResizable() {
+        return this.resizable;
+    }
+
     public boolean isSortable() {
         return this.sortable;
     }
@@ -35,8 +64,16 @@ public class ETableConfig {
         return this.threadSafe;
     }
 
+    public boolean isVertical() {
+        return this.vertical;
+    }
+
     public void lock() {
-        this.locked = true;
+        this.setLocked(true);
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     public void setFilterable(boolean filterable) {
@@ -44,6 +81,24 @@ public class ETableConfig {
             throw new IllegalArgumentException();
         }
         this.filterable = filterable;
+    }
+
+    private void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public void setReorderable(boolean reorderable) {
+        if (this.isLocked()) {
+            throw new IllegalArgumentException();
+        }
+        this.reorderable = reorderable;
+    }
+
+    public void setResizable(boolean resizable) {
+        if (this.isLocked()) {
+            throw new IllegalArgumentException();
+        }
+        this.resizable = resizable;
     }
 
     public void setSortable(boolean sortable) {
@@ -58,5 +113,12 @@ public class ETableConfig {
             throw new IllegalArgumentException();
         }
         this.threadSafe = threadSafe;
+    }
+
+    public void setVertical(boolean vertical) {
+        if (this.isLocked()) {
+            throw new IllegalArgumentException();
+        }
+        this.vertical = vertical;
     }
 }

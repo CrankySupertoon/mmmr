@@ -4,19 +4,25 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
@@ -38,6 +44,7 @@ import ca.odell.glazedlists.matchers.AbstractMatcherEditor;
 import ca.odell.glazedlists.matchers.Matcher;
 import ca.odell.glazedlists.swing.EventSelectionModel;
 import ca.odell.glazedlists.swing.EventTableModel;
+import ca.odell.glazedlists.swing.SortableRenderer;
 import ca.odell.glazedlists.swing.TableComparatorChooser;
 
 /**
@@ -321,7 +328,98 @@ public class ETable extends JTable implements ETableI {
         }
     }
 
-    /** serialVersionUID */
+    /**
+     * @see http://publicobject.com/glazedlistsdeveloper/
+     */
+    protected class VerticalHeaderRenderer extends VerticalTableHeaderCellRenderer implements SortableRenderer {
+        private static final long serialVersionUID = 2995810245364522046L;
+
+        protected Icon sortIcon = null;
+
+        protected final static double DEGREE_90 = 90.0 * Math.PI / 180.0;
+
+        /**
+         * Creates a rotated version of the input image.
+         * 
+         * @param c The component to get properties useful for painting, e.g. the foreground or background color.
+         * @param icon the image to be rotated.
+         * @param rotatedAngle the rotated angle, in degree, clockwise. It could be any double but we will mod it with 360 before using it.
+         * 
+         * @return the image after rotating.
+         * 
+         * @see http://www.jidesoft.com/blog/2008/02/29/rotate-an-icon-in-java/
+         */
+        protected ImageIcon createRotatedImage(Component c, Icon icon, double rotatedAngle) {
+            // convert rotatedAngle to a value from 0 to 360
+            double originalAngle = rotatedAngle % 360;
+            if ((rotatedAngle != 0) && (originalAngle == 0)) {
+                originalAngle = 360.0;
+            }
+
+            // convert originalAngle to a value from 0 to 90
+            double angle = originalAngle % 90;
+            if ((originalAngle != 0.0) && (angle == 0.0)) {
+                angle = 90.0;
+            }
+
+            double radian = Math.toRadians(angle);
+
+            int iw = icon.getIconWidth();
+            int ih = icon.getIconHeight();
+            int w;
+            int h;
+
+            if (((originalAngle >= 0) && (originalAngle <= 90)) || ((originalAngle > 180) && (originalAngle <= 270))) {
+                w = (int) (iw * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian) + ih * Math.sin(radian));
+                h = (int) (iw * Math.sin(radian) + ih * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian));
+            } else {
+                w = (int) (ih * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian) + iw * Math.sin(radian));
+                h = (int) (ih * Math.sin(radian) + iw * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian));
+            }
+            BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+            Graphics g = image.getGraphics();
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // calculate the center of the icon.
+            int cx = iw / 2;
+            int cy = ih / 2;
+
+            // move the graphics center point to the center of the icon.
+            g2d.translate(w / 2, h / 2);
+
+            // rotate the graphcis about the center point of the icon
+            g2d.rotate(Math.toRadians(originalAngle));
+
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            icon.paintIcon(c, g2d, -cx, -cy);
+
+            g2d.dispose();
+            return new ImageIcon(image);
+        }
+
+        /**
+         * 
+         * @see org.mmmr.services.swing.common.VerticalTableHeaderCellRenderer#getIcon(javax.swing.JTable, int)
+         */
+        @Override
+        protected Icon getIcon(JTable table, int column) {
+            return this.sortIcon;
+        }
+
+        /**
+         * 
+         * @see ca.odell.glazedlists.swing.SortableRenderer#setSortIcon(javax.swing.Icon)
+         */
+        @Override
+        public void setSortIcon(Icon sortIcon) {
+            if (sortIcon != null) {
+                this.sortIcon = this.createRotatedImage(this, sortIcon, 90.0);
+            } else {
+                this.sortIcon = null;
+            }
+        }
+    }
+
     private static final long serialVersionUID = 6515690492295488815L;
 
     protected final EventList<ETableRecord> records;
@@ -338,10 +436,13 @@ public class ETable extends JTable implements ETableI {
 
     protected ETableHeaders tableFormat;
 
-    public ETable(ETableConfig cfg) {
-        this.cfg = cfg;
-        cfg.lock();
-        this.records = (cfg.isThreadSafe() ? GlazedLists.threadSafeList(new BasicEventList<ETableRecord>()) : new BasicEventList<ETableRecord>());
+    public ETable(ETableConfig configuration) {
+        this.cfg = configuration;
+        this.cfg.lock();
+        if (this.cfg.isVertical()) {
+            this.getTableHeader().setDefaultRenderer(new VerticalHeaderRenderer());
+        }
+        this.records = (this.cfg.isThreadSafe() ? GlazedLists.threadSafeList(new BasicEventList<ETableRecord>()) : new BasicEventList<ETableRecord>());
         this.sorting = new ESorting(this.records);
         this.tableFormat = new ETableHeaders();
         this.filtering = new EFiltering(this.sorting.getRecords());
@@ -354,6 +455,8 @@ public class ETable extends JTable implements ETableI {
         this.setSelectionModel(this.selectionModel);
         this.sorting.install();
         this.filtering.install();
+        this.getTableHeader().setReorderingAllowed(this.cfg.isReorderable());
+        this.getTableHeader().setResizingAllowed(this.cfg.isResizable());
     }
 
     /**
@@ -392,7 +495,7 @@ public class ETable extends JTable implements ETableI {
      */
     @Override
     protected JTableHeader createDefaultTableHeader() {
-        return new JTableHeader(this.columnModel) {
+        JTableHeader jTableHeader = new JTableHeader(this.columnModel) {
             private static final long serialVersionUID = -378778832166135907L;
 
             @Override
@@ -418,6 +521,7 @@ public class ETable extends JTable implements ETableI {
                 return "<html><body>" + headerValue + "</body></html>";
             }
         };
+        return jTableHeader;
     }
 
     /**
@@ -518,6 +622,15 @@ public class ETable extends JTable implements ETableI {
         } catch (ArrayIndexOutOfBoundsException ex) {
             return null;
         }
+    }
+
+    /**
+     * 
+     * @see javax.swing.JTable#isCellEditable(int, int)
+     */
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return this.cfg.isEditable() && super.isCellEditable(row, column);
     }
 
     /**
