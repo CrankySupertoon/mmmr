@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.mmmr.services.swing.FancySwing;
+import org.mmmr.services.swing.common.FancySwing;
 
 /**
  * @author Jurgen

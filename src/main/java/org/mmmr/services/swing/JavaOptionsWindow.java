@@ -32,13 +32,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
 import org.mmmr.services.IOMethods.MemInfo;
 import org.mmmr.services.MMMR;
-import org.mmmr.services.swing.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.FancySwing;
+import org.mmmr.services.swing.common.RoundedPanel;
+import org.mmmr.services.swing.common.VerticalTableHeaderCellRenderer;
+import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 
 /**
  * @author Jurgen
@@ -50,9 +55,7 @@ public class JavaOptionsWindow extends JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable jtable, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             JLabel renderer = (JLabel) super.getTableCellRendererComponent(jtable, value, isSelected, hasFocus, row, column);
-            if (value != null) {
-                renderer.setToolTipText(String.valueOf(value));
-            }
+            renderer.setToolTipText(value == null ? null : String.valueOf(value));
             if (JavaOptionsWindow.this.cfg != null) {
                 this.setFont(JavaOptionsWindow.this.cfg.getFont18().deriveFont(10f));
             }
@@ -64,14 +67,17 @@ public class JavaOptionsWindow extends JFrame {
                 }
                 this.setForeground(Color.white);
                 this.setHorizontalTextPosition(SwingConstants.CENTER);
-            }
-            if ("n".equals(value)) {
+            } else if ("n".equals(value)) {
                 if (isSelected) {
                     this.setBackground(JavaOptionsWindow.this.redSelected);
                 } else {
                     this.setBackground(JavaOptionsWindow.this.red);
                 }
                 this.setForeground(Color.white);
+                this.setHorizontalTextPosition(SwingConstants.CENTER);
+            } else {
+                this.setBackground(Color.white);
+                this.setForeground(Color.black);
                 this.setHorizontalTextPosition(SwingConstants.CENTER);
             }
             return renderer;
@@ -120,6 +126,15 @@ public class JavaOptionsWindow extends JFrame {
     }
 
     private static final long serialVersionUID = -2617077870487045855L;
+
+    public static void main(String[] args) {
+        try {
+            FancySwing.lookAndFeel();
+            new JavaOptionsWindow(null, new Dimension(600, 300)).setVisible(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     private Config cfg;
 
@@ -207,7 +222,9 @@ public class JavaOptionsWindow extends JFrame {
         this.setUndecorated(true);
         FancySwing.translucent(this);
         this.pack();
-        this.setSize(preferredSize);
+        if (preferredSize != null) {
+            this.setSize(preferredSize);
+        }
         FancySwing.rounded(this);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -331,20 +348,32 @@ public class JavaOptionsWindow extends JFrame {
             }
         };
         this.table = new JTable(model);
+        this.table.setRowSorter(new TableRowSorter<TableModel>(model));
 
+        // tooltips on table header
         ColumnHeaderToolTips tips = new ColumnHeaderToolTips();
+        // vertical table header labels
         VerticalTableHeaderCellRenderer headerRenderer = new VerticalTableHeaderCellRenderer();
         Enumeration<TableColumn> columns = this.table.getColumnModel().getColumns();
         int index = 0;
+        // custom table cell renderer;
+        CellRenderer cellRenderer = new CellRenderer();
         while (columns.hasMoreElements()) {
             TableColumn tc = columns.nextElement();
+            // vertical table header labels
             tc.setHeaderRenderer(headerRenderer);
-            tc.setCellRenderer(new CellRenderer());
+            // custom table cell renderer;
+            tc.setCellRenderer(cellRenderer);
+            // tooltips on table header
             tips.setToolTip(tc, this.columnNames.get(index++));
         }
         JTableHeader tableHeader = this.table.getTableHeader();
+
+        // tooltips on table header
         tableHeader.addMouseMotionListener(tips);
+        // can drag and drop columns
         tableHeader.setReorderingAllowed(false);
+        // can resize columns?
         tableHeader.setResizingAllowed(false);
 
         return this.table;

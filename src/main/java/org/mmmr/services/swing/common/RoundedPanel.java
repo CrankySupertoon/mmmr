@@ -1,4 +1,4 @@
-package org.mmmr.services.swing;
+package org.mmmr.services.swing.common;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

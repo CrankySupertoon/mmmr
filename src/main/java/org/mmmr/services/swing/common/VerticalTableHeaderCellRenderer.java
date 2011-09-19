@@ -1,7 +1,7 @@
 /**
  * @(#)VerticalTableHeaderCellRenderer.java 1.0 02/26/09
  */
-package org.mmmr.services.swing;
+package org.mmmr.services.swing.common;
 
 import java.awt.Component;
 import java.awt.Graphics;

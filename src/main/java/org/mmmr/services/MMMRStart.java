@@ -10,8 +10,8 @@ import java.net.URL;
 import javax.swing.JLabel;
 import javax.swing.ToolTipManager;
 
-import org.mmmr.services.swing.FancySwing;
 import org.mmmr.services.swing.StatusWindow;
+import org.mmmr.services.swing.common.FancySwing;
 
 /**
  * @author Jurgen

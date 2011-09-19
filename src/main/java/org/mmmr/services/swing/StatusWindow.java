@@ -19,7 +19,9 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import org.mmmr.services.Config;
-import org.mmmr.services.swing.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.FancySwing;
+import org.mmmr.services.swing.common.RoundedPanel;
+import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 
 /**
  * @author Jurgen

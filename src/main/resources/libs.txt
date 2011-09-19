@@ -16,3 +16,5 @@
 633312::javassist/javassist/3.12.0.GA/javassist-3.12.0.GA.jar
 9752::org/slf4j/slf4j-log4j12/1.6.2/slf4j-log4j12-1.6.2.jar
 284220::commons-lang/commons-lang/2.6/commons-lang-2.6.jar
+838837::net/java/dev/glazedlists/glazedlists_java15/1.8.0/glazedlists_java15-1.8.0.jar
+206711::commons-beanutils/commons-beanutils-core/1.8.3/commons-beanutils-core-1.8.3.jar

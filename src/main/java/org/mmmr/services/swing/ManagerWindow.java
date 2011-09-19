@@ -27,7 +27,9 @@ import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
 import org.mmmr.services.InstallationService;
-import org.mmmr.services.swing.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.FancySwing;
+import org.mmmr.services.swing.common.RoundedPanel;
+import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 
 /**
  * @author Jurgen
