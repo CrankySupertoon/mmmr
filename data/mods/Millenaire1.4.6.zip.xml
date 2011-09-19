@@ -1,0 +1,11 @@
+<mod archive="Millenaire1.4.6.zip" name="Millenaire"
+	url="http://www.millenaire.org"
+	version="1.4.6" mc="1.8.1">
+	<dependencies>
+		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+	</dependencies>	
+	<resources>
+		<resource sourcepath="Millénaire 1.4.6/Put in mods folder/" targetpath="mods/" />
+		<resource sourcepath="Millénaire 1.4.6/Put in minecraft folder/" targetpath="./" />
+	</resources>
+</mod>
