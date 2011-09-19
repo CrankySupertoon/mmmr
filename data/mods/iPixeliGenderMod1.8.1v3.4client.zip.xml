@@ -1,0 +1,12 @@
+<mod archive="iPixeliGenderMod1.8.1v3.4client.zip" name="iPixeli's Female Gender Option Mod"
+	url="http://www.minecraftforum.net/topic/269822-"
+	version="3.3" mc="1.8.1">
+	<dependencies>
+		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+		<mod name="AudioMod" url="http://www.minecraftforum.net/topic/75440-" version="1.8"/>
+	</dependencies>	
+	<resources>
+		<resource sourcepath="PutContentsInMinecraftJar/" targetpath="bin/minecraft.jar" />
+		<resource sourcepath="resources/" targetpath="resources/" />
+	</resources>
+</mod>
