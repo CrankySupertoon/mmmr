@@ -21,7 +21,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.traversal.NodeFilter;
 
-@SuppressWarnings("restriction")
 public class VersionCheck {
     public static class AllElements implements NodeFilter {
         @Override
@@ -79,9 +78,11 @@ public class VersionCheck {
             String latestversion = versions.get(versions.size() - 1);
 
             if (VersionCheck.version.compareTo(latestversion) < 0) {
-                if (IOMethods.showConfirmation(cfg, cfg.getShortTitle(), "A newer version is available, download?")) {
-                    String dl = "http://mmmr.googlecode.com/svn/maven2/org/mmmr/mmmr/" + latestversion + "/mmmr-" + latestversion + ".jar";
-                    DownloadingService.downloadURL(new URL(dl), new File("mmmr-" + latestversion + ".jar"));
+                if (IOMethods.showConfirmation(cfg, cfg.getShortTitle(), "A newer version is available, download now?")) {
+                    String fname = "mmmr-" + latestversion + ".jar";
+                    String dl = "http://mmmr.googlecode.com/svn/maven2/org/mmmr/mmmr/" + latestversion + "/" + fname;
+                    File newjar = new File(fname);
+                    DownloadingService.downloadURL(new URL(dl), newjar);
                 }
             }
         } catch (Exception ex) {

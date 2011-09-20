@@ -47,11 +47,11 @@ public class MMMRStart {
 
     public static void main(String[] args) {
         try {
-            System.getProperties().list(System.out);
             FancySwing.lookAndFeel();
             Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
             MMMRStart.checkBat(cfg);
             VersionCheck.check(cfg);
+            System.getProperties().list(System.out);
             ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
             toolTipManager.setInitialDelay(100);
             toolTipManager.setReshowDelay(100);
