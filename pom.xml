@@ -4,6 +4,21 @@
 	<groupId>org.mmmr</groupId>
 	<artifactId>mmmr</artifactId>
 	<version>0.1b</version>
+	<!-- http://code.google.com/p/raisercostin/wiki/Maven2DistributionManagementOnGooglecode -->
+        <distributionManagement>
+                <!-- use the following if you're not using a snapshot version. -->
+                <repository>
+                        <id>mmmr.googlecode.releases</id>
+                        <name>mmmr.googlecode.releases</name>
+                        <url>https://mmmr.googlecode.com/svn/maven2/</url>
+                </repository>
+                <!-- use the following if you ARE using a snapshot version. -->
+                <snapshotRepository>
+                        <id>mmmr.googlecode.snapshots</id>
+                        <name>mmmr.googlecode.snapshots</name>
+                        <url>https://mmmr.googlecode.com/svn/maven2-snapshots/</url>
+                </snapshotRepository>
+     </distributionManagement>	
 	<dependencies>
 		<!-- keep this first so it downloads this dependencies first -->
 		<dependency>
