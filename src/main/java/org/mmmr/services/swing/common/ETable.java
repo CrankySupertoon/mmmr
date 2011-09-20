@@ -16,11 +16,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.DropMode;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -91,6 +94,36 @@ public class ETable extends JTable implements ETableI, Reorderable {
             }
             return this.renderer;
         }
+    }
+
+    public static class DateTableCellEditor extends DefaultCellEditor {
+        private static final long serialVersionUID = 5169127745067354714L;
+
+        public DateTableCellEditor() {
+            super(new JTextField());
+        }
+    }
+
+    public static class DateTableCellRenderer extends DefaultTableCellRenderer.UIResource {
+        private static final long serialVersionUID = -8217402048878663776L;
+
+        protected DateFormat formatter;
+
+        @Override
+        public void setValue(Object value) {
+            if (this.formatter == null) {
+                this.formatter = DateFormat.getDateInstance();
+            }
+            this.setText((value == null) ? "" : this.formatter.format(value));
+        }
+
+        // @Override
+        // public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        // if (value != null) {
+        // value = Config.DATE_FORMAT.format(Date.class.cast(value));
+        // }
+        // return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        // }
     }
 
     protected class EFiltering {
@@ -513,7 +546,11 @@ public class ETable extends JTable implements ETableI, Reorderable {
         this.filtering.install();
         this.getTableHeader().setReorderingAllowed(this.cfg.isReorderable());
         this.getTableHeader().setResizingAllowed(this.cfg.isResizable());
+
         this.setDefaultRenderer(Boolean.class, new BooleanTableCellRenderer());
+
+        this.setDefaultRenderer(Date.class, new DateTableCellRenderer());
+        this.setDefaultEditor(Date.class, new DateTableCellEditor());
     }
 
     /**
