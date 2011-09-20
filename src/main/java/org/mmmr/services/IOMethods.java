@@ -1,6 +1,7 @@
 package org.mmmr.services;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -204,6 +205,10 @@ public class IOMethods {
         }
     }
 
+    public static byte[] getResource(String path) throws IOException {
+        return IOMethods.read(IOMethods.class.getClassLoader().getResourceAsStream(path));
+    }
+
     public static boolean is64Bit() {
         return "64".equals(System.getProperties().getProperty("sun.arch.data.model"));
     }
@@ -307,6 +312,16 @@ public class IOMethods {
         }
 
         return lines;
+    }
+
+    public static byte[] read(InputStream in) throws IOException {
+        byte[] buffer = new byte[1024 * 8 * 4];
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
+        return out.toByteArray();
     }
 
     public static File selectFile(File start, javax.swing.filechooser.FileFilter ff) {

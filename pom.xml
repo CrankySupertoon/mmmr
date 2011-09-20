@@ -5,27 +5,27 @@
 	<artifactId>mmmr</artifactId>
 	<version>0.1b</version>
 	<!-- http://code.google.com/p/raisercostin/wiki/Maven2DistributionManagementOnGooglecode -->
-        <distributionManagement>
-                <!-- use the following if you're not using a snapshot version. -->
-                <repository>
-                        <id>mmmr.googlecode.releases</id>
-                        <name>mmmr.googlecode.releases</name>
-                        <url>https://mmmr.googlecode.com/svn/maven2/</url>
-                </repository>
-                <!-- use the following if you ARE using a snapshot version. -->
-                <snapshotRepository>
-                        <id>mmmr.googlecode.snapshots</id>
-                        <name>mmmr.googlecode.snapshots</name>
-                        <url>https://mmmr.googlecode.com/svn/maven2-snapshots/</url>
-                </snapshotRepository>
-     </distributionManagement>	
+	<distributionManagement>
+		<!-- use the following if you're not using a snapshot version. -->
+		<repository>
+			<id>mmmr.googlecode.releases</id>
+			<name>mmmr.googlecode.releases</name>
+			<url>dav:https://mmmr.googlecode.com/svn/maven2</url>
+		</repository>
+		<!-- use the following if you ARE using a snapshot version. -->
+		<snapshotRepository>
+			<id>mmmr.googlecode.snapshots</id>
+			<name>mmmr.googlecode.snapshots</name>
+			<url>dav:https://mmmr.googlecode.com/svn/maven2-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<dependencies>
 		<!-- keep this first so it downloads this dependencies first -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.1.2</version>
-		</dependency>	
+		</dependency>
 		<!-- the this one se we can do logging like it should -->
 		<dependency>
 			<groupId>log4j</groupId>
@@ -95,7 +95,7 @@
 						</manifest>
 					</archive>
 				</configuration>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -109,5 +109,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>	
+	</build>
 </project>

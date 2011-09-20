@@ -1,22 +1,24 @@
 package org.mmmr.services;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Properties;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.traversal.NodeFilter;
 
 @SuppressWarnings("restriction")
@@ -33,49 +35,55 @@ public class VersionCheck {
         }
     }
 
-    private static ByteArrayOutputStream get(String urlList, HttpClient httpclient) throws IOException, ClientProtocolException {
-        HttpGet httpget = new HttpGet(urlList);
-        HttpResponse response = httpclient.execute(httpget);
-        HttpEntity entity = response.getEntity();
-        InputStream in = entity.getContent();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        int read;
-        byte[] buffer = new byte[1024 * 8 * 4];
-        while ((read = in.read(buffer)) != -1) {
-            out.write(buffer, 0, read);
+    public static String version;
+
+    static {
+        Properties mavenprop = new Properties();
+
+        File pom = new File("pom.xml");
+
+        try {
+            if (pom.exists()) {
+                // development
+                String pomxml = new String(IOMethods.read(new FileInputStream(pom)));
+                VersionCheck.version = pomxml.substring(pomxml.indexOf("<version>") + "<version>".length(), pomxml.indexOf("</version>"));
+            } else {
+                // normal execution
+                mavenprop.load(VersionCheck.class.getClassLoader().getResourceAsStream("META-INF/maven/org.mmmr/mmmr/pom.properties"));
+                VersionCheck.version = mavenprop.getProperty("version");
+            }
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
         }
-        in.close();
-        out.close();
-        return out;
     }
 
-    public static void main(String[] args) {
+    public static void check(Config cfg) {
         try {
-            String urlList = "http://code.google.com/feeds/p/mmmr/downloads/basic";
-            HttpClient httpclient = new DefaultHttpClient();
-            ByteArrayOutputStream out = VersionCheck.get(urlList, httpclient);
+            String mavemProjectBase = "http://mmmr.googlecode.com/svn/maven2/org/mmmr/mmmr/maven-metadata.xml";
+            byte[] data = DownloadingService.downloadURL(new URL(mavemProjectBase));
 
-            com.sun.org.apache.xerces.internal.parsers.DOMParser parser = new com.sun.org.apache.xerces.internal.parsers.DOMParser();
-            parser.parse(new org.xml.sax.InputSource(new ByteArrayInputStream(out.toByteArray())));
-            com.sun.org.apache.xerces.internal.dom.DocumentImpl document = (com.sun.org.apache.xerces.internal.dom.DocumentImpl) parser.getDocument();
-            org.w3c.dom.traversal.NodeIterator iterator = document.createNodeIterator(document.getDocumentElement(), NodeFilter.SHOW_ELEMENT,
-                    new AllElements(), true);
-            Pattern pattern = Pattern.compile("<a href=\"(http://mmmr.googlecode.com/files/[^\"]*)\">");
-            Node n;
-            List<String> downloads = new ArrayList<String>();
-            while ((n = iterator.nextNode()) != null) {
-                String value = n.getChildNodes().item(0).getTextContent();
-                Matcher matcher = pattern.matcher(value);
-                matcher.find();
-                downloads.add(matcher.group(1));
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(new ByteArrayInputStream(data));
+            XPathFactory xfactory = XPathFactory.newInstance();
+            XPath xpath = xfactory.newXPath();
+            XPathExpression expr = xpath.compile("/metadata/versioning/versions/version");
+            Object result = expr.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+            List<String> versions = new ArrayList<String>();
+            for (int i = 0; i < nodes.getLength(); i++) {
+                versions.add(nodes.item(i).getTextContent());
             }
-            String latest = downloads.get(0);
-            int slashIndex = latest.lastIndexOf('/');
-            ByteArrayOutputStream jar = VersionCheck.get(latest, httpclient);
-            String name = latest.substring(slashIndex + 1);
-            FileOutputStream test = new FileOutputStream(name);
-            test.write(jar.toByteArray());
-            test.close();
+            Collections.sort(versions);
+            String latestversion = versions.get(versions.size() - 1);
+
+            if (VersionCheck.version.compareTo(latestversion) < 0) {
+                if (IOMethods.showConfirmation(cfg, cfg.getShortTitle(), "A newer version is available, download?")) {
+                    String dl = "http://mmmr.googlecode.com/svn/maven2/org/mmmr/mmmr/" + latestversion + "/mmmr-" + latestversion + ".jar";
+                    DownloadingService.downloadURL(new URL(dl), new File("mmmr-" + latestversion + ".jar"));
+                }
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

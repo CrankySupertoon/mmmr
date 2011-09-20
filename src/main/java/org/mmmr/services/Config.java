@@ -91,6 +91,8 @@ public class Config {
 
     private File thisFolder;
 
+    private String shortTitle;
+
     private String title;
 
     private File tmp;
@@ -102,7 +104,8 @@ public class Config {
 
         this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/Minecraftx512.png"));
         this.mcVersion = "1.8.1";
-        this.title = "Minecraft Mod Manager Reloaded 1.0b For Minecraft " + this.mcVersion;
+        this.shortTitle = "Minecraft Mod Manager Reloaded";
+        this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion;
         this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar";
 
         this.parameterValues = IOMethods.parseParams(args);
@@ -238,6 +241,10 @@ public class Config {
             value = this.setProperty(key, defaultValue);
         }
         return value;
+    }
+
+    public String getShortTitle() {
+        return this.shortTitle;
     }
 
     public File getThisFolder() {

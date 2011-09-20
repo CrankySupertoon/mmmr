@@ -51,6 +51,7 @@ public class MMMRStart {
             FancySwing.lookAndFeel();
             Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
             MMMRStart.checkBat(cfg);
+            VersionCheck.check(cfg);
             ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
             toolTipManager.setInitialDelay(100);
             toolTipManager.setReshowDelay(100);

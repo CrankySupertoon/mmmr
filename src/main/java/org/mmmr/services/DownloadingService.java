@@ -13,6 +13,10 @@ import org.mmmr.services.interfaces.DownloadingServiceI;
 public class DownloadingService {
     private static DownloadingServiceI downloadingService = new DownloadingServiceSimple();
 
+    public static byte[] downloadURL(URL url) throws IOException {
+        return DownloadingService.getDownloadingService().downloadURL(url);
+    }
+
     public static void downloadURL(URL url, File target) throws IOException {
         DownloadingService.getDownloadingService().downloadURL(url, target);
     }

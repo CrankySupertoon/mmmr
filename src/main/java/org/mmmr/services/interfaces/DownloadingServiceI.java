@@ -8,5 +8,7 @@ import java.net.URL;
  * @author Jurgen
  */
 public interface DownloadingServiceI {
+    public abstract byte[] downloadURL(URL url) throws IOException;
+
     public abstract void downloadURL(URL url, File target) throws IOException;
 }
