@@ -24,12 +24,14 @@ import java.util.regex.Pattern;
 import javax.swing.DropMode;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
@@ -56,6 +58,41 @@ import ca.odell.glazedlists.swing.TableComparatorChooser;
  * @author jdlandsh
  */
 public class ETable extends JTable implements ETableI, Reorderable {
+    /**
+     * @see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524
+     */
+    public static class BooleanTableCellRenderer extends DefaultTableCellRenderer {
+        private static final long serialVersionUID = 2577869717107398445L;
+
+        private JCheckBox renderer;
+
+        public BooleanTableCellRenderer() {
+            this.renderer = new JCheckBox();
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            Boolean b = (Boolean) value;
+            if (b != null) {
+                this.renderer.setSelected(b);
+            }
+            if (isSelected) {
+                this.renderer.setForeground(table.getSelectionForeground());
+                this.renderer.setBackground(table.getSelectionBackground());
+            } else {
+                Color bg = this.getBackground();
+                this.renderer.setForeground(this.getForeground());
+                // We have to create a new color object because Nimbus returns
+                // a color of type DerivedColor, which behaves strange, not sure
+                // why.
+                this.renderer.setBackground(new Color(bg.getRed(), bg.getGreen(), bg.getBlue()));
+                this.renderer.setOpaque(true);
+            }
+            return this.renderer;
+        }
+    }
+
     protected class EFiltering {
         /**
          * J_DOC
@@ -476,6 +513,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
         this.filtering.install();
         this.getTableHeader().setReorderingAllowed(this.cfg.isReorderable());
         this.getTableHeader().setResizingAllowed(this.cfg.isResizable());
+        this.setDefaultRenderer(Boolean.class, new BooleanTableCellRenderer());
     }
 
     /**
@@ -699,14 +737,8 @@ public class ETable extends JTable implements ETableI, Reorderable {
     public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
         Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
         if (c instanceof JLabel) {
-            String text = JLabel.class.cast(
-                    TableCellRenderer.class.cast(c).getTableCellRendererComponent(this, this.getValueAt(rowIndex, vColIndex), false, false, rowIndex,
-                            vColIndex)).getText();
-            if (StringUtils.isNotBlank(text)) {
-                JLabel.class.cast(c).setToolTipText(text);
-            } else {
-                JLabel.class.cast(c).setToolTipText(null);
-            }
+            String text = JLabel.class.cast(c).getText();
+            JLabel.class.cast(c).setToolTipText(StringUtils.isNotBlank(text) ? text : null);
         }
         return c;
     }
@@ -778,4 +810,5 @@ public class ETable extends JTable implements ETableI, Reorderable {
     public void unsort() {
         this.sorting.unsort();
     }
+
 }
