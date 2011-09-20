@@ -24,9 +24,9 @@ public class Config {
     public static final DateFormat DATE_FORMAT;
 
     static {
-        LOCALE = Locale.getDefault();
+        LOCALE = new Locale(System.getProperty("user.language.format"), System.getProperty("user.country.format"));
         NUMBER_FORMAT = NumberFormat.getNumberInstance(Config.LOCALE);
-        DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Config.LOCALE);
+        DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Config.LOCALE);
     }
 
     private File backup;
@@ -44,6 +44,8 @@ public class Config {
     private Font font;
 
     private Font font18;
+
+    private Font fontNarrow;
 
     private ImageIcon icon;
 
@@ -154,6 +156,10 @@ public class Config {
         return this.font18;
     }
 
+    public Font getFontNarrow() {
+        return this.fontNarrow;
+    }
+
     public ImageIcon getIcon() {
         return this.icon;
     }
@@ -248,6 +254,10 @@ public class Config {
 
     public void setFont18(Font font18) {
         this.font18 = font18;
+    }
+
+    public void setFontNarrow(Font fontNarrow) {
+        this.fontNarrow = fontNarrow;
     }
 
     public void setMcCommandline(String mcCommandline) {

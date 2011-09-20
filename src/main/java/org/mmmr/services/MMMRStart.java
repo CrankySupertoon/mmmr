@@ -17,7 +17,6 @@ import org.mmmr.services.swing.common.FancySwing;
  * @author Jurgen
  */
 public class MMMRStart {
-
     private static void checkBat(Config cfg) throws IOException {
         File bnc = new File("start MMMR no-console.bat");
         if (!bnc.exists()) {
@@ -48,6 +47,7 @@ public class MMMRStart {
 
     public static void main(String[] args) {
         try {
+            System.getProperties().list(System.out);
             FancySwing.lookAndFeel();
             Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
             MMMRStart.checkBat(cfg);
@@ -74,22 +74,28 @@ public class MMMRStart {
      */
     private static void prepareFont(Config cfg) {
         Font font = null;
+        Font fontNarrow = null;
         try {
-            File fontfont = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSans.ttf");
-            if (!fontfont.exists()) {
+            File fontfile = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSans.ttf");
+            File fontfile2 = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed.ttf");
+            if (!fontfile.exists()) {
                 URL dejavu = new URL(
                         "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip");
                 File file = new File(cfg.getTmp(), "dejavu-fonts-ttf-2.33.zip");
                 DownloadingService.downloadURL(dejavu, file);
                 ArchiveService.extract(file, cfg.getCfg());
             }
-            font = Font.createFont(Font.TRUETYPE_FONT, fontfont);
+            font = Font.createFont(Font.TRUETYPE_FONT, fontfile);
+            fontNarrow = Font.createFont(Font.TRUETYPE_FONT, fontfile2);
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);
             font = new JLabel().getFont();
+            fontNarrow = font;
         }
-        cfg.setFont(font.deriveFont(182));
+        cfg.setFont(font.deriveFont(18f));
         Font font18 = font.deriveFont(18f);
         cfg.setFont18(font18);
+        fontNarrow = fontNarrow.deriveFont(18f);
+        cfg.setFontNarrow(fontNarrow);
     }
 }

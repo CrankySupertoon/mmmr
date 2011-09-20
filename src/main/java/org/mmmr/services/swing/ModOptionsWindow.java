@@ -60,7 +60,7 @@ public class ModOptionsWindow extends JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            this.setFont(ModOptionsWindow.this.cfg.getFont().deriveFont(10.0f));
+            this.setFont(ModOptionsWindow.this.cfg.getFontNarrow().deriveFont(12.0f));
 
             return this;
         }
@@ -124,6 +124,8 @@ public class ModOptionsWindow extends JFrame {
         final ETable options = new ETable(configuration);
         final ETableI safetable = options.getEventSafe();
         final List<String> orderedFields = new ArrayList<String>();
+
+        options.setRowHeight(28);
 
         options.addMouseListener(new MouseAdapter() {
             @Override
@@ -237,7 +239,7 @@ public class ModOptionsWindow extends JFrame {
                 } else if (m1.isInstalled() && m2.isInstalled()) {
                     return m2.getInstallOrder() - m1.getInstallOrder();
                 } else {
-                    return m2.getName().compareToIgnoreCase(m1.getName());
+                    return m1.getName().compareToIgnoreCase(m2.getName());
                 }
             }
         });
