@@ -12,6 +12,8 @@ public interface ETableI {
 
     public abstract void clear();
 
+    public abstract Object getColumnValueAtVisualColumn(int i);
+
     public abstract ETableRecord getRecordAtVisualRow(int i);
 
     public abstract void removeAllRecords();

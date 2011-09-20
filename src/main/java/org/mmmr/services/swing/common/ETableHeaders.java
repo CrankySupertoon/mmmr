@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
+
 import ca.odell.glazedlists.gui.AdvancedTableFormat;
 import ca.odell.glazedlists.gui.WritableTableFormat;
 
@@ -84,7 +86,7 @@ public class ETableHeaders implements WritableTableFormat<ETableRecord>, Advance
         return new Comparator<Object>() {
             @Override
             public int compare(Object o1, Object o2) {
-                return 0;
+                return new CompareToBuilder().append(o1, o2).toComparison();
             }
         };
     }

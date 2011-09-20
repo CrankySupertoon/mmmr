@@ -140,13 +140,13 @@ public class ModOptionsWindow extends JFrame {
                         if (col == -1) {
                             return;
                         }
-                        if (orderedFields.indexOf("url") == col) {
+                        if ("url".equals(safetable.getColumnValueAtVisualColumn(col))) {
                             String url = String.valueOf(safetable.getRecordAtVisualRow(row).get(col));
                             Desktop.getDesktop().browse(URI.create(url));
                         }
                     }
                 } catch (Exception ex) {
-                    // TODO: handle exception
+                    ExceptionAndLogHandler.log(ex);
                 }
             }
         });

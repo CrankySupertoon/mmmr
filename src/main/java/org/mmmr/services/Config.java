@@ -24,7 +24,19 @@ public class Config {
     public static final DateFormat DATE_FORMAT;
 
     static {
-        LOCALE = new Locale(System.getProperty("user.language.format"), System.getProperty("user.country.format"));
+        Locale defaultLocale;
+        try {
+            // (1) Java 1.7 compilable in Java 1.6 but gives Exception at runtimee so we can fall back to (2)
+            @SuppressWarnings("rawtypes")
+            Class type = Class.forName("java.util.Locale$Category");
+            @SuppressWarnings("unchecked")
+            Object enumvalue = Enum.valueOf(type, "FORMAT");
+            defaultLocale = Locale.class.cast(Locale.class.getMethod("getDefault", type).invoke(null, enumvalue));
+        } catch (Exception ex) {
+            // (2) Java 1.6 (gives wrong info in Java 1.7)
+            defaultLocale = Locale.getDefault();
+        }
+        LOCALE = defaultLocale;
         NUMBER_FORMAT = NumberFormat.getNumberInstance(Config.LOCALE);
         DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Config.LOCALE);
     }

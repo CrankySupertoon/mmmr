@@ -47,6 +47,7 @@ import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.matchers.AbstractMatcherEditor;
 import ca.odell.glazedlists.matchers.Matcher;
 import ca.odell.glazedlists.swing.EventSelectionModel;
+import ca.odell.glazedlists.swing.EventTableColumnModel;
 import ca.odell.glazedlists.swing.EventTableModel;
 import ca.odell.glazedlists.swing.SortableRenderer;
 import ca.odell.glazedlists.swing.TableComparatorChooser;
@@ -343,6 +344,8 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
         protected final static double DEGREE_90 = 90.0 * Math.PI / 180.0;
 
+        protected Map<Icon, Icon> rotatedIconsCache = new HashMap<Icon, Icon>();
+
         /**
          * Creates a rotated version of the input image.
          * 
@@ -418,7 +421,12 @@ public class ETable extends JTable implements ETableI, Reorderable {
         @Override
         public void setSortIcon(Icon sortIcon) {
             if (sortIcon != null) {
-                this.sortIcon = this.createRotatedImage(this, sortIcon, 90.0);
+                Icon found = this.rotatedIconsCache.get(sortIcon);
+                if (found == null) {
+                    found = this.createRotatedImage(this, sortIcon, 90.0);
+                    this.rotatedIconsCache.put(sortIcon, found);
+                }
+                this.sortIcon = found;
             } else {
                 this.sortIcon = null;
             }
@@ -452,6 +460,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
             this.setDropMode(DropMode.INSERT_ROWS);
             this.setTransferHandler(new TableRowTransferHandler(this));
         }
+        this.setColumnModel(new EventTableColumnModel<TableColumn>(new BasicEventList<TableColumn>()));
         this.records = (this.cfg.isThreadSafe() ? GlazedLists.threadSafeList(new BasicEventList<ETableRecord>()) : new BasicEventList<ETableRecord>());
         this.sorting = new ESorting(this.records);
         this.tableFormat = new ETableHeaders();
@@ -543,6 +552,15 @@ public class ETable extends JTable implements ETableI, Reorderable {
         Class<?> clas = super.getColumnClass(columnIndex);
         // System.out.println("ETableHeaders.getColumnClass(" + columnIndex + ")=" + clas);
         return clas;
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#getColumnValueAtVisualColumn(int)
+     */
+    @Override
+    public Object getColumnValueAtVisualColumn(int i) {
+        return this.getColumnModel().getColumn(i).getHeaderValue();
     }
 
     /**

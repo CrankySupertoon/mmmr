@@ -24,6 +24,13 @@ public class ETableConfig {
 
     public ETableConfig() {
         super();
+        this.threadSafe = true;
+    }
+
+    public ETableConfig(boolean all) {
+        this(all, all, all, all, all, all, all, all);
+        this.threadSafe = true;
+        this.vertical = false;
     }
 
     public ETableConfig(boolean threadSafe, boolean sortable, boolean filterable, boolean editable, boolean reorderable, boolean resizable,

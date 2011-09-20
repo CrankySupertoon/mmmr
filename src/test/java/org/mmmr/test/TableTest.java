@@ -1,6 +1,8 @@
 package org.mmmr.test;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -18,18 +20,44 @@ public class TableTest {
     public static void main(String[] args) {
         try {
             FancySwing.lookAndFeel();
-            ETableConfig configuration = new ETableConfig();
+            ETableConfig configuration = new ETableConfig(true);
             final ETable table = new ETable(configuration);
+            final ETableHeaders headers = new ETableHeaders();
+            table.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    try {
+                        if ((e.getClickCount() == 1) && (e.getButton() == MouseEvent.BUTTON1)) {
+                            int row = table.rowAtPoint(e.getPoint());
+                            if (row == -1) {
+                                return;
+                            }
+                            int col = table.columnAtPoint(e.getPoint());
+                            if (col == -1) {
+                                return;
+                            }
+                            if ("15".equals("" + table.getRecordAtVisualRow(row).get(0))) {
+                                System.out.println("cellvalue 15");
+                            }
+                            if ("test 1".equals(table.getColumnValueAtVisualColumn(col))) {
+                                System.out.println("col 1");
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
             final ETableI safetable = table.getEventSafe();
             final JFrame frame = new JFrame();
             frame.getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 200);
             final Random r = new Random(256955466579946l);
-            ETableHeaders headers = new ETableHeaders();
-            headers.add("test \n 1", Integer.class, true);
-            headers.add("test \n 2", String.class, true);
-            headers.add("test \n 3", Boolean.class, true);
+            headers.add("test 1", Integer.class, true);
+            headers.add("test 2", String.class, true);
+            headers.add("test 3", Boolean.class, true);
             safetable.setHeaders(headers);
             for (int i = 0; i < 100; i++) {
                 int next = r.nextInt(1000);
