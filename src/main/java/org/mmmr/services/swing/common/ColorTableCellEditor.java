@@ -19,13 +19,13 @@ public class ColorTableCellEditor extends AbstractCellEditor implements TableCel
 
     protected Locale locale;
 
-    Color currentColor;
+    protected Color currentColor;
 
-    JButton button;
+    protected JButton button;
 
-    JColorChooser colorChooser;
+    protected JColorChooser colorChooser;
 
-    JDialog dialog;
+    protected JDialog dialog;
 
     protected static final String EDIT = "edit";
 
@@ -44,7 +44,6 @@ public class ColorTableCellEditor extends AbstractCellEditor implements TableCel
         this.dialog = JColorChooser.createDialog(this.button, "Pick a Color", true, // modal
                 this.colorChooser, this, // OK button handler
                 null); // no CANCEL button handler
-
     }
 
     /**
@@ -88,5 +87,7 @@ public class ColorTableCellEditor extends AbstractCellEditor implements TableCel
 
     public void setLocale(Locale l) {
         this.locale = l;
+        this.colorChooser.setLocale(l);
+        this.dialog.setLocale(l);
     }
 }
