@@ -1,0 +1,10 @@
+<mod archive="ElementalCreepers_v1.5_client.zip" name="Elemental Creepers"
+	url="http://www.minecraftforum.net/topic/498342-"
+	version="1.5"  mc="1.8.1">
+	<dependencies>
+		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+	</dependencies>	
+	<resources>
+		<resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+	</resources>
+</mod>
