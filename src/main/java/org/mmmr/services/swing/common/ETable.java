@@ -550,9 +550,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
             public String getToolTipText(MouseEvent e) {
                 java.awt.Point p = e.getPoint();
                 int index = this.columnModel.getColumnIndexAtX(p.x);
-
-                // int realIndex = columnModel.getColumn(index).getModelIndex();
-                String headerValue = String.valueOf(this.columnModel.getColumn(index).getHeaderValue());
+                String headerValue = String.valueOf(ETable.this.getColumnValueAtVisualColumn(index));
 
                 if (ETable.this.cfg.isFilterable()) {
                     String filter = ETable.this.filtering.getFilterPopup().popupFilters.get(index);

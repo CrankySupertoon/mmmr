@@ -12,9 +12,11 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer.UIResource 
     /** serialVersionUID */
     private static final long serialVersionUID = -7605301072046365348L;
 
-    private Icon createEmptyIcon() {
+    protected Icon emptyIcon;
+
+    public ColorTableCellRenderer() {
         BufferedImage bi = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
-        return new ImageIcon(bi);
+        this.emptyIcon = new ImageIcon(bi);
     }
 
     private Icon createIcon(Color color) {
@@ -32,15 +34,32 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer.UIResource 
     @Override
     protected void setValue(Object value) {
         if (value == null) {
-            this.setIcon(this.createEmptyIcon());
+            this.setIcon(this.emptyIcon);
             super.setValue("");
         }
         Color color = Color.class.cast(value);
         String red = Integer.toHexString(color.getRed());
+        if (red.length() == 1) {
+            red = "0" + red;
+        }
         String green = Integer.toHexString(color.getGreen());
+        if (green.length() == 1) {
+            green = "0" + green;
+        }
         String blue = Integer.toHexString(color.getBlue());
-        String alpha = Integer.toHexString(color.getBlue());
-        super.setValue(("#" + red + green + blue + alpha).toUpperCase());
-        this.setIcon(this.createIcon(color));
+        if (blue.length() == 1) {
+            blue = "0" + blue;
+        }
+        String alpha = Integer.toHexString(color.getAlpha());
+        if (alpha.length() == 1) {
+            alpha = "0" + alpha;
+        }
+        if (alpha.equals("FF")) {
+            super.setValue(("#" + red + green + blue).toUpperCase());
+            this.setIcon(this.createIcon(color));
+        } else {
+            super.setValue(("#" + red + green + blue + "(" + alpha + ")").toUpperCase());
+            this.setIcon(this.createIcon(color));
+        }
     }
 }
