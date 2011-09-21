@@ -155,6 +155,10 @@ public class IOMethods {
         return all;
     }
 
+    public static File getCurrentJar() {
+        return new File(IOMethods.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+    }
+
     @SuppressWarnings("restriction")
     public static MemInfo getMemInfo() {
         com.sun.management.OperatingSystemMXBean o = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();

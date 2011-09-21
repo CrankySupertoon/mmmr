@@ -4,18 +4,26 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.mmmr.Mod;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -24,6 +32,26 @@ import org.xml.sax.SAXException;
  * @author Jurgen
  */
 public class XmlService {
+    private static final XPathFactory xfactory = XPathFactory.newInstance();
+
+    private static final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+    static {
+        // was true but xpath didn't work on pom.xml
+        XmlService.factory.setNamespaceAware(false);
+    }
+
+    public static List<Node> xpath(InputStream xml, String xpathString) throws Exception {
+        Document doc = XmlService.factory.newDocumentBuilder().parse(xml);
+        doc.normalizeDocument();
+        NodeList nodes = NodeList.class.cast(XmlService.xfactory.newXPath().compile(xpathString).evaluate(doc, XPathConstants.NODESET));
+        List<Node> nodeList = new ArrayList<Node>();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            nodeList.add(nodes.item(i));
+        }
+        return nodeList;
+    }
+
     private Marshaller marshaller;
 
     private Unmarshaller unmarshaller;

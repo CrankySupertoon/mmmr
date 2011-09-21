@@ -47,6 +47,8 @@ public class MMMRStart {
 
     public static void main(String[] args) {
         try {
+            System.out.println(IOMethods.getCurrentJar().getAbsolutePath());
+            System.exit(0);
             FancySwing.lookAndFeel();
             Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
             MMMRStart.checkBat(cfg);
