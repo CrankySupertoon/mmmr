@@ -7,6 +7,7 @@ import java.util.Locale;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+// javax.swing.text.DateFormatter
 public class DateTableCellRenderer extends DefaultTableCellRenderer.UIResource {
     public enum Type {
         DATE, TIME, DATE_TIME;

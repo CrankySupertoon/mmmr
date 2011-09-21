@@ -32,10 +32,10 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -456,6 +456,14 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
     protected DateTableCellEditor dateTableCellEditor = new DateTableCellEditor();
 
+    protected NumberTableCellEditor numberTableCellEditor = new NumberTableCellEditor();
+
+    protected NumberTableCellRenderer numberTableCellRenderer = new NumberTableCellRenderer();
+
+    protected ColorTableCellEditor colorTableCellEditor = new ColorTableCellEditor();
+
+    protected ColorTableCellRenderer colorTableCellRenderer = new ColorTableCellRenderer();
+
     public ETable(ETableConfig configuration) {
         this.cfg = configuration;
         this.cfg.lock();
@@ -485,9 +493,18 @@ public class ETable extends JTable implements ETableI, Reorderable {
         this.getTableHeader().setResizingAllowed(this.cfg.isResizable());
 
         this.setDefaultRenderer(Boolean.class, new BooleanTableCellRenderer());
+        this.setDefaultEditor(Boolean.class, new BooleanTableCellEditor());
 
         this.setDefaultRenderer(Date.class, this.dateTableCellRenderer);
         this.setDefaultEditor(Date.class, this.dateTableCellEditor);
+
+        this.setDefaultRenderer(Color.class, this.colorTableCellRenderer);
+        this.setDefaultEditor(Color.class, this.colorTableCellEditor);
+
+        this.setDefaultRenderer(Number.class, this.numberTableCellRenderer);
+        this.setDefaultRenderer(Float.class, this.numberTableCellRenderer);
+        this.setDefaultRenderer(Double.class, this.numberTableCellRenderer);
+        this.setDefaultEditor(Number.class, this.numberTableCellEditor);
     }
 
     /**
@@ -675,7 +692,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
      * @param margin
      */
     public void packColumn(int vColIndex, int margin) {
-        DefaultTableColumnModel colModel = (DefaultTableColumnModel) this.getColumnModel();
+        TableColumnModel colModel = this.getColumnModel();
         TableColumn col = colModel.getColumn(vColIndex);
         int width = 0;
 
@@ -776,6 +793,10 @@ public class ETable extends JTable implements ETableI, Reorderable {
         super.setLocale(l);
         this.dateTableCellRenderer.setLocale(l);
         this.dateTableCellEditor.setLocale(l);
+        this.numberTableCellEditor.setLocale(l);
+        this.numberTableCellRenderer.setLocale(l);
+        this.colorTableCellEditor.setLocale(l);
+        this.colorTableCellRenderer.setLocale(l);
     }
 
     /**

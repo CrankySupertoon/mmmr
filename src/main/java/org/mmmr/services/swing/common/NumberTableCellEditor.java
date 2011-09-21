@@ -1,29 +1,19 @@
 package org.mmmr.services.swing.common;
 
-import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTextField;
 
-// javax.swing.text.DateFormatter
-public class DateTableCellEditor extends DefaultCellEditor {
-    public enum Type {
-        DATE, TIME, DATE_TIME;
-    }
-
+// javax.swing.text.NumberFormatter
+public class NumberTableCellEditor extends DefaultCellEditor {
     private static final long serialVersionUID = 5169127745067354714L;
 
-    protected DateFormat formatter;
+    protected NumberFormat formatter;
 
-    protected Type type;
-
-    public DateTableCellEditor() {
-        this(Type.DATE_TIME);
-    }
-
-    public DateTableCellEditor(Type type) {
+    public NumberTableCellEditor() {
         super(new JTextField());
 
         final JTextField jtf = JTextField.class.cast(this.getComponent());
@@ -38,7 +28,7 @@ public class DateTableCellEditor extends DefaultCellEditor {
                     return null;
                 }
                 try {
-                    return DateTableCellEditor.this.formatter.parseObject(jtf.getText());
+                    return NumberTableCellEditor.this.formatter.parseObject(jtf.getText());
                 } catch (ParseException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -50,12 +40,11 @@ public class DateTableCellEditor extends DefaultCellEditor {
              */
             @Override
             public void setValue(Object value) {
-                jtf.setText((value != null) ? DateTableCellEditor.this.formatter.format(value) : "");
+                jtf.setText((value != null) ? NumberTableCellEditor.this.formatter.format(value) : "");
             }
         };
         jtf.addActionListener(this.delegate);
 
-        this.type = type;
         this.newFormatter();
     }
 
@@ -64,17 +53,7 @@ public class DateTableCellEditor extends DefaultCellEditor {
     }
 
     protected void newFormatter() {
-        switch (this.type) {
-            case DATE:
-                this.formatter = DateFormat.getDateInstance(DateFormat.SHORT, this.getLocale());
-                break;
-            case DATE_TIME:
-                this.formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, this.getLocale());
-                break;
-            case TIME:
-                this.formatter = DateFormat.getTimeInstance(DateFormat.SHORT, this.getLocale());
-                break;
-        }
+        this.formatter = NumberFormat.getInstance(this.getLocale());
     }
 
     public void setLocale(Locale l) {
