@@ -1,0 +1,2 @@
+* when this issue is resolved (http://sourceforge.net/apps/mediawiki/sevenzipjbind/index.php?title=Maven) download 7zipbinding from maven repo
+* 
