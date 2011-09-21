@@ -102,7 +102,7 @@ public class Config {
     public Config(String[] args, File thisFolder) throws IOException {
         this.thisFolder = thisFolder;
 
-        this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/Minecraftx512.png"));
+        this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/Minecraftx256.png"));
         this.mcVersion = "1.8.1";
         this.shortTitle = "Minecraft Mod Manager Reloaded";
         this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion;
