@@ -16,25 +16,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.swing.DefaultCellEditor;
 import javax.swing.DropMode;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
@@ -61,70 +58,6 @@ import ca.odell.glazedlists.swing.TableComparatorChooser;
  * @author jdlandsh
  */
 public class ETable extends JTable implements ETableI, Reorderable {
-    /**
-     * @see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524
-     */
-    public static class BooleanTableCellRenderer extends DefaultTableCellRenderer {
-        private static final long serialVersionUID = 2577869717107398445L;
-
-        private JCheckBox renderer;
-
-        public BooleanTableCellRenderer() {
-            this.renderer = new JCheckBox();
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            Boolean b = (Boolean) value;
-            if (b != null) {
-                this.renderer.setSelected(b);
-            }
-            if (isSelected) {
-                this.renderer.setForeground(table.getSelectionForeground());
-                this.renderer.setBackground(table.getSelectionBackground());
-            } else {
-                Color bg = this.getBackground();
-                this.renderer.setForeground(this.getForeground());
-                // We have to create a new color object because Nimbus returns
-                // a color of type DerivedColor, which behaves strange, not sure
-                // why.
-                this.renderer.setBackground(new Color(bg.getRed(), bg.getGreen(), bg.getBlue()));
-                this.renderer.setOpaque(true);
-            }
-            return this.renderer;
-        }
-    }
-
-    public static class DateTableCellEditor extends DefaultCellEditor {
-        private static final long serialVersionUID = 5169127745067354714L;
-
-        public DateTableCellEditor() {
-            super(new JTextField());
-        }
-    }
-
-    public static class DateTableCellRenderer extends DefaultTableCellRenderer.UIResource {
-        private static final long serialVersionUID = -8217402048878663776L;
-
-        protected DateFormat formatter;
-
-        @Override
-        public void setValue(Object value) {
-            if (this.formatter == null) {
-                this.formatter = DateFormat.getDateInstance();
-            }
-            this.setText((value == null) ? "" : this.formatter.format(value));
-        }
-
-        // @Override
-        // public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        // if (value != null) {
-        // value = Config.DATE_FORMAT.format(Date.class.cast(value));
-        // }
-        // return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        // }
-    }
 
     protected class EFiltering {
         /**
@@ -519,6 +452,10 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
     protected ETableHeaders tableFormat;
 
+    protected DateTableCellRenderer dateTableCellRenderer = new DateTableCellRenderer();
+
+    protected DateTableCellEditor dateTableCellEditor = new DateTableCellEditor();
+
     public ETable(ETableConfig configuration) {
         this.cfg = configuration;
         this.cfg.lock();
@@ -549,8 +486,8 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
         this.setDefaultRenderer(Boolean.class, new BooleanTableCellRenderer());
 
-        this.setDefaultRenderer(Date.class, new DateTableCellRenderer());
-        this.setDefaultEditor(Date.class, new DateTableCellEditor());
+        this.setDefaultRenderer(Date.class, this.dateTableCellRenderer);
+        this.setDefaultEditor(Date.class, this.dateTableCellEditor);
     }
 
     /**
@@ -828,6 +765,17 @@ public class ETable extends JTable implements ETableI, Reorderable {
         this.sorting.dispose();
         this.tableModel.setTableFormat(headers);
         this.sorting.install();
+    }
+
+    /**
+     * 
+     * @see java.awt.Component#setLocale(java.util.Locale)
+     */
+    @Override
+    public void setLocale(Locale l) {
+        super.setLocale(l);
+        this.dateTableCellRenderer.setLocale(l);
+        this.dateTableCellEditor.setLocale(l);
     }
 
     /**

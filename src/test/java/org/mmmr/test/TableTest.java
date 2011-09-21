@@ -15,11 +15,12 @@ import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableI;
 import org.mmmr.services.swing.common.ETableRecordArray;
+import org.mmmr.services.swing.common.FancySwing;
 
 public class TableTest {
     public static void main(String[] args) {
         try {
-            // FancySwing.lookAndFeel();
+            FancySwing.lookAndFeel();
             ETableConfig configuration = new ETableConfig(true);
             final ETable table = new ETable(configuration);
             final ETableHeaders headers = new ETableHeaders();
