@@ -25,6 +25,8 @@ public class BooleanTableCellRenderer extends DefaultTableCellRenderer {
         Boolean b = (Boolean) value;
         if (b != null) {
             this.renderer.setSelected(b);
+        } else {
+            this.renderer.setSelected(false);
         }
         if (isSelected) {
             this.renderer.setForeground(table.getSelectionForeground());

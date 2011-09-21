@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -83,6 +84,8 @@ public class TableTest {
             headers.add("Color", Color.class, true);
             headers.add("Enum", EnumTest.class, true);
             safetable.setHeaders(headers);
+            Object[] empty = new Object[headers.getColumnCount()];
+            safetable.addRecord(new ETableRecordArray(empty));
             for (int i = 0; i < 100; i++) {
                 int next = r.nextInt(1000);
                 safetable.addRecord(new ETableRecordArray(new Object[] {
@@ -103,6 +106,7 @@ public class TableTest {
                 table.packColumn(i, 3);
             }
             table.setDefaultEditor(EnumTest.class, new EnumTableCellEditor<EnumTest>(EnumTest.class));
+            table.setLocale(Locale.getDefault(Locale.Category.FORMAT));
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
