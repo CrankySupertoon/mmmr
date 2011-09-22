@@ -117,7 +117,9 @@ public class StatusWindow extends JFrame {
         this.goOn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ManagerWindow(cfg).setVisible(true);
+                ManagerWindow managerWindow = new ManagerWindow(cfg);
+                managerWindow.setLocationRelativeTo(StatusWindow.this);
+                managerWindow.setVisible(true);
                 StatusWindow.this.dispose();
             }
         });

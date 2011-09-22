@@ -1,9 +1,8 @@
 package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,11 +21,10 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumnModel;
 
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
@@ -42,42 +40,6 @@ import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
 
 public class ModOptionsWindow extends JFrame {
-    private class DateRenderer extends DefaultRenderer {
-        private static final long serialVersionUID = -8217402048878663776L;
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value != null) {
-                value = Config.DATE_FORMAT.format(Date.class.cast(value));
-            }
-            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        }
-    }
-
-    private class DefaultRenderer extends DefaultTableCellRenderer {
-        private static final long serialVersionUID = -6412182708542004171L;
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            this.setFont(ModOptionsWindow.this.cfg.getFontNarrow().deriveFont(12.0f));
-
-            return this;
-        }
-    }
-
-    private class UrlAsStringRenderer extends DefaultRenderer {
-        private static final long serialVersionUID = -8217402048878663776L;
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            this.setForeground(Color.BLUE);
-
-            return this;
-        }
-    }
-
     private static final long serialVersionUID = -3663235803657033008L;
 
     private Config cfg;
@@ -98,7 +60,20 @@ public class ModOptionsWindow extends JFrame {
         jtable.getTableHeader().setBorder(BorderFactory.createRaisedBevelBorder());
         mainpanel.add(new JScrollPane(jtable), BorderLayout.CENTER);
 
-        JButton quit = new JButton("Select an option and click here.");
+        JPanel actions = new JPanel(new GridLayout(1, -1));
+
+        JButton commit = new JButton("Apply changes.");
+        commit.setFont(cfg.getFont18());
+        commit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO make changes (installing/deinstalling/changing order)
+                ModOptionsWindow.this.dispose();
+            }
+        });
+        actions.add(commit);
+
+        JButton quit = new JButton("Do not make any changes.");
         quit.setFont(cfg.getFont18());
         quit.addActionListener(new ActionListener() {
             @Override
@@ -106,7 +81,9 @@ public class ModOptionsWindow extends JFrame {
                 ModOptionsWindow.this.dispose();
             }
         });
-        mainpanel.add(quit, BorderLayout.SOUTH);
+        actions.add(quit);
+
+        mainpanel.add(actions, BorderLayout.SOUTH);
 
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -115,18 +92,18 @@ public class ModOptionsWindow extends JFrame {
         this.pack();
         this.setSize((int) jtable.getPreferredSize().getWidth(), this.getHeight());
         FancySwing.rounded(this);
-        this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
 
     private JTable getOptions() {
-        ETableConfig configuration = new ETableConfig(true, false, true, true, true, true, false, true);
+        ETableConfig configuration = new ETableConfig(true, false, true, true, false, true, false, true);
         final ETable options = new ETable(configuration);
         final ETableI safetable = options.getEventSafe();
         final List<String> orderedFields = new ArrayList<String>();
 
         options.setRowHeight(28);
 
+        // click on column actions
         options.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -183,10 +160,6 @@ public class ModOptionsWindow extends JFrame {
 
         safetable.setHeaders(headers);
 
-        TableColumnModel columnModel = options.getColumnModel();
-        columnModel.getColumn(orderedFields.indexOf("url")).setCellRenderer(new UrlAsStringRenderer());
-        columnModel.getColumn(orderedFields.indexOf("installationDate")).setCellRenderer(new DateRenderer());
-
         File[] modxmls = this.cfg.getMods().listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -207,26 +180,32 @@ public class ModOptionsWindow extends JFrame {
         });
 
         List<ETableRecord> records = new ArrayList<ETableRecord>();
+        // add installed mods (read from database) to list
+        List<Mod> installedMods = this.cfg.getDb().hql("from Mod", Mod.class);
+        for (Mod installedMod : installedMods) {
+            records.add(new ETableRecordBean(orderedFields, installedMod));
+        }
         for (File modxml : modxmls) {
             try {
-                Mod availablemod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
-                // mod not fit for mc version
-                if ((availablemod.getMcVersionDependency() != null) && !availablemod.getMcVersionDependency().contains("?")) {
-                    if (!availablemod.getMcVersionDependency().equals(this.cfg.getMcVersion())) {
+                Mod availableMod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
+                // mod not fit for mc version, do not show mod configuration
+                if ((availableMod.getMcVersionDependency() != null) && !availableMod.getMcVersionDependency().contains("?")) {
+                    if (!availableMod.getMcVersionDependency().equals(this.cfg.getMcVersion())) {
                         continue;
                     }
                 }
-                Mod installedmod = this.cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
-                // mod already installed
-                if ((installedmod != null) && installedmod.isInstalled()) {
+                // mod already added to list (read from database), do not show this configuration
+                if (installedMods.contains(availableMod)) {
                     continue;
                 }
-                records.add(new ETableRecordBean(orderedFields, availablemod));
+                // add mod configuration
+                records.add(new ETableRecordBean(orderedFields, availableMod));
             } catch (Exception ex) {
                 ExceptionAndLogHandler.log(ex);
             }
         }
 
+        // sort, installed on top ordered by install order, then the others by name
         Collections.sort(records, new Comparator<ETableRecord>() {
             @Override
             public int compare(ETableRecord o1, ETableRecord o2) {

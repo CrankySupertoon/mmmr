@@ -96,12 +96,10 @@ public class ManagerWindow extends JFrame {
             }
         });
         mainpanel.add(quit);
-        this.setLocationRelativeTo(null);
         this.setResizable(false);
         FancySwing.translucent(this);
         this.pack();
         this.setSize(800, this.getHeight());
-        this.setLocationRelativeTo(null);
         FancySwing.rounded(this);
         this.setVisible(true);
     }
@@ -117,8 +115,8 @@ public class ManagerWindow extends JFrame {
                         if (ManagerWindow.this.javaOptionsWindow == null) {
                             ManagerWindow.this.javaOptionsWindow = new JavaOptionsWindow(ManagerWindow.this.cfg, ManagerWindow.this.getSize());
                             ManagerWindow.this.javaOptionsWindow.packColumns();
-                            ManagerWindow.this.javaOptionsWindow.setLocationRelativeTo(null);
                         }
+                        ManagerWindow.this.javaOptionsWindow.setLocationRelativeTo(ManagerWindow.this);
                         ManagerWindow.this.javaOptionsWindow.selectDefault();
                         ManagerWindow.this.javaOptionsWindow.setVisible(true);
                     } catch (Exception ex) {
@@ -156,7 +154,9 @@ public class ManagerWindow extends JFrame {
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new ModOptionsWindow(ManagerWindow.this.cfg).setVisible(true);
+                    ModOptionsWindow modOptionsWindow = new ModOptionsWindow(ManagerWindow.this.cfg);
+                    modOptionsWindow.setLocationRelativeTo(ManagerWindow.this);
+                    modOptionsWindow.setVisible(true);
                 }
             });
             mainpanel.add(comp);

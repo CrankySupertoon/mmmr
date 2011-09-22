@@ -38,6 +38,7 @@ import javax.swing.WindowConstants;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.mmmr.services.swing.common.FancySwing;
+import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedOptionPane;
 
 /**
@@ -364,6 +365,7 @@ public class IOMethods {
     public static boolean showConfirmation(Config cfg, String title, String message) {
         RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
         jop.getDelegate().setShady(false);
+        new MoveMouseListener(jop);
         JDialog dialog = IOMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
@@ -380,6 +382,7 @@ public class IOMethods {
     public static void showInformation(Config cfg, String title, String message) {
         RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
         jop.getDelegate().setShady(false);
+        new MoveMouseListener(jop);
         JDialog dialog = IOMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
@@ -396,6 +399,7 @@ public class IOMethods {
     public static <T> T showOptions(Config cfg, String title, String message, T[] options, T selected) {
         RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, null, null);
         jop.getDelegate().setShady(false);
+        new MoveMouseListener(jop);
         jop.setWantsInput(true);
         jop.setSelectionValues(options);
         jop.setInitialSelectionValue(selected);
@@ -419,6 +423,7 @@ public class IOMethods {
     public static void showWarning(Config cfg, String title, String message) {
         RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.ERROR_MESSAGE, JOptionPane.DEFAULT_OPTION);
         jop.getDelegate().setShady(false);
+        new MoveMouseListener(jop);
         JDialog dialog = IOMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());

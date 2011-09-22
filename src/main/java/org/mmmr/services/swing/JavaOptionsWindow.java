@@ -226,7 +226,6 @@ public class JavaOptionsWindow extends JFrame {
             this.setSize(preferredSize);
         }
         FancySwing.rounded(this);
-        this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
 
