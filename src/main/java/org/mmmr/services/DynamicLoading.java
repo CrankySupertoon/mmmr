@@ -78,7 +78,7 @@ public class DynamicLoading {
                             DownloadingService.downloadURL(url, jar);
                             if (jar.length() != len) {
                                 jar.delete();
-                                throw new IOException("length><" + len);
+                                throw new IOException(jar.getName() + ": length><" + len);
                             }
                         }
                     }

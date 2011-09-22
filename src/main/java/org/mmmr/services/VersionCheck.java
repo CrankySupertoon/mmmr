@@ -61,7 +61,7 @@ public class VersionCheck {
                     String dl = VersionCheck.mavenBase + "/" + latestversion + "/" + fname;
                     File newjar = new File(fname);
                     DownloadingService.downloadURL(new URL(dl), newjar);
-                    IOMethods.getCurrentJar().deleteOnExit();
+                    // FIXME delete file
                     System.exit(0);
                 }
             }
