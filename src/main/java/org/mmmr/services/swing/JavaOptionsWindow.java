@@ -171,7 +171,7 @@ public class JavaOptionsWindow extends JFrame {
         }
 
         RoundedPanel mainpanel = new RoundedPanel(new BorderLayout());
-        mainpanel.setShady(false);
+        mainpanel.getDelegate().setShady(false);
         new MoveMouseListener(mainpanel);
         mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         this.getContentPane().add(mainpanel);

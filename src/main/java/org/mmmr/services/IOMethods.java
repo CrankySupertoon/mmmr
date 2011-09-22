@@ -1,5 +1,7 @@
 package org.mmmr.services;
 
+import java.awt.Component;
+import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,10 +33,12 @@ import java.util.zip.CheckedInputStream;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
 import javax.swing.WindowConstants;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.mmmr.services.swing.common.FancySwing;
+import org.mmmr.services.swing.common.RoundedOptionPane;
 
 /**
  * @author Jurgen
@@ -96,6 +100,20 @@ public class IOMethods {
 
     public static long crc32File(File source) throws IOException {
         return IOMethods._copy(source, null);
+    }
+
+    private static JDialog createDialog(JOptionPane pane, String title) {
+        try {
+            final JDialog dialog = new JDialog((Frame) null, title, true);
+            dialog.setUndecorated(true);
+            int style = IOMethods.styleFromMessageType(pane.getMessageType());
+            Method method = JOptionPane.class.getDeclaredMethod("initDialog", JDialog.class, Integer.TYPE, Component.class);
+            method.setAccessible(true);
+            method.invoke(pane, dialog, style, null);
+            return dialog;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static boolean deleteDirectory(File path) {
@@ -344,52 +362,88 @@ public class IOMethods {
     }
 
     public static boolean showConfirmation(Config cfg, String title, String message) {
-        JOptionPane jop = new JOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
-        JDialog dialog = jop.createDialog(FancySwing.getCurrentFrame(), title);
+        RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
+        jop.getDelegate().setShady(false);
+        JDialog dialog = IOMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        FancySwing.rounded(dialog);
+        FancySwing.translucent(dialog);
+        dialog.setLocationRelativeTo(FancySwing.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
         return jop.getValue().equals(JOptionPane.YES_OPTION);
     }
 
     public static void showInformation(Config cfg, String title, String message) {
-        JOptionPane jop = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
-        JDialog dialog = jop.createDialog(FancySwing.getCurrentFrame(), title);
+        RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        jop.getDelegate().setShady(false);
+        JDialog dialog = IOMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        FancySwing.rounded(dialog);
+        FancySwing.translucent(dialog);
+        dialog.setLocationRelativeTo(FancySwing.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
     }
 
     @SuppressWarnings("unchecked")
     public static <T> T showOptions(Config cfg, String title, String message, T[] options, T selected) {
-        JOptionPane pane = new JOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, null, null);
-        pane.setWantsInput(true);
-        pane.setSelectionValues(options);
-        pane.setInitialSelectionValue(selected);
-        JDialog dialog = pane.createDialog(FancySwing.getCurrentFrame(), title);
-        if (cfg != null) {
-            dialog.setIconImage(cfg.getIcon().getImage());
-        }
-        pane.selectInitialValue();
-        dialog.setVisible(true);
-        dialog.dispose();
-        return (T) pane.getInputValue();
-    }
-
-    public static void showWarning(Config cfg, String title, String message) {
-        JOptionPane jop = new JOptionPane(message, JOptionPane.ERROR_MESSAGE, JOptionPane.DEFAULT_OPTION);
-        JDialog dialog = jop.createDialog(FancySwing.getCurrentFrame(), title);
+        RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, null, null);
+        jop.getDelegate().setShady(false);
+        jop.setWantsInput(true);
+        jop.setSelectionValues(options);
+        jop.setInitialSelectionValue(selected);
+        JDialog dialog = IOMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        FancySwing.rounded(dialog);
+        FancySwing.translucent(dialog);
+        if (cfg != null) {
+            dialog.setIconImage(cfg.getIcon().getImage());
+        }
+        jop.selectInitialValue();
+        dialog.setLocationRelativeTo(FancySwing.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
+        return (T) jop.getInputValue();
+    }
+
+    public static void showWarning(Config cfg, String title, String message) {
+        RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.ERROR_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        jop.getDelegate().setShady(false);
+        JDialog dialog = IOMethods.createDialog(jop, title);
+        if (cfg != null) {
+            dialog.setIconImage(cfg.getIcon().getImage());
+        }
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        FancySwing.rounded(dialog);
+        FancySwing.translucent(dialog);
+        dialog.setLocationRelativeTo(FancySwing.getCurrentFrame());
+        dialog.setVisible(true);
+        dialog.dispose();
+    }
+
+    private static int styleFromMessageType(int messageType) {
+        switch (messageType) {
+            case JOptionPane.ERROR_MESSAGE:
+                return JRootPane.ERROR_DIALOG;
+            case JOptionPane.QUESTION_MESSAGE:
+                return JRootPane.QUESTION_DIALOG;
+            case JOptionPane.WARNING_MESSAGE:
+                return JRootPane.WARNING_DIALOG;
+            case JOptionPane.INFORMATION_MESSAGE:
+                return JRootPane.INFORMATION_DIALOG;
+            case JOptionPane.PLAIN_MESSAGE:
+            default:
+                return JRootPane.PLAIN_DIALOG;
+        }
     }
 }

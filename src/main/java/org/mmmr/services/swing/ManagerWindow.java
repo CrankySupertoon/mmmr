@@ -79,7 +79,7 @@ public class ManagerWindow extends JFrame {
         this.setUndecorated(true);
         RoundedPanel mainpanel = new RoundedPanel(new GridLayout(-1, 1));
         mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
-        mainpanel.setShady(false);
+        mainpanel.getDelegate().setShady(false);
         new MoveMouseListener(mainpanel);
         this.getContentPane().add(mainpanel, BorderLayout.CENTER);
         JLabel label = new JLabel(this.getTitle());

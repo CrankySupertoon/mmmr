@@ -4,6 +4,10 @@
 	<groupId>org.mmmr</groupId>
 	<artifactId>mmmr</artifactId>
 	<version>0.1b</version>
+	<issueManagement>
+		<system>Google</system>
+		<url>http://code.google.com/p/mmmr/issues/list</url>
+	</issueManagement>
 	<!-- http://code.google.com/p/raisercostin/wiki/Maven2DistributionManagementOnGooglecode -->
 	<distributionManagement>
 		<!-- use the following if you're not using a snapshot version. -->
@@ -19,6 +23,26 @@
 			<url>dav:https://mmmr.googlecode.com/svn/maven2-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+	<scm>
+		<connection>scm:svn:dav:https://mmmr.googlecode.com/svn/maven2</connection>
+		<developerConnection>scm:svn:dav:https://mmmr.googlecode.com/svn/maven2-snapshots</developerConnection>
+	</scm>
+	<developers>
+		<developer>
+			<id />
+			<name>Jurgen</name>
+			<email>mmmr@googlecode.com</email>
+			<roles>
+				<role>Project owner</role>
+			</roles>
+		</developer>
+	</developers>
+	<repositories>
+		<repository>
+			<id>my-internal-site</id>
+			<url>http://mmmr.googlecode.com/svn/maven2</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<!-- keep this first so it downloads this dependencies first -->
 		<dependency>
@@ -31,6 +55,17 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.13</version>
+		</dependency>
+		<!-- then this ones -->
+		<dependency>
+			<groupId>net.sf.sevenzipjbinding</groupId>
+			<artifactId>sevenzipjbinding</artifactId>
+			<version>4.65-1.04rc-extr-only</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.sevenzipjbinding</groupId>
+			<artifactId>sevenzipjbinding-AllWindows</artifactId>
+			<version>4.65-1.04rc-extr-only</version>
 		</dependency>
 		<!-- rest of denpendencies -->
 		<dependency>

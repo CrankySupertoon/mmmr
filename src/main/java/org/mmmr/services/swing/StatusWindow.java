@@ -93,7 +93,7 @@ public class StatusWindow extends JFrame {
         this.setIconImage(cfg.getIcon().getImage());
         this.setTitle(cfg.getTitle());
         RoundedPanel mainpanel = new RoundedPanel(new GridLayout(-1, 1));
-        mainpanel.setShady(false);
+        mainpanel.getDelegate().setShady(false);
         new MoveMouseListener(mainpanel);
         mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         this.getContentPane().add(mainpanel);
