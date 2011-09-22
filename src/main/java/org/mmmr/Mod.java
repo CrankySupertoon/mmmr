@@ -1,5 +1,6 @@
 package org.mmmr;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cascade;
+import org.mmmr.services.InstallationService;
 
 /**
  * @author Jurgen
@@ -80,6 +82,8 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     @Column(nullable = false)
     private String version;
+
+    private transient Boolean updated;
 
     public Mod() {
         super();
@@ -209,6 +213,11 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         return this.resources;
     }
 
+    @XmlTransient
+    public Boolean getUpdated() {
+        return this.isUpdated();
+    }
+
     @XmlAttribute
     public String getUrl() {
         return this.url;
@@ -232,6 +241,28 @@ public class Mod implements Comparable<Mod>, PersistentObject {
     @XmlTransient
     public Boolean isInstalled() {
         return this.getInstallationDate() != null;
+    }
+
+    @XmlTransient
+    public Boolean isUpdated() {
+        if (this.updated == null) {
+            if (this.isInstalled()) {
+                try {
+                    URL u = new URL(this.getUrl());
+                    String fragment = u.toURI().getFragment();
+                    String url2 = InstallationService.getUrl(this.getUrl());
+                    if ((url2 != null) && !"null".equals(url2)) {
+                        if (fragment != null) {
+                            url2 = url2 + "#" + fragment;
+                        }
+                        this.updated = !u.equals(url2);
+                    }
+                } catch (Exception ex) {
+                    this.updated = false;
+                }
+            }
+        }
+        return this.updated;
     }
 
     public void setActualUrl(String actualUrl) {
@@ -286,6 +317,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         this.resources = resources;
     }
 
+    public void setUpdated(Boolean updated) {
+        this.updated = updated;
+    }
+
     public void setUrl(String url) {
         this.url = url;
     }
@@ -301,7 +336,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("name", this.name).append("version", this.version).append("archive", this.archive)
-                .append("description", this.description).append("installationDate", this.installationDate).append("modPack", this.modPack)
-                .append("url", this.url).toString();
+                .append("description", this.description).append("installationDate", this.installationDate).append("installOrder", this.installOrder)
+                .append("modPack", this.modPack).append("url", this.url).toString();
     }
 }

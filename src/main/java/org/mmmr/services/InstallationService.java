@@ -23,35 +23,7 @@ import org.mmmr.Resource;
  * @author Jurgen
  */
 public class InstallationService {
-    public static void main(String[] args) {
-        try {
-            String string = "http://www.minecraftforum.net/topic/75440-";
-            System.out.println(string + " >> " + new InstallationService().getUrl(string));
-            string = "http://www.minecraftforum.net/topic/124117-18-daftpvfs-mods/#starting_inventory";
-            System.out.println(string + " >> " + new InstallationService().getUrl(string));
-            string = "http://www.minecraftforum.net/topic/124117-/#starting_inventory";
-            System.out.println(string + " >> " + new InstallationService().getUrl(string));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void copy(Config cfg, Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
-        int posmcb = cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
-        Date now = new Date();
-        for (Map.Entry<File, File> entry : toCopy.entrySet()) {
-            if (ignored.contains(entry.getKey())) {
-                continue;
-            }
-            long crc32 = IOMethods.copyFile(entry.getKey(), entry.getValue());
-            String path = entry.getValue().getCanonicalFile().getAbsolutePath().substring(posmcb);
-            fileResource.get(entry.getKey()).addFile(new MCFile(path, now, crc32));
-        }
-        mod.setInstallationDate(now);
-        cfg.getDb().save(mod);
-    }
-
-    public String getUrl(String url) {
+    public static String getUrl(String url) {
         try {
             ByteArrayOutputStream readOnly = new ByteArrayOutputStream() {
                 @Override
@@ -81,6 +53,37 @@ public class InstallationService {
             ExceptionAndLogHandler.log(ex);
             return url;
         }
+    }
+
+    public static void main(String[] args) {
+        try {
+            String string = "http://www.minecraftforum.net/topic/75440-";
+            new InstallationService();
+            System.out.println(string + " >> " + InstallationService.getUrl(string));
+            string = "http://www.minecraftforum.net/topic/124117-18-daftpvfs-mods/#starting_inventory";
+            new InstallationService();
+            System.out.println(string + " >> " + InstallationService.getUrl(string));
+            string = "http://www.minecraftforum.net/topic/124117-/#starting_inventory";
+            new InstallationService();
+            System.out.println(string + " >> " + InstallationService.getUrl(string));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void copy(Config cfg, Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
+        int posmcb = cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
+        Date now = new Date();
+        for (Map.Entry<File, File> entry : toCopy.entrySet()) {
+            if (ignored.contains(entry.getKey())) {
+                continue;
+            }
+            long crc32 = IOMethods.copyFile(entry.getKey(), entry.getValue());
+            String path = entry.getValue().getCanonicalFile().getAbsolutePath().substring(posmcb);
+            fileResource.get(entry.getKey()).addFile(new MCFile(path, now, crc32));
+        }
+        mod.setInstallationDate(now);
+        cfg.getDb().save(mod);
     }
 
     @SuppressWarnings("unused")
@@ -197,7 +200,7 @@ public class InstallationService {
         }
         int max = Math.max(max1, max2) + 1;
         mod.setInstallOrder(max);
-        mod.setActualUrl(this.getUrl(mod.getUrl()));
+        mod.setActualUrl(InstallationService.getUrl(mod.getUrl()));
         cfg.getDb().save(mod);
         IOMethods.showInformation(cfg, "Install mods.", "Mod installed.");
     }

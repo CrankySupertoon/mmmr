@@ -38,7 +38,9 @@
     <logger name="org.hibernate.SQL"><level value="DEBUG"/></logger>
     <logger name="org.hibernate.type"><level value="TRACE"/></logger>
     <logger name="org.hibernate.hql"><level value="DEBUG"/></logger>
-
+    <logger name="org.apache.http"><level value="WARN"/></logger>
+    <logger name="org.apache.commons.beanutils.converters"><level value="WARN"/></logger>
+    
 	<root>
 		<appender-ref ref="CONSOLE"/>
 		<appender-ref ref="ROLLINGFILE"/>

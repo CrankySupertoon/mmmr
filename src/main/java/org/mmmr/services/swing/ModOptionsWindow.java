@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
+import javax.swing.table.TableColumn;
 
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
@@ -172,6 +173,10 @@ public class ModOptionsWindow extends JFrame {
         headers.add("Link", String.class, false);
         orderedFields.add("url");
 
+        // 7
+        headers.add("Updated", Boolean.class, false);
+        orderedFields.add("updated");
+
         safetable.setHeaders(headers);
 
         File[] modxmls = this.cfg.getMods().listFiles(new FilenameFilter() {
@@ -230,7 +235,7 @@ public class ModOptionsWindow extends JFrame {
                 } else if (!m1.isInstalled() && m2.isInstalled()) {
                     return 1;
                 } else if (m1.isInstalled() && m2.isInstalled()) {
-                    return m2.getInstallOrder() - m1.getInstallOrder();
+                    return -m1.getInstallOrder() + m2.getInstallOrder();
                 } else {
                     return m1.getName().compareToIgnoreCase(m2.getName());
                 }
@@ -238,12 +243,18 @@ public class ModOptionsWindow extends JFrame {
         });
 
         for (ETableRecord record : records) {
+            System.out.println(record.getBean());
             safetable.addRecord(record);
         }
 
         for (int i = 0; i < orderedFields.size(); i++) {
             options.packColumn(i, 8);
         }
+
+        TableColumn col = options.getColumnModel().getColumn(orderedFields.indexOf("url"));
+        col.setPreferredWidth(250);
+        col.setWidth(250);
+        col.setMaxWidth(250);
 
         return options;
     }
