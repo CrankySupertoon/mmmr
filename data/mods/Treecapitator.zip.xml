@@ -1,10 +1,10 @@
-<mod archive="Treecapitator.zip" name="Treecapitator"
-	url="http://www.minecraftforum.net/topic/124117-v173-18-daftpvfs-mods-18-treecapitator-will-update-the-others-soon/#treecapitator"
-	version="1.8"  mc="1.8.1">
-	<dependencies>
-		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-	</dependencies>	
-	<resources>
-		<resource sourcepath="./" targetpath="bin/minecraft.jar"/>
-	</resources>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="Treecapitator.zip" mc="1.8.1" name="Treecapitator" url="http://www.minecraftforum.net/topic/124117-18-daftpvfs-mods/#treecapitator" version="1.8">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <installed>false</installed>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
 </mod>

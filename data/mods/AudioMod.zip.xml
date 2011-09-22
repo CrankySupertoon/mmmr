@@ -1,7 +1,7 @@
-<mod archive="AudioMod.zip" name="AudioMod"
-	url="http://www.minecraftforum.net/topic/75440-"
-	version="1.8" mc="1.8.1">
-	<resources>
-		<resource sourcepath="./" targetpath="bin/minecraft.jar" />
-	</resources>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="AudioMod.zip" mc="1.8.1" name="AudioMod" url="http://www.minecraftforum.net/topic/75440-v181-risugamis-mods-everything-updated/" version="1.8">
+    <installed>false</installed>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
 </mod>

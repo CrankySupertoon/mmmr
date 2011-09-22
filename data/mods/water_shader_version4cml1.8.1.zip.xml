@@ -1,11 +1,11 @@
-<mod archive="water_shader_version4cml1.8.1.zip" name="Water Shader"
-	url="http://www.minecraftforum.net/topic/542215-"
-	version="4c"  mc="1.8.1">
-	<dependencies>
-		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-	</dependencies>	
-	<resources>
-		<resource sourcepath="version4cml1.8.1/Minecraft/" targetpath="bin/minecraft.jar"/>
-		<resource sourcepath="version4cml1.8.1/shader/" targetpath="bin/"/>
-	</resources>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="water_shader_version4cml1.8.1.zip" mc="1.8.1" name="Water Shader" url="http://www.minecraftforum.net/topic/542215-181-water-shader-alpha-v4c/" version="4c">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <installed>false</installed>
+    <resources>
+        <resource sourcepath="version4cml1.8.1/Minecraft/" targetpath="bin/minecraft.jar"/>
+        <resource sourcepath="version4cml1.8.1/shader/" targetpath="bin/"/>
+    </resources>
 </mod>

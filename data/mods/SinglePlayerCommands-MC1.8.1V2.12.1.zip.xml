@@ -1,8 +1,8 @@
-<mod archive="SinglePlayerCommands-MC1.8.1V2.12.1.zip" name="Single Player Commands"
-	url="http://www.minecraftforum.net/topic/94310-"
-	version="2.12.1"  mc="1.8.1">
-	<resources>
-		<resource sourcepath="./" targetpath="bin/minecraft.jar" include="*.class"/>
-		<resource sourcepath="./" targetpath="bin/" include="*.jar"/>
-	</resources>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="SinglePlayerCommands-MC1.8.1V2.12.1.zip" mc="1.8.1" name="Single Player Commands" url="http://www.minecraftforum.net/topic/94310-181-single-player-commands-v2121-mcp-pack-updated/" version="2.12.1">
+    <installed>false</installed>
+    <resources>
+        <resource include="*.class" sourcepath="./" targetpath="bin/minecraft.jar"/>
+        <resource include="*.jar" sourcepath="./" targetpath="bin/"/>
+    </resources>
 </mod>

@@ -1,7 +1,7 @@
-<mod archive="ModLoader.zip" name="ModLoader"
-	url="http://www.minecraftforum.net/topic/75440-"
-	version="1.8.1" mc="1.8.1">
-	<resources>
-		<resource sourcepath="./" targetpath="bin/minecraft.jar" />
-	</resources>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="ModLoader.zip" mc="1.8.1" name="ModLoader" url="http://www.minecraftforum.net/topic/75440-v181-risugamis-mods-everything-updated/" version="1.8.1">
+    <installed>false</installed>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
 </mod>

@@ -1,10 +1,10 @@
-<mod archive="mod_Fossil.zip" name="Fossil / Archeology"
-	url="http://www.minecraftforum.net/topic/446117-"
-	version="4.9" mc="1.8.1">
-	<dependencies>
-		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-	</dependencies>	
-	<resources>
-		<resource targetpath="mods/" />
-	</resources>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="mod_Fossil.zip" mc="1.8.1" name="Fossil / Archeology" url="http://www.minecraftforum.net/topic/446117-181fossil-archeology-v49/" version="4.9">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <installed>false</installed>
+    <resources>
+        <resource targetpath="mods/"/>
+    </resources>
 </mod>

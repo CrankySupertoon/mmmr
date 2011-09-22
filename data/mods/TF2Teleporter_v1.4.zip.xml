@@ -1,11 +1,11 @@
-<mod archive="TF2Teleporter_v1.4.zip" name="TF2 Teleporter"
-	url="http://www.minecraftforum.net/topic/334760-181-team-fortress-2-teleporter-sentry-pitmans-mods/#tele"
-	version="1.4"  mc="1.8.1">
-	<dependencies>
-		<mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-	</dependencies>	
-	<resources>
-		<resource sourcepath="into_resources/" targetpath="resources/"/>
-		<resource sourcepath="into_minecraft.jar/" targetpath="bin/minecraft.jar"/>
-	</resources>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="TF2Teleporter_v1.4.zip" mc="1.8.1" name="TF2 Teleporter" url="http://www.minecraftforum.net/topic/334760-181-team-fortress-2-teleporter-sentry-pitmans-mods/#tele" version="1.4">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <installed>false</installed>
+    <resources>
+        <resource sourcepath="into_resources/" targetpath="resources/"/>
+        <resource sourcepath="into_minecraft.jar/" targetpath="bin/minecraft.jar"/>
+    </resources>
 </mod>
