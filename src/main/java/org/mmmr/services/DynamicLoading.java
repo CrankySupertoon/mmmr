@@ -82,12 +82,10 @@ public class DynamicLoading {
             String repo = new File(M2_REPO + "/repository").getAbsolutePath().replace('\\', '/');
             for (String cp : System.getProperty("java.class.path").split(";")) {
                 String path = new File(cp).getAbsolutePath().replace('\\', '/');
-                if (path.startsWith(repo)) {
-                    String relative = path.substring(repo.length() + 1);
-                    URL url = new URL(DynamicLoading.MAVEN_REPO + relative);
-                    System.out.println(url.openConnection().getContentLength() + "::" + url);
-                    out.write(url.openConnection().getContentLength() + "::" + relative + "\n");
+                if (path.endsWith("target/classes")) {
+                    continue;
                 }
+                out.write(new File(cp).length() + "::" + path.substring(repo.length() + 1) + "\n");
             }
             out.close();
         } catch (Exception ex) {

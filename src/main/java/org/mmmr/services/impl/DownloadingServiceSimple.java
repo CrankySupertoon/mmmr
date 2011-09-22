@@ -1,7 +1,6 @@
 package org.mmmr.services.impl;
 
 import java.awt.Component;
-import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayOutputStream;
@@ -78,7 +77,6 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
                 this.setNote(message);
                 System.out.println(message);
                 if (this.isCanceled() || this.sw.isDone()) {
-                    Toolkit.getDefaultToolkit().beep();
                     if (this.isCanceled()) {
                         this.sw.cancel(true);
                         System.out.println("Task canceled.");
