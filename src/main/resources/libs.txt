@@ -1,7 +1,6 @@
 352254::org/apache/httpcomponents/httpclient/4.1.2/httpclient-4.1.2.jar
 181200::org/apache/httpcomponents/httpcore/4.1.2/httpcore-4.1.2.jar
 60686::commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar
-58160::commons-codec/commons-codec/1.4/commons-codec-1.4.jar
 358180::log4j/log4j/1.2.13/log4j-1.2.13.jar
 30297::net/sf/sevenzipjbinding/sevenzipjbinding/4.65-1.04rc-extr-only/sevenzipjbinding-4.65-1.04rc-extr-only.jar
 2232482::net/sf/sevenzipjbinding/sevenzipjbinding-AllWindows/4.65-1.04rc-extr-only/sevenzipjbinding-AllWindows-4.65-1.04rc-extr-only.jar
@@ -14,9 +13,8 @@
 100884::org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.0.Final/hibernate-jpa-2.0-api-1.0.0.Final.jar
 15071::javax/transaction/jta/1.1/jta-1.1.jar
 25496::org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar
-421435::org/hibernate/hibernate-entitymanager/3.6.3.Final/hibernate-entitymanager-3.6.3.Final.jar
-633312::javassist/javassist/3.12.0.GA/javassist-3.12.0.GA.jar
 9752::org/slf4j/slf4j-log4j12/1.6.2/slf4j-log4j12-1.6.2.jar
 284220::commons-lang/commons-lang/2.6/commons-lang-2.6.jar
 838837::net/java/dev/glazedlists/glazedlists_java15/1.8.0/glazedlists_java15-1.8.0.jar
 206711::commons-beanutils/commons-beanutils-core/1.8.3/commons-beanutils-core-1.8.3.jar
+644148::javassist/javassist/3.12.1.GA/javassist-3.12.1.GA.jar

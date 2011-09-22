@@ -13,6 +13,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @author Jurgen
  */
@@ -75,6 +77,9 @@ public class ModList {
         URL base = new URL(cfg.getMmmrSvnOnGoogleCode());
         for (String record : new String(DownloadingService.downloadURL(new URL(cfg.getMmmrSvnOnGoogleCode() + "/src/main/modlist.txt")))
                 .split("\r\n")) {
+            if (StringUtils.isBlank(record)) {
+                continue;
+            }
             String[] d = record.split("::");
             String xmlname = d[1];
             Long lastmod = Long.parseLong(d[0]);

@@ -20,6 +20,7 @@ public class EnumTableCellEditor<T extends Enum<T>> extends DefaultCellEditor {
 
     protected Class<T> enumType;
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public EnumTableCellEditor(Class<T> enumType) {
         super(new JComboBox(EnumTableCellEditor.options(enumType)));
         this.enumType = enumType;
