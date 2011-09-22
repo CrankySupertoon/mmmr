@@ -7,11 +7,14 @@ import java.io.FilenameFilter;
 import java.io.OutputStreamWriter;
 
 /**
- * write list of mod configurations available in subversion so users can download them when they are updated/added
- * 
  * @author Jurgen
  */
 public class ModList {
+    /**
+     * write list of mod configurations available in subversion so users can download them when they are updated/added
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         try {
             File mods = new File("data/mods");
@@ -29,12 +32,19 @@ public class ModList {
             });
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/main/modlist.txt")));
             for (File mod : modxmls) {
-                out.write(mod.getName() + "\r\n");
+                out.write(mod.lastModified() + "::" + mod.getName() + "\r\n");
             }
             out.flush();
             out.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    /**
+     * update mod configurations
+     */
+    public static void update() {
+
     }
 }
