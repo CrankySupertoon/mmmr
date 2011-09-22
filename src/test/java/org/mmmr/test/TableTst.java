@@ -7,13 +7,13 @@ import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import org.mmmr.services.Config;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
@@ -22,7 +22,7 @@ import org.mmmr.services.swing.common.ETableRecordArray;
 import org.mmmr.services.swing.common.EnumTableCellEditor;
 import org.mmmr.services.swing.common.FancySwing;
 
-public class TableTest {
+public class TableTst {
     public static enum EnumTest {
         VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8;
     }
@@ -106,7 +106,7 @@ public class TableTest {
                 table.packColumn(i, 3);
             }
             table.setDefaultEditor(EnumTest.class, new EnumTableCellEditor<EnumTest>(EnumTest.class));
-            table.setLocale(Locale.getDefault(Locale.Category.FORMAT));
+            table.setLocale(Config.LOCALE);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
