@@ -143,6 +143,7 @@ public class ManagerWindow extends JFrame {
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    // TODO remove when "(Un)install mods and change order." is complete
                     ManagerWindow.this.installMods();
                 }
             });
@@ -167,6 +168,7 @@ public class ManagerWindow extends JFrame {
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    // TODO Resolve mod conflicts.
                     IOMethods.showWarning(ManagerWindow.this.cfg, "Resolve mod conflicts.", "Not implemented yet.");
                 }
             });
@@ -178,8 +180,8 @@ public class ManagerWindow extends JFrame {
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    // TODO change
                     IOMethods.showWarning(ManagerWindow.this.cfg, "Change sex.", "Not implemented yet.");
-
                 }
             });
             mainpanel.add(comp);
@@ -190,8 +192,8 @@ public class ManagerWindow extends JFrame {
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    // TODO Backup and restore worlds/stats/etc.
                     IOMethods.showWarning(ManagerWindow.this.cfg, "Backup and restore worlds/stats/etc.", "Not implemented yet.");
-
                 }
             });
             mainpanel.add(comp);

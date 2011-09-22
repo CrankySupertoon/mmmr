@@ -73,6 +73,8 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     private String url;
 
+    private String actualUrl;
+
     @Version
     private Integer ver;
 
@@ -137,6 +139,11 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         }
         Mod castOther = (Mod) other;
         return new EqualsBuilder().append(this.name, castOther.name).append(this.version, castOther.version).isEquals();
+    }
+
+    @XmlTransient
+    public String getActualUrl() {
+        return this.actualUrl;
     }
 
     @XmlAttribute
@@ -224,6 +231,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     public Boolean isInstalled() {
         return this.getInstallationDate() != null;
+    }
+
+    public void setActualUrl(String actualUrl) {
+        this.actualUrl = actualUrl;
     }
 
     public void setArchive(String archive) {

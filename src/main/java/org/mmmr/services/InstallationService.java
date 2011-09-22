@@ -1,7 +1,10 @@
 package org.mmmr.services;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,6 +23,15 @@ import org.mmmr.Resource;
  * @author Jurgen
  */
 public class InstallationService {
+    public static void main(String[] args) {
+        try {
+            System.out.println("http://www.minecraftforum.net/topic/75440-" + " >> "
+                    + new InstallationService().getUrl("http://www.minecraftforum.net/topic/75440-"));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void copy(Config cfg, Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
         int posmcb = cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
         Date now = new Date();
@@ -33,6 +45,38 @@ public class InstallationService {
         }
         mod.setInstallationDate(now);
         cfg.getDb().save(mod);
+    }
+
+    public String getUrl(String url) {
+        try {
+            ByteArrayOutputStream readOnly = new ByteArrayOutputStream() {
+                @Override
+                public void write(byte[] b) throws IOException {
+                    throw new UnsupportedOperationException();
+                }
+
+                @Override
+                public synchronized void write(byte[] b, int off, int len) {
+                    throw new UnsupportedOperationException();
+                }
+
+                @Override
+                public synchronized void write(int b) {
+                    throw new UnsupportedOperationException();
+                }
+
+                @Override
+                public synchronized void writeTo(OutputStream out) throws IOException {
+                    throw new UnsupportedOperationException();
+                }
+            };
+            Map<String, Object> downloadURL = DownloadingService.downloadURL(new URL(url), readOnly);
+            String redirect = String.valueOf(downloadURL.get("redirect"));
+            return redirect;
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
+            return url;
+        }
     }
 
     @SuppressWarnings("unused")
@@ -149,6 +193,7 @@ public class InstallationService {
         }
         int max = Math.max(max1, max2) + 1;
         mod.setInstallOrder(max);
+        mod.setActualUrl(this.getUrl(mod.getUrl()));
         cfg.getDb().save(mod);
         IOMethods.showInformation(cfg, "Install mods.", "Mod installed.");
     }

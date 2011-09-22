@@ -41,6 +41,7 @@ import org.mmmr.services.swing.common.FancySwing;
 import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
 
+// TODO check if link is updated (see mod.actualUrl)
 public class ModOptionsWindow extends JFrame {
     private static final long serialVersionUID = -3663235803657033008L;
 

@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFrame;
@@ -119,11 +121,17 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
      * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL, java.io.File)
      */
     @Override
-    public void downloadURL(URL url, File target) throws IOException {
+    public Map<String, Object> downloadURL(URL url, File target) throws IOException {
         this.downloadURL(url, new FileOutputStream(target));
+        return new HashMap<String, Object>();
     }
 
-    private void downloadURL(URL url, OutputStream target) throws IOException {
+    /**
+     * 
+     * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL, java.io.OutputStream)
+     */
+    @Override
+    public Map<String, Object> downloadURL(URL url, OutputStream target) throws IOException {
         ExceptionAndLogHandler.log(url);
         URLConnection conn = url.openConnection();
         conn.setAllowUserInteraction(false);
@@ -138,5 +146,6 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
         } catch (ExecutionException ex) {
             throw new RuntimeException(ex);
         }
+        return new HashMap<String, Object>();
     }
 }

@@ -9,8 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFrame;
@@ -19,9 +22,11 @@ import javax.swing.SwingWorker;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.interfaces.DownloadingServiceI;
 import org.mmmr.services.swing.common.FancySwing;
@@ -61,7 +66,6 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
                         target.close();
                         uin.close();
                     } catch (Exception ex) {
-                        ex.printStackTrace();
                         return String.valueOf(ex);
                     }
                     return note;
@@ -70,7 +74,6 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
                 @Override
                 public void done() {
                     DownloadProgressMonitor.this.close();
-                    System.out.println("done");
                 }
             };
 
@@ -85,13 +88,13 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
                 this.setProgress(progress);
                 String message = String.format("Completed %d%%.", progress);
                 this.setNote(message);
-                System.out.println(message);
+                // System.out.println(message);
                 if (this.isCanceled() || this.sw.isDone()) {
                     if (this.isCanceled()) {
                         this.sw.cancel(true);
-                        System.out.println("Task canceled.");
+                        // System.out.println("Task canceled.");
                     } else {
-                        System.out.println("Task completed.");
+                        // System.out.println("Task completed.");
                     }
                 }
             }
@@ -127,13 +130,26 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
      * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL, java.io.File)
      */
     @Override
-    public void downloadURL(URL url, File target) throws IOException {
-        this.downloadURL(url, new FileOutputStream(target));
+    public Map<String, Object> downloadURL(URL url, File target) throws IOException {
+        return this.downloadURL(url, new FileOutputStream(target));
     }
 
-    private void downloadURL(URL url, OutputStream target) throws IOException {
+    /**
+     * 
+     * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL, java.io.OutputStream)
+     */
+    @Override
+    public Map<String, Object> downloadURL(URL url, OutputStream target) throws IOException {
         ExceptionAndLogHandler.log(url);
-        HttpClient httpclient = new DefaultHttpClient();
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        final Map<String, Object> info = new HashMap<String, Object>();
+        httpclient.setRedirectStrategy(new DefaultRedirectStrategy() {
+            @Override
+            protected URI createLocationURI(String location) throws ProtocolException {
+                info.put("redirect", location);
+                return super.createLocationURI(location);
+            }
+        });
         HttpGet httpget;
         try {
             httpget = new HttpGet(url.toURI());
@@ -144,14 +160,14 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try {
-                System.out.println(new DownloadProgressMonitor(null, "Downloading", String.valueOf(url), target, entity).sw.get());
+                new DownloadProgressMonitor(null, "Downloading", String.valueOf(url), target, entity).sw.get();
             } catch (InterruptedException ex) {
                 //
             } catch (ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
 
-            return;
+            return info;
         }
         throw new IOException("" + url);
     }

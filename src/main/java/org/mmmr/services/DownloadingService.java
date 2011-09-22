@@ -2,7 +2,9 @@ package org.mmmr.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
+import java.util.Map;
 
 import org.mmmr.services.impl.DownloadingServiceSimple;
 import org.mmmr.services.interfaces.DownloadingServiceI;
@@ -17,8 +19,12 @@ public class DownloadingService {
         return DownloadingService.getDownloadingService().downloadURL(url);
     }
 
-    public static void downloadURL(URL url, File target) throws IOException {
-        DownloadingService.getDownloadingService().downloadURL(url, target);
+    public static Map<String, Object> downloadURL(URL url, File target) throws IOException {
+        return DownloadingService.getDownloadingService().downloadURL(url, target);
+    }
+
+    public static Map<String, Object> downloadURL(URL url, OutputStream target) throws IOException {
+        return DownloadingService.getDownloadingService().downloadURL(url, target);
     }
 
     private static DownloadingServiceI getDownloadingService() {
