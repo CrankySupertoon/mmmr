@@ -22,6 +22,8 @@ import org.mmmr.services.interfaces.DownloadingServiceI;
 import org.mmmr.services.swing.common.FancySwing;
 
 /**
+ * {@link URL}, {@link URLConnection} download service
+ * 
  * @author Jurgen
  */
 public class DownloadingServiceSimple implements DownloadingServiceI {

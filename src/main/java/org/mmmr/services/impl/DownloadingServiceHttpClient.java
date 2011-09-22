@@ -27,7 +27,12 @@ import org.mmmr.services.interfaces.DownloadingServiceI;
 import org.mmmr.services.swing.common.FancySwing;
 
 /**
+ * {@link HttpClient} (httpcomponents from apache) download service<br>
+ * download and sourcecode available from ... (see links)
+ * 
  * @author Jurgen
+ * 
+ * @see http://hc.apache.org/
  */
 public class DownloadingServiceHttpClient implements DownloadingServiceI {
     public class DownloadProgressMonitor extends ProgressMonitor implements PropertyChangeListener {

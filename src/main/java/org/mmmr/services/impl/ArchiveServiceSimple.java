@@ -11,6 +11,8 @@ import java.util.zip.ZipInputStream;
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
 /**
+ * unzip via java (using native java liv for zip compression)
+ * 
  * @author Jurgen
  */
 public class ArchiveServiceSimple implements ArchiveServiceI {

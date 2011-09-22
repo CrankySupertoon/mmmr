@@ -13,7 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * log4j over slf4j logging and exception handling<br>
+ * download and sourcecode available from ... (see links)
+ * 
  * @author Jurgen
+ * 
+ * @see http://logging.apache.org/log4j/1.2/
+ * @see http://www.slf4j.org/
  */
 public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
     private static final Logger logger = LoggerFactory.getLogger(ExceptionAndLogHandlerLog4j.class);

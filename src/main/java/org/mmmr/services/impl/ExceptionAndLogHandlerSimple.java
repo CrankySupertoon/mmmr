@@ -7,6 +7,8 @@ import org.mmmr.services.IOMethods;
 import org.mmmr.services.interfaces.ExceptionAndLogHandlerI;
 
 /**
+ * System.out logging and exception handling
+ * 
  * @author Jurgen
  */
 public class ExceptionAndLogHandlerSimple implements ExceptionAndLogHandlerI {

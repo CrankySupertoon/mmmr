@@ -22,9 +22,13 @@ import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
 /**
- * add data/libs/sevenzipjbinding.jar and data/libs/sevenzipjbinding-AllWindows.jar to the classpath after running SevenZipDownloader
+ * extracts lots of compressions formats including but not limited to zip, rar, 7z (7zip)<br/>
+ * download and sourcecode available from ... (see links)
  * 
  * @author Jurgen
+ * 
+ * @see http://sevenzipjbind.sourceforge.net/
+ * @see http://sourceforge.net/apps/mediawiki/sevenzipjbind/index.php?title=Main_Page
  */
 public class ArchiveService7Zip implements ArchiveServiceI {
     /**
@@ -110,13 +114,10 @@ public class ArchiveService7Zip implements ArchiveServiceI {
                 this.out.flush();
                 this.out.close();
             } catch (Exception ex) {
-                //
+                ex.printStackTrace();
             }
             if (extractOperationResult != ExtractOperationResult.OK) {
                 ExceptionAndLogHandler.log(new RuntimeException("Extraction error"));
-            } else {
-                // (Long.toHexString(this.crc32.getValue()).toUpperCase() + " | " + this.total + " | " + this.inArchive.getProperty(this.index,
-                // PropID.PATH));
             }
         }
 
