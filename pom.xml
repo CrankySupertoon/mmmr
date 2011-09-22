@@ -4,6 +4,15 @@
 	<groupId>org.mmmr</groupId>
 	<artifactId>mmmr</artifactId>
 	<version>0.1b</version>
+	<name>mmmr</name>
+	<description>mmmr</description>
+	<url>http://mmmr.googlecode.com</url>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License v2.1</name>
+			<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+		</license>
+	</licenses>
 	<issueManagement>
 		<system>Google</system>
 		<url>http://code.google.com/p/mmmr/issues/list</url>
@@ -23,13 +32,11 @@
 			<url>dav:https://mmmr.googlecode.com/svn/maven2-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<scm>
-		<connection>scm:svn:dav:https://mmmr.googlecode.com/svn/maven2</connection>
-		<developerConnection>scm:svn:dav:https://mmmr.googlecode.com/svn/maven2-snapshots</developerConnection>
-	</scm>
+	<inceptionYear>2011</inceptionYear>
 	<developers>
 		<developer>
 			<id />
+			<timezone>GMT+1</timezone>
 			<name>Jurgen</name>
 			<email>mmmr@googlecode.com</email>
 			<roles>
@@ -37,9 +44,24 @@
 			</roles>
 		</developer>
 	</developers>
+	<contributors />
+	<mailingLists>
+		<mailingList>
+			<name>mmmr Google mailing list</name>
+			<subscribe>http://groups.google.com/group/mmmrlist/subscribe</subscribe>
+			<unsubscribe>http://groups.google.com/group/mmmrlist/subscribe</unsubscribe>
+			<post>mmmrlist@googlegroups.com</post>
+			<archive>http://groups.google.com/group/mmmrlist/topics</archive>
+		</mailingList>
+	</mailingLists>
+	<scm>
+		<connection>scm:svn:http://mmmr.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://mmmr.googlecode.com/svn/trunk/</developerConnection>
+		<url>http://mmmr.googlecode.com/svn/trunk/</url>
+	</scm>
 	<repositories>
 		<repository>
-			<id>my-internal-site</id>
+			<id>mmmr.googlecode</id>
 			<url>http://mmmr.googlecode.com/svn/maven2</url>
 		</repository>
 	</repositories>
@@ -134,7 +156,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
