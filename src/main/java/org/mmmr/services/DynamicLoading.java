@@ -10,6 +10,7 @@ import java.net.URL;
 
 import org.mmmr.services.swing.StatusListener;
 
+// TODO when this issue is resolved (http://sourceforge.net/apps/mediawiki/sevenzipjbind/index.php?title=Maven) download 7zipbinding from maven repo
 /**
  * @author Jurgen
  */
