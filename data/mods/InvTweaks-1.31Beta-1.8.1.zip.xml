@@ -3,7 +3,6 @@
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>
-    <installed>false</installed>
     <resources>
         <resource exclude="doc" sourcepath="./" targetpath="bin/minecraft.jar"/>
     </resources>

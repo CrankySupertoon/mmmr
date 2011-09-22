@@ -229,6 +229,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
     }
 
+    @XmlTransient
     public Boolean isInstalled() {
         return this.getInstallationDate() != null;
     }

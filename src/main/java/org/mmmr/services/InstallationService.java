@@ -25,8 +25,12 @@ import org.mmmr.Resource;
 public class InstallationService {
     public static void main(String[] args) {
         try {
-            System.out.println("http://www.minecraftforum.net/topic/75440-" + " >> "
-                    + new InstallationService().getUrl("http://www.minecraftforum.net/topic/75440-"));
+            String string = "http://www.minecraftforum.net/topic/75440-";
+            System.out.println(string + " >> " + new InstallationService().getUrl(string));
+            string = "http://www.minecraftforum.net/topic/124117-18-daftpvfs-mods/#starting_inventory";
+            System.out.println(string + " >> " + new InstallationService().getUrl(string));
+            string = "http://www.minecraftforum.net/topic/124117-/#starting_inventory";
+            System.out.println(string + " >> " + new InstallationService().getUrl(string));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

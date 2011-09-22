@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mod archive="Sign Tags.zip" mc="1.8.1" name="Sign Tags" url="http://www.minecraftforum.net/topic/75440-v181-risugamis-mods-everything-updated/" version="1.8">
-    <installed>false</installed>
     <resources>
         <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
     </resources>

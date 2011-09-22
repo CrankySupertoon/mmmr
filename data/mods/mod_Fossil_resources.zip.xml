@@ -4,7 +4,6 @@
         <mod name="Fossil / Archeology" url="http://www.minecraftforum.net/topic/446117-" version="4.9"/>
         <mod name="AudioMod" url="http://www.minecraftforum.net/topic/75440-" version="1.8"/>
     </dependencies>
-    <installed>false</installed>
     <resources>
         <resource sourcepath="./" targetpath="./"/>
     </resources>

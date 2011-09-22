@@ -3,7 +3,6 @@
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>
-    <installed>false</installed>
     <resources>
         <resource sourcepath="compiled_put_this_into_minecraft_jar/" targetpath="bin/minecraft.jar"/>
         <resource include="dynamiclights.settings" sourcepath="configfile_put_this_into_.minecraft_folder/" targetpath="./"/>

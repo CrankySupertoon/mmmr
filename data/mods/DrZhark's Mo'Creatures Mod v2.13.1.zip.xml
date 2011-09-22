@@ -5,7 +5,6 @@
         <mod name="AudioMod" url="http://www.minecraftforum.net/topic/75440-" version="1.8"/>
         <mod name="GuiAPI - An Advanced GUI Toolkit" url="http://www.minecraftforum.net/topic/612536-" version="0.11.1"/>
     </dependencies>
-    <installed>false</installed>
     <resources>
         <resource sourcepath="mods/" targetpath="mods/"/>
         <resource sourcepath="resources/" targetpath="resources/"/>
