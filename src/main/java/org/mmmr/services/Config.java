@@ -99,8 +99,15 @@ public class Config {
 
     private XmlService xml;
 
+    private String mmmrOnGoogleCode;
+
+    private String mmmrSvnOnGoogleCode;
+
     public Config(String[] args, File thisFolder) throws IOException {
         this.thisFolder = thisFolder;
+
+        this.mmmrOnGoogleCode = "http://mmmr.googlecode.com";
+        this.mmmrSvnOnGoogleCode = this.mmmrOnGoogleCode + "/svn/trunk";
 
         this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/Minecraftx256.png"));
         this.mcVersion = "1.8.1";
@@ -221,6 +228,14 @@ public class Config {
 
     public String getMcVersion() {
         return this.mcVersion;
+    }
+
+    public String getMmmrOnGoogleCode() {
+        return this.mmmrOnGoogleCode;
+    }
+
+    public String getMmmrSvnOnGoogleCode() {
+        return this.mmmrSvnOnGoogleCode;
     }
 
     public File getMods() {

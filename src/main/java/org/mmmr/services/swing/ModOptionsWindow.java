@@ -29,6 +29,8 @@ import javax.swing.WindowConstants;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.IOMethods;
+import org.mmmr.services.ModList;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
@@ -96,6 +98,13 @@ public class ModOptionsWindow extends JFrame {
     }
 
     private JTable getOptions() {
+        // update mod configuration from server
+        try {
+            ModList.update(this.cfg);
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
+        }
+
         ETableConfig configuration = new ETableConfig(true, false, true, true, false, true, false, true);
         final ETable options = new ETable(configuration);
         final ETableI safetable = options.getEventSafe();
@@ -119,7 +128,11 @@ public class ModOptionsWindow extends JFrame {
                         }
                         if ("url".equals(safetable.getColumnValueAtVisualColumn(col))) {
                             String url = String.valueOf(safetable.getRecordAtVisualRow(row).get(col));
-                            Desktop.getDesktop().browse(URI.create(url));
+                            if (Desktop.isDesktopSupported()) {
+                                Desktop.getDesktop().browse(URI.create(url));
+                            } else {
+                                IOMethods.showWarning(ModOptionsWindow.this.cfg, "", "Not supported.");
+                            }
                         }
                     }
                 } catch (Exception ex) {
