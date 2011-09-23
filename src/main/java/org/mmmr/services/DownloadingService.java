@@ -30,7 +30,7 @@ public class DownloadingService {
     private static DownloadingServiceI getDownloadingService() {
         if (DownloadingService.downloadingService instanceof DownloadingServiceSimple) {
             try {
-                DownloadingService.downloadingService = (DownloadingServiceI) Class.forName("org.mmmr.services.impl.DownloadingServiceHttpClient")
+                DownloadingService.downloadingService = (DownloadingServiceI) Class.forName("org.mmmr.services.impl.DownloadingServiceHttpClient") //$NON-NLS-1$
                         .newInstance();
             } catch (Throwable ex) {
                 System.out.println(ex);

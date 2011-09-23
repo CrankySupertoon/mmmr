@@ -64,8 +64,8 @@ public class IOMethods {
         @Override
         public String toString() {
             if (this.toString == null) {
-                this.toString = new ToStringBuilder(this).appendSuper(super.toString()).append("memfreemb", this.memfreemb)
-                        .append("memtotmb", this.memtotmb).append("memusage", this.memusage).toString();
+                this.toString = new ToStringBuilder(this).appendSuper(super.toString()).append("memfreemb", this.memfreemb) //$NON-NLS-1$
+                        .append("memtotmb", this.memtotmb).append("memusage", this.memusage).toString(); //$NON-NLS-1$ //$NON-NLS-2$
             }
             return this.toString;
         }
@@ -108,7 +108,7 @@ public class IOMethods {
             final JDialog dialog = new JDialog((Frame) null, title, true);
             dialog.setUndecorated(true);
             int style = IOMethods.styleFromMessageType(pane.getMessageType());
-            Method method = JOptionPane.class.getDeclaredMethod("initDialog", JDialog.class, Integer.TYPE, Component.class);
+            Method method = JOptionPane.class.getDeclaredMethod("initDialog", JDialog.class, Integer.TYPE, Component.class); //$NON-NLS-1$
             method.setAccessible(true);
             method.invoke(pane, dialog, style, null);
             return dialog;
@@ -142,7 +142,7 @@ public class IOMethods {
     public static List<String[]> getAllJavaInfo(Collection<String> all) throws IOException {
         List<String[]> info = new ArrayList<String[]>();
         for (String option : all) {
-            ProcessBuilder pb = new ProcessBuilder(option + "/bin/java.exe", "-version");
+            ProcessBuilder pb = new ProcessBuilder(option + "/bin/java.exe", "-version"); //$NON-NLS-1$ //$NON-NLS-2$
             pb.redirectErrorStream(true);
             Process p = pb.start();
             InputStream in = p.getInputStream();
@@ -152,9 +152,9 @@ public class IOMethods {
                 sb.append((char) c);
             }
             String text = sb.toString().toLowerCase();
-            boolean _64bit = text.contains("64-bit");
-            int pos = text.indexOf("java version \"") + 1;
-            String version = text.substring(pos + 13, text.indexOf("\"", pos + 15));
+            boolean _64bit = text.contains("64-bit"); //$NON-NLS-1$
+            int pos = text.indexOf("java version \"") + 1; //$NON-NLS-1$
+            String version = text.substring(pos + 13, text.indexOf("\"", pos + 15)); //$NON-NLS-1$
 
             info.add(new String[] { option, version, String.valueOf(_64bit) });
         }
@@ -163,14 +163,14 @@ public class IOMethods {
 
     public static Collection<String> getAllJavaRuntimes() {
         Collection<String> all = new HashSet<String>();
-        for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) {
-            all.add(opt + "\\jre");
+        for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            all.add(opt + "\\jre"); //$NON-NLS-1$
         }
-        for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) {
-            all.add(opt + "\\jre");
+        for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            all.add(opt + "\\jre"); //$NON-NLS-1$
         }
-        all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
-        all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ"));
+        all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         return all;
     }
 
@@ -189,7 +189,7 @@ public class IOMethods {
 
     public static List<String> getRegValue(String path, String key, String type) {
         try {
-            String command = "reg query \"" + path + "\" /s /v " + key;
+            String command = "reg query \"" + path + "\" /s /v " + key; //$NON-NLS-1$ //$NON-NLS-2$
             Process process = Runtime.getRuntime().exec(command);
             final InputStream is = process.getInputStream();
             final StringWriter sw = new StringWriter();
@@ -212,7 +212,7 @@ public class IOMethods {
             reader.join();
 
             String result = sw.toString();
-            StringTokenizer st = new StringTokenizer(result, "\r\n");
+            StringTokenizer st = new StringTokenizer(result, "\r\n"); //$NON-NLS-1$
             List<String> results = new ArrayList<String>();
             while (st.hasMoreTokens()) {
                 String token = st.nextToken().trim();
@@ -233,7 +233,7 @@ public class IOMethods {
     }
 
     public static boolean is64Bit() {
-        return "64".equals(System.getProperties().getProperty("sun.arch.data.model"));
+        return "64".equals(System.getProperties().getProperty("sun.arch.data.model")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @SuppressWarnings("unchecked")
@@ -266,10 +266,10 @@ public class IOMethods {
 
     public static void loadjarAtRuntime(File jar) throws SecurityException, NoSuchMethodException, IllegalArgumentException, MalformedURLException,
             IllegalAccessException, InvocationTargetException {
-        System.out.println("loading " + jar.getName());
+        System.out.println("loading " + jar.getName()); //$NON-NLS-1$
         URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Class<?> sysclass = URLClassLoader.class;
-        Method method = sysclass.getDeclaredMethod("addURL", URL.class);
+        Method method = sysclass.getDeclaredMethod("addURL", URL.class); //$NON-NLS-1$
         method.setAccessible(true);
         method.invoke(sysloader, new Object[] { jar.toURI().toURL() });
     }
@@ -291,14 +291,14 @@ public class IOMethods {
         if (args != null) {
             for (String arg : args) {
                 if (arg.indexOf('=') == -1) {
-                    if (arg.startsWith("-")) {
-                        parameterValues.put(arg.substring(1), "true");
+                    if (arg.startsWith("-")) { //$NON-NLS-1$
+                        parameterValues.put(arg.substring(1), "true"); //$NON-NLS-1$
                     } else {
-                        parameterValues.put(arg, "true");
+                        parameterValues.put(arg, "true"); //$NON-NLS-1$
                     }
                 } else {
-                    String[] kv = arg.split("=");
-                    if (kv[0].startsWith("-")) {
+                    String[] kv = arg.split("="); //$NON-NLS-1$
+                    if (kv[0].startsWith("-")) { //$NON-NLS-1$
                         parameterValues.put(kv[0].substring(1), kv[1]);
                     } else {
                         parameterValues.put(kv[0], kv[1]);

@@ -206,7 +206,7 @@ public class ModPack implements Comparable<ModPack>, PersistentObject {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("name", this.name).append("installationDate", this.installationDate).append("version", this.version)
-                .append("description", this.description).toString();
+        return new ToStringBuilder(this).append("name", this.name).append("installationDate", this.installationDate).append("version", this.version) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                .append("description", this.description).toString(); //$NON-NLS-1$
     }
 }

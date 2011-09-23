@@ -27,19 +27,19 @@ public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
     @Override
     public void adjustLogging(Config cfg) throws IOException {
         Level level;
-        String levelstr = cfg.getProperty("logging.level", "?");
-        if (!"?".equals(levelstr)) {
-            if ("TRACE".equals(levelstr)) {
+        String levelstr = cfg.getProperty("logging.level", "?"); //$NON-NLS-1$ //$NON-NLS-2$
+        if (!"?".equals(levelstr)) { //$NON-NLS-1$
+            if ("TRACE".equals(levelstr)) { //$NON-NLS-1$
                 level = Level.TRACE;
-            } else if ("DEBUG".equals(levelstr)) {
+            } else if ("DEBUG".equals(levelstr)) { //$NON-NLS-1$
                 level = Level.DEBUG;
-            } else if ("INFO".equals(levelstr)) {
+            } else if ("INFO".equals(levelstr)) { //$NON-NLS-1$
                 level = Level.INFO;
-            } else if ("WARN".equals(levelstr)) {
+            } else if ("WARN".equals(levelstr)) { //$NON-NLS-1$
                 level = Level.WARN;
-            } else if ("ERROR".equals(levelstr)) {
+            } else if ("ERROR".equals(levelstr)) { //$NON-NLS-1$
                 level = Level.ERROR;
-            } else if ("FATAL".equals(levelstr)) {
+            } else if ("FATAL".equals(levelstr)) { //$NON-NLS-1$
                 level = Level.FATAL;
             } else {
                 level = Level.OFF;
@@ -73,7 +73,7 @@ public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
      */
     @Override
     public void log(Exception ex) {
-        ExceptionAndLogHandlerLog4j.logger.error("exception", ex);
+        ExceptionAndLogHandlerLog4j.logger.error("exception", ex); //$NON-NLS-1$
     }
 
     /**
@@ -82,6 +82,6 @@ public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
      */
     @Override
     public void log(Object object) {
-        ExceptionAndLogHandlerLog4j.logger.info("{}", object);
+        ExceptionAndLogHandlerLog4j.logger.info("{}", object); //$NON-NLS-1$
     }
 }

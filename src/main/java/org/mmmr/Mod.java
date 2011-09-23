@@ -256,7 +256,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
                     this.updated = true;
                 } else {
                     // this trick only works here so if it is another site there is no check => false
-                    if (!this.getUrl().contains("minecraftforum")) {
+                    if (!this.getUrl().contains("minecraftforum")) { //$NON-NLS-1$
                         this.updated = false;
                     } else {
                         // trick: the site redirects to a link where the title is replaced (updated)
@@ -264,10 +264,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
                         try {
                             String htmlAnchor = new URL(this.getUrl()).toURI().getFragment(); // if not set = null
                             String newUrl = InstallationService.getUrl(this.getUrl());
-                            if ((newUrl != null) && !"null".equals(newUrl)) {
+                            if ((newUrl != null) && !"null".equals(newUrl)) { //$NON-NLS-1$
                                 if (htmlAnchor != null) {
                                     // when set: append anchor because it is removed from the new url
-                                    newUrl = newUrl + "#" + htmlAnchor;
+                                    newUrl = newUrl + "#" + htmlAnchor; //$NON-NLS-1$
                                 }
                                 // title not changed => false OR title changed => true
                                 this.updated = !this.getUrl().equals(newUrl);
@@ -352,8 +352,8 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("name", this.name).append("version", this.version).append("archive", this.archive)
-                .append("description", this.description).append("installationDate", this.installationDate).append("installOrder", this.installOrder)
-                .append("modPack", this.modPack).append("url", this.url).toString();
+        return new ToStringBuilder(this).append("name", this.name).append("version", this.version).append("archive", this.archive) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                .append("description", this.description).append("installationDate", this.installationDate).append("installOrder", this.installOrder) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                .append("modPack", this.modPack).append("url", this.url).toString(); //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

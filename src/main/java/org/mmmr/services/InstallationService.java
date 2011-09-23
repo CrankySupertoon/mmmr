@@ -47,7 +47,7 @@ public class InstallationService {
                 }
             };
             Map<String, Object> downloadURL = DownloadingService.downloadURL(new URL(url), readOnly);
-            String redirect = String.valueOf(downloadURL.get("redirect"));
+            String redirect = String.valueOf(downloadURL.get("redirect")); //$NON-NLS-1$
             return redirect;
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);
@@ -57,15 +57,15 @@ public class InstallationService {
 
     public static void main(String[] args) {
         try {
-            String string = "http://www.minecraftforum.net/topic/75440-";
+            String string = "http://www.minecraftforum.net/topic/75440-"; //$NON-NLS-1$
             new InstallationService();
-            System.out.println(string + " >> " + InstallationService.getUrl(string));
-            string = "http://www.minecraftforum.net/topic/124117-18-daftpvfs-mods/#starting_inventory";
+            System.out.println(string + " >> " + InstallationService.getUrl(string)); //$NON-NLS-1$
+            string = "http://www.minecraftforum.net/topic/124117-18-daftpvfs-mods/#starting_inventory"; //$NON-NLS-1$
             new InstallationService();
-            System.out.println(string + " >> " + InstallationService.getUrl(string));
-            string = "http://www.minecraftforum.net/topic/124117-/#starting_inventory";
+            System.out.println(string + " >> " + InstallationService.getUrl(string)); //$NON-NLS-1$
+            string = "http://www.minecraftforum.net/topic/124117-/#starting_inventory"; //$NON-NLS-1$
             new InstallationService();
-            System.out.println(string + " >> " + InstallationService.getUrl(string));
+            System.out.println(string + " >> " + InstallationService.getUrl(string)); //$NON-NLS-1$
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -113,12 +113,12 @@ public class InstallationService {
             List<Pattern> includes = new ArrayList<Pattern>();
             List<Pattern> excludes = new ArrayList<Pattern>();
             if (resource.getInclude() != null) {
-                for (String include : resource.getInclude().split(",")) {
+                for (String include : resource.getInclude().split(",")) { //$NON-NLS-1$
                     includes.add(Pattern.compile(include, Pattern.CASE_INSENSITIVE));
                 }
             }
             if (resource.getExclude() != null) {
-                for (String exclude : resource.getExclude().split(",")) {
+                for (String exclude : resource.getExclude().split(",")) { //$NON-NLS-1$
                     excludes.add(Pattern.compile(exclude, Pattern.CASE_INSENSITIVE));
                 }
             }
@@ -155,11 +155,11 @@ public class InstallationService {
                     // TODO conflicted files should be ordered as the are installed by mod(pack)s
                     if (existing.getResource() != null) {
                         if (existing.getResource().getMod() != null) {
-                            ExceptionAndLogHandler.log("conflict " + existing.getResource().getMod().getName() + ": " + mcRelative);
-                            conflicts.add(existing.getResource().getMod().getName() + " v" + existing.getResource().getMod().getVersion());
+                            ExceptionAndLogHandler.log("conflict " + existing.getResource().getMod().getName() + ": " + mcRelative); //$NON-NLS-1$ //$NON-NLS-2$
+                            conflicts.add(existing.getResource().getMod().getName() + " v" + existing.getResource().getMod().getVersion()); //$NON-NLS-1$
                         } else {
-                            ExceptionAndLogHandler.log("conflict " + existing.getResource().getModPack().getName() + ": " + mcRelative);
-                            conflicts.add(existing.getResource().getModPack().getName() + " v" + existing.getResource().getModPack().getVersion());
+                            ExceptionAndLogHandler.log("conflict " + existing.getResource().getModPack().getName() + ": " + mcRelative); //$NON-NLS-1$ //$NON-NLS-2$
+                            conflicts.add(existing.getResource().getModPack().getName() + " v" + existing.getResource().getModPack().getVersion()); //$NON-NLS-1$
                         }
                     }
                 }
@@ -167,12 +167,12 @@ public class InstallationService {
         }
         if (check) {
             if (conflicts.size() > 0) {
-                StringBuilder sb = new StringBuilder("Conflicting with:\n");
+                StringBuilder sb = new StringBuilder(Messages.getString("InstallationService.conflict") + ":\n"); //$NON-NLS-1$ //$NON-NLS-2$
                 for (String conflict : conflicts) {
-                    sb.append("    ").append(conflict).append("\n");
+                    sb.append("    ").append(conflict).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
                 }
-                sb.append("\nInstall anyways?");
-                if (IOMethods.showConfirmation(cfg, "Conflicts.", sb.toString())) {
+                sb.append("\n" + Messages.getString("InstallationService.install_force")); //$NON-NLS-1$ //$NON-NLS-2$
+                if (IOMethods.showConfirmation(cfg, Messages.getString("InstallationService.conflicts"), sb.toString())) { //$NON-NLS-1$
                     this.installMod(cfg, mod, toCopy, ignored, fileResource);
                 }
             } else {
@@ -190,8 +190,8 @@ public class InstallationService {
 
     private void installMod(Config cfg, Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
         this.copy(cfg, mod, fileResource, toCopy, ignored);
-        Integer max1 = cfg.getDb().hql("select max(installOrder) from Mod", Integer.class).get(0);
-        Integer max2 = cfg.getDb().hql("select max(installOrder) from ModPack", Integer.class).get(0);
+        Integer max1 = cfg.getDb().hql("select max(installOrder) from Mod", Integer.class).get(0); //$NON-NLS-1$
+        Integer max2 = cfg.getDb().hql("select max(installOrder) from ModPack", Integer.class).get(0); //$NON-NLS-1$
         if (max1 == null) {
             max1 = 0;
         }
@@ -202,7 +202,7 @@ public class InstallationService {
         mod.setInstallOrder(max);
         mod.setActualUrl(InstallationService.getUrl(mod.getUrl()));
         cfg.getDb().save(mod);
-        IOMethods.showInformation(cfg, "Install mods.", "Mod installed.");
+        IOMethods.showInformation(cfg, Messages.getString("InstallationService.install_mods"), Messages.getString("InstallationService.mod_installed")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @SuppressWarnings("unused")

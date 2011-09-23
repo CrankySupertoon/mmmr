@@ -20,6 +20,7 @@ import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 
 import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.Messages;
 import org.mmmr.services.interfaces.DownloadingServiceI;
 import org.mmmr.services.swing.common.FancySwing;
 
@@ -73,10 +74,10 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if ("progress" == evt.getPropertyName()) {
+            if ("progress" == evt.getPropertyName()) { //$NON-NLS-1$
                 int progress = (Integer) evt.getNewValue();
                 this.setProgress(progress);
-                String message = String.format("Completed %d%%.", progress);
+                String message = String.format(Messages.getString("DownloadingServiceSimple.completed") + " %d%%.", progress); //$NON-NLS-1$ //$NON-NLS-2$
                 this.setNote(message);
                 // System.out.println(message);
                 if (this.isCanceled() || this.sw.isDone()) {
@@ -97,7 +98,7 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
             JFrame f = new JFrame();
             f.setVisible(true);
             System.out.println(new DownloadingServiceHttpClient().downloadURL(new URL(
-                    "http://repo1.maven.org/maven2/org/hibernate/hibernate/3.2.7.ga/hibernate-3.2.7.ga-javadoc.jar")).length);
+                    "http://repo1.maven.org/maven2/org/hibernate/hibernate/3.2.7.ga/hibernate-3.2.7.ga-javadoc.jar")).length); //$NON-NLS-1$
             f.dispose();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -139,7 +140,7 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
         conn.setReadTimeout(60 * 1000);
         conn.setUseCaches(true);
         try {
-            System.out.println(new DownloadProgressMonitor(null, "Downloading", String.valueOf(url), target, conn).sw.get());
+            System.out.println(new DownloadProgressMonitor(null, Messages.getString("DownloadingServiceSimple.downloading"), String.valueOf(url), target, conn).sw.get()); //$NON-NLS-1$
         } catch (InterruptedException ex) {
             //
         } catch (ExecutionException ex) {

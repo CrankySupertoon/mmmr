@@ -17,12 +17,12 @@ public class NiceFont {
         Font font = null;
         Font fontNarrow = null;
         try {
-            File fontfile = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSans.ttf");
-            File fontfile2 = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed.ttf");
+            File fontfile = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSans.ttf"); //$NON-NLS-1$
+            File fontfile2 = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed.ttf"); //$NON-NLS-1$
             if (!fontfile.exists()) {
                 URL dejavu = new URL(
-                        "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip");
-                File file = new File(cfg.getTmp(), "dejavu-fonts-ttf-2.33.zip");
+                        "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip"); //$NON-NLS-1$
+                File file = new File(cfg.getTmp(), "dejavu-fonts-ttf-2.33.zip"); //$NON-NLS-1$
                 DownloadingService.downloadURL(dejavu, file);
                 ArchiveService.extract(file, cfg.getCfg());
             }

@@ -28,10 +28,10 @@ public class Config {
         try {
             // (1) Java 1.7 compilable in Java 1.6 but gives Exception at runtimee so we can fall back to (2)
             @SuppressWarnings("rawtypes")
-            Class type = Class.forName("java.util.Locale$Category");
+            Class type = Class.forName("java.util.Locale$Category"); //$NON-NLS-1$
             @SuppressWarnings("unchecked")
-            Object enumvalue = Enum.valueOf(type, "FORMAT");
-            defaultLocale = Locale.class.cast(Locale.class.getMethod("getDefault", type).invoke(null, enumvalue));
+            Object enumvalue = Enum.valueOf(type, "FORMAT"); //$NON-NLS-1$
+            defaultLocale = Locale.class.cast(Locale.class.getMethod("getDefault", type).invoke(null, enumvalue)); //$NON-NLS-1$
         } catch (Exception ex) {
             // (2) Java 1.6 (gives wrong info in Java 1.7)
             defaultLocale = Locale.getDefault();
@@ -106,44 +106,44 @@ public class Config {
     public Config(String[] args, File thisFolder) throws IOException {
         this.thisFolder = thisFolder;
 
-        this.mmmrOnGoogleCode = "http://mmmr.googlecode.com";
-        this.mmmrSvnOnGoogleCode = this.mmmrOnGoogleCode + "/svn/trunk";
+        this.mmmrOnGoogleCode = "http://mmmr.googlecode.com"; //$NON-NLS-1$
+        this.mmmrSvnOnGoogleCode = this.mmmrOnGoogleCode + "/svn/trunk"; //$NON-NLS-1$
 
-        this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/Minecraftx256.png"));
-        this.mcVersion = "1.8.1";
-        this.shortTitle = "Minecraft Mod Manager Reloaded";
-        this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion;
-        this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar";
+        this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/Minecraftx256.png")); //$NON-NLS-1$
+        this.mcVersion = "1.8.1"; //$NON-NLS-1$
+        this.shortTitle = "Minecraft Mod Manager Reloaded"; //$NON-NLS-1$
+        this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion; //$NON-NLS-1$
+        this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar"; //$NON-NLS-1$
 
         this.parameterValues = IOMethods.parseParams(args);
 
         // not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
         // we use a locally installed minecraft so you can mod at your heart's content
-        this.mcBaseFolder = new File(thisFolder, ".minecraft");
+        this.mcBaseFolder = new File(thisFolder, ".minecraft"); //$NON-NLS-1$
 
-        this.mcBin = new File(this.mcBaseFolder, "bin");
-        this.mcMods = new File(this.mcBaseFolder, "mods");
-        this.mcResources = new File(this.mcBaseFolder, "resources");
-        this.mcJar = new File(this.mcBin, "minecraft.jar");
-        this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup");
+        this.mcBin = new File(this.mcBaseFolder, "bin"); //$NON-NLS-1$
+        this.mcMods = new File(this.mcBaseFolder, "mods"); //$NON-NLS-1$
+        this.mcResources = new File(this.mcBaseFolder, "resources"); //$NON-NLS-1$
+        this.mcJar = new File(this.mcBin, "minecraft.jar"); //$NON-NLS-1$
+        this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup"); //$NON-NLS-1$
 
-        this.data = IOMethods.newDir(thisFolder, "data");
+        this.data = IOMethods.newDir(thisFolder, "data"); //$NON-NLS-1$
 
-        this.cfg = IOMethods.newDir(this.data, "cfg");
+        this.cfg = IOMethods.newDir(this.data, "cfg"); //$NON-NLS-1$
         this.properties = new Properties();
-        File file = new File(this.cfg, "config.properties");
+        File file = new File(this.cfg, "config.properties"); //$NON-NLS-1$
         if (file.exists()) {
             this.properties.load(new FileInputStream(file));
         }
-        this.backup = IOMethods.newDir(this.data, "backup");
-        this.mods = IOMethods.newDir(this.data, "mods");
-        this.libs = IOMethods.newDir(this.data, "libs");
-        this.tmp = new File(System.getProperty("java.io.tmpdir"));
+        this.backup = IOMethods.newDir(this.data, "backup"); //$NON-NLS-1$
+        this.mods = IOMethods.newDir(this.data, "mods"); //$NON-NLS-1$
+        this.libs = IOMethods.newDir(this.data, "libs"); //$NON-NLS-1$
+        this.tmp = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
         this.tmp.deleteOnExit();
-        this.logs = IOMethods.newDir(this.data, "logs");
-        this.dbdir = new File(this.data, "db");
-        this.backupOriginalJar = IOMethods.newDir(this.backup, "minecraft.jar");
-        this.mcJogboxBackup = IOMethods.newDir(this.backup, "jogbox");
+        this.logs = IOMethods.newDir(this.data, "logs"); //$NON-NLS-1$
+        this.dbdir = new File(this.data, "db"); //$NON-NLS-1$
+        this.backupOriginalJar = IOMethods.newDir(this.backup, "minecraft.jar"); //$NON-NLS-1$
+        this.mcJogboxBackup = IOMethods.newDir(this.backup, "jogbox"); //$NON-NLS-1$
     }
 
     public File getBackup() {
@@ -300,7 +300,7 @@ public class Config {
 
     public String setProperty(String key, String value) throws IOException {
         this.properties.put(key, value);
-        this.properties.store(new FileOutputStream(new File(this.cfg, "config.properties")), null);
+        this.properties.store(new FileOutputStream(new File(this.cfg, "config.properties")), null); //$NON-NLS-1$
         return value;
     }
 

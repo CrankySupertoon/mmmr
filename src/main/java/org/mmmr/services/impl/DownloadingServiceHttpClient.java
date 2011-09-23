@@ -28,6 +28,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.Messages;
 import org.mmmr.services.interfaces.DownloadingServiceI;
 import org.mmmr.services.swing.common.FancySwing;
 
@@ -84,10 +85,10 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if ("progress" == evt.getPropertyName()) {
+            if ("progress" == evt.getPropertyName()) { //$NON-NLS-1$
                 int progress = (Integer) evt.getNewValue();
                 this.setProgress(progress);
-                String message = String.format("Completed %d%%.", progress);
+                String message = String.format(Messages.getString("DownloadingServiceHttpClient.completed") + " %d%%.", progress); //$NON-NLS-1$ //$NON-NLS-2$
                 this.setNote(message);
                 // System.out.println(message);
                 if (this.isCanceled() || this.sw.isDone()) {
@@ -108,7 +109,7 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
             JFrame f = new JFrame();
             f.setVisible(true);
             System.out.println(new DownloadingServiceHttpClient().downloadURL(new URL(
-                    "http://repo1.maven.org/maven2/org/hibernate/hibernate/3.2.7.ga/hibernate-3.2.7.ga-javadoc.jar")).length);
+                    "http://repo1.maven.org/maven2/org/hibernate/hibernate/3.2.7.ga/hibernate-3.2.7.ga-javadoc.jar")).length); //$NON-NLS-1$
             f.dispose();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -147,7 +148,7 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
         httpclient.setRedirectStrategy(new DefaultRedirectStrategy() {
             @Override
             protected URI createLocationURI(String location) throws ProtocolException {
-                info.put("redirect", location);
+                info.put("redirect", location); //$NON-NLS-1$
                 return super.createLocationURI(location);
             }
         });
@@ -161,7 +162,7 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try {
-                new DownloadProgressMonitor(null, "Downloading", String.valueOf(url), target, entity).sw.get();
+                new DownloadProgressMonitor(null, Messages.getString("DownloadingServiceHttpClient.downloading"), String.valueOf(url), target, entity).sw.get(); //$NON-NLS-1$
             } catch (InterruptedException ex) {
                 //
             } catch (ExecutionException ex) {
@@ -170,6 +171,6 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
 
             return info;
         }
-        throw new IOException("" + url);
+        throw new IOException("" + url); //$NON-NLS-1$
     }
 }

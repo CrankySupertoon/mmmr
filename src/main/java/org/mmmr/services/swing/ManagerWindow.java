@@ -27,6 +27,7 @@ import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
 import org.mmmr.services.InstallationService;
+import org.mmmr.services.Messages;
 import org.mmmr.services.swing.common.FancySwing;
 import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
@@ -49,15 +50,15 @@ public class ManagerWindow extends JFrame {
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder(this.mod.getName()).append(" v").append(this.mod.getVersion());
+            StringBuilder sb = new StringBuilder(this.mod.getName()).append(Messages.getString("ManagerWindow.0")).append(this.mod.getVersion()); //$NON-NLS-1$
 
             if (this.mod.isInstalled()) {
-                sb.append(" [installed]");
+                sb.append(" [installed]"); //$NON-NLS-1$
             }
 
             File file = new File(ManagerWindow.this.cfg.getMods(), this.mod.getArchive());
             if (!file.exists()) {
-                sb.append(" [archive not found]");
+                sb.append(" [archive not found]"); //$NON-NLS-1$
             }
 
             return sb.toString();
@@ -87,12 +88,13 @@ public class ManagerWindow extends JFrame {
         label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
         mainpanel.add(label);
         this.addActions(mainpanel);
-        JButton quit = new JButton("Get me out of here :(");
+        JButton quit = new JButton(Messages.getString("ManagerWindow.exit")); //$NON-NLS-1$
         quit.setFont(cfg.getFont18());
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ManagerWindow.this.dispose();
+                System.exit(0);
             }
         });
         mainpanel.add(quit);
@@ -106,7 +108,7 @@ public class ManagerWindow extends JFrame {
 
     private void addActions(Container mainpanel) {
         {
-            JButton comp = new JButton("Change startup configuration (performance related).");
+            JButton comp = new JButton(Messages.getString("ManagerWindow.change_startup")); //$NON-NLS-1$
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
@@ -127,7 +129,7 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Install OptiFine (performance mod & HD texture enabler).");
+            JButton comp = new JButton(Messages.getString("ManagerWindow.install_optifine")); //$NON-NLS-1$
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
@@ -138,7 +140,7 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("(Un)install mods and change order.");
+            JButton comp = new JButton(Messages.getString("ManagerWindow.un_install_reorder")); //$NON-NLS-1$
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
@@ -151,53 +153,55 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Resolve mod conflicts.");
+            JButton comp = new JButton(Messages.getString("ManagerWindow.resolve")); //$NON-NLS-1$
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // TODO Resolve mod conflicts.
-                    IOMethods.showWarning(ManagerWindow.this.cfg, "Resolve mod conflicts.", "Not implemented yet.");
+                    IOMethods.showWarning(ManagerWindow.this.cfg, Messages.getString("ManagerWindow.resolve"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Change sex.");
+            JButton comp = new JButton(Messages.getString("ManagerWindow.change_sex")); //$NON-NLS-1$
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // TODO change
-                    IOMethods.showWarning(ManagerWindow.this.cfg, "Change sex.", "Not implemented yet.");
+                    IOMethods.showWarning(ManagerWindow.this.cfg, Messages.getString("ManagerWindow.change_sex"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Backup and restore worlds/stats/etc.");
+            JButton comp = new JButton(Messages.getString("ManagerWindow.backup_restore")); //$NON-NLS-1$
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // TODO Backup and restore worlds/stats/etc.
-                    IOMethods.showWarning(ManagerWindow.this.cfg, "Backup and restore worlds/stats/etc.", "Not implemented yet.");
+                    IOMethods.showWarning(ManagerWindow.this.cfg, Messages.getString("ManagerWindow.backup_restore"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Change MMMR logging level.");
+            JButton comp = new JButton(Messages.getString("ManagerWindow.change_logging")); //$NON-NLS-1$
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         Level[] levels = { Level.TRACE, Level.DEBUG, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF };
-                        Level level = IOMethods.showOptions(ManagerWindow.this.cfg, "Choose logging level.", "Choose logging level.", levels,
+                        Level level = IOMethods.showOptions(
+                                ManagerWindow.this.cfg,
+                                Messages.getString("ManagerWindow.change_logging_level"), Messages.getString("ManagerWindow.change_logging_level"), levels, //$NON-NLS-1$ //$NON-NLS-2$
                                 org.apache.log4j.Logger.getRootLogger().getLevel());
                         if (level != null) {
-                            ManagerWindow.this.cfg.setProperty("logging.level", String.valueOf(level));
+                            ManagerWindow.this.cfg.setProperty("logging.level", String.valueOf(level)); //$NON-NLS-1$
                             org.apache.log4j.Logger.getRootLogger().setLevel(level);
                             Enumeration<?> allAppenders = org.apache.log4j.Logger.getRootLogger().getAllAppenders();
                             while (allAppenders.hasMoreElements()) {
@@ -220,7 +224,7 @@ public class ManagerWindow extends JFrame {
             File[] modxmls = this.cfg.getMods().listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
-                    return name.toLowerCase().contains("optifine") && name.endsWith(".xml");
+                    return name.toLowerCase().contains("optifine") && name.endsWith(".xml"); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             List<ModOption> options = new ArrayList<ModOption>();
@@ -240,12 +244,12 @@ public class ManagerWindow extends JFrame {
                 options.add(modoption);
             }
             if (options.size() == 0) {
-                IOMethods.showInformation(this.cfg, "OptiFine.", "No compatible OptiFine mod configuration found.");
+                IOMethods.showInformation(this.cfg, "OptiFine.", Messages.getString("ManagerWindow.no_compatible_version")); //$NON-NLS-1$ //$NON-NLS-2$
                 return;
             }
             ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
             ModOption selected = installedOption == null ? selectionValues[0] : installedOption;
-            selected = IOMethods.showOptions(this.cfg, "OptiFine.", "Select a version.", selectionValues, selected);
+            selected = IOMethods.showOptions(this.cfg, "OptiFine.", Messages.getString("ManagerWindow.select_version"), selectionValues, selected); //$NON-NLS-1$ //$NON-NLS-2$
             if (selected != null) {
                 Mod mod = ModOption.class.cast(selected).getMod();
                 if (installed != null) {

@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import org.mmmr.services.Config;
+import org.mmmr.services.Messages;
 import org.mmmr.services.swing.common.FancySwing;
 import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
@@ -61,8 +62,8 @@ public class StatusWindow extends JFrame {
         @Override
         public void setStatus(String text, Boolean success) {
             this.statuslabel.setText(text);
-            this.statuslabel.setIcon(success == null ? StatusWindow.getIcon("images/waiting.png") : success ? StatusWindow.getIcon("images/ok.png")
-                    : StatusWindow.getIcon("images/nok.png"));
+            this.statuslabel.setIcon(success == null ? StatusWindow.getIcon("images/waiting.png") : success ? StatusWindow.getIcon("images/ok.png") //$NON-NLS-1$ //$NON-NLS-2$
+                    : StatusWindow.getIcon("images/nok.png")); //$NON-NLS-1$
         }
     }
 
@@ -101,18 +102,18 @@ public class StatusWindow extends JFrame {
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
         mainpanel.add(label, BorderLayout.CENTER);
-        String bullet = "images/waiting.png";
-        this.libstatus = new StatusPanel("Program libraries", bullet);
+        String bullet = "images/waiting.png"; //$NON-NLS-1$
+        this.libstatus = new StatusPanel(Messages.getString("StatusWindow.libraries"), bullet); //$NON-NLS-1$
         mainpanel.add(this.libstatus);
-        this.dbstatus = new StatusPanel("Database and Hibernate", bullet);
+        this.dbstatus = new StatusPanel(Messages.getString("StatusWindow.db_hibernate"), bullet); //$NON-NLS-1$
         mainpanel.add(this.dbstatus);
-        this.xmlstatus = new StatusPanel("XML service", bullet);
+        this.xmlstatus = new StatusPanel(Messages.getString("StatusWindow.xml_service"), bullet); //$NON-NLS-1$
         mainpanel.add(this.xmlstatus);
-        this.mcstatus = new StatusPanel("Minecraft", bullet);
+        this.mcstatus = new StatusPanel("Minecraft", bullet); //$NON-NLS-1$
         mainpanel.add(this.mcstatus);
-        this.ybstatus = new StatusPanel("YogBox", bullet);
+        this.ybstatus = new StatusPanel("YogBox", bullet); //$NON-NLS-1$
         mainpanel.add(this.ybstatus);
-        this.goOn = new JButton("I'm ready to start adding mods :)");
+        this.goOn = new JButton(Messages.getString("StatusWindow.to_mod_manager")); //$NON-NLS-1$
         this.goOn.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
         this.goOn.addActionListener(new ActionListener() {
             @Override
@@ -124,12 +125,13 @@ public class StatusWindow extends JFrame {
             }
         });
         this.goOn.setEnabled(false);
-        this.quit = new JButton("Get me out of here :(");
+        this.quit = new JButton(Messages.getString("StatusWindow.exit")); //$NON-NLS-1$
         this.quit.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
         this.quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 StatusWindow.this.dispose();
+                System.exit(0);
             }
         });
 

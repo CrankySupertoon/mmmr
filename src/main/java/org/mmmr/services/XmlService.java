@@ -62,7 +62,7 @@ public class XmlService {
 
     private void init(Config cfg) throws JAXBException, SAXException, IOException {
         String contextPath = Mod.class.getPackage().getName();
-        final File xsdfile = new File(cfg.getData(), contextPath + ".xsd");
+        final File xsdfile = new File(cfg.getData(), contextPath + ".xsd"); //$NON-NLS-1$
         JAXBContext context = JAXBContext.newInstance(contextPath);
         context.generateSchema(new SchemaOutputResolver() {
             @Override

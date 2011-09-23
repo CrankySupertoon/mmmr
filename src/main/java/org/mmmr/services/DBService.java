@@ -34,9 +34,9 @@ public class DBService {
 
     public static void main(String[] args) {
         try {
-            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
+            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile()); //$NON-NLS-1$
             DBService db = DBService.getInstance(cfg);
-            String hql = "from " + MCFile.class.getName();
+            String hql = "from " + MCFile.class.getName(); //$NON-NLS-1$
             for (Object record : db.hql(hql, MCFile.class)) {
                 System.out.println(record);
             }
@@ -48,7 +48,7 @@ public class DBService {
     private Session session = null;
 
     public DBService(Config cfg) throws IOException, ClassNotFoundException {
-        System.setProperty("derby.stream.error.file", new File(cfg.getLogs(), "derby.log").getAbsolutePath());
+        System.setProperty("derby.stream.error.file", new File(cfg.getLogs(), "derby.log").getAbsolutePath()); //$NON-NLS-1$ //$NON-NLS-2$
 
         AnnotationConfiguration configuration = new AnnotationConfiguration();
         configuration.addAnnotatedClass(Dependency.class);
@@ -58,16 +58,16 @@ public class DBService {
         configuration.addAnnotatedClass(Mod.class);
         configuration.addAnnotatedClass(ModPack.class);
         Properties properties = new Properties();
-        properties.setProperty("hibernate.connection.username", "mmmr");
-        properties.setProperty("hibernate.connection.password", "mmmr");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.show_sql", "false");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
+        properties.setProperty("hibernate.connection.username", "mmmr"); //$NON-NLS-1$ //$NON-NLS-2$
+        properties.setProperty("hibernate.connection.password", "mmmr"); //$NON-NLS-1$ //$NON-NLS-2$
+        properties.setProperty("hibernate.hbm2ddl.auto", "update"); //$NON-NLS-1$ //$NON-NLS-2$
+        properties.setProperty("hibernate.show_sql", "false"); //$NON-NLS-1$ //$NON-NLS-2$
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.DerbyDialect"); //$NON-NLS-1$ //$NON-NLS-2$
         // embedded server can only be opened by 1 program
-        properties.setProperty("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver");
-        String url = "jdbc:derby:" + cfg.getDbdir().getAbsolutePath() + ";create=" + !cfg.getDbdir().exists();
+        properties.setProperty("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver"); //$NON-NLS-1$ //$NON-NLS-2$
+        String url = "jdbc:derby:" + cfg.getDbdir().getAbsolutePath() + ";create=" + !cfg.getDbdir().exists(); //$NON-NLS-1$ //$NON-NLS-2$
         ExceptionAndLogHandler.log(url);
-        properties.setProperty("hibernate.connection.url", url);
+        properties.setProperty("hibernate.connection.url", url); //$NON-NLS-1$
         configuration.setProperties(properties);
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         this.session = sessionFactory.openSession();
@@ -110,7 +110,7 @@ public class DBService {
             return create ? object : null;
         }
         if (results.size() > 1) {
-            throw new RuntimeException("more than 1 result");
+            throw new RuntimeException(Messages.getString("DBService.morethan1")); //$NON-NLS-1$
         }
         return results.get(0);
     }

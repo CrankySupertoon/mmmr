@@ -134,6 +134,6 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("name", this.name).append("version", this.version).toString();
+        return new ToStringBuilder(this).append("name", this.name).append("version", this.version).toString(); //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

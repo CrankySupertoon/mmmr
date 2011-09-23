@@ -204,7 +204,7 @@ public class Resource implements Comparable<Resource>, PersistentObject {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("exclude", this.exclude).append("include", this.include).append("mod", this.mod)
-                .append("modPack", this.modPack).append("sourcePath", this.sourcePath).append("targetPath", this.targetPath).toString();
+        return new ToStringBuilder(this).append("exclude", this.exclude).append("include", this.include).append("mod", this.mod) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                .append("modPack", this.modPack).append("sourcePath", this.sourcePath).append("targetPath", this.targetPath).toString(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

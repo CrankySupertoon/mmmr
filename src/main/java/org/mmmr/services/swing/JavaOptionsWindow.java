@@ -38,6 +38,7 @@ import javax.swing.table.TableRowSorter;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
+import org.mmmr.services.Messages;
 import org.mmmr.services.IOMethods.MemInfo;
 import org.mmmr.services.MMMR;
 import org.mmmr.services.swing.common.FancySwing;
@@ -59,7 +60,7 @@ public class JavaOptionsWindow extends JFrame {
             if (JavaOptionsWindow.this.cfg != null) {
                 this.setFont(JavaOptionsWindow.this.cfg.getFont18().deriveFont(10f));
             }
-            if ("y".equals(value)) {
+            if ("y".equals(value)) { //$NON-NLS-1$
                 if (isSelected) {
                     this.setBackground(JavaOptionsWindow.this.greenSelected);
                 } else {
@@ -67,7 +68,7 @@ public class JavaOptionsWindow extends JFrame {
                 }
                 this.setForeground(Color.white);
                 this.setHorizontalTextPosition(SwingConstants.CENTER);
-            } else if ("n".equals(value)) {
+            } else if ("n".equals(value)) { //$NON-NLS-1$
                 if (isSelected) {
                     this.setBackground(JavaOptionsWindow.this.redSelected);
                 } else {
@@ -146,8 +147,8 @@ public class JavaOptionsWindow extends JFrame {
 
     private Color greenSelected;
 
-    private String[] options = ("-Xms{MIN}m -Xmx{MAX}m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc -XX:+UseCompressedOops")
-            .split(" ");
+    private String[] options = ("-Xms{MIN}m -Xmx{MAX}m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc -XX:+UseCompressedOops") //$NON-NLS-1$
+            .split(" "); //$NON-NLS-1$
 
     private Color red;
 
@@ -156,7 +157,7 @@ public class JavaOptionsWindow extends JFrame {
     private JTable table;
 
     public JavaOptionsWindow(final Config cfg, Dimension preferredSize) throws HeadlessException, IOException {
-        Color selectionColor = Color.class.cast(UIManager.get("Table.selectionBackground"));
+        Color selectionColor = Color.class.cast(UIManager.get("Table.selectionBackground")); //$NON-NLS-1$
         this.red = Color.RED.darker();
         this.redSelected = selectionColor == null ? this.red : new Color(Math.max(this.red.getRed(), selectionColor.getRed()), Math.max(
                 this.red.getGreen(), selectionColor.getGreen()), Math.max(this.red.getRed(), selectionColor.getBlue()));
@@ -182,7 +183,7 @@ public class JavaOptionsWindow extends JFrame {
         mainpanel.add(jtable, BorderLayout.CENTER);
         mainpanel.add(jtable.getTableHeader(), BorderLayout.NORTH);
 
-        JButton quit = new JButton("Select an option and click here.");
+        JButton quit = new JButton(Messages.getString("JavaOptionsWindow.select_and_click")); //$NON-NLS-1$
         if (cfg != null) {
             quit.setFont(cfg.getFont18());
         }
@@ -193,20 +194,20 @@ public class JavaOptionsWindow extends JFrame {
                     if ((cfg != null) && (jtable.getSelectedRow() != -1)) {
                         StringBuilder sb = new StringBuilder();
                         String jre = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 0));
-                        sb.append("\"").append(jre).append("\\bin\\java.exe\"");
+                        sb.append("\"").append(jre).append("\\bin\\java.exe\""); //$NON-NLS-1$ //$NON-NLS-2$
                         String min = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 2));
-                        sb.append(" ").append(JavaOptionsWindow.this.options[0].replaceAll("\\Q{MIN}\\E", min));
+                        sb.append(" ").append(JavaOptionsWindow.this.options[0].replaceAll("\\Q{MIN}\\E", min)); //$NON-NLS-1$ //$NON-NLS-2$
                         String max = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 3));
-                        sb.append(" ").append(JavaOptionsWindow.this.options[1].replaceAll("\\Q{MAX}\\E", max));
+                        sb.append(" ").append(JavaOptionsWindow.this.options[1].replaceAll("\\Q{MAX}\\E", max)); //$NON-NLS-1$ //$NON-NLS-2$
                         for (int i = 4; i < JavaOptionsWindow.this.options.length + 1; i++) {
-                            boolean optionAvailable = "y".equals(String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), i)));
+                            boolean optionAvailable = "y".equals(String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), i))); //$NON-NLS-1$
                             if (optionAvailable) {
-                                sb.append(" ").append(JavaOptionsWindow.this.options[i - 1]);
+                                sb.append(" ").append(JavaOptionsWindow.this.options[i - 1]); //$NON-NLS-1$
                             }
                         }
-                        sb.append(" -jar minecraft.jar");
+                        sb.append(" -jar minecraft.jar"); //$NON-NLS-1$
                         cfg.setMcCommandline(sb.toString());
-                        cfg.setProperty("jre", jre);
+                        cfg.setProperty("jre", jre); //$NON-NLS-1$
                         MMMR.writeMCBat(cfg);
                     }
                     JavaOptionsWindow.this.dispose();
@@ -247,13 +248,13 @@ public class JavaOptionsWindow extends JFrame {
             max = 2048;
         }
 
-        this.columnNames.add("JRE");
-        this.columnNames.add("64bit");
+        this.columnNames.add("JRE"); //$NON-NLS-1$
+        this.columnNames.add("64bit"); //$NON-NLS-1$
         this.columnNames.addAll(Arrays.asList(this.options));
 
         for (String[] jreinfo : IOMethods.getAllJavaInfo(IOMethods.getAllJavaRuntimes())) {
             String jre = jreinfo[0];
-            boolean _64 = "true".equals(jreinfo[2]);
+            boolean _64 = "true".equals(jreinfo[2]); //$NON-NLS-1$
 
             int _min = min;
             int _max = max;
@@ -265,8 +266,8 @@ public class JavaOptionsWindow extends JFrame {
 
             String[] opts = new String[this.options.length];
             System.arraycopy(this.options, 0, opts, 0, this.options.length);
-            opts[0] = opts[0].replaceAll("\\Q{MIN}\\E", "" + _min);
-            opts[1] = opts[1].replaceAll("\\Q{MAX}\\E", "" + _max);
+            opts[0] = opts[0].replaceAll("\\Q{MIN}\\E", "" + _min); //$NON-NLS-1$ //$NON-NLS-2$
+            opts[1] = opts[1].replaceAll("\\Q{MAX}\\E", "" + _max); //$NON-NLS-1$ //$NON-NLS-2$
 
             Vector<Object> row = new Vector<Object>();
             int success = 0;
@@ -274,28 +275,28 @@ public class JavaOptionsWindow extends JFrame {
             if (_64) {
                 success++;
             }
-            row.add(_64 ? "y" : "n");
+            row.add(_64 ? "y" : "n"); //$NON-NLS-1$ //$NON-NLS-2$
             for (int i = 0; i < opts.length; i++) {
                 String option = opts[i];
-                boolean result = IOMethods.process(true, false, jre + "/bin/java.exe", option, "-version").get(0).toLowerCase()
-                        .startsWith("java version");
+                boolean result = IOMethods.process(true, false, jre + "/bin/java.exe", option, "-version").get(0).toLowerCase() //$NON-NLS-1$ //$NON-NLS-2$
+                        .startsWith("java version"); //$NON-NLS-1$
                 if (result) {
                     success++;
                 }
                 if (i == 0) {
                     if (result) {
-                        row.add("" + _min);
+                        row.add("" + _min); //$NON-NLS-1$
                     } else {
-                        row.add("1024");
+                        row.add("1024"); //$NON-NLS-1$
                     }
                 } else if (i == 1) {
                     if (result) {
-                        row.add("" + _max);
+                        row.add("" + _max); //$NON-NLS-1$
                     } else {
-                        row.add("1024");
+                        row.add("1024"); //$NON-NLS-1$
                     }
                 } else {
-                    row.add((result ? "y" : "n"));
+                    row.add((result ? "y" : "n")); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             }
             row.add(jreinfo[1]);
@@ -321,8 +322,8 @@ public class JavaOptionsWindow extends JFrame {
                     return x2 - x1;
                 }
 
-                boolean d1 = String.valueOf(o1.get(0)).toLowerCase().contains("jdk");
-                boolean d2 = String.valueOf(o2.get(0)).toLowerCase().contains("jdk");
+                boolean d1 = String.valueOf(o1.get(0)).toLowerCase().contains("jdk"); //$NON-NLS-1$
+                boolean d2 = String.valueOf(o2.get(0)).toLowerCase().contains("jdk"); //$NON-NLS-1$
 
                 if (d1 && !d2) {
                     return 1;
@@ -391,7 +392,7 @@ public class JavaOptionsWindow extends JFrame {
 
     public void selectDefault() {
         try {
-            String defaultJre = this.cfg.getProperty("jre");
+            String defaultJre = this.cfg.getProperty("jre"); //$NON-NLS-1$
             if (defaultJre != null) {
                 for (int i = 0; i < this.table.getRowCount(); i++) {
                     String jreOption = String.valueOf(this.table.getValueAt(i, 0));

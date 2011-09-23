@@ -19,8 +19,8 @@ public class ExceptionAndLogHandler {
         if (ExceptionAndLogHandler.exceptionAndLogHandler instanceof ExceptionAndLogHandlerSimple) {
             try {
                 ExceptionAndLogHandler.exceptionAndLogHandler = (ExceptionAndLogHandlerI) Class.forName(
-                        "org.mmmr.services.impl.ExceptionAndLogHandlerLog4j").newInstance();
-                ExceptionAndLogHandler.exceptionAndLogHandler.log("log4j over slf4j");
+                        "org.mmmr.services.impl.ExceptionAndLogHandlerLog4j").newInstance(); //$NON-NLS-1$
+                ExceptionAndLogHandler.exceptionAndLogHandler.log("log4j over slf4j"); //$NON-NLS-1$
             } catch (Throwable ex) {
                 //
             }

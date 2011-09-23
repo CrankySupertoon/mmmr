@@ -121,6 +121,6 @@ public class MC implements Comparable<MC>, PersistentObject {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("version", this.version).toString();
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("version", this.version).toString(); //$NON-NLS-1$
     }
 }

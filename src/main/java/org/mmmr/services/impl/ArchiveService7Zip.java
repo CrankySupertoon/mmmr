@@ -117,7 +117,7 @@ public class ArchiveService7Zip implements ArchiveServiceI {
                 ex.printStackTrace();
             }
             if (extractOperationResult != ExtractOperationResult.OK) {
-                ExceptionAndLogHandler.log(new RuntimeException("Extraction error"));
+                ExceptionAndLogHandler.log(new RuntimeException("Extraction error")); //$NON-NLS-1$
             }
         }
 
@@ -134,7 +134,7 @@ public class ArchiveService7Zip implements ArchiveServiceI {
         RandomAccessFile randomAccessFile = null;
         ISevenZipInArchive inArchive = null;
         try {
-            randomAccessFile = new RandomAccessFile(archive, "r");
+            randomAccessFile = new RandomAccessFile(archive, "r"); //$NON-NLS-1$
             inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile));
             int[] in = new int[inArchive.getNumberOfItems()];
             for (int i = 0; i < in.length; i++) {
@@ -142,14 +142,14 @@ public class ArchiveService7Zip implements ArchiveServiceI {
             }
             inArchive.extract(in, false, new Callback(out, inArchive));
         } catch (Exception e) {
-            System.err.println("Error occurs: " + e);
+            System.err.println("Error occurs: " + e); //$NON-NLS-1$
             runtimeException = new RuntimeException(e);
         } finally {
             if (inArchive != null) {
                 try {
                     inArchive.close();
                 } catch (SevenZipException e) {
-                    System.err.println("Error closing archive: " + e);
+                    System.err.println("Error closing archive: " + e); //$NON-NLS-1$
                     exception = new IOException(e);
                 }
             }
@@ -157,7 +157,7 @@ public class ArchiveService7Zip implements ArchiveServiceI {
                 try {
                     randomAccessFile.close();
                 } catch (IOException e) {
-                    System.err.println("Error closing file: " + e);
+                    System.err.println("Error closing file: " + e); //$NON-NLS-1$
                     exception = e;
                 }
             }

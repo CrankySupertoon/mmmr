@@ -127,7 +127,7 @@ public class MCFile implements Comparable<MCFile>, PersistentObject {
     }
 
     public void setPath(String path) {
-        this.path = path.replace('\\', '/').replaceAll("//", "/");
+        this.path = path.replace('\\', '/').replaceAll("//", "/"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     protected void setResource(Resource resource) {
@@ -140,7 +140,7 @@ public class MCFile implements Comparable<MCFile>, PersistentObject {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("path", this.path).append("crc32", this.crc32).append("mc", this.mc)
-                .append("modificationDate", this.modificationDate).append("resource", this.resource).toString();
+        return new ToStringBuilder(this).append("path", this.path).append("crc32", this.crc32).append("mc", this.mc) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                .append("modificationDate", this.modificationDate).append("resource", this.resource).toString(); //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

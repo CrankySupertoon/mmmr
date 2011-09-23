@@ -31,6 +31,7 @@ import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
+import org.mmmr.services.Messages;
 import org.mmmr.services.ModList;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
@@ -70,7 +71,7 @@ public class ModOptionsWindow extends JFrame {
 
         JPanel actions = new JPanel(new GridLayout(1, -1));
 
-        JButton commit = new JButton("Apply changes.");
+        JButton commit = new JButton(Messages.getString("ModOptionsWindow.apply_changes")); //$NON-NLS-1$
         commit.setFont(cfg.getFont18());
         commit.addActionListener(new ActionListener() {
             @Override
@@ -81,7 +82,7 @@ public class ModOptionsWindow extends JFrame {
         });
         actions.add(commit);
 
-        JButton quit = new JButton("Do not make any changes.");
+        JButton quit = new JButton(Messages.getString("ModOptionsWindow.do_not_make_changed")); //$NON-NLS-1$
         quit.setFont(cfg.getFont18());
         quit.addActionListener(new ActionListener() {
             @Override
@@ -110,7 +111,7 @@ public class ModOptionsWindow extends JFrame {
             Mod inDb = this.cfg.getDb().get(inTable);
             if ((inDb != null) && inDb.isInstalled() && !inTable.isInstalled()) {
                 // uninstall mod
-                System.out.println("uninstall mod: " + inDb);
+                System.out.println("uninstall mod: " + inDb); //$NON-NLS-1$
             }
         }
         for (ETableRecord record : this.options.getEventSafe().getRecords()) {
@@ -118,7 +119,7 @@ public class ModOptionsWindow extends JFrame {
             Mod inDb = this.cfg.getDb().get(inTable);
             if ((inDb != null) && (inDb.getInstallOrder() != inTable.getInstallOrder())) {
                 // change load order
-                System.out.println("change load order: " + inDb.getInstallOrder() + " // " + inTable);
+                System.out.println("change load order: " + inDb.getInstallOrder() + " // " + inTable); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
         for (ETableRecord record : this.options.getEventSafe().getRecords()) {
@@ -126,7 +127,7 @@ public class ModOptionsWindow extends JFrame {
             Mod inDb = this.cfg.getDb().get(inTable);
             if ((inDb == null) && inTable.isInstalled()) {
                 // install mod
-                System.out.println("install mod: " + inTable);
+                System.out.println("install mod: " + inTable); //$NON-NLS-1$
             }
         }
     }
@@ -160,12 +161,13 @@ public class ModOptionsWindow extends JFrame {
                         if (col == -1) {
                             return;
                         }
-                        if ("url".equals(safetable.getColumnValueAtVisualColumn(col))) {
+                        if ("url".equals(safetable.getColumnValueAtVisualColumn(col))) { //$NON-NLS-1$
                             String url = String.valueOf(safetable.getRecordAtVisualRow(row).get(col));
                             if (Desktop.isDesktopSupported()) {
                                 Desktop.getDesktop().browse(URI.create(url));
                             } else {
-                                IOMethods.showWarning(ModOptionsWindow.this.cfg, "", "Not supported.\nVisit site:\n" + url);
+                                IOMethods.showWarning(ModOptionsWindow.this.cfg,
+                                        "", Messages.getString("ModOptionsWindow.not_supported_visit_site") + url); //$NON-NLS-1$ //$NON-NLS-2$
                             }
                         }
                     }
@@ -178,52 +180,52 @@ public class ModOptionsWindow extends JFrame {
         ETableHeaders headers = new ETableHeaders();
 
         // 0
-        headers.add("Installed", Boolean.class, true);
-        orderedFields.add("installed");
+        headers.add(Messages.getString("ModOptionsWindow.installed"), Boolean.class, true); //$NON-NLS-1$
+        orderedFields.add("installed"); //$NON-NLS-1$
 
         // 1
-        headers.add("Name", String.class, false);
-        orderedFields.add("name");
+        headers.add(Messages.getString("ModOptionsWindow.name"), String.class, false); //$NON-NLS-1$
+        orderedFields.add("name"); //$NON-NLS-1$
 
         // 2
-        headers.add("Version", String.class, false);
-        orderedFields.add("version");
+        headers.add(Messages.getString("ModOptionsWindow.version"), String.class, false); //$NON-NLS-1$
+        orderedFields.add("version"); //$NON-NLS-1$
 
         // 3
-        headers.add("Description", String.class, false);
-        orderedFields.add("description");
+        headers.add(Messages.getString("ModOptionsWindow.description"), String.class, false); //$NON-NLS-1$
+        orderedFields.add("description"); //$NON-NLS-1$
 
         // 4
-        headers.add("Install order", Integer.class, false);
-        orderedFields.add("installOrder");
+        headers.add(Messages.getString("ModOptionsWindow.install_order"), Integer.class, false); //$NON-NLS-1$
+        orderedFields.add("installOrder"); //$NON-NLS-1$
 
         // 5
-        headers.add("Install date", Date.class, false);
-        orderedFields.add("installationDate");
+        headers.add(Messages.getString("ModOptionsWindow.install_date"), Date.class, false); //$NON-NLS-1$
+        orderedFields.add("installationDate"); //$NON-NLS-1$
 
         // 6
-        headers.add("Link", String.class, false);
-        orderedFields.add("url");
+        headers.add(Messages.getString("ModOptionsWindow.url"), String.class, false); //$NON-NLS-1$
+        orderedFields.add("url"); //$NON-NLS-1$
 
         // 7
-        headers.add("Updated", Boolean.class, false);
-        orderedFields.add("updated");
+        headers.add(Messages.getString("ModOptionsWindow.updated"), Boolean.class, false); //$NON-NLS-1$
+        orderedFields.add("updated"); //$NON-NLS-1$
 
         safetable.setHeaders(headers);
 
         File[] modxmls = this.cfg.getMods().listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                if (!name.endsWith(".xml")) {
+                if (!name.endsWith(".xml")) { //$NON-NLS-1$
                     return false;
                 }
-                if (name.toLowerCase().contains("optifine")) {
+                if (name.toLowerCase().contains("optifine")) { //$NON-NLS-1$
                     return false;
                 }
-                if (name.toLowerCase().contains("yogbox")) {
+                if (name.toLowerCase().contains("yogbox")) { //$NON-NLS-1$
                     return false;
                 }
-                if (name.toLowerCase().contains("gender")) {
+                if (name.toLowerCase().contains("gender")) { //$NON-NLS-1$
                     return false;
                 }
                 return true;
@@ -232,7 +234,7 @@ public class ModOptionsWindow extends JFrame {
 
         List<ETableRecord> records = new ArrayList<ETableRecord>();
         // add installed mods (read from database) to list
-        List<Mod> installedMods = this.cfg.getDb().hql("from Mod", Mod.class);
+        List<Mod> installedMods = this.cfg.getDb().hql("from Mod", Mod.class); //$NON-NLS-1$
         for (Mod installedMod : installedMods) {
             records.add(new ETableRecordBean(orderedFields, installedMod));
         }
@@ -240,7 +242,7 @@ public class ModOptionsWindow extends JFrame {
             try {
                 Mod availableMod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
                 // mod not fit for mc version, do not show mod configuration
-                if ((availableMod.getMcVersionDependency() != null) && !availableMod.getMcVersionDependency().contains("?")) {
+                if ((availableMod.getMcVersionDependency() != null) && !availableMod.getMcVersionDependency().contains("?")) { //$NON-NLS-1$
                     if (!availableMod.getMcVersionDependency().equals(this.cfg.getMcVersion())) {
                         continue;
                     }
@@ -282,7 +284,7 @@ public class ModOptionsWindow extends JFrame {
             this.options.packColumn(i, 8);
         }
 
-        TableColumn col = this.options.getColumnModel().getColumn(orderedFields.indexOf("url"));
+        TableColumn col = this.options.getColumnModel().getColumn(orderedFields.indexOf("url")); //$NON-NLS-1$
         col.setPreferredWidth(250);
         col.setWidth(250);
         col.setMaxWidth(250);

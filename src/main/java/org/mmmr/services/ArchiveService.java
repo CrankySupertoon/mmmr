@@ -19,7 +19,7 @@ public class ArchiveService {
     private static ArchiveServiceI getArchiveService() {
         if (ArchiveService.archiveService instanceof ArchiveServiceSimple) {
             try {
-                ArchiveService.archiveService = (ArchiveServiceI) Class.forName("org.mmmr.services.impl.ArchiveService7Zip").newInstance();
+                ArchiveService.archiveService = (ArchiveServiceI) Class.forName("org.mmmr.services.impl.ArchiveService7Zip").newInstance(); //$NON-NLS-1$
             } catch (Throwable ex) {
                 System.out.println(ex);
             }

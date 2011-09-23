@@ -26,27 +26,27 @@ public class ModList {
      */
     public static void main(String[] args) {
         try {
-            File mods = new File("data/mods");
+            File mods = new File("data/mods"); //$NON-NLS-1$
             File[] modxmls = mods.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
-                    if (!name.endsWith(".xml")) {
+                    if (!name.endsWith(".xml")) { //$NON-NLS-1$
                         return false;
                     }
-                    if (name.toLowerCase().contains("yogbox")) {
+                    if (name.toLowerCase().contains("yogbox")) { //$NON-NLS-1$
                         return false;
                     }
                     return true;
                 }
             });
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/main/modlist.txt")));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/main/modlist.txt"))); //$NON-NLS-1$
             for (File mod : modxmls) {
-                out.write(mod.lastModified() + "::" + mod.getName() + "\r\n");
+                out.write(mod.lastModified() + "::" + mod.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
             }
             out.flush();
             out.close();
 
-            ModList.update(new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile()));
+            ModList.update(new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile())); //$NON-NLS-1$
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -60,10 +60,10 @@ public class ModList {
         File[] modxmls = cfg.getMods().listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                if (!name.endsWith(".xml")) {
+                if (!name.endsWith(".xml")) { //$NON-NLS-1$
                     return false;
                 }
-                if (name.toLowerCase().contains("yogbox")) {
+                if (name.toLowerCase().contains("yogbox")) { //$NON-NLS-1$
                     return false;
                 }
                 return true;
@@ -75,18 +75,18 @@ public class ModList {
             }
         }
         URL base = new URL(cfg.getMmmrSvnOnGoogleCode());
-        for (String record : new String(DownloadingService.downloadURL(new URL(cfg.getMmmrSvnOnGoogleCode() + "/src/main/modlist.txt")))
-                .split("\r\n")) {
+        for (String record : new String(DownloadingService.downloadURL(new URL(cfg.getMmmrSvnOnGoogleCode() + "/src/main/modlist.txt"))) //$NON-NLS-1$
+                .split("\r\n")) { //$NON-NLS-1$
             if (StringUtils.isBlank(record)) {
                 continue;
             }
-            String[] d = record.split("::");
+            String[] d = record.split("::"); //$NON-NLS-1$
             String xmlname = d[1];
             Long lastmod = Long.parseLong(d[0]);
             Long lastmodlocal = existing.get(xmlname);
             if ((lastmodlocal == null) || (lastmodlocal < lastmod)) {
                 // does not exists or newer on server => download
-                URI uri = new URI(base.getProtocol(), base.getHost(), base.getPath() + "/data/mods/" + xmlname, null);
+                URI uri = new URI(base.getProtocol(), base.getHost(), base.getPath() + "/data/mods/" + xmlname, null); //$NON-NLS-1$
                 String url = uri.toURL().toString();
                 DownloadingService.downloadURL(new URL(url), new File(cfg.getMods(), xmlname));
             }

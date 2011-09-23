@@ -16,7 +16,7 @@ public class MMMRStart {
         try {
             ExceptionAndLogHandler.log(IOMethods.getCurrentJar().getAbsolutePath());
             FancySwing.lookAndFeel();
-            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile());
+            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile()); //$NON-NLS-1$
             BatCheck.check(cfg);
             VersionCheck.check(cfg);
             System.getProperties().list(System.out);
@@ -28,7 +28,7 @@ public class MMMRStart {
             StatusWindow statusWindow = new StatusWindow(cfg);
             statusWindow.setVisible(true);
             DynamicLoading.init(statusWindow.getLibstatus(), cfg);
-            MMMRI starter = MMMRI.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance());
+            MMMRI starter = MMMRI.class.cast(Class.forName("org.mmmr.services.MMMR").newInstance()); //$NON-NLS-1$
             starter.setCfg(cfg);
             ExceptionAndLogHandler.adjustLogging(cfg);
             starter.setStatusWindow(statusWindow);
