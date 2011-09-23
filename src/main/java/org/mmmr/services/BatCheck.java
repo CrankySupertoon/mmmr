@@ -9,8 +9,8 @@ import java.io.IOException;
  */
 public class BatCheck {
     public static void check(Config cfg) throws IOException {
-        // when running in eclipse with startup parameter "dev" or "-dev" => do nothing
-        if (cfg.getParameterValue("dev") != null) { //$NON-NLS-1$
+        // when running in development mode => do nothing
+        if (IOMethods.isDevelopmentMode()) {
             return;
         }
         // see if bat files exist and create if not

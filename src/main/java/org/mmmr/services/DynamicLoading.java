@@ -15,8 +15,7 @@ import org.mmmr.services.swing.StatusListener;
  * @author Jurgen
  */
 public class DynamicLoading {
-    private static final String[] MAVEN_REPO = {
-            "http://repo1.maven.org/maven2/", //$NON-NLS-1$
+    private static final String[] MAVEN_REPO = { "http://repo1.maven.org/maven2/", //$NON-NLS-1$
             "http://mmmr.googlecode.com/svn/maven2", //$NON-NLS-1$
             "http://uk.maven.org/maven2", //$NON-NLS-1$
             "http://mirrors.ibiblio.org/pub/mirrors/maven2/" }; //$NON-NLS-1$
@@ -58,7 +57,7 @@ public class DynamicLoading {
                         throw new IOException(jar.getName() + ": length><" + len); //$NON-NLS-1$
                     }
                 }
-                if (cfg.getParameterValue("dev") == null) { //$NON-NLS-1$
+                if (IOMethods.isStandAloneMode()) {
                     status.setStatus(Messages.getString("DynamicLoading.libs_loading") + jar.getName(), null); //$NON-NLS-1$
                     IOMethods.loadjarAtRuntime(jar);
                 }

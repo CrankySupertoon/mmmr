@@ -236,6 +236,14 @@ public class IOMethods {
         return "64".equals(System.getProperties().getProperty("sun.arch.data.model")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
+    public static boolean isDevelopmentMode() {
+        return !IOMethods.getCurrentJar().getName().endsWith(".jar");
+    }
+
+    public static boolean isStandAloneMode() {
+        return !IOMethods.isDevelopmentMode();
+    }
+
     @SuppressWarnings("unchecked")
     public static List<File> list(File dir) {
         File[] tmp = dir.listFiles();
