@@ -55,7 +55,6 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
                         target.close();
                         uin.close();
                     } catch (Exception ex) {
-                        ex.printStackTrace();
                         return String.valueOf(ex);
                     }
                     return note;
@@ -64,7 +63,7 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
                 @Override
                 public void done() {
                     DownloadProgressMonitor.this.close();
-                    System.out.println("done");
+                    // System.out.println("done");
                 }
             };
 
@@ -79,13 +78,13 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
                 this.setProgress(progress);
                 String message = String.format("Completed %d%%.", progress);
                 this.setNote(message);
-                System.out.println(message);
+                // System.out.println(message);
                 if (this.isCanceled() || this.sw.isDone()) {
                     if (this.isCanceled()) {
                         this.sw.cancel(true);
-                        System.out.println("Task canceled.");
+                        // System.out.println("Task canceled.");
                     } else {
-                        System.out.println("Task completed.");
+                        // System.out.println("Task completed.");
                     }
                 }
             }

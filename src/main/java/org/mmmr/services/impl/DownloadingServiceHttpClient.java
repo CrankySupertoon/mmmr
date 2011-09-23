@@ -74,6 +74,7 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
                 @Override
                 public void done() {
                     DownloadProgressMonitor.this.close();
+                    // System.out.println("done");
                 }
             };
 
