@@ -55,13 +55,14 @@ public class VersionCheck {
             Collections.sort(versions);
             String latestversion = versions.get(versions.size() - 1);
             if ((VersionCheck.version.compareTo(latestversion) < 0)) {
-                if (IOMethods.showConfirmation(cfg, cfg.getShortTitle(),
-                        "A newer version is available: download now?\nThe program will exit afterwards.")) {
+                if (IOMethods.showConfirmation(cfg, cfg.getShortTitle(), "A newer version v" + latestversion
+                        + " is available while running version v" + VersionCheck.version
+                        + ".\nDownload now?\nThe program will exit afterwards.\nThe old version will be removed on next startup.")) {
                     String fname = VersionCheck.shortJarName + "-" + latestversion + ".jar";
                     String dl = VersionCheck.mavenBase + "/" + latestversion + "/" + fname;
                     File newjar = new File(fname);
                     DownloadingService.downloadURL(new URL(dl), newjar);
-                    // FIXME delete file
+                    BatCheck.force(IOMethods.getCurrentJar(), newjar);
                     System.exit(0);
                 }
             }
