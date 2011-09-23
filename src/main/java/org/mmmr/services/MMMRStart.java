@@ -4,8 +4,8 @@ import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
+import java.security.CodeSource;
 
 import javax.swing.JLabel;
 import javax.swing.ToolTipManager;
@@ -18,24 +18,22 @@ import org.mmmr.services.swing.common.FancySwing;
  */
 public class MMMRStart {
     private static void checkBat(Config cfg) throws IOException {
-        File bnc = new File("start MMMR no-console.bat");
-        if (!bnc.exists()) {
-            InputStream in = MMMRStart.class.getClassLoader().getResourceAsStream("bat/start MMMR no-console.bat");
-            byte[] buffer = new byte[in.available()];
-            in.read(buffer);
-            in.close();
-            FileOutputStream bnco = new FileOutputStream(bnc);
-            bnco.write(buffer);
+        File console = new File("start MMMR console.bat");
+        File noconsole = new File("start MMMR no-console.bat");
+        String batstring = !(console.exists() || noconsole.exists()) ? new String(IOMethods.read(MMMRStart.class.getClassLoader()
+                .getResourceAsStream("bat/start MMMR.bat"))) : null;
+        CodeSource domain = MMMRStart.class.getProtectionDomain().getCodeSource();
+        String jarname = new File(domain.getLocation().getFile()).getName();
+        if (!noconsole.exists()) {
+            byte[] bytes = batstring.replaceAll("\\Q{CONSOLE}\\E", "w").replaceAll("\\Q{JAR}\\E", jarname).getBytes();
+            FileOutputStream bnco = new FileOutputStream(noconsole);
+            bnco.write(bytes);
             bnco.close();
         }
-        File nc = new File("start MMMR console.bat");
-        if (!nc.exists()) {
-            InputStream in = MMMRStart.class.getClassLoader().getResourceAsStream("bat/start MMMR console.bat");
-            byte[] buffer = new byte[in.available()];
-            in.read(buffer);
-            in.close();
-            FileOutputStream bnco = new FileOutputStream(nc);
-            bnco.write(buffer);
+        if (!console.exists()) {
+            byte[] bytes = batstring.replaceAll("\\Q{CONSOLE}\\E", "").replaceAll("\\Q{JAR}\\E", jarname).getBytes();
+            FileOutputStream bnco = new FileOutputStream(console);
+            bnco.write(bytes);
             bnco.close();
         }
         if ((cfg.getParameterValue("console") == null) && (cfg.getParameterValue("dev") == null)) {
