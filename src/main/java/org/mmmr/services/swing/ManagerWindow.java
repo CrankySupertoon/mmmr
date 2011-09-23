@@ -2,7 +2,6 @@ package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -85,11 +84,11 @@ public class ManagerWindow extends JFrame {
         this.getContentPane().add(mainpanel, BorderLayout.CENTER);
         JLabel label = new JLabel(this.getTitle());
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
+        label.setFont(cfg.getFontTitle());
         mainpanel.add(label);
         this.addActions(mainpanel);
         JButton quit = new JButton(Messages.getString("ManagerWindow.exit")); //$NON-NLS-1$
-        quit.setFont(cfg.getFont18());
+        quit.setFont(cfg.getFontLarge());
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,14 +108,13 @@ public class ManagerWindow extends JFrame {
     private void addActions(Container mainpanel) {
         {
             JButton comp = new JButton(Messages.getString("ManagerWindow.change_startup")); //$NON-NLS-1$
-            comp.setFont(this.cfg.getFont18());
+            comp.setFont(this.cfg.getFontLarge());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         if (ManagerWindow.this.javaOptionsWindow == null) {
                             ManagerWindow.this.javaOptionsWindow = new JavaOptionsWindow(ManagerWindow.this.cfg, ManagerWindow.this.getSize());
-                            ManagerWindow.this.javaOptionsWindow.packColumns();
                         }
                         ManagerWindow.this.javaOptionsWindow.setLocationRelativeTo(ManagerWindow.this);
                         ManagerWindow.this.javaOptionsWindow.selectDefault();
@@ -130,7 +128,7 @@ public class ManagerWindow extends JFrame {
         }
         {
             JButton comp = new JButton(Messages.getString("ManagerWindow.install_optifine")); //$NON-NLS-1$
-            comp.setFont(this.cfg.getFont18());
+            comp.setFont(this.cfg.getFontLarge());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -141,7 +139,7 @@ public class ManagerWindow extends JFrame {
         }
         {
             JButton comp = new JButton(Messages.getString("ManagerWindow.un_install_reorder")); //$NON-NLS-1$
-            comp.setFont(this.cfg.getFont18());
+            comp.setFont(this.cfg.getFontLarge());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -153,20 +151,8 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton(Messages.getString("ManagerWindow.resolve")); //$NON-NLS-1$
-            comp.setFont(this.cfg.getFont18());
-            comp.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // TODO Resolve mod conflicts.
-                    IOMethods.showWarning(ManagerWindow.this.cfg, Messages.getString("ManagerWindow.resolve"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
-                }
-            });
-            mainpanel.add(comp);
-        }
-        {
             JButton comp = new JButton(Messages.getString("ManagerWindow.change_sex")); //$NON-NLS-1$
-            comp.setFont(this.cfg.getFont18());
+            comp.setFont(this.cfg.getFontLarge());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -178,7 +164,7 @@ public class ManagerWindow extends JFrame {
         }
         {
             JButton comp = new JButton(Messages.getString("ManagerWindow.backup_restore")); //$NON-NLS-1$
-            comp.setFont(this.cfg.getFont18());
+            comp.setFont(this.cfg.getFontLarge());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -190,7 +176,7 @@ public class ManagerWindow extends JFrame {
         }
         {
             JButton comp = new JButton(Messages.getString("ManagerWindow.change_logging")); //$NON-NLS-1$
-            comp.setFont(this.cfg.getFont18());
+            comp.setFont(this.cfg.getFontLarge());
             comp.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

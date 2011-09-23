@@ -7,44 +7,38 @@ import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
-import org.mmmr.services.Messages;
 import org.mmmr.services.IOMethods.MemInfo;
 import org.mmmr.services.MMMR;
+import org.mmmr.services.Messages;
+import org.mmmr.services.swing.common.ETable;
+import org.mmmr.services.swing.common.ETableConfig;
+import org.mmmr.services.swing.common.ETableHeaders;
+import org.mmmr.services.swing.common.ETableRecordCollection;
 import org.mmmr.services.swing.common.FancySwing;
 import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
-import org.mmmr.services.swing.common.VerticalTableHeaderCellRenderer;
 
 /**
  * @author Jurgen
@@ -58,7 +52,7 @@ public class JavaOptionsWindow extends JFrame {
             JLabel renderer = (JLabel) super.getTableCellRendererComponent(jtable, value, isSelected, hasFocus, row, column);
             renderer.setToolTipText(value == null ? null : String.valueOf(value));
             if (JavaOptionsWindow.this.cfg != null) {
-                this.setFont(JavaOptionsWindow.this.cfg.getFont18().deriveFont(10f));
+                this.setFont(JavaOptionsWindow.this.cfg.getFontSmall());
             }
             if ("y".equals(value)) { //$NON-NLS-1$
                 if (isSelected) {
@@ -85,63 +79,19 @@ public class JavaOptionsWindow extends JFrame {
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    public class ColumnHeaderToolTips extends MouseMotionAdapter {
-        // Current column whose tooltip is being displayed.
-        // This variable is used to minimize the calls to setToolTipText().
-        TableColumn curCol;
-
-        // Maps TableColumn objects to tooltips
-
-        Map tips = new HashMap();
-
-        @Override
-        public void mouseMoved(MouseEvent evt) {
-            TableColumn col = null;
-            JTableHeader header = (JTableHeader) evt.getSource();
-            @SuppressWarnings("hiding")
-            JTable table = header.getTable();
-            TableColumnModel colModel = table.getColumnModel();
-            int vColIndex = colModel.getColumnIndexAtX(evt.getX());
-
-            // Return if not clicked on any column header
-            if (vColIndex >= 0) {
-                col = colModel.getColumn(vColIndex);
-            }
-
-            if (col != this.curCol) {
-                header.setToolTipText((String) this.tips.get(col));
-                this.curCol = col;
-            }
-        }
-
-        // If tooltip is null, removes any tooltip text.
-        @SuppressWarnings("unchecked")
-        public void setToolTip(TableColumn col, String tooltip) {
-            if (tooltip == null) {
-                this.tips.remove(col);
-            } else {
-                this.tips.put(col, tooltip);
-            }
-        }
-    }
-
     private static final long serialVersionUID = -2617077870487045855L;
 
     public static void main(String[] args) {
         try {
             FancySwing.lookAndFeel();
-            new JavaOptionsWindow(null, new Dimension(600, 300)).setVisible(true);
+            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile()); //$NON-NLS-1$
+            new JavaOptionsWindow(cfg, null).setVisible(true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private Config cfg;
-
-    private Vector<String> columnNames = new Vector<String>();
-
-    private Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 
     private Color green;
 
@@ -154,9 +104,9 @@ public class JavaOptionsWindow extends JFrame {
 
     private Color redSelected;
 
-    private JTable table;
+    private ETable table;
 
-    public JavaOptionsWindow(final Config cfg, Dimension preferredSize) throws HeadlessException, IOException {
+    public JavaOptionsWindow(final Config cfg, Dimension prefSize) throws HeadlessException, IOException {
         Color selectionColor = Color.class.cast(UIManager.get("Table.selectionBackground")); //$NON-NLS-1$
         this.red = Color.RED.darker();
         this.redSelected = selectionColor == null ? this.red : new Color(Math.max(this.red.getRed(), selectionColor.getRed()), Math.max(
@@ -166,10 +116,6 @@ public class JavaOptionsWindow extends JFrame {
                 this.green.getGreen(), selectionColor.getGreen()), Math.min(this.green.getRed(), selectionColor.getBlue()));
 
         this.cfg = cfg;
-        if (cfg != null) {
-            this.setIconImage(cfg.getIcon().getImage());
-            this.setTitle(cfg.getTitle());
-        }
 
         RoundedPanel mainpanel = new RoundedPanel(new BorderLayout());
         mainpanel.getDelegate().setShady(false);
@@ -177,21 +123,26 @@ public class JavaOptionsWindow extends JFrame {
         mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         this.getContentPane().add(mainpanel);
 
-        final JTable jtable = this.getOptions();
-        jtable.setBorder(BorderFactory.createRaisedBevelBorder());
-        jtable.getTableHeader().setBorder(BorderFactory.createRaisedBevelBorder());
-        mainpanel.add(jtable, BorderLayout.CENTER);
-        mainpanel.add(jtable.getTableHeader(), BorderLayout.NORTH);
+        this.setIconImage(cfg.getIcon().getImage());
+        this.setTitle(cfg.getTitle());
+
+        JLabel label = new JLabel(this.getTitle());
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setFont(cfg.getFontTitle());
+        mainpanel.add(label, BorderLayout.NORTH);
+
+        final ETable jtable = this.getOptions();
+        jtable.setFont(cfg.getFontSmall());
+
+        mainpanel.add(new JScrollPane(jtable), BorderLayout.CENTER);
 
         JButton quit = new JButton(Messages.getString("JavaOptionsWindow.select_and_click")); //$NON-NLS-1$
-        if (cfg != null) {
-            quit.setFont(cfg.getFont18());
-        }
+        quit.setFont(cfg.getFontLarge());
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if ((cfg != null) && (jtable.getSelectedRow() != -1)) {
+                    if (jtable.getSelectedRow() != -1) {
                         StringBuilder sb = new StringBuilder();
                         String jre = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 0));
                         sb.append("\"").append(jre).append("\\bin\\java.exe\""); //$NON-NLS-1$ //$NON-NLS-2$
@@ -222,15 +173,18 @@ public class JavaOptionsWindow extends JFrame {
 
         this.setUndecorated(true);
         FancySwing.translucent(this);
-        this.pack();
-        if (preferredSize != null) {
-            this.setSize(preferredSize);
+
+        if (prefSize == null) {
+            this.setSize(800, 300);
+        } else {
+            this.setSize(prefSize);
         }
+
         FancySwing.rounded(this);
         this.setResizable(false);
     }
 
-    private JTable getOptions() throws IOException {
+    private ETable getOptions() throws IOException {
         int min;
         int max;
         MemInfo info = IOMethods.getMemInfo();
@@ -248,9 +202,25 @@ public class JavaOptionsWindow extends JFrame {
             max = 2048;
         }
 
-        this.columnNames.add("JRE"); //$NON-NLS-1$
-        this.columnNames.add("64bit"); //$NON-NLS-1$
-        this.columnNames.addAll(Arrays.asList(this.options));
+        ETableConfig configuration = new ETableConfig(true);
+        configuration.setVertical(true);
+        this.table = new ETable(configuration);
+
+        this.table.setRowHeight(28);
+
+        ETableHeaders columnNames = new ETableHeaders();
+
+        columnNames.add("      JRE      "); //$NON-NLS-1$
+        columnNames.add("64bit"); //$NON-NLS-1$
+        for (String option : this.options) {
+            columnNames.add(option);
+        }
+        columnNames.add("V");
+        columnNames.add("*");
+
+        this.table.getEventSafe().setHeaders(columnNames);
+
+        List<ETableRecordCollection> records = new ArrayList<ETableRecordCollection>();
 
         for (String[] jreinfo : IOMethods.getAllJavaInfo(IOMethods.getAllJavaRuntimes())) {
             String jre = jreinfo[0];
@@ -301,15 +271,15 @@ public class JavaOptionsWindow extends JFrame {
             }
             row.add(jreinfo[1]);
             row.add(success);
-            this.data.add(row);
+
+            records.add(new ETableRecordCollection(row));
         }
 
-        Collections.sort(this.data, new Comparator<Vector<Object>>() {
-
+        Collections.sort(records, new Comparator<ETableRecordCollection>() {
             @Override
-            public int compare(Vector<Object> o1, Vector<Object> o2) {
-                int s1 = Integer.parseInt(String.valueOf(o1.lastElement()));
-                int s2 = Integer.parseInt(String.valueOf(o2.lastElement()));
+            public int compare(ETableRecordCollection o1, ETableRecordCollection o2) {
+                int s1 = Integer.parseInt(String.valueOf(o1.get(o1.size() - 1)));
+                int s2 = Integer.parseInt(String.valueOf(o2.get(o2.size() - 1)));
 
                 if (s1 != s2) {
                     return s2 - s1;
@@ -339,55 +309,15 @@ public class JavaOptionsWindow extends JFrame {
             }
         });
 
-        DefaultTableModel model = new DefaultTableModel(this.data, this.columnNames) {
-            private static final long serialVersionUID = 7182945794160936753L;
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; // Disallow the editing of any cell
-            }
-        };
-        this.table = new JTable(model);
-        this.table.setRowSorter(new TableRowSorter<TableModel>(model));
-
-        // tooltips on table header
-        ColumnHeaderToolTips tips = new ColumnHeaderToolTips();
-        // vertical table header labels
-        VerticalTableHeaderCellRenderer headerRenderer = new VerticalTableHeaderCellRenderer();
-        Enumeration<TableColumn> columns = this.table.getColumnModel().getColumns();
-        int index = 0;
-        // custom table cell renderer;
-        CellRenderer cellRenderer = new CellRenderer();
-        while (columns.hasMoreElements()) {
-            TableColumn tc = columns.nextElement();
-            // vertical table header labels
-            tc.setHeaderRenderer(headerRenderer);
-            // custom table cell renderer;
-            tc.setCellRenderer(cellRenderer);
-            // tooltips on table header
-            tips.setToolTip(tc, this.columnNames.get(index++));
+        for (ETableRecordCollection r : records) {
+            this.table.getEventSafe().addRecord(r);
         }
-        JTableHeader tableHeader = this.table.getTableHeader();
 
-        // tooltips on table header
-        tableHeader.addMouseMotionListener(tips);
-        // can drag and drop columns
-        tableHeader.setReorderingAllowed(false);
-        // can resize columns?
-        tableHeader.setResizingAllowed(false);
+        for (int i = 0; i < columnNames.getColumnCount(); i++) {
+            this.table.packColumn(i, 3);
+        }
 
         return this.table;
-    }
-
-    public void packColumns() {
-        DefaultTableColumnModel colModel = (DefaultTableColumnModel) this.table.getColumnModel();
-        // this.setColWidth(colModel, 0, 300);
-        this.setColWidth(colModel, 1, 20);
-        this.setColWidth(colModel, 2, 40);
-        this.setColWidth(colModel, 3, 40);
-        for (int i = 4; i < this.columnNames.size(); i++) {
-            this.setColWidth(colModel, i, 20);
-        }
     }
 
     public void selectDefault() {
@@ -404,13 +334,5 @@ public class JavaOptionsWindow extends JFrame {
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);
         }
-    }
-
-    private void setColWidth(DefaultTableColumnModel colModel, int i, int w) {
-        TableColumn col = colModel.getColumn(i);
-        col.setPreferredWidth(w);
-        col.setMaxWidth(w);
-        col.setMinWidth(w);
-        col.setWidth(w);
     }
 }

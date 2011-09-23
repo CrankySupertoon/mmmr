@@ -21,9 +21,11 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.TableColumn;
 
@@ -64,6 +66,11 @@ public class ModOptionsWindow extends JFrame {
         mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         this.getContentPane().add(mainpanel);
 
+        JLabel label = new JLabel(this.getTitle());
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setFont(cfg.getFontTitle());
+        mainpanel.add(label, BorderLayout.NORTH);
+
         final JTable jtable = this.getOptions();
         jtable.setBorder(BorderFactory.createRaisedBevelBorder());
         jtable.getTableHeader().setBorder(BorderFactory.createRaisedBevelBorder());
@@ -71,8 +78,19 @@ public class ModOptionsWindow extends JFrame {
 
         JPanel actions = new JPanel(new GridLayout(1, -1));
 
+        JButton resolve = new JButton(Messages.getString("ManagerWindow.resolve")); //$NON-NLS-1$
+        resolve.setFont(cfg.getFontLarge());
+        resolve.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Resolve mod conflicts.
+                IOMethods.showWarning(cfg, Messages.getString("ManagerWindow.resolve"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+        });
+        actions.add(resolve);
+
         JButton commit = new JButton(Messages.getString("ModOptionsWindow.apply_changes")); //$NON-NLS-1$
-        commit.setFont(cfg.getFont18());
+        commit.setFont(cfg.getFontLarge());
         commit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,7 +101,7 @@ public class ModOptionsWindow extends JFrame {
         actions.add(commit);
 
         JButton quit = new JButton(Messages.getString("ModOptionsWindow.do_not_make_changed")); //$NON-NLS-1$
-        quit.setFont(cfg.getFont18());
+        quit.setFont(cfg.getFontLarge());
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -145,8 +163,10 @@ public class ModOptionsWindow extends JFrame {
 
         ETableConfig configuration = new ETableConfig(true, false, true, true, false, true, false, true);
         this.options = new ETable(configuration);
+        this.options.setFont(this.cfg.getFontTable());
         final ETableI safetable = this.options.getEventSafe();
         final List<String> orderedFields = new ArrayList<String>();
+        final ETableHeaders headers = new ETableHeaders();
 
         this.options.setRowHeight(28);
 
@@ -155,7 +175,7 @@ public class ModOptionsWindow extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    if ((e.getClickCount() == 2) && (e.getButton() == MouseEvent.BUTTON1)) {
+                    if ((e.getClickCount() == 1) && (e.getButton() == MouseEvent.BUTTON1)) {
                         int row = ModOptionsWindow.this.options.rowAtPoint(e.getPoint());
                         if (row == -1) {
                             return;
@@ -164,7 +184,8 @@ public class ModOptionsWindow extends JFrame {
                         if (col == -1) {
                             return;
                         }
-                        if ("url".equals(safetable.getColumnValueAtVisualColumn(col))) { //$NON-NLS-1$
+                        Object columnValueAtVisualColumn = safetable.getColumnValueAtVisualColumn(col);
+                        if (Messages.getString("ModOptionsWindow.url").equals(columnValueAtVisualColumn)) { //$NON-NLS-1$
                             String url = String.valueOf(safetable.getRecordAtVisualRow(row).get(col));
                             if (Desktop.isDesktopSupported()) {
                                 Desktop.getDesktop().browse(URI.create(url));
@@ -179,8 +200,6 @@ public class ModOptionsWindow extends JFrame {
                 }
             }
         });
-
-        ETableHeaders headers = new ETableHeaders();
 
         // 0
         headers.add(Messages.getString("ModOptionsWindow.installed"), Boolean.class, true); //$NON-NLS-1$

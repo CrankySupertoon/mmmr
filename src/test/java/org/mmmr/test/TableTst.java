@@ -31,6 +31,7 @@ public class TableTst {
         try {
             FancySwing.lookAndFeel();
             ETableConfig configuration = new ETableConfig(true);
+            configuration.setVertical(true);
             final ETable table = new ETable(configuration);
             final ETableHeaders headers = new ETableHeaders();
             table.addMouseListener(new MouseAdapter() {

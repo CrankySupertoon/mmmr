@@ -271,6 +271,8 @@ public class Mod implements Comparable<Mod>, PersistentObject {
                                 }
                                 // title not changed => false OR title changed => true
                                 this.updated = !this.getUrl().equals(newUrl);
+                            } else {
+                                this.updated = false;
                             }
                         } catch (Exception ex) {
                             ExceptionAndLogHandler.log(ex);

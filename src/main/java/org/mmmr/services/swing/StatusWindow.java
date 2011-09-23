@@ -1,9 +1,6 @@
 package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,7 +36,7 @@ public class StatusWindow extends JFrame {
             this.statuslabel = new JLabel(text, StatusWindow.getIcon(iconPath), SwingConstants.CENTER);
             this.statuslabel.setVerticalAlignment(SwingConstants.CENTER);
             this.statuslabel.setOpaque(false);
-            this.statuslabel.setFont(StatusWindow.this.cfg.getFont18());
+            this.statuslabel.setFont(StatusWindow.this.cfg.getFontLarge());
             this.add(this.statuslabel, BorderLayout.CENTER);
         }
 
@@ -77,7 +74,7 @@ public class StatusWindow extends JFrame {
 
     private StatusPanel dbstatus;
 
-    private JButton goOn = null;
+    // private JButton goOn = null;
 
     private StatusPanel libstatus;
 
@@ -100,7 +97,7 @@ public class StatusWindow extends JFrame {
         this.getContentPane().add(mainpanel);
         JLabel label = new JLabel(this.getTitle());
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setFont(cfg.getFont18().deriveFont(20f).deriveFont(Font.BOLD));
+        label.setFont(cfg.getFontTitle());
         mainpanel.add(label, BorderLayout.CENTER);
         String bullet = "images/waiting.png"; //$NON-NLS-1$
         this.libstatus = new StatusPanel(Messages.getString("StatusWindow.libraries"), bullet); //$NON-NLS-1$
@@ -113,20 +110,20 @@ public class StatusWindow extends JFrame {
         mainpanel.add(this.mcstatus);
         this.ybstatus = new StatusPanel("YogBox", bullet); //$NON-NLS-1$
         mainpanel.add(this.ybstatus);
-        this.goOn = new JButton(Messages.getString("StatusWindow.to_mod_manager")); //$NON-NLS-1$
-        this.goOn.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
-        this.goOn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ManagerWindow managerWindow = new ManagerWindow(cfg);
-                managerWindow.setLocationRelativeTo(StatusWindow.this);
-                managerWindow.setVisible(true);
-                StatusWindow.this.dispose();
-            }
-        });
-        this.goOn.setEnabled(false);
+        //        this.goOn = new JButton(Messages.getString("StatusWindow.to_mod_manager")); //$NON-NLS-1$
+        // this.goOn.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
+        // this.goOn.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // ManagerWindow managerWindow = new ManagerWindow(cfg);
+        // managerWindow.setLocationRelativeTo(StatusWindow.this);
+        // managerWindow.setVisible(true);
+        // StatusWindow.this.dispose();
+        // }
+        // });
+        // this.goOn.setEnabled(false);
         this.quit = new JButton(Messages.getString("StatusWindow.exit")); //$NON-NLS-1$
-        this.quit.setFont(cfg.getFont().deriveFont(14f).deriveFont(Font.BOLD));
+        this.quit.setFont(cfg.getFontLarge());
         this.quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -135,17 +132,17 @@ public class StatusWindow extends JFrame {
             }
         });
 
-        this.goOn.setMinimumSize(new Dimension(300, 30));
-        this.quit.setMinimumSize(new Dimension(300, 30));
-        this.goOn.setPreferredSize(new Dimension(300, 30));
-        this.quit.setPreferredSize(new Dimension(300, 30));
-        this.goOn.setSize(new Dimension(300, 30));
-        this.quit.setSize(new Dimension(300, 30));
+        // this.goOn.setMinimumSize(new Dimension(300, 30));
+        // this.quit.setMinimumSize(new Dimension(300, 30));
+        // this.goOn.setPreferredSize(new Dimension(300, 30));
+        // this.quit.setPreferredSize(new Dimension(300, 30));
+        // this.goOn.setSize(new Dimension(300, 30));
+        // this.quit.setSize(new Dimension(300, 30));
 
-        JPanel btns = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        btns.add(this.goOn, null);
-        btns.add(this.quit, null);
-        mainpanel.add(btns);
+        // JPanel btns = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        // btns.add(this.goOn, null);
+        // btns.add(this.quit, null);
+        mainpanel.add(this.quit);
 
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -195,7 +192,11 @@ public class StatusWindow extends JFrame {
     }
 
     public void setReadyToGoOn() {
-        this.goOn.setEnabled(true);
-        this.goOn.grabFocus();
+        // this.goOn.setEnabled(true);
+        // this.goOn.grabFocus();
+        ManagerWindow managerWindow = new ManagerWindow(this.cfg);
+        managerWindow.setLocationRelativeTo(StatusWindow.this);
+        managerWindow.setVisible(true);
+        StatusWindow.this.dispose();
     }
 }

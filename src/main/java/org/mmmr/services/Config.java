@@ -53,11 +53,13 @@ public class Config {
 
     private File dbdir;
 
-    private Font font;
+    private Font fontTitle;
 
-    private Font font18;
+    private Font fontLarge;
 
-    private Font fontNarrow;
+    private Font fontSmall;
+
+    private Font fontTable;
 
     private ImageIcon icon;
 
@@ -170,16 +172,20 @@ public class Config {
         return this.dbdir;
     }
 
-    public Font getFont() {
-        return this.font;
+    public Font getFontLarge() {
+        return this.fontLarge;
     }
 
-    public Font getFont18() {
-        return this.font18;
+    public Font getFontSmall() {
+        return this.fontSmall;
     }
 
-    public Font getFontNarrow() {
-        return this.fontNarrow;
+    public Font getFontTable() {
+        return this.fontTable;
+    }
+
+    public Font getFontTitle() {
+        return this.fontTitle;
     }
 
     public ImageIcon getIcon() {
@@ -282,16 +288,20 @@ public class Config {
         this.db = db;
     }
 
-    public void setFont(Font font) {
-        this.font = font;
+    public void setFontLarge(Font fontLarge) {
+        this.fontLarge = fontLarge;
     }
 
-    public void setFont18(Font font18) {
-        this.font18 = font18;
+    public void setFontSmall(Font fontSmall) {
+        this.fontSmall = fontSmall;
     }
 
-    public void setFontNarrow(Font fontNarrow) {
-        this.fontNarrow = fontNarrow;
+    public void setFontTable(Font fontTable) {
+        this.fontTable = fontTable;
+    }
+
+    public void setFontTitle(Font fontTitle) {
+        this.fontTitle = fontTitle;
     }
 
     public void setMcCommandline(String mcCommandline) {
