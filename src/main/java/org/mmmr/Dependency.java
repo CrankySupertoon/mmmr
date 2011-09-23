@@ -27,6 +27,7 @@ import org.hibernate.annotations.Cascade;
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @Entity
 public class Dependency implements Comparable<Dependency>, PersistentObject {
+    /** database id */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

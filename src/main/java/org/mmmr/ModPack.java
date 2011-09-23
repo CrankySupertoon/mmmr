@@ -38,6 +38,7 @@ import org.hibernate.annotations.Cascade;
 public class ModPack implements Comparable<ModPack>, PersistentObject {
     private String description;
 
+    /** database id */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

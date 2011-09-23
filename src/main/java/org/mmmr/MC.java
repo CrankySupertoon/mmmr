@@ -36,6 +36,7 @@ public class MC implements Comparable<MC>, PersistentObject {
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private List<MCFile> files;
 
+    /** database id */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

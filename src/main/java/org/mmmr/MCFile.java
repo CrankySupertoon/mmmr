@@ -25,6 +25,7 @@ import org.hibernate.annotations.Cascade;
 public class MCFile implements Comparable<MCFile>, PersistentObject {
     private long crc32;
 
+    /** database id */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
