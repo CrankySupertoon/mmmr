@@ -138,18 +138,6 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
-            JButton comp = new JButton("Install mods.");
-            comp.setFont(this.cfg.getFont18());
-            comp.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // TODO remove when "(Un)install mods and change order." is complete
-                    ManagerWindow.this.installMods();
-                }
-            });
-            mainpanel.add(comp);
-        }
-        {
             JButton comp = new JButton("(Un)install mods and change order.");
             comp.setFont(this.cfg.getFont18());
             comp.addActionListener(new ActionListener() {
@@ -224,60 +212,6 @@ public class ManagerWindow extends JFrame {
                 }
             });
             mainpanel.add(comp);
-        }
-    }
-
-    private void installMods() {
-        try {
-            File[] modxmls = this.cfg.getMods().listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    if (!name.endsWith(".xml")) {
-                        return false;
-                    }
-                    if (name.toLowerCase().contains("optifine")) {
-                        return false;
-                    }
-                    if (name.toLowerCase().contains("yogbox")) {
-                        return false;
-                    }
-                    if (name.toLowerCase().contains("gender")) {
-                        return false;
-                    }
-                    return true;
-                }
-            });
-            List<ModOption> options = new ArrayList<ModOption>();
-            for (File modxml : modxmls) {
-                try {
-                    Mod availablemod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
-                    // mod not fit for mc version
-                    if ((availablemod.getMcVersionDependency() != null) && !availablemod.getMcVersionDependency().contains("?")) {
-                        if (!availablemod.getMcVersionDependency().equals(this.cfg.getMcVersion())) {
-                            continue;
-                        }
-                    }
-                    Mod installedmod = this.cfg.getDb().get(new Mod(availablemod.getName(), availablemod.getVersion()));
-                    // mod already installed
-                    if ((installedmod != null) && installedmod.isInstalled()) {
-                        continue;
-                    }
-                    options.add(new ModOption(availablemod));
-                } catch (Exception ex) {
-                    ExceptionAndLogHandler.log(ex);
-                }
-            }
-            if (options.size() == 0) {
-                IOMethods.showInformation(this.cfg, "Install mods.", "No compatible not-installed mods found.");
-                return;
-            }
-            ModOption selected = IOMethods.showOptions(this.cfg, "Install mods.", "Select a version:",
-                    options.toArray(new ModOption[options.size()]), options.get(0));
-            if (selected != null) {
-                this.iserv.installMod(this.cfg, selected.getMod());
-            }
-        } catch (Exception ex) {
-            ExceptionAndLogHandler.log(ex);
         }
     }
 

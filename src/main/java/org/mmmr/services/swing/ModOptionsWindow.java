@@ -42,11 +42,15 @@ import org.mmmr.services.swing.common.FancySwing;
 import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
 
-// TODO check if link is updated (see mod.actualUrl)
+/**
+ * @author Jurgen
+ */
 public class ModOptionsWindow extends JFrame {
     private static final long serialVersionUID = -3663235803657033008L;
 
-    private Config cfg;
+    protected Config cfg;
+
+    protected ETable options;
 
     public ModOptionsWindow(final Config cfg) throws HeadlessException {
         this.cfg = cfg;
@@ -71,7 +75,7 @@ public class ModOptionsWindow extends JFrame {
         commit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO make changes (installing/deinstalling/changing order)
+                ModOptionsWindow.this.applyChanges();
                 ModOptionsWindow.this.dispose();
             }
         });
@@ -99,7 +103,35 @@ public class ModOptionsWindow extends JFrame {
         this.setResizable(false);
     }
 
-    private JTable getOptions() {
+    protected void applyChanges() {
+        // TODO make changes (installing/deinstalling/changing order)
+        for (ETableRecord record : this.options.getEventSafe().getRecords()) {
+            Mod inTable = Mod.class.cast(ETableRecordBean.class.cast(record).getBean());
+            Mod inDb = this.cfg.getDb().get(inTable);
+            if ((inDb != null) && inDb.isInstalled() && !inTable.isInstalled()) {
+                // uninstall mod
+                System.out.println("uninstall mod: " + inDb);
+            }
+        }
+        for (ETableRecord record : this.options.getEventSafe().getRecords()) {
+            Mod inTable = Mod.class.cast(ETableRecordBean.class.cast(record).getBean());
+            Mod inDb = this.cfg.getDb().get(inTable);
+            if ((inDb != null) && (inDb.getInstallOrder() != inTable.getInstallOrder())) {
+                // change load order
+                System.out.println("change load order: " + inDb.getInstallOrder() + " // " + inTable);
+            }
+        }
+        for (ETableRecord record : this.options.getEventSafe().getRecords()) {
+            Mod inTable = Mod.class.cast(ETableRecordBean.class.cast(record).getBean());
+            Mod inDb = this.cfg.getDb().get(inTable);
+            if ((inDb == null) && inTable.isInstalled()) {
+                // install mod
+                System.out.println("install mod: " + inTable);
+            }
+        }
+    }
+
+    protected JTable getOptions() {
         // update mod configuration from server
         try {
             ModList.update(this.cfg);
@@ -108,23 +140,23 @@ public class ModOptionsWindow extends JFrame {
         }
 
         ETableConfig configuration = new ETableConfig(true, false, true, true, false, true, false, true);
-        final ETable options = new ETable(configuration);
-        final ETableI safetable = options.getEventSafe();
+        this.options = new ETable(configuration);
+        final ETableI safetable = this.options.getEventSafe();
         final List<String> orderedFields = new ArrayList<String>();
 
-        options.setRowHeight(28);
+        this.options.setRowHeight(28);
 
         // click on column actions
-        options.addMouseListener(new MouseAdapter() {
+        this.options.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
                     if ((e.getClickCount() == 2) && (e.getButton() == MouseEvent.BUTTON1)) {
-                        int row = options.rowAtPoint(e.getPoint());
+                        int row = ModOptionsWindow.this.options.rowAtPoint(e.getPoint());
                         if (row == -1) {
                             return;
                         }
-                        int col = options.columnAtPoint(e.getPoint());
+                        int col = ModOptionsWindow.this.options.columnAtPoint(e.getPoint());
                         if (col == -1) {
                             return;
                         }
@@ -133,7 +165,7 @@ public class ModOptionsWindow extends JFrame {
                             if (Desktop.isDesktopSupported()) {
                                 Desktop.getDesktop().browse(URI.create(url));
                             } else {
-                                IOMethods.showWarning(ModOptionsWindow.this.cfg, "", "Not supported.");
+                                IOMethods.showWarning(ModOptionsWindow.this.cfg, "", "Not supported.\nVisit site:\n" + url);
                             }
                         }
                     }
@@ -243,19 +275,18 @@ public class ModOptionsWindow extends JFrame {
         });
 
         for (ETableRecord record : records) {
-            System.out.println(record.getBean());
             safetable.addRecord(record);
         }
 
         for (int i = 0; i < orderedFields.size(); i++) {
-            options.packColumn(i, 8);
+            this.options.packColumn(i, 8);
         }
 
-        TableColumn col = options.getColumnModel().getColumn(orderedFields.indexOf("url"));
+        TableColumn col = this.options.getColumnModel().getColumn(orderedFields.indexOf("url"));
         col.setPreferredWidth(250);
         col.setWidth(250);
         col.setMaxWidth(250);
 
-        return options;
+        return this.options;
     }
 }

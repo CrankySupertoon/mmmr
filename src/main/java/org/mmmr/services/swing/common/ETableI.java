@@ -1,6 +1,7 @@
 package org.mmmr.services.swing.common;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author jdlandsh
@@ -15,6 +16,8 @@ public interface ETableI {
     public abstract Object getColumnValueAtVisualColumn(int i);
 
     public abstract ETableRecord getRecordAtVisualRow(int i);
+
+    public abstract List<ETableRecord> getRecords();
 
     public abstract void removeAllRecords();
 

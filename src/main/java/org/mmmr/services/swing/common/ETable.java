@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -677,6 +678,15 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
     /**
      * 
+     * @see org.mmmr.services.swing.common.ETableI#getRecords()
+     */
+    @Override
+    public List<ETableRecord> getRecords() {
+        return this.filtering.getRecords();
+    }
+
+    /**
+     * 
      * @see javax.swing.JTable#isCellEditable(int, int)
      */
     @Override
@@ -817,5 +827,4 @@ public class ETable extends JTable implements ETableI, Reorderable {
     public void unsort() {
         this.sorting.unsort();
     }
-
 }
