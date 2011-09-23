@@ -107,11 +107,14 @@ public class ModOptionsWindow extends JFrame {
     protected void applyChanges() {
         // TODO make changes (installing/deinstalling/changing order)
         for (ETableRecord record : this.options.getEventSafe().getRecords()) {
-            Mod inTable = Mod.class.cast(ETableRecordBean.class.cast(record).getBean());
-            Mod inDb = this.cfg.getDb().get(inTable);
-            if ((inDb != null) && inDb.isInstalled() && !inTable.isInstalled()) {
+            ETableRecordBean eTableRecordBean = ETableRecordBean.class.cast(record);
+            if (!eTableRecordBean.hasChanged("installed")) {
+                continue;
+            }
+            Mod inTable = Mod.class.cast(eTableRecordBean.getBean());
+            if (!inTable.isInstalled()) {
                 // uninstall mod
-                System.out.println("uninstall mod: " + inDb); //$NON-NLS-1$
+                System.out.println("uninstall mod: " + inTable); //$NON-NLS-1$
             }
         }
         for (ETableRecord record : this.options.getEventSafe().getRecords()) {

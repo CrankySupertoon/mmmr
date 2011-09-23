@@ -1,9 +1,12 @@
 package org.mmmr.services.swing.common;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * @author jdlandsh
@@ -12,6 +15,8 @@ public class ETableRecordBean implements ETableRecord {
     protected Object object;
 
     private List<String> orderedFields;
+
+    private final Map<String, Object> originalValues = new HashMap<String, Object>();
 
     /**
      * 
@@ -64,6 +69,19 @@ public class ETableRecordBean implements ETableRecord {
         return value == null ? null : "" + value;
     }
 
+    public boolean hasChanged(String property) {
+        try {
+            Object ov = this.originalValues.get(property);
+            return (ov != null) && !new EqualsBuilder().append(ov, PropertyUtils.getProperty(this.object, property)).isEquals();
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException(ex);
+        } catch (NoSuchMethodException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     /**
      * 
      * @see org.mmmr.services.swing.common.ETableRecord#set(int, java.lang.Object)
@@ -71,7 +89,12 @@ public class ETableRecordBean implements ETableRecord {
     @Override
     public void set(int column, Object newValue) {
         try {
-            PropertyUtils.setProperty(this.object, this.orderedFields.get(column), newValue);
+            String property = this.orderedFields.get(column);
+            if (this.originalValues.get(property) == null) {
+                Object ov = PropertyUtils.getProperty(this.object, property);
+                this.originalValues.put(property, ov == null ? Void.TYPE : ov);
+            }
+            PropertyUtils.setProperty(this.object, property, newValue);
         } catch (IllegalAccessException ex) {
             throw new RuntimeException(ex);
         } catch (InvocationTargetException ex) {
