@@ -1,9 +1,7 @@
 package org.mmmr.services;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,28 +23,7 @@ import org.mmmr.Resource;
 public class InstallationService {
     public static String getUrl(String url) {
         try {
-            ByteArrayOutputStream readOnly = new ByteArrayOutputStream() {
-                @Override
-                public void write(byte[] b) throws IOException {
-                    throw new UnsupportedOperationException();
-                }
-
-                @Override
-                public synchronized void write(byte[] b, int off, int len) {
-                    throw new UnsupportedOperationException();
-                }
-
-                @Override
-                public synchronized void write(int b) {
-                    throw new UnsupportedOperationException();
-                }
-
-                @Override
-                public synchronized void writeTo(OutputStream out) throws IOException {
-                    throw new UnsupportedOperationException();
-                }
-            };
-            Map<String, Object> downloadURL = DownloadingService.downloadURL(new URL(url), readOnly);
+            Map<String, Object> downloadURL = DownloadingService.downloadURL(new URL(url), DownloadingService.readOnly);
             String redirect = String.valueOf(downloadURL.get("redirect")); //$NON-NLS-1$
             return redirect;
         } catch (Exception ex) {
@@ -202,7 +179,8 @@ public class InstallationService {
         mod.setInstallOrder(max);
         mod.setActualUrl(InstallationService.getUrl(mod.getUrl()));
         cfg.getDb().save(mod);
-        IOMethods.showInformation(cfg, Messages.getString("InstallationService.install_mods"), Messages.getString("InstallationService.mod_installed")); //$NON-NLS-1$ //$NON-NLS-2$
+        IOMethods.showInformation(cfg,
+                Messages.getString("InstallationService.install_mods"), Messages.getString("InstallationService.mod_installed")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @SuppressWarnings("unused")

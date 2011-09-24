@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JFrame;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 
@@ -30,7 +29,6 @@ import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.Messages;
 import org.mmmr.services.interfaces.DownloadingServiceI;
-import org.mmmr.services.swing.common.FancySwing;
 
 /**
  * {@link HttpClient} (httpcomponents from apache) download service<br>
@@ -100,19 +98,6 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
                     }
                 }
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            FancySwing.lookAndFeel();
-            JFrame f = new JFrame();
-            f.setVisible(true);
-            System.out.println(new DownloadingServiceHttpClient().downloadURL(new URL(
-                    "http://repo1.maven.org/maven2/org/hibernate/hibernate/3.2.7.ga/hibernate-3.2.7.ga-javadoc.jar")).length); //$NON-NLS-1$
-            f.dispose();
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 

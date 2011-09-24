@@ -1,5 +1,6 @@
 package org.mmmr.services;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,6 +15,28 @@ import org.mmmr.services.interfaces.DownloadingServiceI;
  */
 public class DownloadingService {
     private static DownloadingServiceI downloadingService = new DownloadingServiceSimple();
+
+    public static final ByteArrayOutputStream readOnly = new ByteArrayOutputStream() {
+        @Override
+        public void write(byte[] b) throws IOException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public synchronized void write(byte[] b, int off, int len) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public synchronized void write(int b) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public synchronized void writeTo(OutputStream out) throws IOException {
+            throw new UnsupportedOperationException();
+        }
+    };
 
     public static byte[] downloadURL(URL url) throws IOException {
         return DownloadingService.getDownloadingService().downloadURL(url);

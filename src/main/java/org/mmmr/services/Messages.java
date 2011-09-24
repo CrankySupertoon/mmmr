@@ -3,6 +3,9 @@ package org.mmmr.services;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * @author Jurgen
+ */
 public class Messages {
     private static final String BUNDLE_NAME = "org.mmmr.services.messages"; //$NON-NLS-1$
 
