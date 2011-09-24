@@ -261,6 +261,7 @@ public class ModOptionsWindow extends JFrame {
             records.add(new ETableRecordBean(orderedFields, installedMod));
         }
         for (File modxml : modxmls) {
+            ExceptionAndLogHandler.log(modxml);
             try {
                 Mod availableMod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
                 // mod not fit for mc version, do not show mod configuration
