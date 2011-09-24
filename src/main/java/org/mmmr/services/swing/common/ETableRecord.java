@@ -3,10 +3,10 @@ package org.mmmr.services.swing.common;
 /**
  * @author jdlandsh
  */
-public interface ETableRecord {
+public interface ETableRecord<T> {
     public abstract Object get(int column);
 
-    public abstract Object getBean();
+    public abstract T getBean();
 
     public abstract String getStringValue(int column);
 

@@ -124,8 +124,9 @@ public class ModOptionsWindow extends JFrame {
 
     protected void applyChanges() {
         // TODO make changes (installing/deinstalling/changing order)
-        for (ETableRecord record : this.options.getEventSafe().getRecords()) {
-            ETableRecordBean eTableRecordBean = ETableRecordBean.class.cast(record);
+        for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
+            @SuppressWarnings("unchecked")
+            ETableRecordBean<ModOption> eTableRecordBean = ETableRecordBean.class.cast(record);
             if (!eTableRecordBean.hasChanged("installed")) {
                 continue;
             }
@@ -135,7 +136,7 @@ public class ModOptionsWindow extends JFrame {
                 System.out.println("uninstall mod: " + inTable); //$NON-NLS-1$
             }
         }
-        for (ETableRecord record : this.options.getEventSafe().getRecords()) {
+        for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
             Mod inTable = Mod.class.cast(ETableRecordBean.class.cast(record).getBean());
             Mod inDb = this.cfg.getDb().get(inTable);
             if ((inDb != null) && (inDb.getInstallOrder() != inTable.getInstallOrder())) {
@@ -143,7 +144,7 @@ public class ModOptionsWindow extends JFrame {
                 System.out.println("change load order: " + inDb.getInstallOrder() + " // " + inTable); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
-        for (ETableRecord record : this.options.getEventSafe().getRecords()) {
+        for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
             Mod inTable = Mod.class.cast(ETableRecordBean.class.cast(record).getBean());
             Mod inDb = this.cfg.getDb().get(inTable);
             if ((inDb == null) && inTable.isInstalled()) {
@@ -201,37 +202,32 @@ public class ModOptionsWindow extends JFrame {
             }
         });
 
-        // 0
         headers.add(Messages.getString("ModOptionsWindow.installed"), Boolean.class, true); //$NON-NLS-1$
         orderedFields.add("installed"); //$NON-NLS-1$
 
-        // 1
         headers.add(Messages.getString("ModOptionsWindow.name"), String.class, false); //$NON-NLS-1$
         orderedFields.add("name"); //$NON-NLS-1$
 
-        // 2
         headers.add(Messages.getString("ModOptionsWindow.version"), String.class, false); //$NON-NLS-1$
         orderedFields.add("version"); //$NON-NLS-1$
 
-        // 3
         headers.add(Messages.getString("ModOptionsWindow.description"), String.class, false); //$NON-NLS-1$
         orderedFields.add("description"); //$NON-NLS-1$
 
-        // 4
         headers.add(Messages.getString("ModOptionsWindow.install_order"), Integer.class, false); //$NON-NLS-1$
         orderedFields.add("installOrder"); //$NON-NLS-1$
 
-        // 5
         headers.add(Messages.getString("ModOptionsWindow.install_date"), Date.class, false); //$NON-NLS-1$
         orderedFields.add("installationDate"); //$NON-NLS-1$
 
-        // 6
         headers.add(Messages.getString("ModOptionsWindow.url"), String.class, false); //$NON-NLS-1$
         orderedFields.add("url"); //$NON-NLS-1$
 
-        // 7
         headers.add(Messages.getString("ModOptionsWindow.updated"), Boolean.class, false); //$NON-NLS-1$
         orderedFields.add("updated"); //$NON-NLS-1$
+
+        headers.add(Messages.getString("ModOptionsWindow.modArchive"), Boolean.class, false); //$NON-NLS-1$
+        orderedFields.add("modArchive"); //$NON-NLS-1$
 
         safetable.setHeaders(headers);
 
@@ -254,11 +250,11 @@ public class ModOptionsWindow extends JFrame {
             }
         });
 
-        List<ETableRecord> records = new ArrayList<ETableRecord>();
+        List<ETableRecord<ModOption>> records = new ArrayList<ETableRecord<ModOption>>();
         // add installed mods (read from database) to list
         List<Mod> installedMods = this.cfg.getDb().hql("from Mod", Mod.class); //$NON-NLS-1$
         for (Mod installedMod : installedMods) {
-            records.add(new ETableRecordBean(orderedFields, installedMod));
+            records.add(new ETableRecordBean<ModOption>(orderedFields, new ModOption(this.cfg, installedMod)));
         }
         for (File modxml : modxmls) {
             ExceptionAndLogHandler.log(modxml);
@@ -275,18 +271,18 @@ public class ModOptionsWindow extends JFrame {
                     continue;
                 }
                 // add mod configuration
-                records.add(new ETableRecordBean(orderedFields, availableMod));
+                records.add(new ETableRecordBean<ModOption>(orderedFields, new ModOption(this.cfg, availableMod)));
             } catch (Exception ex) {
                 ExceptionAndLogHandler.log(ex);
             }
         }
 
         // sort, installed on top ordered by install order, then the others by name
-        Collections.sort(records, new Comparator<ETableRecord>() {
+        Collections.sort(records, new Comparator<ETableRecord<ModOption>>() {
             @Override
-            public int compare(ETableRecord o1, ETableRecord o2) {
-                Mod m1 = Mod.class.cast(o1.getBean());
-                Mod m2 = Mod.class.cast(o2.getBean());
+            public int compare(ETableRecord<ModOption> o1, ETableRecord<ModOption> o2) {
+                Mod m1 = o1.getBean().getMod();
+                Mod m2 = o2.getBean().getMod();
                 if (m1.isInstalled() && !m2.isInstalled()) {
                     return -1;
                 } else if (!m1.isInstalled() && m2.isInstalled()) {
@@ -299,7 +295,7 @@ public class ModOptionsWindow extends JFrame {
             }
         });
 
-        for (ETableRecord record : records) {
+        for (ETableRecord<ModOption> record : records) {
             safetable.addRecord(record);
         }
 

@@ -1,8 +1,6 @@
 package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -20,11 +18,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
@@ -44,41 +39,6 @@ import org.mmmr.services.swing.common.RoundedPanel;
  * @author Jurgen
  */
 public class JavaOptionsWindow extends JFrame {
-    private class CellRenderer extends DefaultTableCellRenderer {
-        private static final long serialVersionUID = -9161606663652528876L;
-
-        @Override
-        public Component getTableCellRendererComponent(JTable jtable, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            JLabel renderer = (JLabel) super.getTableCellRendererComponent(jtable, value, isSelected, hasFocus, row, column);
-            renderer.setToolTipText(value == null ? null : String.valueOf(value));
-            if (JavaOptionsWindow.this.cfg != null) {
-                this.setFont(JavaOptionsWindow.this.cfg.getFontSmall());
-            }
-            if ("y".equals(value)) { //$NON-NLS-1$
-                if (isSelected) {
-                    this.setBackground(JavaOptionsWindow.this.greenSelected);
-                } else {
-                    this.setBackground(JavaOptionsWindow.this.green);
-                }
-                this.setForeground(Color.white);
-                this.setHorizontalTextPosition(SwingConstants.CENTER);
-            } else if ("n".equals(value)) { //$NON-NLS-1$
-                if (isSelected) {
-                    this.setBackground(JavaOptionsWindow.this.redSelected);
-                } else {
-                    this.setBackground(JavaOptionsWindow.this.red);
-                }
-                this.setForeground(Color.white);
-                this.setHorizontalTextPosition(SwingConstants.CENTER);
-            } else {
-                this.setBackground(Color.white);
-                this.setForeground(Color.black);
-                this.setHorizontalTextPosition(SwingConstants.CENTER);
-            }
-            return renderer;
-        }
-    }
-
     private static final long serialVersionUID = -2617077870487045855L;
 
     public static void main(String[] args) {
@@ -93,28 +53,13 @@ public class JavaOptionsWindow extends JFrame {
 
     private Config cfg;
 
-    private Color green;
-
-    private Color greenSelected;
-
     private String[] options = ("-Xms{MIN}m -Xmx{MAX}m -client -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:MaxGCPauseMillis=500 -XX:-UseGCOverheadLimit -XX:SurvivorRatio=12 -Xnoclassgc -XX:UseSSE=3 -Xincgc -XX:+UseCompressedOops") //$NON-NLS-1$
             .split(" "); //$NON-NLS-1$
-
-    private Color red;
-
-    private Color redSelected;
 
     private ETable table;
 
     public JavaOptionsWindow(final Config cfg, Dimension prefSize) throws HeadlessException, IOException {
-        Color selectionColor = Color.class.cast(UIManager.get("Table.selectionBackground")); //$NON-NLS-1$
-        this.red = Color.RED.darker();
-        this.redSelected = selectionColor == null ? this.red : new Color(Math.max(this.red.getRed(), selectionColor.getRed()), Math.max(
-                this.red.getGreen(), selectionColor.getGreen()), Math.max(this.red.getRed(), selectionColor.getBlue()));
-        this.green = Color.GREEN.darker();
-        this.greenSelected = selectionColor == null ? this.green : new Color(Math.min(this.green.getRed(), selectionColor.getRed()), Math.min(
-                this.green.getGreen(), selectionColor.getGreen()), Math.min(this.green.getRed(), selectionColor.getBlue()));
-
+        //Color selectionColor = Color.class.cast(UIManager.get("Table.selectionBackground")); //$NON-NLS-1$
         this.cfg = cfg;
 
         RoundedPanel mainpanel = new RoundedPanel(new BorderLayout());

@@ -1,6 +1,5 @@
 package org.mmmr;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,8 +31,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cascade;
-import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.InstallationService;
 
 /**
  * @author Jurgen
@@ -84,8 +81,6 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     @Column(nullable = false)
     private String version;
-
-    private transient Boolean updated;
 
     public Mod() {
         super();
@@ -215,11 +210,6 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         return this.resources;
     }
 
-    @XmlTransient
-    public Boolean getUpdated() {
-        return this.isUpdated();
-    }
-
     @XmlAttribute
     public String getUrl() {
         return this.url;
@@ -243,45 +233,6 @@ public class Mod implements Comparable<Mod>, PersistentObject {
     @XmlTransient
     public Boolean isInstalled() {
         return this.getInstallationDate() != null;
-    }
-
-    @XmlTransient
-    public Boolean isUpdated() {
-        // check only needed when not set (not persisten in db, not persisted in xml)
-        if (this.updated == null) {
-            // check only needed when installed => no change
-            if (this.isInstalled()) {
-                // if actualUrl is set and differs url we already know that there is an update => true
-                if ((this.getActualUrl() != null) && !this.getActualUrl().equals(this.getUrl())) {
-                    this.updated = true;
-                } else {
-                    // this trick only works here so if it is another site there is no check => false
-                    if (!this.getUrl().contains("minecraftforum")) { //$NON-NLS-1$
-                        this.updated = false;
-                    } else {
-                        // trick: the site redirects to a link where the title is replaced (updated)
-                        // so if the title has changed: the mod is probably updated
-                        try {
-                            String htmlAnchor = new URL(this.getUrl()).toURI().getFragment(); // if not set = null
-                            String newUrl = InstallationService.getUrl(this.getUrl());
-                            if ((newUrl != null) && !"null".equals(newUrl)) { //$NON-NLS-1$
-                                if (htmlAnchor != null) {
-                                    // when set: append anchor because it is removed from the new url
-                                    newUrl = newUrl + "#" + htmlAnchor; //$NON-NLS-1$
-                                }
-                                // title not changed => false OR title changed => true
-                                this.updated = !this.getUrl().equals(newUrl);
-                            } else {
-                                this.updated = false;
-                            }
-                        } catch (Exception ex) {
-                            ExceptionAndLogHandler.log(ex);
-                        }
-                    }
-                }
-            }
-        }
-        return this.updated;
     }
 
     public void setActualUrl(String actualUrl) {
@@ -334,10 +285,6 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     public void setResources(List<Resource> resources) {
         this.resources = resources;
-    }
-
-    public void setUpdated(Boolean updated) {
-        this.updated = updated;
     }
 
     public void setUrl(String url) {

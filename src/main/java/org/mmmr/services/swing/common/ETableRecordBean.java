@@ -11,8 +11,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 /**
  * @author jdlandsh
  */
-public class ETableRecordBean implements ETableRecord {
-    protected Object object;
+public class ETableRecordBean<T> implements ETableRecord<T> {
+    protected T object;
 
     private List<String> orderedFields;
 
@@ -25,7 +25,7 @@ public class ETableRecordBean implements ETableRecord {
      * @param orderedFields
      * @param o
      */
-    public ETableRecordBean(List<String> orderedFields, Object o) {
+    public ETableRecordBean(List<String> orderedFields, T o) {
         this.object = o;
         this.orderedFields = orderedFields;
     }
@@ -55,7 +55,7 @@ public class ETableRecordBean implements ETableRecord {
      * @see org.mmmr.services.swing.common.ETableRecord#getBean()
      */
     @Override
-    public Object getBean() {
+    public T getBean() {
         return this.object;
     }
 

@@ -45,8 +45,6 @@ public class ModList {
             }
             out.flush();
             out.close();
-
-            ModList.update(new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile())); //$NON-NLS-1$
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -88,7 +86,13 @@ public class ModList {
                 // does not exists or newer on server => download
                 URI uri = new URI(base.getProtocol(), base.getHost(), base.getPath() + "/data/mods/" + xmlname, null); //$NON-NLS-1$
                 String url = uri.toURL().toString();
-                DownloadingService.downloadURL(new URL(url), new File(cfg.getMods(), xmlname));
+                File target = new File(cfg.getMods(), xmlname);
+                try {
+                    DownloadingService.downloadURL(new URL(url), target);
+                } catch (IOException ex) {
+                    target.delete();
+                    throw ex;
+                }
             }
         }
     }

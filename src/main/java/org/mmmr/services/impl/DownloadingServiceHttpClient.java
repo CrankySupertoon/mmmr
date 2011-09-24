@@ -118,7 +118,19 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
      */
     @Override
     public Map<String, Object> downloadURL(URL url, File target) throws IOException {
-        return this.downloadURL(url, new FileOutputStream(target));
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(target);
+            return this.downloadURL(url, fos);
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (Exception ex) {
+                    //
+                }
+            }
+        }
     }
 
     /**
@@ -144,6 +156,9 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
             throw new IllegalArgumentException(ex);
         }
         HttpResponse response = httpclient.execute(httpget);
+        if (response.getStatusLine().getStatusCode() == 404) {
+            throw new IOException(url + ": 404");
+        }
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try {
