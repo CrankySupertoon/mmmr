@@ -17,7 +17,7 @@
 1316728063167::InvTweaks-1.31Beta-1.8.1.zip.xml
 1316728063167::iPixeliGenderMod1.8.1v3.4client.zip.xml
 1316728063167::Lightsensor.zip.xml
-1316728063168::Millenaire1.5.1.zip.xml
+1316887542943::Millenaire1.6.zip.xml
 1316728063168::minecraft-mipmap-20-dev.zip.xml
 1316728063168::ModLoader.zip.xml
 1316728063165::mod_Fossil.zip.xml
