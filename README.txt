@@ -24,3 +24,17 @@ it will download all libraries that MMMR uses to a directory called '.m2' under 
 if you installed more than 1 JDK/JRE: menu 'Window', 'Preferences', 'Java', 'Installed JRE's' and chech if the default selected options is the JDK you just installed, when not: click 'Add', 'Standard JVM', click 'Directory' and browse to 'C:\Program Files\Java\jdk1.7.0' and check it, you can remove the other ones
 
 the project is now ready to use
+
+
+
+
+other installed software: menu 'Help', 'Install New Software', click 'Add' to add update sites:
+
+use Eclipse Mylyl to connect to Google code Issues (use 'Task Repositories' and 'Tasks List' tab): http://code.google.com/p/googlecode-mylyn-connector/
+update site: http://knittig.de/googlecode-mylyn-connector/update/
+
+decompile classes when you don't have the code with JD Eclipse: http://java.decompiler.free.fr/?q=jdeclipse
+update site: http://java.decompiler.free.fr/jd-eclipse/update
+
+use Jakarta Commons in Eclipse more easily with Commons4E: http://developer.berlios.de/projects/commons4e/
+update site: http://commons4e.berlios.de/updatesite31
