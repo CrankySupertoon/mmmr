@@ -30,9 +30,9 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
         try {
             out = new ZipOutputStream(new FileOutputStream(archive));
             out.setLevel(9);
-            ZipEntry ze = new ZipEntry("a.zip");
 
             for (String file : files) {
+                ZipEntry ze = new ZipEntry(file);
                 in = new FileInputStream(new File(basedir, file));
                 out.putNextEntry(ze);
                 int read;

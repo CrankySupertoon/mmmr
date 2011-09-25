@@ -355,6 +355,10 @@ public class IOMethods {
         return out.toByteArray();
     }
 
+    public static String relativePath(File base, File file) throws IOException {
+        return file.getCanonicalFile().getAbsolutePath().substring(base.getCanonicalFile().getAbsolutePath().length() + 1);
+    }
+
     public static File selectFile(File start, javax.swing.filechooser.FileFilter ff) {
         JFileChooser fc = new JFileChooser(start);
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

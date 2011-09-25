@@ -2,6 +2,7 @@ package org.mmmr.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.mmmr.services.impl.ArchiveServiceSimple;
 import org.mmmr.services.interfaces.ArchiveServiceI;
@@ -11,6 +12,10 @@ import org.mmmr.services.interfaces.ArchiveServiceI;
  */
 public class ArchiveService {
     private static ArchiveServiceI archiveService = new ArchiveServiceSimple();
+
+    public static void compress(File basedir, List<String> files, File archive) throws IOException {
+        ArchiveService.getArchiveService().compress(basedir, files, archive);
+    }
 
     public static void extract(File archive, File out) throws IOException {
         ArchiveService.getArchiveService().extract(archive, out);
