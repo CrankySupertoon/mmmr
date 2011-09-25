@@ -252,7 +252,7 @@ public class ModOptionsWindow extends JFrame {
 
         List<ETableRecord<ModOption>> records = new ArrayList<ETableRecord<ModOption>>();
         // add installed mods (read from database) to list
-        List<Mod> installedMods = this.cfg.getDb().hql("from Mod", Mod.class); //$NON-NLS-1$
+        List<Mod> installedMods = this.cfg.getDb().all(Mod.class);
         for (Mod installedMod : installedMods) {
             records.add(new ETableRecordBean<ModOption>(orderedFields, new ModOption(this.cfg, installedMod)));
         }

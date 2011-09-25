@@ -1,7 +1,6 @@
 package org.mmmr.services.swing;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Date;
 
 import org.mmmr.Mod;
@@ -70,13 +69,8 @@ public class ModOption {
                         // trick: the site redirects to a link where the title is replaced (updated)
                         // so if the title has changed: the mod is probably updated
                         try {
-                            String htmlAnchor = new URL(this.getUrl()).toURI().getFragment(); // if not set = null
                             String newUrl = InstallationService.getUrl(this.getUrl());
                             if ((newUrl != null) && !"null".equals(newUrl)) { //$NON-NLS-1$
-                                if (htmlAnchor != null) {
-                                    // when set: append anchor because it is removed from the new url
-                                    newUrl = newUrl + "#" + htmlAnchor; //$NON-NLS-1$
-                                }
                                 // title not changed => false OR title changed => true
                                 this.updated = !this.getUrl().equals(newUrl);
                             } else {

@@ -7,7 +7,6 @@ import java.util.Properties;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.classic.Session;
 import org.hibernate.criterion.Example;
 import org.mmmr.Dependency;
@@ -19,12 +18,20 @@ import org.mmmr.PersistentObject;
 import org.mmmr.Resource;
 
 /**
+ * service uses Hibernate to interact with Derby database
+ * 
  * @author Jurgen
+ * 
+ * @see http://www.hibernate.org/
+ * @see http://db.apache.org/derby/
  */
-@SuppressWarnings("deprecation")
 public class DBService {
+    /** singleton */
     private static DBService instance = null;
 
+    /**
+     * gets singleton {@link DBService}
+     */
     public static DBService getInstance(Config cfg) throws IOException, ClassNotFoundException {
         if (DBService.instance == null) {
             DBService.instance = new DBService(cfg);
@@ -32,25 +39,16 @@ public class DBService {
         return DBService.instance;
     }
 
-    public static void main(String[] args) {
-        try {
-            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile()); //$NON-NLS-1$
-            DBService db = DBService.getInstance(cfg);
-            String hql = "from " + MCFile.class.getName(); //$NON-NLS-1$
-            for (Object record : db.hql(hql, MCFile.class)) {
-                System.out.println(record);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private Session session = null;
 
+    /**
+     * creates and configures database (Apache Derby)
+     */
+    @SuppressWarnings("deprecation")
     public DBService(Config cfg) throws IOException, ClassNotFoundException {
         System.setProperty("derby.stream.error.file", new File(cfg.getLogs(), "derby.log").getAbsolutePath()); //$NON-NLS-1$ //$NON-NLS-2$
 
-        AnnotationConfiguration configuration = new AnnotationConfiguration();
+        org.hibernate.cfg.AnnotationConfiguration configuration = new org.hibernate.cfg.AnnotationConfiguration();
         configuration.addAnnotatedClass(Dependency.class);
         configuration.addAnnotatedClass(MCFile.class);
         configuration.addAnnotatedClass(MC.class);
@@ -73,14 +71,23 @@ public class DBService {
         this.session = sessionFactory.openSession();
     }
 
-    public void flush() {
-        this.session.flush();
+    /**
+     * returns all objects saved to database of given type
+     */
+    public List<Mod> all(Class<Mod> clazz) {
+        return this.hql("from " + clazz.getName(), clazz);
     }
 
+    /**
+     * returns an object saved from databse or null
+     */
     public <T extends PersistentObject> T get(T object) {
         return this.getOrCreate(object, false);
     }
 
+    /**
+     * finds all objects that have matching properties (like is used), not case sensitive
+     */
     @SuppressWarnings("unchecked")
     public <T extends PersistentObject> List<T> getAll(T object) {
         this.session.flush();
@@ -93,10 +100,16 @@ public class DBService {
         return results;
     }
 
+    /**
+     * returns object from database or a new one when not saved to database yet
+     */
     public <T extends PersistentObject> T getOrCreate(T object) {
         return this.getOrCreate(object, true);
     }
 
+    /**
+     * returns object from database or a new one when not saved to database yet
+     */
     @SuppressWarnings("unchecked")
     private <T extends PersistentObject> T getOrCreate(T object, boolean create) {
         this.session.flush();
@@ -115,11 +128,31 @@ public class DBService {
         return results.get(0);
     }
 
+    /**
+     * execute HQL, returns list (never null)
+     */
     @SuppressWarnings({ "unchecked", "unused" })
     public <T> List<T> hql(String hql, Class<T> returnType) {
         return this.session.createQuery(hql).list();
     }
 
+    /**
+     * execute HQL, returns singleton or null when not exits or throws exception (message 'more_than_1_result') when more than 1 result
+     */
+    public <T> T hql1(String hql, Class<T> returnType) {
+        List<T> list = this.hql(hql, returnType);
+        if (list.size() == 0) {
+            return null;
+        }
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+        throw new RuntimeException("more_than_1_result");
+    }
+
+    /**
+     * saves an object (first and consecutive saves)
+     */
     public <T extends PersistentObject> T save(T object) {
         Transaction tx = this.session.beginTransaction();
         if (object.getId() == null) {

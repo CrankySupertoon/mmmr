@@ -19,7 +19,6 @@ import net.sf.sevenzipjbinding.SevenZipException;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.interfaces.ArchiveServiceI;
 
 /**
  * extracts lots of compressions formats including but not limited to zip, rar, 7z (7zip)<br/>
@@ -30,7 +29,7 @@ import org.mmmr.services.interfaces.ArchiveServiceI;
  * @see http://sevenzipjbind.sourceforge.net/
  * @see http://sourceforge.net/apps/mediawiki/sevenzipjbind/index.php?title=Main_Page
  */
-public class ArchiveService7Zip implements ArchiveServiceI {
+public class ArchiveService7Zip extends ArchiveServiceSimple {
     /**
      * @see http://sevenzipjbind.sourceforge.net/basic_snippets.html#extraction-single-file
      */
@@ -49,6 +48,7 @@ public class ArchiveService7Zip implements ArchiveServiceI {
 
         private boolean skipExtraction;
 
+        @SuppressWarnings("unused")
         private long total;
 
         public Callback(File outdir, ISevenZipInArchive inArchive) {
@@ -56,6 +56,10 @@ public class ArchiveService7Zip implements ArchiveServiceI {
             this.inArchive = inArchive;
         }
 
+        /**
+         * 
+         * @see net.sf.sevenzipjbinding.IArchiveExtractCallback#getStream(int, net.sf.sevenzipjbinding.ExtractAskMode)
+         */
         @Override
         public ISequentialOutStream getStream(int i, ExtractAskMode extractAskMode) throws SevenZipException {
             this.index = i;
@@ -95,16 +99,28 @@ public class ArchiveService7Zip implements ArchiveServiceI {
             };
         }
 
+        /**
+         * 
+         * @see net.sf.sevenzipjbinding.IArchiveExtractCallback#prepareOperation(net.sf.sevenzipjbinding.ExtractAskMode)
+         */
         @Override
         public void prepareOperation(ExtractAskMode extractAskMode) throws SevenZipException {
             //
         }
 
+        /**
+         * 
+         * @see net.sf.sevenzipjbinding.IProgress#setCompleted(long)
+         */
         @Override
         public void setCompleted(long completeValue) throws SevenZipException {
             //
         }
 
+        /**
+         * 
+         * @see net.sf.sevenzipjbinding.IArchiveExtractCallback#setOperationResult(net.sf.sevenzipjbinding.ExtractOperationResult)
+         */
         @Override
         public void setOperationResult(ExtractOperationResult extractOperationResult) throws SevenZipException {
             if (this.skipExtraction) {
@@ -121,12 +137,20 @@ public class ArchiveService7Zip implements ArchiveServiceI {
             }
         }
 
+        /**
+         * 
+         * @see net.sf.sevenzipjbinding.IProgress#setTotal(long)
+         */
         @Override
         public void setTotal(long total) throws SevenZipException {
             //
         }
     }
 
+    /**
+     * 
+     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, java.io.File)
+     */
     @Override
     public void extract(File archive, File out) throws IOException {
         IOException exception = null;

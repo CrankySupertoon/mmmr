@@ -5,35 +5,103 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
 /**
- * unzip via java (using native java liv for zip compression)
+ * (un)zip via java (using native java liv for zip compression)
  * 
  * @author Jurgen
  */
 public class ArchiveServiceSimple implements ArchiveServiceI {
+    /**
+     * 
+     * @see org.mmmr.services.interfaces.ArchiveServiceI#compress(java.io.File, java.util.List, java.io.File)
+     */
     @Override
-    public void extract(File archive, File out) throws IOException {
-        ZipInputStream zis = new ZipInputStream(new FileInputStream(archive));
-        ZipEntry ze;
-        byte[] buffer = new byte[1024 * 8];
-        int read;
-        while ((ze = zis.getNextEntry()) != null) {
-            if (ze.isDirectory()) {
-                continue;
+    public void compress(File basedir, List<String> files, File archive) throws IOException {
+        ZipOutputStream out = null;
+        FileInputStream in = null;
+        byte[] buffer = new byte[1024 * 8 * 4];
+        try {
+            out = new ZipOutputStream(new FileOutputStream(archive));
+            out.setLevel(9);
+            ZipEntry ze = new ZipEntry("a.zip");
+
+            for (String file : files) {
+                in = new FileInputStream(new File(basedir, file));
+                out.putNextEntry(ze);
+                int read;
+                while ((read = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, read);
+                }
+                in.close();
+                in = null;
             }
-            OutputStream fout = null;
-            File file = new File(out, ze.getName());
-            file.getParentFile().mkdirs();
-            fout = new FileOutputStream(file);
-            while ((read = zis.read(buffer)) != -1) {
-                fout.write(buffer, 0, read);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (Exception ex) {
+                    //
+                }
             }
-            fout.close();
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception ex) {
+                    //
+                }
+            }
+        }
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File)
+     */
+    @Override
+    public void extract(File archive, File basedir) throws IOException {
+        ZipInputStream in = null;
+        OutputStream out = null;
+        try {
+            in = new ZipInputStream(new FileInputStream(archive));
+            ZipEntry ze;
+            byte[] buffer = new byte[1024 * 8 * 4];
+            int read;
+            while ((ze = in.getNextEntry()) != null) {
+                if (ze.isDirectory()) {
+                    continue;
+                }
+
+                File file = new File(basedir, ze.getName());
+                file.getParentFile().mkdirs();
+                out = new FileOutputStream(file);
+                while ((read = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, read);
+                }
+                out.close();
+                out = null;
+            }
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (Exception ex) {
+                    //
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception ex) {
+                    //
+                }
+            }
         }
     }
 }

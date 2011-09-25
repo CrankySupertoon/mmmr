@@ -23,7 +23,14 @@ import org.mmmr.Resource;
 public class InstallationService {
     public static String getUrl(String url) {
         try {
-            return DownloadingService.trace(new URL(url));
+            URL asUrl = new URL(url);
+            String htmlAnchor = asUrl.toURI().getFragment(); // if not set = null
+            String newUrl = DownloadingService.trace(asUrl).toString();
+            if (htmlAnchor != null) {
+                // when set: append anchor because it is removed from the new url
+                newUrl = newUrl + "#" + htmlAnchor; //$NON-NLS-1$
+            }
+            return newUrl;
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);
             return url;
@@ -149,8 +156,8 @@ public class InstallationService {
 
     private void installMod(Config cfg, Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
         this.copy(cfg, mod, fileResource, toCopy, ignored);
-        Integer max1 = cfg.getDb().hql("select max(installOrder) from Mod", Integer.class).get(0); //$NON-NLS-1$
-        Integer max2 = cfg.getDb().hql("select max(installOrder) from ModPack", Integer.class).get(0); //$NON-NLS-1$
+        Integer max1 = cfg.getDb().hql1("select max(installOrder) from Mod", Integer.class); //$NON-NLS-1$
+        Integer max2 = cfg.getDb().hql1("select max(installOrder) from ModPack", Integer.class); //$NON-NLS-1$
         if (max1 == null) {
             max1 = 0;
         }
