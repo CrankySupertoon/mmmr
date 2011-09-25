@@ -42,6 +42,8 @@ import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedOptionPane;
 
 /**
+ * do not put methods in here that use non standard Java classes
+ * 
  * @author Jurgen
  */
 public class IOMethods {
@@ -172,6 +174,10 @@ public class IOMethods {
         all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         return all;
+    }
+
+    public static File getCurrentDir() {
+        return new File(System.getProperty("user.dir"));//$NON-NLS-1$ 
     }
 
     public static File getCurrentJar() {

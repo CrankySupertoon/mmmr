@@ -1,7 +1,5 @@
 package org.mmmr.services;
 
-import java.io.File;
-
 import javax.swing.ToolTipManager;
 
 import org.mmmr.services.swing.StatusWindow;
@@ -16,7 +14,7 @@ public class MMMRStart {
         try {
             ExceptionAndLogHandler.log(IOMethods.getCurrentJar().getAbsolutePath());
             FancySwing.lookAndFeel();
-            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile()); //$NON-NLS-1$
+            Config cfg = new Config(args);
             BatCheck.check(cfg);
             VersionCheck.check(cfg);
             System.getProperties().list(System.out);

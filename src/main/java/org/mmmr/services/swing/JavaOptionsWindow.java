@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +43,7 @@ public class JavaOptionsWindow extends JFrame {
     public static void main(String[] args) {
         try {
             FancySwing.lookAndFeel();
-            Config cfg = new Config(args, new File("DUMMY").getAbsoluteFile().getParentFile()); //$NON-NLS-1$
+            Config cfg = new Config(args);
             new JavaOptionsWindow(cfg, null).setVisible(true);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -95,7 +94,7 @@ public class JavaOptionsWindow extends JFrame {
                         sb.append(" ").append(JavaOptionsWindow.this.options[0].replaceAll("\\Q{MIN}\\E", min)); //$NON-NLS-1$ //$NON-NLS-2$
                         String max = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 3));
                         sb.append(" ").append(JavaOptionsWindow.this.options[1].replaceAll("\\Q{MAX}\\E", max)); //$NON-NLS-1$ //$NON-NLS-2$
-                        for (int i = 4; i < JavaOptionsWindow.this.options.length + 1; i++) {
+                        for (int i = 4; i < (JavaOptionsWindow.this.options.length + 1); i++) {
                             boolean optionAvailable = "y".equals(String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), i))); //$NON-NLS-1$
                             if (optionAvailable) {
                                 sb.append(" ").append(JavaOptionsWindow.this.options[i - 1]); //$NON-NLS-1$

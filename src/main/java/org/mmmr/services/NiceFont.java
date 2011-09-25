@@ -1,15 +1,42 @@
 package org.mmmr.services;
 
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
 /**
  * @author Jurgen
  */
 public class NiceFont {
+    public static void main(String[] args) {
+        try {
+            // 128x128
+            int dd = 8;
+            int wh = 128 * dd;
+            BufferedImage bi = new BufferedImage(wh, wh, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bi.createGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            g2d.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("data/cfg/dejavu-fonts-ttf-2.33/ttf/DejaVuSansMono.ttf")).deriveFont(8f * dd));
+            g2d.setColor(Color.white);
+            int d = wh / 16;
+            int sqrt = (int) Math.sqrt(256);
+            for (int i = 1; i <= 256; i++) {
+                String s = new String(new byte[] { (byte) i }, "cp850");
+                g2d.drawChars(s.toCharArray(), 0, 1, (i % sqrt) * d, -15 + ((1 + (i / sqrt)) * d));
+            }
+            ImageIO.write(bi, "png", new File(".minecraft/bin/minecraft.jar/font/default.png"));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     /**
      * @see http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-2.33.tar.bz2
      */

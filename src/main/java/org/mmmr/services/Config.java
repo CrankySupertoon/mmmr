@@ -105,7 +105,15 @@ public class Config {
 
     private String mmmrSvnOnGoogleCode;
 
-    public Config(String[] args, File thisFolder) throws IOException {
+    public Config() throws IOException {
+        this(null);
+    }
+
+    public Config(String[] args) throws IOException {
+        this(args, IOMethods.getCurrentDir());
+    }
+
+    private Config(String[] args, File thisFolder) throws IOException {
         this.thisFolder = thisFolder;
 
         this.mmmrOnGoogleCode = "http://mmmr.googlecode.com"; //$NON-NLS-1$
