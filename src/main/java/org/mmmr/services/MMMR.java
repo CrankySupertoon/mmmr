@@ -282,6 +282,12 @@ public class MMMR implements MMMRI {
                             this.cfg.getMcResources());
                     db.save(this.mc);
                 }
+                File meta_inf = new File(this.cfg.getMcJar(), "META-INF");
+                if (meta_inf.exists()) {
+                    if (!IOMethods.deleteDirectory(meta_inf)) {
+                        throw new IOException("could not delete META-INF");
+                    }
+                }
                 if (!"true".equals(this.cfg.getProperty("jogbox.ignore", "?"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                     ModPack jb = db.get(new ModPack("YogBox", "1.1")); //$NON-NLS-1$ //$NON-NLS-2$
                     if (jb != null) {
@@ -318,7 +324,10 @@ public class MMMR implements MMMRI {
             allSuccess = mccheck && ybcheck;
 
             if (!allSuccess) {
-                if (!IOMethods.showConfirmation(this.cfg, Messages.getString("MMMR.error"), Messages.getString("MMMR.error_during") + ": " + error + "\n" + Messages.getString("MMMR.try_again"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                if (!IOMethods
+                        .showConfirmation(
+                                this.cfg,
+                                Messages.getString("MMMR.error"), Messages.getString("MMMR.error_during") + ": " + error + "\n" + Messages.getString("MMMR.try_again"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                     System.exit(0);
                 }
             } else {
