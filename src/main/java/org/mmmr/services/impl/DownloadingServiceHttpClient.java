@@ -9,23 +9,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.impl.client.ContentEncodingHttpClient;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.Messages;
 import org.mmmr.services.interfaces.DownloadingServiceI;
@@ -59,7 +57,7 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
                         while ((read = uin.read(buffer)) > 0) {
                             target.write(buffer, 0, read);
                             dl += read;
-                            int percentage = (int) (dl * 100l / entity.getContentLength());
+                            int percentage = (int) ((dl * 100l) / entity.getContentLength());
                             this.setProgress(percentage);
                         }
                         target.close();
@@ -117,11 +115,11 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
      * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL, java.io.File)
      */
     @Override
-    public Map<String, Object> downloadURL(URL url, File target) throws IOException {
+    public void downloadURL(URL url, File target) throws IOException {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(target);
-            return this.downloadURL(url, fos);
+            this.downloadURL(url, fos);
         } finally {
             if (fos != null) {
                 try {
@@ -138,26 +136,18 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
      * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL, java.io.OutputStream)
      */
     @Override
-    public Map<String, Object> downloadURL(URL url, OutputStream target) throws IOException {
+    public void downloadURL(URL url, OutputStream target) throws IOException {
         ExceptionAndLogHandler.log(url);
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        final Map<String, Object> info = new HashMap<String, Object>();
-        httpclient.setRedirectStrategy(new DefaultRedirectStrategy() {
-            @Override
-            protected URI createLocationURI(String location) throws ProtocolException {
-                info.put("redirect", location); //$NON-NLS-1$
-                return super.createLocationURI(location);
-            }
-        });
-        HttpGet httpget;
+        ContentEncodingHttpClient httpclient = new ContentEncodingHttpClient();
+        HttpGet request;
         try {
-            httpget = new HttpGet(url.toURI());
+            request = new HttpGet(url.toURI());
         } catch (URISyntaxException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new IOException(ex);
         }
-        HttpResponse response = httpclient.execute(httpget);
+        HttpResponse response = httpclient.execute(request);
         if (response.getStatusLine().getStatusCode() == 404) {
-            throw new IOException(url + ": 404");
+            throw new IOException(url + ": 404");//$NON-NLS-1$
         }
         HttpEntity entity = response.getEntity();
         if (entity != null) {
@@ -168,9 +158,34 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
             } catch (ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
-
-            return info;
         }
         throw new IOException("" + url); //$NON-NLS-1$
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.interfaces.DownloadingServiceI#trace(java.net.URL)
+     */
+    @Override
+    public String trace(URL url) throws IOException {
+        ExceptionAndLogHandler.log(url);
+        ContentEncodingHttpClient httpclient = new ContentEncodingHttpClient();
+        httpclient.getParams().setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, false);
+        HttpHead request;
+        try {
+            request = new HttpHead(url.toURI());
+        } catch (URISyntaxException ex) {
+            throw new IOException(ex);
+        }
+        HttpResponse response = httpclient.execute(request);
+        if (response.getStatusLine().getStatusCode() == 404) {
+            throw new IOException(url + ": 404");//$NON-NLS-1$
+        }
+
+        Header[] headers = response.getHeaders("Location");//$NON-NLS-1$
+        if ((headers == null) || (headers.length == 0)) {
+            return url.toExternalForm();
+        }
+        return headers[0].getValue();
     }
 }

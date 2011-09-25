@@ -19,6 +19,8 @@ menu 'File', 'New', 'Other', 'SVN', 'Checkout Projects from SVN', 'Create a new 
 whenever you want to update the project, rightclick and under 'Team', choose 'Update to HEAD'
 
 rightclick the project and choose 'Configure', 'Convert to Maven Project'
-it will download all libraries that MMMR uses to 
+it will download all libraries that MMMR uses to a directory called '.m2' under you Windows user home directory
+
+if you installed more than 1 JDK/JRE: menu 'Window', 'Preferences', 'Java', 'Installed JRE's' and chech if the default selected options is the JDK you just installed, when not: click 'Add', 'Standard JVM', click 'Directory' and browse to 'C:\Program Files\Java\jdk1.7.0' and check it, you can remove the other ones
 
 the project is now ready to use

@@ -1,11 +1,9 @@
 package org.mmmr.services;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Map;
 
 import org.mmmr.services.impl.DownloadingServiceSimple;
 import org.mmmr.services.interfaces.DownloadingServiceI;
@@ -16,38 +14,16 @@ import org.mmmr.services.interfaces.DownloadingServiceI;
 public class DownloadingService {
     private static DownloadingServiceI downloadingService = new DownloadingServiceSimple();
 
-    public static final ByteArrayOutputStream readOnly = new ByteArrayOutputStream() {
-        @Override
-        public void write(byte[] b) throws IOException {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public synchronized void write(byte[] b, int off, int len) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public synchronized void write(int b) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public synchronized void writeTo(OutputStream out) throws IOException {
-            throw new UnsupportedOperationException();
-        }
-    };
-
     public static byte[] downloadURL(URL url) throws IOException {
         return DownloadingService.getDownloadingService().downloadURL(url);
     }
 
-    public static Map<String, Object> downloadURL(URL url, File target) throws IOException {
-        return DownloadingService.getDownloadingService().downloadURL(url, target);
+    public static void downloadURL(URL url, File target) throws IOException {
+        DownloadingService.getDownloadingService().downloadURL(url, target);
     }
 
-    public static Map<String, Object> downloadURL(URL url, OutputStream target) throws IOException {
-        return DownloadingService.getDownloadingService().downloadURL(url, target);
+    public static void downloadURL(URL url, OutputStream target) throws IOException {
+        DownloadingService.getDownloadingService().downloadURL(url, target);
     }
 
     private static DownloadingServiceI getDownloadingService() {
@@ -60,5 +36,9 @@ public class DownloadingService {
             }
         }
         return DownloadingService.downloadingService;
+    }
+
+    public static String trace(URL url) throws IOException {
+        return DownloadingService.getDownloadingService().trace(url);
     }
 }

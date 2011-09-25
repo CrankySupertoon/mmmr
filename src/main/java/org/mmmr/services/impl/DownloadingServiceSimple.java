@@ -11,18 +11,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JFrame;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.Messages;
 import org.mmmr.services.interfaces.DownloadingServiceI;
-import org.mmmr.services.swing.common.FancySwing;
 
 /**
  * {@link URL}, {@link URLConnection} download service
@@ -50,7 +46,7 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
                         while ((read = uin.read(buffer)) > 0) {
                             target.write(buffer, 0, read);
                             dl += read;
-                            int percentage = (int) (dl * 100l / entity.getContentLength());
+                            int percentage = (int) ((dl * 100l) / entity.getContentLength());
                             this.setProgress(percentage);
                         }
                         target.close();
@@ -92,19 +88,6 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            FancySwing.lookAndFeel();
-            JFrame f = new JFrame();
-            f.setVisible(true);
-            System.out.println(new DownloadingServiceHttpClient().downloadURL(new URL(
-                    "http://repo1.maven.org/maven2/org/hibernate/hibernate/3.2.7.ga/hibernate-3.2.7.ga-javadoc.jar")).length); //$NON-NLS-1$
-            f.dispose();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     /**
      * 
      * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL)
@@ -121,9 +104,8 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
      * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL, java.io.File)
      */
     @Override
-    public Map<String, Object> downloadURL(URL url, File target) throws IOException {
+    public void downloadURL(URL url, File target) throws IOException {
         this.downloadURL(url, new FileOutputStream(target));
-        return new HashMap<String, Object>();
     }
 
     /**
@@ -131,7 +113,7 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
      * @see org.mmmr.services.interfaces.DownloadingServiceI#downloadURL(java.net.URL, java.io.OutputStream)
      */
     @Override
-    public Map<String, Object> downloadURL(URL url, OutputStream target) throws IOException {
+    public void downloadURL(URL url, OutputStream target) throws IOException {
         ExceptionAndLogHandler.log(url);
         URLConnection conn = url.openConnection();
         conn.setAllowUserInteraction(false);
@@ -140,12 +122,21 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
         conn.setReadTimeout(60 * 1000);
         conn.setUseCaches(true);
         try {
-            System.out.println(new DownloadProgressMonitor(null, Messages.getString("DownloadingServiceSimple.downloading"), String.valueOf(url), target, conn).sw.get()); //$NON-NLS-1$
+            System.out.println(new DownloadProgressMonitor(null,
+                    Messages.getString("DownloadingServiceSimple.downloading"), String.valueOf(url), target, conn).sw.get()); //$NON-NLS-1$
         } catch (InterruptedException ex) {
             //
         } catch (ExecutionException ex) {
             throw new RuntimeException(ex);
         }
-        return new HashMap<String, Object>();
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.interfaces.DownloadingServiceI#trace(java.net.URL)
+     */
+    @Override
+    public String trace(URL url) throws IOException {
+        throw new UnsupportedOperationException("trace: " + url); //$NON-NLS-1$
     }
 }

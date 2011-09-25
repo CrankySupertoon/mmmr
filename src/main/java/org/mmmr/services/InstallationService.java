@@ -23,28 +23,10 @@ import org.mmmr.Resource;
 public class InstallationService {
     public static String getUrl(String url) {
         try {
-            Map<String, Object> downloadURL = DownloadingService.downloadURL(new URL(url), DownloadingService.readOnly);
-            String redirect = String.valueOf(downloadURL.get("redirect")); //$NON-NLS-1$
-            return redirect;
+            return DownloadingService.trace(new URL(url));
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);
             return url;
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            String string = "http://www.minecraftforum.net/topic/75440-"; //$NON-NLS-1$
-            new InstallationService();
-            System.out.println(string + " >> " + InstallationService.getUrl(string)); //$NON-NLS-1$
-            string = "http://www.minecraftforum.net/topic/124117-18-daftpvfs-mods/#starting_inventory"; //$NON-NLS-1$
-            new InstallationService();
-            System.out.println(string + " >> " + InstallationService.getUrl(string)); //$NON-NLS-1$
-            string = "http://www.minecraftforum.net/topic/124117-/#starting_inventory"; //$NON-NLS-1$
-            new InstallationService();
-            System.out.println(string + " >> " + InstallationService.getUrl(string)); //$NON-NLS-1$
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
