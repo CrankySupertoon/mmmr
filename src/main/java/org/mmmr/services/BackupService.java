@@ -33,6 +33,6 @@ public class BackupService {
     }
 
     public static void restore(Config cfg, File backup) throws IOException {
-        // TODO implement restore
+        ArchiveService.extract(backup, cfg.getMcBaseFolder());
     }
 }
