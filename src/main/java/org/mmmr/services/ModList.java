@@ -26,7 +26,7 @@ public class ModList {
      */
     public static void main(String[] args) {
         try {
-            File mods = new File("data/mods"); //$NON-NLS-1$
+            File mods = new File("data/mods/"); //$NON-NLS-1$
             File[] modxmls = mods.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
@@ -39,7 +39,7 @@ public class ModList {
                     return true;
                 }
             });
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/main/modlist.txt"))); //$NON-NLS-1$
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/mods/modlist.txt"))); //$NON-NLS-1$
             for (File mod : modxmls) {
                 out.write(mod.lastModified() + "::" + mod.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
             }
@@ -73,7 +73,7 @@ public class ModList {
             }
         }
         URL base = new URL(cfg.getMmmrSvnOnGoogleCode());
-        for (String record : new String(DownloadingService.downloadURL(new URL(cfg.getMmmrSvnOnGoogleCode() + "/src/main/modlist.txt"))) //$NON-NLS-1$
+        for (String record : new String(DownloadingService.downloadURL(new URL(cfg.getMmmrSvnOnGoogleCode() + "/data/mods/modlist.txt"))) //$NON-NLS-1$
                 .split("\r\n")) { //$NON-NLS-1$
             if (StringUtils.isBlank(record)) {
                 continue;
