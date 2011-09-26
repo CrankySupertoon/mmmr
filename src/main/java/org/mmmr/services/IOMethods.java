@@ -93,6 +93,10 @@ public class IOMethods {
         return in.getChecksum().getValue();
     }
 
+    public static String absolutePath(File file) throws IOException {
+        return file.getCanonicalFile().getAbsolutePath().replace('\\', '/');
+    }
+
     public static long copyFile(File source, File target) throws IOException {
         return IOMethods._copy(source, target);
     }
@@ -362,7 +366,7 @@ public class IOMethods {
     }
 
     public static String relativePath(File base, File file) throws IOException {
-        return file.getCanonicalFile().getAbsolutePath().substring(base.getCanonicalFile().getAbsolutePath().length() + 1);
+        return file.getCanonicalFile().getAbsolutePath().substring(base.getCanonicalFile().getAbsolutePath().length() + 1).replace('\\', '/');
     }
 
     public static File selectFile(File start, javax.swing.filechooser.FileFilter ff) {
