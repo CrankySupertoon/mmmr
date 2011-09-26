@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,11 +14,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.mmmr.Dependency;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
+import org.mmmr.ModPack;
 import org.mmmr.Resource;
 
+// select path,
+// case when mod.id is null then modpack.installationdate else mod.installationdate end,
+// case when mod.id is null then modpack.name else mod.name end,
+// case when mod.id is null then modpack.version else mod.version end
+// from mcfile
+// inner join resource on resource_id=resource.id
+// left join mod on mod.id=mod_id
+// left join modpack on modpack.id=resource.modpack_id
+// where path in ( select path from mcfile mci where mci.mc_id is null group by path having count(*) > 1 )
+// and mcfile.mc_id is null
+// order by path
 /**
  * @author Jurgen
  */
@@ -64,7 +79,6 @@ public class InstallationService {
         String version = mod.getVersion();
         File outdir = IOMethods.newDir(cfg.getTmp(), archive);
         ArchiveService.extract(new File(cfg.getMods(), archive), outdir);
-        int posmcb = cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
         Set<String> conflicts = new HashSet<String>();
         Map<File, File> toCopy = new HashMap<File, File>();
         List<File> ignored = new ArrayList<File>();
@@ -75,24 +89,23 @@ public class InstallationService {
             String target = resource.getTargetPath();
             File from = new File(outdir, source).getCanonicalFile();
             File to = new File(cfg.getMcBaseFolder(), target).getCanonicalFile();
-            int pos = from.getCanonicalFile().getAbsolutePath().length() + 1;
             List<Pattern> includes = new ArrayList<Pattern>();
             List<Pattern> excludes = new ArrayList<Pattern>();
             if (resource.getInclude() != null) {
                 for (String include : resource.getInclude().split(",")) { //$NON-NLS-1$
-                    includes.add(Pattern.compile(include, Pattern.CASE_INSENSITIVE));
+                    includes.add(Pattern.compile(include.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
                 }
             }
             if (resource.getExclude() != null) {
                 for (String exclude : resource.getExclude().split(",")) { //$NON-NLS-1$
-                    excludes.add(Pattern.compile(exclude, Pattern.CASE_INSENSITIVE));
+                    excludes.add(Pattern.compile(exclude.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
                 }
             }
             for (File fromFile : IOMethods.listRecursive(from)) {
                 if (fromFile.isDirectory()) {
                     continue;
                 }
-                String relative = fromFile.getCanonicalFile().getAbsolutePath().substring(pos);
+                String relative = IOMethods.relativePath(from, fromFile);
                 boolean ignore = false;
                 for (Pattern include : includes) {
                     if (!include.matcher(relative).find()) {
@@ -109,7 +122,7 @@ public class InstallationService {
                     continue;
                 }
                 File toFile = new File(to, relative);
-                String mcRelative = toFile.getCanonicalFile().getAbsolutePath().substring(posmcb);
+                String mcRelative = IOMethods.relativePath(cfg.getMcBaseFolder(), toFile);
                 toCopy.put(fromFile, toFile);
                 fileResource.put(fromFile, resource);
                 for (MCFile existing : cfg.getDb().getAll(new MCFile(mcRelative))) {
@@ -174,6 +187,37 @@ public class InstallationService {
 
     @SuppressWarnings("unused")
     public void uninstallMod(Config cfg, Mod mod) {
-        //
+        String hql = "select f, (case when m.installOrder is null then p.installOrder else m.installOrder end as) installOrder, m, p as from MCFile f inner join f.resource r left outer join r.mod m left outer join r.modPack p where f.path=?";
+        for (Resource resource : mod.getResources()) {
+            for (MCFile mcfile : resource.getFiles()) {
+                int maxOrder = -1;
+                Mod maxConflictingMod = null;
+                ModPack maxConflictingModPack = null;
+                List<Object[]> results = cfg.getDb().hql(hql, Object[].class, mcfile.getPath());
+                if (results.size() == 0) {
+                    ExceptionAndLogHandler.log("no conflict, remove: " + mcfile.getPath());
+                    continue;
+                }
+                Collections.sort(results, new Comparator<Object[]>() {
+                    @Override
+                    public int compare(Object[] o1, Object[] o2) {
+                        return new CompareToBuilder().append(Integer.class.cast(o1[1]), Integer.class.cast(o2[1])).toComparison();
+                    }
+                });
+                Object[] last = results.get(results.size() - 1);
+                if (Integer.class.cast(last[1]) != mod.getInstallOrder()) {
+                    Mod conflictingMod = Mod.class.cast(last[2]);
+                    ModPack conflictingModPack = ModPack.class.cast(last[3]);
+                    ExceptionAndLogHandler.log("another mod(pack) is already overwriting this file, no change: " + mcfile.getPath() + " "
+                            + (conflictingModPack == null ? conflictingMod : conflictingModPack));
+                    continue;
+                }
+                Object[] previous = results.get(results.size() - 2);
+                Mod conflictingMod = Mod.class.cast(previous[2]);
+                ModPack conflictingModPack = ModPack.class.cast(previous[3]);
+                ExceptionAndLogHandler.log("restoring file from conflicting mod(pack): " + mcfile.getPath() + " "
+                        + (conflictingModPack == null ? conflictingMod : conflictingModPack));
+            }
+        }
     }
 }

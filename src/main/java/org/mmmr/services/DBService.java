@@ -3,8 +3,10 @@ package org.mmmr.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
@@ -74,7 +76,7 @@ public class DBService {
     /**
      * returns all objects saved to database of given type
      */
-    public List<Mod> all(Class<Mod> clazz) {
+    public <T extends PersistentObject> List<T> all(Class<T> clazz) {
         return this.hql("from " + clazz.getName(), clazz);
     }
 
@@ -132,15 +134,45 @@ public class DBService {
      * execute HQL, returns list (never null)
      */
     @SuppressWarnings({ "unchecked", "unused" })
-    public <T> List<T> hql(String hql, Class<T> returnType) {
-        return this.session.createQuery(hql).list();
+    public <T> List<T> hql(String hql, Class<T> returnType, Map<String, Object> params) {
+        Query createQuery = this.session.createQuery(hql);
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            createQuery.setParameter(entry.getKey(), entry.getValue());
+        }
+        return createQuery.list();
+    }
+
+    /**
+     * execute HQL, returns list (never null)
+     */
+    @SuppressWarnings({ "unchecked", "unused" })
+    public <T> List<T> hql(String hql, Class<T> returnType, Object... params) {
+        Query createQuery = this.session.createQuery(hql);
+        for (int i = 0; i < params.length; i++) {
+            createQuery.setParameter(i, params[i]);
+        }
+        return createQuery.list();
     }
 
     /**
      * execute HQL, returns singleton or null when not exits or throws exception (message 'more_than_1_result') when more than 1 result
      */
-    public <T> T hql1(String hql, Class<T> returnType) {
-        List<T> list = this.hql(hql, returnType);
+    public <T> T hql1(String hql, Class<T> returnType, Map<String, Object> params) {
+        List<T> list = this.hql(hql, returnType, params);
+        if (list.size() == 0) {
+            return null;
+        }
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+        throw new RuntimeException("more_than_1_result");
+    }
+
+    /**
+     * execute HQL, returns singleton or null when not exits or throws exception (message 'more_than_1_result') when more than 1 result
+     */
+    public <T> T hql1(String hql, Class<T> returnType, Object... params) {
+        List<T> list = this.hql(hql, returnType, params);
         if (list.size() == 0) {
             return null;
         }
