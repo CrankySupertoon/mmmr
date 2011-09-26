@@ -53,6 +53,8 @@ public class Config {
 
     private File dbdir;
 
+    private Font fontMono;
+
     private Font fontTitle;
 
     private Font fontLarge;
@@ -184,6 +186,10 @@ public class Config {
         return this.fontLarge;
     }
 
+    public Font getFontMono() {
+        return this.fontMono;
+    }
+
     public Font getFontSmall() {
         return this.fontSmall;
     }
@@ -298,6 +304,10 @@ public class Config {
 
     public void setFontLarge(Font fontLarge) {
         this.fontLarge = fontLarge;
+    }
+
+    public void setFontMono(Font fontMono) {
+        this.fontMono = fontMono;
     }
 
     public void setFontSmall(Font fontSmall) {
