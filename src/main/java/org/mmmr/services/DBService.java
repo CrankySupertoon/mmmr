@@ -183,6 +183,15 @@ public class DBService {
     }
 
     /**
+     * refresh object as found in database
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends PersistentObject> T refresh(T object) {
+        this.session.evict(object);
+        return (T) this.session.load(object.getClass(), object.getId());
+    }
+
+    /**
      * saves an object (first and consecutive saves)
      */
     public <T extends PersistentObject> T save(T object) {
@@ -194,7 +203,6 @@ public class DBService {
         }
         this.session.flush();
         tx.commit();
-
         return object;
     }
 }

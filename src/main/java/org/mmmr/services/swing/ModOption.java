@@ -24,6 +24,10 @@ public class ModOption {
         return this.mod.compareTo(other);
     }
 
+    /**
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object other) {
         return this.mod.equals(other);
@@ -94,6 +98,11 @@ public class ModOption {
         return this.mod.getVersion();
     }
 
+    /**
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+
     @Override
     public int hashCode() {
         return this.mod.hashCode();
@@ -139,8 +148,12 @@ public class ModOption {
         this.mod.setVersion(version);
     }
 
+    /**
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
-        return this.mod.toString();
+        return this.mod.getName() + " v" + this.mod.getVersion();
     }
 }

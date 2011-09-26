@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +34,7 @@ import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
+import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
 import org.mmmr.services.ModList;
 import org.mmmr.services.swing.common.ETable;
@@ -55,8 +57,11 @@ public class ModOptionsWindow extends JFrame {
 
     protected ETable options;
 
+    private final InstallationService iserv;
+
     public ModOptionsWindow(final Config cfg) throws HeadlessException {
         this.cfg = cfg;
+        this.iserv = new InstallationService(cfg);
         this.setIconImage(cfg.getIcon().getImage());
         this.setTitle(cfg.getTitle());
 
@@ -123,7 +128,6 @@ public class ModOptionsWindow extends JFrame {
     }
 
     protected void applyChanges() {
-        // TODO make changes (installing/deinstalling/changing order)
         for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
             @SuppressWarnings("unchecked")
             ETableRecordBean<ModOption> eTableRecordBean = ETableRecordBean.class.cast(record);
@@ -132,24 +136,28 @@ public class ModOptionsWindow extends JFrame {
             }
             Mod inTable = Mod.class.cast(eTableRecordBean.getBean());
             if (!inTable.isInstalled()) {
-                // uninstall mod
-                System.out.println("uninstall mod: " + inTable); //$NON-NLS-1$
+                ExceptionAndLogHandler.log("uninstall mod: " + inTable); //$NON-NLS-1$
+                this.iserv.uninstallMod(this.cfg.getDb().refresh(inTable));
             }
         }
         for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
             Mod inTable = Mod.class.cast(ETableRecordBean.class.cast(record).getBean());
             Mod inDb = this.cfg.getDb().get(inTable);
             if ((inDb != null) && (inDb.getInstallOrder() != inTable.getInstallOrder())) {
-                // change load order
-                System.out.println("change load order: " + inDb.getInstallOrder() + " // " + inTable); //$NON-NLS-1$ //$NON-NLS-2$
+                // TODO change load order: implement
+                ExceptionAndLogHandler.log("change load order: " + inDb.getInstallOrder() + " // " + inTable); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
         for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
             Mod inTable = Mod.class.cast(ETableRecordBean.class.cast(record).getBean());
             Mod inDb = this.cfg.getDb().get(inTable);
             if ((inDb == null) && inTable.isInstalled()) {
-                // install mod
-                System.out.println("install mod: " + inTable); //$NON-NLS-1$
+                ExceptionAndLogHandler.log("install mod: " + inTable); //$NON-NLS-1$
+                try {
+                    this.iserv.installMod(inTable);
+                } catch (IOException ex) {
+                    ExceptionAndLogHandler.log(ex);
+                }
             }
         }
     }

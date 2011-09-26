@@ -52,8 +52,14 @@ public class InstallationService {
         }
     }
 
-    private void copy(Config cfg, Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
-        int posmcb = cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
+    protected final Config cfg;
+
+    public InstallationService(Config cfg) {
+        this.cfg = cfg;
+    }
+
+    private void copy(Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
+        int posmcb = this.cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
         Date now = new Date();
         for (Map.Entry<File, File> entry : toCopy.entrySet()) {
             if (ignored.contains(entry.getKey())) {
@@ -64,11 +70,10 @@ public class InstallationService {
             fileResource.get(entry.getKey()).addFile(new MCFile(path, now, crc32));
         }
         mod.setInstallationDate(now);
-        cfg.getDb().save(mod);
+        this.cfg.getDb().save(mod);
     }
 
-    @SuppressWarnings("unused")
-    private void installMod(Config cfg, boolean check, Mod mod) throws IOException {
+    private void installMod(boolean check, Mod mod) throws IOException {
         if (mod.getDependencies() != null) {
             for (Dependency dependency : mod.getDependencies()) {
                 dependency.setMod(mod);
@@ -77,8 +82,8 @@ public class InstallationService {
         String archive = mod.getArchive();
         String name = mod.getName();
         String version = mod.getVersion();
-        File outdir = IOMethods.newDir(cfg.getTmp(), archive);
-        ArchiveService.extract(new File(cfg.getMods(), archive), outdir);
+        File outdir = IOMethods.newDir(this.cfg.getTmp(), archive);
+        ArchiveService.extract(new File(this.cfg.getMods(), archive), outdir);
         Set<String> conflicts = new HashSet<String>();
         Map<File, File> toCopy = new HashMap<File, File>();
         List<File> ignored = new ArrayList<File>();
@@ -88,7 +93,7 @@ public class InstallationService {
             String source = resource.getSourcePath();
             String target = resource.getTargetPath();
             File from = new File(outdir, source).getCanonicalFile();
-            File to = new File(cfg.getMcBaseFolder(), target).getCanonicalFile();
+            File to = new File(this.cfg.getMcBaseFolder(), target).getCanonicalFile();
             List<Pattern> includes = new ArrayList<Pattern>();
             List<Pattern> excludes = new ArrayList<Pattern>();
             if (resource.getInclude() != null) {
@@ -122,10 +127,10 @@ public class InstallationService {
                     continue;
                 }
                 File toFile = new File(to, relative);
-                String mcRelative = IOMethods.relativePath(cfg.getMcBaseFolder(), toFile);
+                String mcRelative = IOMethods.relativePath(this.cfg.getMcBaseFolder(), toFile);
                 toCopy.put(fromFile, toFile);
                 fileResource.put(fromFile, resource);
-                for (MCFile existing : cfg.getDb().getAll(new MCFile(mcRelative))) {
+                for (MCFile existing : this.cfg.getDb().getAll(new MCFile(mcRelative))) {
                     if (existing.getMc() != null) {
                         // ("conflict MC: " + mcRelative);
                         // this doesn't interest us now as almost all mods change mc class files
@@ -151,26 +156,26 @@ public class InstallationService {
                     sb.append("    ").append(conflict).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
                 }
                 sb.append("\n" + Messages.getString("InstallationService.install_force")); //$NON-NLS-1$ //$NON-NLS-2$
-                if (IOMethods.showConfirmation(cfg, Messages.getString("InstallationService.conflicts"), sb.toString())) { //$NON-NLS-1$
-                    this.installMod(cfg, mod, toCopy, ignored, fileResource);
+                if (IOMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.conflicts"), sb.toString())) { //$NON-NLS-1$
+                    this.installMod(mod, toCopy, ignored, fileResource);
                 }
             } else {
-                this.installMod(cfg, mod, toCopy, ignored, fileResource);
+                this.installMod(mod, toCopy, ignored, fileResource);
             }
         } else {
-            this.installMod(cfg, mod, toCopy, ignored, fileResource);
+            this.installMod(mod, toCopy, ignored, fileResource);
         }
-        cfg.getTmp().delete();
+        this.cfg.getTmp().delete();
     }
 
-    public void installMod(Config cfg, Mod mod) throws IOException {
-        this.installMod(cfg, true, mod);
+    public void installMod(Mod mod) throws IOException {
+        this.installMod(true, mod);
     }
 
-    private void installMod(Config cfg, Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
-        this.copy(cfg, mod, fileResource, toCopy, ignored);
-        Integer max1 = cfg.getDb().hql1("select max(installOrder) from Mod", Integer.class); //$NON-NLS-1$
-        Integer max2 = cfg.getDb().hql1("select max(installOrder) from ModPack", Integer.class); //$NON-NLS-1$
+    private void installMod(Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
+        this.copy(mod, fileResource, toCopy, ignored);
+        Integer max1 = this.cfg.getDb().hql1("select max(installOrder) from Mod", Integer.class); //$NON-NLS-1$
+        Integer max2 = this.cfg.getDb().hql1("select max(installOrder) from ModPack", Integer.class); //$NON-NLS-1$
         if (max1 == null) {
             max1 = 0;
         }
@@ -180,20 +185,20 @@ public class InstallationService {
         int max = Math.max(max1, max2) + 1;
         mod.setInstallOrder(max);
         mod.setActualUrl(InstallationService.getUrl(mod.getUrl()));
-        cfg.getDb().save(mod);
-        IOMethods.showInformation(cfg,
+        this.cfg.getDb().save(mod);
+        IOMethods.showInformation(this.cfg,
                 Messages.getString("InstallationService.install_mods"), Messages.getString("InstallationService.mod_installed")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @SuppressWarnings("unused")
-    public void uninstallMod(Config cfg, Mod mod) {
+    public void uninstallMod(Mod mod) {
         String hql = "select f, (case when m.installOrder is null then p.installOrder else m.installOrder end as) installOrder, m, p as from MCFile f inner join f.resource r left outer join r.mod m left outer join r.modPack p where f.path=?";
         for (Resource resource : mod.getResources()) {
             for (MCFile mcfile : resource.getFiles()) {
                 int maxOrder = -1;
                 Mod maxConflictingMod = null;
                 ModPack maxConflictingModPack = null;
-                List<Object[]> results = cfg.getDb().hql(hql, Object[].class, mcfile.getPath());
+                List<Object[]> results = this.cfg.getDb().hql(hql, Object[].class, mcfile.getPath());
                 if (results.size() == 0) {
                     ExceptionAndLogHandler.log("no conflict, remove: " + mcfile.getPath());
                     continue;

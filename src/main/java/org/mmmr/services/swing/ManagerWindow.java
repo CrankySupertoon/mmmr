@@ -68,12 +68,13 @@ public class ManagerWindow extends JFrame {
 
     private Config cfg;
 
-    private InstallationService iserv = new InstallationService();
+    private final InstallationService iserv;
 
     private JavaOptionsWindow javaOptionsWindow;
 
     public ManagerWindow(Config cfg) {
         this.cfg = cfg;
+        this.iserv = new InstallationService(cfg);
         this.setIconImage(cfg.getIcon().getImage());
         this.setTitle(cfg.getTitle());
         this.setUndecorated(true);
@@ -242,11 +243,11 @@ public class ManagerWindow extends JFrame {
                     if (mod.equals(installed)) {
                         // already installed, nothing to do
                     } else {
-                        this.iserv.uninstallMod(this.cfg, installed);
-                        this.iserv.installMod(this.cfg, mod);
+                        this.iserv.uninstallMod(installed);
+                        this.iserv.installMod(mod);
                     }
                 } else {
-                    this.iserv.installMod(this.cfg, mod);
+                    this.iserv.installMod(mod);
                 }
             }
         } catch (Exception ex) {
