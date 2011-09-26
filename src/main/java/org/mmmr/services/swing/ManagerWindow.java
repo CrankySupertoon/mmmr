@@ -176,6 +176,19 @@ public class ManagerWindow extends JFrame {
             mainpanel.add(comp);
         }
         {
+            JButton comp = new JButton(Messages.getString("ManagerWindow.hd_font")); //$NON-NLS-1$
+            comp.setFont(this.cfg.getFontLarge());
+            comp.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    HDFontWindow hdFontWindow = new HDFontWindow(ManagerWindow.this.cfg);
+                    hdFontWindow.setLocationRelativeTo(ManagerWindow.this);
+                    hdFontWindow.setVisible(true);
+                }
+            });
+            mainpanel.add(comp);
+        }
+        {
             JButton comp = new JButton(Messages.getString("ManagerWindow.change_logging")); //$NON-NLS-1$
             comp.setFont(this.cfg.getFontLarge());
             comp.addActionListener(new ActionListener() {

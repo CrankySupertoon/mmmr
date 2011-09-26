@@ -153,6 +153,7 @@ public class DownloadingServiceHttpClient implements DownloadingServiceI {
         if (entity != null) {
             try {
                 new DownloadProgressMonitor(null, Messages.getString("DownloadingServiceHttpClient.downloading"), String.valueOf(url), target, entity).sw.get(); //$NON-NLS-1$
+                return;
             } catch (InterruptedException ex) {
                 //
             } catch (ExecutionException ex) {

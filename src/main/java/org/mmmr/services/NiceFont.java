@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -16,21 +15,20 @@ import javax.swing.JLabel;
  * @author Jurgen
  */
 public class NiceFont {
-    public static void hqFontFile(boolean debug, Config cfg, int scale) {
+    public static BufferedImage hqFontFile(boolean debug, Config cfg, int scale, Font f) {
         try {
             int wh = 128 * scale;
             int sqrt = (int) Math.sqrt(256);
             int d = wh / sqrt;
-            BufferedImage bi = new BufferedImage(wh, wh, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage bi = new BufferedImage(wh, wh, BufferedImage.TYPE_INT_ARGB_PRE);
             Graphics2D g2d = bi.createGraphics();
-            g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-            g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
-            g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            Font f = cfg.getFontMono();
+            // g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+            // g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            // g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+            // g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            // g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            // g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
             int size = 8 * scale;
             f = f.deriveFont((float) size);
             FontMetrics fm = g2d.getFontMetrics(f);
@@ -63,16 +61,18 @@ public class NiceFont {
             int dy = (d - maxw) / 2;
             for (int i = 1; i <= 256; i++) {
                 String s = new String(new byte[] { (byte) i }, "cp850");//$NON-NLS-1$
-                g2d.drawChars(s.toCharArray(), 0, 1, (i % sqrt) * d + dy, (i / sqrt) * d + fm.getAscent());
+                g2d.drawChars(s.toCharArray(), 0, 1, ((i % sqrt) * d) + dy, ((i / sqrt) * d) + fm.getAscent());
+            }
+            g2d.dispose();
+            if (debug) {
+                return bi;
             }
             ImageIO.write(bi, "png", new File(cfg.getMcJar(), "font/default.png"));//$NON-NLS-1$//$NON-NLS-2$
+            return bi;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static void hqFontFile(Config cfg) {
-        NiceFont.hqFontFile(false, cfg, 8);
+        return null;
     }
 
     /**
@@ -83,11 +83,13 @@ public class NiceFont {
         Font fontNarrow = null;
         Font fontTitle = null;
         Font fontMono = null;
+        Font fontMonoBold = null;
         try {
             File fontfile1 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSans.ttf"); //$NON-NLS-1$
             File fontfile2 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed.ttf"); //$NON-NLS-1$
             File fontfile3 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed-BoldOblique.ttf"); //$NON-NLS-1$
             File fontfile4 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansMono.ttf"); //$NON-NLS-1$
+            File fontfile5 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansMono-Bold.ttf"); //$NON-NLS-1$
             if (!fontfile1.exists()) {
                 URL dejavu = new URL(
                         "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip"); //$NON-NLS-1$
@@ -99,17 +101,20 @@ public class NiceFont {
             fontNarrow = Font.createFont(Font.TRUETYPE_FONT, fontfile2);
             fontTitle = Font.createFont(Font.TRUETYPE_FONT, fontfile3);
             fontMono = Font.createFont(Font.TRUETYPE_FONT, fontfile4);
+            fontMonoBold = Font.createFont(Font.TRUETYPE_FONT, fontfile5);
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);
             font = new JLabel().getFont();
             fontNarrow = font;
             fontTitle = font;
             fontMono = font;
+            fontMonoBold = font;
         }
         cfg.setFontLarge(font.deriveFont(18f));
         cfg.setFontSmall(fontNarrow.deriveFont(10f));
         cfg.setFontTable(font.deriveFont(10f));
         cfg.setFontTitle(fontTitle.deriveFont(22f));
         cfg.setFontMono(fontMono.deriveFont(12f));
+        cfg.setFontMonoBold(fontMonoBold.deriveFont(12f));
     }
 }

@@ -105,7 +105,7 @@ public class ModOptionsWindow extends JFrame {
         });
         actions.add(commit);
 
-        JButton quit = new JButton(Messages.getString("ModOptionsWindow.do_not_make_changed")); //$NON-NLS-1$
+        JButton quit = new JButton(Messages.getString("ModOptionsWindow.do_not_make_changes")); //$NON-NLS-1$
         quit.setFont(cfg.getFontLarge());
         quit.addActionListener(new ActionListener() {
             @Override

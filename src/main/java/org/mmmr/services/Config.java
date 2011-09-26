@@ -61,6 +61,8 @@ public class Config {
 
     private Font fontSmall;
 
+    private Font fontMonoBold;
+
     private Font fontTable;
 
     private ImageIcon icon;
@@ -190,6 +192,10 @@ public class Config {
         return this.fontMono;
     }
 
+    public Font getFontMonoBold() {
+        return this.fontMonoBold;
+    }
+
     public Font getFontSmall() {
         return this.fontSmall;
     }
@@ -308,6 +314,10 @@ public class Config {
 
     public void setFontMono(Font fontMono) {
         this.fontMono = fontMono;
+    }
+
+    public void setFontMonoBold(Font fontMonoBold) {
+        this.fontMonoBold = fontMonoBold;
     }
 
     public void setFontSmall(Font fontSmall) {
