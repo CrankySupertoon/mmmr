@@ -1,6 +1,10 @@
 required knowlegde: programming in Java and using IDEs (Integrated Development Environment)
 
+
+
 if you have a Windows 64 bit version download the 64bit versions of software
+
+
 
 download Slick SVN 64bit/32bit
 http://www.sliksvn.com/en/download
@@ -24,7 +28,6 @@ it will download all libraries that MMMR uses to a directory called '.m2' under 
 if you installed more than 1 JDK/JRE: menu 'Window', 'Preferences', 'Java', 'Installed JRE's' and chech if the default selected options is the JDK you just installed, when not: click 'Add', 'Standard JVM', click 'Directory' and browse to 'C:\Program Files\Java\jdk1.7.0' and check it, you can remove the other ones
 
 the project is now ready to use
-
 
 
 

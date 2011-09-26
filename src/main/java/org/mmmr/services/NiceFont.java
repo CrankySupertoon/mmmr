@@ -84,16 +84,16 @@ public class NiceFont {
         Font fontTitle = null;
         Font fontMono = null;
         try {
-            File fontfile1 = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSans.ttf"); //$NON-NLS-1$
-            File fontfile2 = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed.ttf"); //$NON-NLS-1$
-            File fontfile3 = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed-BoldOblique.ttf"); //$NON-NLS-1$
-            File fontfile4 = new File(cfg.getCfg(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansMono.ttf"); //$NON-NLS-1$
+            File fontfile1 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSans.ttf"); //$NON-NLS-1$
+            File fontfile2 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed.ttf"); //$NON-NLS-1$
+            File fontfile3 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed-BoldOblique.ttf"); //$NON-NLS-1$
+            File fontfile4 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansMono.ttf"); //$NON-NLS-1$
             if (!fontfile1.exists()) {
                 URL dejavu = new URL(
                         "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip"); //$NON-NLS-1$
-                File file = new File(cfg.getTmp(), "dejavu-fonts-ttf-2.33.zip"); //$NON-NLS-1$
+                File file = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33.zip"); //$NON-NLS-1$
                 DownloadingService.downloadURL(dejavu, file);
-                ArchiveService.extract(file, cfg.getCfg());
+                ArchiveService.extract(file, cfg.getLibs());
             }
             font = Font.createFont(Font.TRUETYPE_FONT, fontfile1);
             fontNarrow = Font.createFont(Font.TRUETYPE_FONT, fontfile2);
