@@ -1,0 +1,18 @@
+- MMMR updates itself automatically
+- downloads everything, except mod archives, automatically; this includes:
+  * libraries, fonts, etc and other resources MMMR uses
+  * Minecraft client and server executables
+  * mod installation info (xml files)
+  * start first run Minecraft from within MMMR
+- backup of Minecraft jar
+- start with YogBox as base modpack, starts optional installation from within MMMR, backup Minecraft jar after installation
+- enables multiple installations of Minecraft by setting APPDATA on startup (bat files) so you can play with two version of Minecraft containing incompatible mods or different Minecraft versions
+- performance configuration and selection of JVM (startup Minecraft with or without console)
+- manages different OptiFine installations
+- install and uninstall mods, warns about file conflicts
+- reorder mods to fix conflicts based on conflicting mods
+- backup and restore world and character data and keyboard setting, includes load order list for reference
+- HQ font for Minecraft (needs OptiFine installed or MCPatcher run manually)
+- check if mod is updated (only MinecraftForum) and visit link
+- create mod install configuration with wizard
+- create merged patches (to fix incompatible mods) with wizard and install them as mod
