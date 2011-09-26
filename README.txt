@@ -1,5 +1,10 @@
 
 
+
+
+
+
+
 FOR USERS
 ---------
 - user needs to do as less as possible outside MMMR
@@ -29,19 +34,20 @@ FOR USERS
 - useful links (0% done)
 - mail bugs, feature-request and new and updated mod install configurations to include in MMMR (0% done)
 - help webpages available in MMMR (0% done)
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
 FOR DEVELOPERS
 --------------
+- Google Code: http://mmmr.googlecode.com
+- Google Group, Mailing List: http://groups.google.com/group/mmmrlist , mmmrlist@googlegroups.com
 - LGPL, open source, transparent
 - use of open source libraries using equal or comparable licenses
-- uses Eclipse, Subversion, Maven development tools all commonly used
+- uses Eclipse, Subversion, Maven development tools which are commonly used
 - uses JAXB (xml), Hibernate and Derby (database) for object persistence
 - MMMR source commit permission can be obtained
 - Windows focused development
@@ -49,54 +55,72 @@ FOR DEVELOPERS
   * sevenzipbinding
   * shell scripts: start MMMR/Minecraft with/without console and Maven scripts
   * Windows registry querying is used to find out what JDK/JRE are installed, find alternative for other OS's
-- mailing list
+- mailing list (see Maven site genaration)
 - Maven site generation gives a LOT of info about the project
 
 
 
 
 
-required knowledge: programming in Java and using IDEs (Integrated Development Environment)
 
+START DEVELOPMENT
+-----------------
+WARNING: required knowledge: programming in Java and using IDEs (Integrated Development Environment)
+WARNING: if you have a Windows 64 bit version download the 64bit versions of software
 
+1) download "Java Development Kit" (JDK) version 1.7 64bit/32bit [JDK includes JRE]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
-if you have a Windows 64 bit version download the 64bit versions of software
-
-
-
-download Slick SVN 64bit/32bit
+2) download Slick SVN 64bit/32bit
 http://www.sliksvn.com/en/download
 
-download "Java Development Kit" (JDK) version 1.7 64bit/32bit [JDK includes JRE]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
-
-download "Eclipse IDE for Java Developers" (Indigo or higher) 64bit/32bit
+3) download "Eclipse IDE for Java Developers" (Indigo or higher) 64bit/32bit
 http://www.eclipse.org/downloads/
 it comes with Maven integration
 
-menu 'Help', 'Eclipse Marketplace', search/install 'Subclipse'
+4) menu 'Help', 'Eclipse Marketplace', search/install 'Subclipse'
 
-close and restart Eclipse if you didn't do already so all new installed software can be loaded
+5) close and restart Eclipse so all new installed software can be loaded
 
-menu 'File', 'New', 'Other', 'SVN', 'Checkout Projects from SVN', 'Create a new repository location', input 'http://mmmr.googlecode.com/svn/trunk/' as 'Url' and finish, if you have commit rights use 'https://mmmr.googlecode.com/svn/trunk/' instead
+6) menu 'File', 'New', 'Other', 'SVN', 'Checkout Projects from SVN', 'Create a new repository location', input 'http://mmmr.googlecode.com/svn/trunk/' as 'Url' and finish, if you have commit rights use 'https://mmmr.googlecode.com/svn/trunk/' instead
 whenever you want to update the project, rightclick and under 'Team', choose 'Update to HEAD'
 
-rightclick the project and choose 'Configure', 'Convert to Maven Project'
+7) rightclick the project and choose 'Configure', 'Convert to Maven Project'
 it will download all libraries that MMMR uses to a directory called '.m2' under you Windows user home directory
 
-if you installed more than 1 JDK/JRE: menu 'Window', 'Preferences', 'Java', 'Installed JRE's' and chech if the default selected options is the JDK you just installed, when not: click 'Add', 'Standard JVM', click 'Directory' and browse to 'C:\Program Files\Java\jdk1.7.0' and check it, you can remove the other ones
+8) if you installed more than 1 JDK/JRE: menu 'Window', 'Preferences', 'Java', 'Installed JRE's' and chech if the default selected options is the JDK you just installed, when not: click 'Add', 'Standard JVM', click 'Directory' and browse to 'C:\Program Files\Java\jdk1.7.0' and check it, you can remove the other ones
 
-the project is now ready to use
+9) the project is now ready to use
 
 
 
+
+
+
+
+DEVELOPMENT - EXTRA
+-------------------
 other installed software: menu 'Help', 'Install New Software', click 'Add' to add update sites:
 
-use Eclipse Mylyl to connect to Google code Issues (use 'Task Repositories' and 'Tasks List' tab): http://code.google.com/p/googlecode-mylyn-connector/
+1) use Eclipse Mylyl to connect to MMMR Google Code Issue list (use 'Task Repositories' and 'Tasks List' tab): http://code.google.com/p/googlecode-mylyn-connector/
 update site: http://knittig.de/googlecode-mylyn-connector/update/
 
-decompile classes when you don't have the code with JD Eclipse: http://java.decompiler.free.fr/?q=jdeclipse
+2) decompile classes when you don't have the code with JD Eclipse: http://java.decompiler.free.fr/?q=jdeclipse
 update site: http://java.decompiler.free.fr/jd-eclipse/update
 
-use Jakarta Commons in Eclipse more easily with Commons4E: http://developer.berlios.de/projects/commons4e/
+3) use Jakarta Commons in Eclipse more easily with Commons4E: http://developer.berlios.de/projects/commons4e/
 update site: http://commons4e.berlios.de/updatesite31
 
+
+
+
+
+
+
+DEVELOPMENT - TODO
+------------------
+- move glazedlist extension to new project and include as library (probably hosted on Google Code)
+- see TODO and FIXME in code (Eclipse Task tab)
+- integration of other Minecraft user and developer tools if permission is granted
+- follow up Google Code Issues (bugs and feature request) (Eclipse Task Repositories & Task List tab)
+- follow up updating mod install configurations send by users (mailing list)
+- localization to other languages (like messages_en_UK.properties, default is English)
