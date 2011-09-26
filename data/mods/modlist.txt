@@ -12,6 +12,7 @@
 1316954142908::DrZhark's Mo'Creatures Mod v2.13.1.zip.xml
 1316954142888::Dynamic Lights 1.8.1.zip.xml
 1316954142905::ElementalCreepers_v1.5_client.zip.xml
+1317066459079::fix1ClaySoldierModv35_noCam.zip.xml
 1316954142898::Floating Ruins.zip.xml
 1316954142892::Floodgate.zip.xml
 1316954142885::GuiAPI 0.11.1-1.8.1.zip.xml
