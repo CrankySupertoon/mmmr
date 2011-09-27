@@ -61,7 +61,7 @@ public class HDFontWindow extends JFrame {
 
     public static void main(String[] args) {
         try {
-            new HDFontWindow(NiceFont.prepareFont(new Config()));
+            new HDFontWindow(NiceFont.prepareFont(new Config())).setVisible(true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -134,6 +134,7 @@ public class HDFontWindow extends JFrame {
         mainpanel.add(this.preview, BorderLayout.CENTER);
 
         combo.setSelectedItem("DejaVu Sans Mono"); //$NON-NLS-1$
+        this.preview(mainpanel, map, gc, "DejaVu Sans Mono");
 
         combo.addMouseWheelListener(new MouseWheelListener() {
             @Override
@@ -159,22 +160,7 @@ public class HDFontWindow extends JFrame {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            Font font = map.get(e.getItem());
-                            // full bitmap like minecraft uses it
-                            BufferedImage prv = NiceFont.hqFontFile(gc, true, HDFontWindow.this.cfg, HDFontWindow.this.scale, font);
-                            // the first two rows (-2) are not drawn because they do not contain drawable characters
-                            // FIXME: what to do on monitors less than 1024 pixels heigh
-                            // the bitmap does not fit and pushes buttons and combobox of the screen
-                            BufferedImage _bi = gc.createCompatibleImage(HDFontWindow.this.scale * HDFontWindow.whb, (HDFontWindow.this.scale - 2)
-                                    * HDFontWindow.whb, Transparency.OPAQUE);
-                            Graphics2D _g2d = _bi.createGraphics();
-                            _g2d.drawImage(prv, null, 0, -2 * HDFontWindow.whb);
-                            _g2d.dispose();
-                            mainpanel.remove(HDFontWindow.this.preview);
-                            HDFontWindow.this.preview = new JLabel(new ImageIcon(_bi));
-                            HDFontWindow.this.preview.setToolTipText(Messages.getString("HDFont.tooltip"));
-                            mainpanel.add(HDFontWindow.this.preview, BorderLayout.CENTER);
-                            mainpanel.revalidate();
+                            HDFontWindow.this.preview(mainpanel, map, gc, e.getItem());
                         }
                     });
                 }
@@ -230,5 +216,24 @@ public class HDFontWindow extends JFrame {
         this.pack();
         FancySwing.rounded(this);
         this.setResizable(false);
+    }
+
+    protected void preview(final RoundedPanel mainpanel, final Map<String, Font> map, final GraphicsConfiguration gc, final Object key) {
+        Font font = map.get(key);
+        // full bitmap like minecraft uses it
+        BufferedImage prv = NiceFont.hqFontFile(gc, true, HDFontWindow.this.cfg, HDFontWindow.this.scale, font);
+        // the first two rows (-2) are not drawn because they do not contain drawable characters
+        // FIXME: what to do on monitors less than 1024 pixels heigh
+        // the bitmap does not fit and pushes buttons and combobox of the screen
+        BufferedImage _bi = gc.createCompatibleImage(HDFontWindow.this.scale * HDFontWindow.whb, (HDFontWindow.this.scale - 2) * HDFontWindow.whb,
+                Transparency.OPAQUE);
+        Graphics2D _g2d = _bi.createGraphics();
+        _g2d.drawImage(prv, null, 0, -2 * HDFontWindow.whb);
+        _g2d.dispose();
+        mainpanel.remove(HDFontWindow.this.preview);
+        HDFontWindow.this.preview = new JLabel(new ImageIcon(_bi));
+        HDFontWindow.this.preview.setToolTipText(Messages.getString("HDFont.tooltip"));
+        mainpanel.add(HDFontWindow.this.preview, BorderLayout.CENTER);
+        mainpanel.revalidate();
     }
 }

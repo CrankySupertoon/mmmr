@@ -62,8 +62,9 @@ public class NiceFont {
             ExceptionAndLogHandler.log("size=" + size);//$NON-NLS-1$
             g2d.setFont(f);
             fm = g2d.getFontMetrics();
-            g2d.setColor(Color.white);
             if (debug) {
+                g2d.setColor(Color.white);
+                g2d.fillRect(0, 0, wh, wh);
                 g2d.setColor(Color.black);
                 for (int i = 1; i < sqrt; i++) {
                     g2d.drawLine(i * d, 0, i * d, wh);
@@ -71,6 +72,8 @@ public class NiceFont {
                 for (int i = 1; i < sqrt; i++) {
                     g2d.drawLine(0, i * d, wh, i * d);
                 }
+            } else {
+                g2d.setColor(Color.white);
             }
             int maxw = 0; // maxw will be the maximum width of characters for this font: used to center font horizontally
             for (int w : fm.getWidths()) {
