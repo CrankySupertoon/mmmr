@@ -9,7 +9,7 @@
 1316954142906::Crystal Wing.zip.xml
 1317067777226::CrystalCraft v1.42.zip.xml
 1316954142910::Death Chest.zip.xml
-1316954142897::Doggy Talents v0.5.4.zip.xml
+1317166350719::Doggy Talents v0.5.6FULL.zip.xml
 1316954142908::DrZhark's Mo'Creatures Mod v2.13.1.zip.xml
 1316954142888::Dynamic Lights 1.8.1.zip.xml
 1316954142905::ElementalCreepers_v1.5_client.zip.xml
@@ -21,7 +21,8 @@
 1316954142890::InvTweaks-1.31Beta-1.8.1.zip.xml
 1316954142899::iPixeliGenderMod1.8.1v3.4client.zip.xml
 1316954142903::Lightsensor.zip.xml
-1316983358534::Millenaire1.6.1.zip.xml
+1317166177615::Millenaire1.6.1.zip.xml
+1317165899885::Millenaire1.6.3.zip.xml
 1316954142888::minecraft-mipmap-20-dev.zip.xml
 1316954142892::ModLoader.zip.xml
 1316954142900::mod_Fossil.zip.xml
