@@ -3,8 +3,11 @@ package org.mmmr.services.swing;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -39,6 +42,28 @@ import org.mmmr.services.swing.common.RoundedPanel;
 public class HDFontWindow extends JFrame {
     private static final long serialVersionUID = -8166133499677459166L;
 
+    private static Object getFieldValue(Object object, Class<?> clazz, String fieldname) throws Exception {
+        Field field = clazz.getDeclaredField(fieldname);
+        field.setAccessible(true);
+
+        return field.get(object);
+    }
+
+    private static Object getFieldValue(Object object, String fieldname) throws Exception {
+        Field field = object.getClass().getDeclaredField(fieldname);
+        field.setAccessible(true);
+
+        return field.get(object);
+    }
+
+    public static void main(String[] args) {
+        try {
+            new HDFontWindow(NiceFont.prepareFont(new Config()));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private final Config cfg;
 
     private JLabel preview;
@@ -60,23 +85,30 @@ public class HDFontWindow extends JFrame {
 
         Vector<String> options = new Vector<String>();
         final Map<String, Font> map = new HashMap<String, Font>();
-        for (Font ff : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()) {
+
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gs = ge.getDefaultScreenDevice();
+        final GraphicsConfiguration gc = gs.getDefaultConfiguration();
+        BufferedImage bimage = gc.createCompatibleImage(1, 1, Transparency.OPAQUE);
+        Graphics2D g2d = bimage.createGraphics();
+
+        for (Font font : ge.getAllFonts()) {
             try {
-                ff = ff.deriveFont(Font.PLAIN, 12f);
-                ff.getFontName();
-                Field declaredField = ff.getClass().getDeclaredField("font2DHandle");
-                declaredField.setAccessible(true);
-                Object object = declaredField.get(ff);
-                declaredField = object.getClass().getDeclaredField("font2D");
-                declaredField.setAccessible(true);
-                object = declaredField.get(object);
-                if (object instanceof sun.font.TrueTypeFont) {
-                    String key = ff.getName();
-                    options.add(key);
-                    map.put(key, ff);
-                }
+                font = font.deriveFont(Font.PLAIN, 12f);
+                @SuppressWarnings("unused")
+                String family = font.getFamily();
+                font.canDisplay(' ');
+                g2d.getFontMetrics(font);
+                @SuppressWarnings({ "restriction", "unused" })
+                String path = (String) HDFontWindow.getFieldValue(
+                        HDFontWindow.getFieldValue(HDFontWindow.getFieldValue(font, "font2DHandle"), "font2D"), sun.font.PhysicalFont.class, //$NON-NLS-1$ //$NON-NLS-2$
+                        "platName"); //$NON-NLS-1$
+                String full = font.getFontName();
+                System.out.println(full);
+                options.add(full);
+                map.put(full, font);
             } catch (Exception ex) {
-                System.out.println(ex);
+                //
             }
         }
 
@@ -90,6 +122,8 @@ public class HDFontWindow extends JFrame {
         BufferedImage bi = new BufferedImage(8 * 128, 6 * 128, BufferedImage.TYPE_INT_ARGB);
         this.preview = new JLabel(new ImageIcon(bi));
         mainpanel.add(this.preview, BorderLayout.CENTER);
+
+        combo.setSelectedItem("DejaVu Sans Mono"); //$NON-NLS-1$
 
         combo.addMouseWheelListener(new MouseWheelListener() {
             @Override
@@ -116,11 +150,11 @@ public class HDFontWindow extends JFrame {
                         @Override
                         public void run() {
                             Font font = map.get(e.getItem());
-                            BufferedImage prv = NiceFont.hqFontFile(true, HDFontWindow.this.cfg, 8, font);
+                            BufferedImage prv = NiceFont.hqFontFile(gc, true, HDFontWindow.this.cfg, 8, font);
                             BufferedImage prv2 = new BufferedImage(8 * 128, 6 * 128, BufferedImage.TYPE_INT_ARGB);
-                            Graphics2D g2d = prv2.createGraphics();
-                            g2d.drawImage(prv, null, 0, -2 * 128);
-                            g2d.dispose();
+                            Graphics2D _g2d = prv2.createGraphics();
+                            _g2d.drawImage(prv, null, 0, -2 * 128);
+                            _g2d.dispose();
                             mainpanel.remove(HDFontWindow.this.preview);
                             HDFontWindow.this.preview = new JLabel(new ImageIcon(prv2));
                             mainpanel.add(HDFontWindow.this.preview, BorderLayout.CENTER);

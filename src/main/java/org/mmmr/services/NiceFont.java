@@ -4,8 +4,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -15,12 +19,13 @@ import javax.swing.JLabel;
  * @author Jurgen
  */
 public class NiceFont {
-    public static BufferedImage hqFontFile(boolean debug, Config cfg, int scale, Font f) {
+    @SuppressWarnings("null")
+    public static BufferedImage hqFontFile(GraphicsConfiguration gc, boolean debug, Config cfg, int scale, Font f) {
         try {
             int wh = 128 * scale;
             int sqrt = (int) Math.sqrt(256);
             int d = wh / sqrt;
-            BufferedImage bi = new BufferedImage(wh, wh, BufferedImage.TYPE_INT_ARGB_PRE);
+            BufferedImage bi = gc.createCompatibleImage(wh, wh, Transparency.BITMASK);
             Graphics2D g2d = bi.createGraphics();
             // g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
             // g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -32,10 +37,21 @@ public class NiceFont {
             int size = 8 * scale;
             f = f.deriveFont((float) size);
             FontMetrics fm = g2d.getFontMetrics(f);
+            Integer direction = null;
             while (fm.getHeight() != d) {
                 if (fm.getHeight() > d) {
+                    if (direction == null) {
+                        direction = -1;
+                    } else if (direction == +1) {
+                        break;
+                    }
                     size--;
                 } else {
+                    if (direction == null) {
+                        direction = +1;
+                    } else if (direction == -1) {
+                        break;
+                    }
                     size++;
                 }
                 f = f.deriveFont((float) size);
@@ -78,18 +94,19 @@ public class NiceFont {
     /**
      * @see http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-2.33.tar.bz2
      */
-    public static void prepareFont(Config cfg) {
+    public static Config prepareFont(Config cfg) {
         Font font = null;
         Font fontNarrow = null;
         Font fontTitle = null;
         Font fontMono = null;
         Font fontMonoBold = null;
+        String path = "dejavu-fonts-ttf-2.33/ttf/"; //$NON-NLS-1$
         try {
-            File fontfile1 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSans.ttf"); //$NON-NLS-1$
-            File fontfile2 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed.ttf"); //$NON-NLS-1$
-            File fontfile3 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansCondensed-BoldOblique.ttf"); //$NON-NLS-1$
-            File fontfile4 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansMono.ttf"); //$NON-NLS-1$
-            File fontfile5 = new File(cfg.getLibs(), "dejavu-fonts-ttf-2.33/ttf/DejaVuSansMono-Bold.ttf"); //$NON-NLS-1$
+            File fontfile1 = new File(cfg.getLibs(), path + "DejaVuSans.ttf"); //$NON-NLS-1$
+            File fontfile2 = new File(cfg.getLibs(), path + "DejaVuSansCondensed.ttf"); //$NON-NLS-1$
+            File fontfile3 = new File(cfg.getLibs(), path + "DejaVuSansCondensed-BoldOblique.ttf"); //$NON-NLS-1$
+            File fontfile4 = new File(cfg.getLibs(), path + "DejaVuSansMono.ttf"); //$NON-NLS-1$
+            File fontfile5 = new File(cfg.getLibs(), path + "DejaVuSansMono-Bold.ttf"); //$NON-NLS-1$
             if (!fontfile1.exists()) {
                 URL dejavu = new URL(
                         "http://www.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/d/project/de/dejavu/dejavu/2.33/dejavu-fonts-ttf-2.33.zip"); //$NON-NLS-1$
@@ -102,6 +119,17 @@ public class NiceFont {
             fontTitle = Font.createFont(Font.TRUETYPE_FONT, fontfile3);
             fontMono = Font.createFont(Font.TRUETYPE_FONT, fontfile4);
             fontMonoBold = Font.createFont(Font.TRUETYPE_FONT, fontfile5);
+
+            GraphicsEnvironment localGraphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            for (File ff : new File(cfg.getLibs(), path).listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.endsWith("ttf");//$NON-NLS-1$
+                }
+            })) {
+                Font newfont = Font.createFont(Font.TRUETYPE_FONT, ff);
+                localGraphicsEnvironment.registerFont(newfont);
+            }
         } catch (Exception ex) {
             ExceptionAndLogHandler.log(ex);
             font = new JLabel().getFont();
@@ -116,5 +144,7 @@ public class NiceFont {
         cfg.setFontTitle(fontTitle.deriveFont(22f));
         cfg.setFontMono(fontMono.deriveFont(12f));
         cfg.setFontMonoBold(fontMonoBold.deriveFont(12f));
+
+        return cfg;
     }
 }
