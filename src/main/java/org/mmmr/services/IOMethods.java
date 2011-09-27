@@ -16,8 +16,10 @@ import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -135,6 +137,53 @@ public class IOMethods {
             }
         }
         return (path.delete());
+    }
+
+    /**
+     * encode url parameter value part (' ' will be replaced by '+')
+     */
+    public static String encodeURLParameter(String parameter) {
+        if (parameter == null) {
+            return null;
+        }
+        try {
+            return URLEncoder.encode(parameter, "UTF-8");
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * encode url path part (' ' will be replaced by '%20')
+     */
+    public static String encodeURLPath(String path) {
+        if (path == null) {
+            return null;
+        }
+        boolean addSlash = !path.startsWith("/");
+        if (addSlash) {
+            path = "/" + path;
+        }
+        try {
+            URI base = new URI("http", null, "www.google.com", 80, null, null, null);
+            URI uri = new URI("http" // protocol
+                    , null // user
+                    , "www.google.com" // host
+                    , 80 // port, verplicht
+                    , path // path MOET met '/' beginnen
+                    , null // key1=value1&key2=value2... ZONDER te beginnen met '?' */
+                    , null // fragment, wat achter de # staat aka html anchor
+            );
+            String baserequest = base.toASCIIString();
+            String request = uri.toASCIIString();
+            String encodedPath = request.substring(baserequest.length());
+            if (addSlash) {
+                encodedPath = encodedPath.substring(1);
+            }
+            return encodedPath;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static boolean fileEquals(File f1, File f2) throws IOException {
