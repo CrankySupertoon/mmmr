@@ -22,9 +22,11 @@ public class NiceFont {
     @SuppressWarnings("null")
     public static BufferedImage hqFontFile(GraphicsConfiguration gc, boolean debug, Config cfg, int scale, Font f) {
         try {
-            int wh = 128 * scale;
-            int sqrt = (int) Math.sqrt(256);
-            int d = wh / sqrt;
+            int charactercount = 256; // 256 = number of characters: 16 rows x 16 columns
+            int sqrt = (int) Math.sqrt(charactercount); // 16
+            int wh = 128 * scale; // scale defaults to 8: 8*128 = 1024 pixels
+            int d = wh / sqrt; // pixels per row, pixels per column; cell is square
+
             BufferedImage bi = gc.createCompatibleImage(wh, wh, Transparency.BITMASK);
             Graphics2D g2d = bi.createGraphics();
             // g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
@@ -34,7 +36,7 @@ public class NiceFont {
             // g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
             // g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             // g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-            int size = 8 * scale;
+            int size = 8 * scale; // start with 8 point font x scale
             f = f.deriveFont((float) size);
             FontMetrics fm = g2d.getFontMetrics(f);
             Integer direction = null;
@@ -70,14 +72,15 @@ public class NiceFont {
                     g2d.drawLine(0, i * d, wh, i * d);
                 }
             }
-            int maxw = 0;
+            int maxw = 0; // maxw will be the maximum width of characters for this font: used to center font horizontally
             for (int w : fm.getWidths()) {
                 maxw = Math.max(maxw, w);
             }
-            int dy = (d - maxw) / 2;
-            for (int i = 1; i <= 256; i++) {
-                String s = new String(new byte[] { (byte) i }, "cp850");//$NON-NLS-1$
-                g2d.drawChars(s.toCharArray(), 0, 1, ((i % sqrt) * d) + dy, ((i / sqrt) * d) + fm.getAscent());
+            int dx = (d - maxw) / 2; // center font horizontally, shift dx pixels
+            int dy = fm.getAscent();// center font vertically, shift dy pixels
+            for (int i = 1; i <= charactercount; i++) {
+                String s = new String(new byte[] { (byte) i }, "cp850"); //codepage 850 (VGA default?) //$NON-NLS-1$
+                g2d.drawChars(s.toCharArray(), 0, 1, ((i % sqrt) * d) + dx, ((i / sqrt) * d) + dy);
             }
             g2d.dispose();
             if (debug) {

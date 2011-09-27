@@ -15,6 +15,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.mmmr.services.Config;
+import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.IOMethods;
 import org.mmmr.services.Messages;
 import org.mmmr.services.NiceFont;
 import org.mmmr.services.swing.common.FancySwing;
@@ -68,6 +71,10 @@ public class HDFontWindow extends JFrame {
 
     private JLabel preview;
 
+    private int scale = 8; // 8x128 = 1024
+
+    private static final int whb = 128;
+
     public HDFontWindow(Config cfg) {
         this.cfg = cfg;
         this.setIconImage(cfg.getIcon().getImage());
@@ -89,22 +96,23 @@ public class HDFontWindow extends JFrame {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gs = ge.getDefaultScreenDevice();
         final GraphicsConfiguration gc = gs.getDefaultConfiguration();
-        BufferedImage bimage = gc.createCompatibleImage(1, 1, Transparency.OPAQUE);
-        Graphics2D g2d = bimage.createGraphics();
+        // the first two rows (-2) are not drawn because they do not contain drawable characters
+        BufferedImage bi = gc.createCompatibleImage(this.scale * HDFontWindow.whb, (this.scale - 2) * HDFontWindow.whb, Transparency.OPAQUE);
+        Graphics2D g2d = bi.createGraphics();
 
         for (Font font : ge.getAllFonts()) {
             try {
-                font = font.deriveFont(Font.PLAIN, 12f);
+                font = font.deriveFont(Font.PLAIN, 12f); // create default font
                 @SuppressWarnings("unused")
                 String family = font.getFamily();
-                font.canDisplay(' ');
-                g2d.getFontMetrics(font);
+                font.canDisplay(' '); // initializes Font2DHandle
+                g2d.getFontMetrics(font); // make sure we can get FontMetrics info
                 @SuppressWarnings({ "restriction", "unused" })
                 String path = (String) HDFontWindow.getFieldValue(
                         HDFontWindow.getFieldValue(HDFontWindow.getFieldValue(font, "font2DHandle"), "font2D"), sun.font.PhysicalFont.class, //$NON-NLS-1$ //$NON-NLS-2$
                         "platName"); //$NON-NLS-1$
                 String full = font.getFontName();
-                System.out.println(full);
+                ExceptionAndLogHandler.log(full);
                 options.add(full);
                 map.put(full, font);
             } catch (Exception ex) {
@@ -112,15 +120,17 @@ public class HDFontWindow extends JFrame {
             }
         }
 
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         final DefaultComboBoxModel model = new DefaultComboBoxModel(options);
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         final JComboBox combo = new JComboBox(model);
 
         JPanel actions = new JPanel(new GridLayout(1, -1));
         actions.add(combo);
         mainpanel.add(actions, BorderLayout.SOUTH);
 
-        BufferedImage bi = new BufferedImage(8 * 128, 6 * 128, BufferedImage.TYPE_INT_ARGB);
         this.preview = new JLabel(new ImageIcon(bi));
+        HDFontWindow.this.preview.setToolTipText(Messages.getString("HDFont.tooltip"));
         mainpanel.add(this.preview, BorderLayout.CENTER);
 
         combo.setSelectedItem("DejaVu Sans Mono"); //$NON-NLS-1$
@@ -150,13 +160,19 @@ public class HDFontWindow extends JFrame {
                         @Override
                         public void run() {
                             Font font = map.get(e.getItem());
-                            BufferedImage prv = NiceFont.hqFontFile(gc, true, HDFontWindow.this.cfg, 8, font);
-                            BufferedImage prv2 = new BufferedImage(8 * 128, 6 * 128, BufferedImage.TYPE_INT_ARGB);
-                            Graphics2D _g2d = prv2.createGraphics();
-                            _g2d.drawImage(prv, null, 0, -2 * 128);
+                            // full bitmap like minecraft uses it
+                            BufferedImage prv = NiceFont.hqFontFile(gc, true, HDFontWindow.this.cfg, HDFontWindow.this.scale, font);
+                            // the first two rows (-2) are not drawn because they do not contain drawable characters
+                            // FIXME: what to do on monitors less than 1024 pixels heigh
+                            // the bitmap does not fit and pushes buttons and combobox of the screen
+                            BufferedImage _bi = gc.createCompatibleImage(HDFontWindow.this.scale * HDFontWindow.whb, (HDFontWindow.this.scale - 2)
+                                    * HDFontWindow.whb, Transparency.OPAQUE);
+                            Graphics2D _g2d = _bi.createGraphics();
+                            _g2d.drawImage(prv, null, 0, -2 * HDFontWindow.whb);
                             _g2d.dispose();
                             mainpanel.remove(HDFontWindow.this.preview);
-                            HDFontWindow.this.preview = new JLabel(new ImageIcon(prv2));
+                            HDFontWindow.this.preview = new JLabel(new ImageIcon(_bi));
+                            HDFontWindow.this.preview.setToolTipText(Messages.getString("HDFont.tooltip"));
                             mainpanel.add(HDFontWindow.this.preview, BorderLayout.CENTER);
                             mainpanel.revalidate();
                         }
@@ -164,6 +180,38 @@ public class HDFontWindow extends JFrame {
                 }
             }
         });
+
+        JButton choose = new JButton(Messages.getString("HDFont.choose_font")); //$NON-NLS-1$
+        choose.setFont(cfg.getFontLarge());
+        choose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Font font = map.get(combo.getSelectedItem());
+                    NiceFont.hqFontFile(gc, false, HDFontWindow.this.cfg, HDFontWindow.this.scale, font);
+                    HDFontWindow.this.dispose();
+                } catch (Exception ex) {
+                    ExceptionAndLogHandler.log(ex);
+                }
+            }
+        });
+        actions.add(choose);
+
+        JButton restore = new JButton(Messages.getString("HDFont.restore")); //$NON-NLS-1$
+        restore.setFont(cfg.getFontLarge());
+        restore.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String path = "font/default.png";//$NON-NLS-1$
+                    IOMethods.copyFile(new File(HDFontWindow.this.cfg.getMcJarBackup(), path), new File(HDFontWindow.this.cfg.getMcJar(), path));
+                    HDFontWindow.this.dispose();
+                } catch (Exception ex) {
+                    ExceptionAndLogHandler.log(ex);
+                }
+            }
+        });
+        actions.add(restore);
 
         JButton quit = new JButton(Messages.getString("HDFont.do_not_make_changes")); //$NON-NLS-1$
         quit.setFont(cfg.getFontLarge());
@@ -174,16 +222,6 @@ public class HDFontWindow extends JFrame {
             }
         });
         actions.add(quit);
-
-        JButton choose = new JButton(Messages.getString("HDFont.choose_font")); //$NON-NLS-1$
-        choose.setFont(cfg.getFontLarge());
-        choose.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                HDFontWindow.this.dispose();
-            }
-        });
-        actions.add(choose);
 
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
