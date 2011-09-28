@@ -25,20 +25,21 @@ COMPLETED FEATURES
 - manages different OptiFine installations, quickly switch between options or remove it
 - install and uninstall mods, warns about file conflicts (75% done)
 - HQ font for Minecraft (needs OptiFine installed or MCPatcher run manually)
+- check if mod is updated (only MinecraftForum)
+- visit mod site links to check updates, information
 
 FEATURES IN PROGRESS
 --------------------
 
-- reorder mods to fix conflicts between compatible mods, or remove one of both if impossible (25% done)
 - backup and restore world and character data and keyboard setting, includes load order list for reference (50% done)
-- check if mod is updated (only MinecraftForum)
-- visit mod site links to check updates, information
+- reorder mods to fix conflicts between compatible mods, or remove one of both if impossible (25% done)
+- check mod install configurations (drag and drop) when a user creates one himself by hand (0% done)
 - create mod install configurations with wizard based on existing or create new ones (0% done)
 - create merged patches (to fix incompatible mods) with wizard and install them as mod (0% done)
 - useful links (0% done)
 - mail bugs, feature-request and new and updated mod install configurations to include in MMMR (0% done)
 - help webpages available in MMMR (0% done)
-
+- support other OS (0% done)
 
 
 
@@ -59,8 +60,8 @@ FEATURES
 - uses JAXB (xml), Hibernate and Derby (database) for object persistence
 - MMMR source commit permission can be obtained
 - Windows focused development
-- support other OS (0% done)
-  * sevenzipbinding
+- support other OS
+  * sevenzipbinding (available for other OS)
   * shell scripts: start MMMR/Minecraft with/without console and Maven scripts
   * Windows registry querying is used to find out what JDK/JRE are installed, find alternative for other OS's
 - mailing list (see Maven site genaration)
