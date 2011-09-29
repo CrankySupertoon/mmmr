@@ -24,6 +24,7 @@ import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.FavoriteLinksWindow;
 import org.mmmr.services.IOMethods;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
@@ -184,6 +185,23 @@ public class ManagerWindow extends JFrame {
                     HDFontWindow hdFontWindow = new HDFontWindow(ManagerWindow.this.cfg);
                     hdFontWindow.setLocationRelativeTo(ManagerWindow.this);
                     hdFontWindow.setVisible(true);
+                }
+            });
+            mainpanel.add(comp);
+        }
+        {
+            JButton comp = new JButton(Messages.getString("ManagerWindow.links")); //$NON-NLS-1$
+            comp.setFont(this.cfg.getFontLarge());
+            comp.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        FavoriteLinksWindow window = new FavoriteLinksWindow(ManagerWindow.this.cfg);
+                        window.setLocationRelativeTo(ManagerWindow.this);
+                        window.setVisible(true);
+                    } catch (Exception ex) {
+                        ExceptionAndLogHandler.log(ex);
+                    }
                 }
             });
             mainpanel.add(comp);

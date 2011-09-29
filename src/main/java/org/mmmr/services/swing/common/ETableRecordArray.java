@@ -14,8 +14,8 @@ public class ETableRecordArray implements ETableRecord {
      * 
      * @param o
      */
-    public ETableRecordArray(Object o) {
-        this.array = (Object[]) o;
+    public ETableRecordArray(Object... o) {
+        this.array = o;
     }
 
     /**

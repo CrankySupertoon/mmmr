@@ -465,6 +465,10 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
     protected ColorTableCellRenderer colorTableCellRenderer = new ColorTableCellRenderer();
 
+    public ETable() {
+        this(new ETableConfig(false));
+    }
+
     public ETable(ETableConfig configuration) {
         this.cfg = configuration;
         this.cfg.lock();
@@ -737,7 +741,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
      */
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
-        Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+        Component c = this.super_prepareRenderer(renderer, rowIndex, vColIndex);
         if (c instanceof JLabel) {
             String text = JLabel.class.cast(c).getText();
             JLabel.class.cast(c).setToolTipText(StringUtils.isNotBlank(text) ? text : null);
@@ -817,6 +821,10 @@ public class ETable extends JTable implements ETableI, Reorderable {
     @Override
     public void sort(final int col) {
         this.sorting.sort(col);
+    }
+
+    protected Component super_prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
+        return super.prepareRenderer(renderer, rowIndex, vColIndex);
     }
 
     /**

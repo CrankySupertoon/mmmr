@@ -36,10 +36,10 @@ FEATURES IN PROGRESS
 - check mod install configurations (drag and drop) when a user creates one himself by hand (0% done)
 - create mod install configurations with wizard based on existing or create new ones (0% done)
 - create merged patches (to fix incompatible mods) with wizard and install them as mod (0% done)
-- useful links (0% done)
 - mail bugs, feature-request and new and updated mod install configurations to include in MMMR (0% done)
 - help webpages available in MMMR (0% done)
 - support other OS (0% done)
+- favorite links (additional ones can be added by dragging a hyperlink from the browser to the 'data\links' directory) (80% done)
 
 
 
