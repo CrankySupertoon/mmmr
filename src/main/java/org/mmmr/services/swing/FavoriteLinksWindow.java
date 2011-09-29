@@ -1,4 +1,4 @@
-package org.mmmr.services;
+package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,6 +34,10 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang.StringUtils;
+import org.mmmr.services.Config;
+import org.mmmr.services.DownloadingService;
+import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.Messages;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableRecordArray;

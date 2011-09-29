@@ -24,7 +24,6 @@ import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.FavoriteLinksWindow;
 import org.mmmr.services.IOMethods;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
