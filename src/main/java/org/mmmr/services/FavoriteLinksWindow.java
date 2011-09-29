@@ -10,11 +10,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -25,6 +33,7 @@ import javax.swing.JWindow;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.commons.lang.StringUtils;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableRecordArray;
@@ -38,9 +47,39 @@ public class FavoriteLinksWindow extends JWindow {
     /** serialVersionUID */
     private static final long serialVersionUID = -2596040987353689775L;
 
-    public FavoriteLinksWindow(Config cfg) throws IOException {
-        super((Window) FancySwing.getCurrentFrame());
+    public static void main(String[] args) {
+        try {
+            File linkdir = new File("data/links/"); //$NON-NLS-1$
+            File[] links = linkdir.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    if (!name.toLowerCase().endsWith(".url")) { //$NON-NLS-1$
+                        return false;
+                    }
+                    return true;
+                }
+            });
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/links/links.txt"))); //$NON-NLS-1$
+            for (File link : links) {
+                out.write(link.lastModified() + "::" + link.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+            out.flush();
+            out.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
+    private Config cfg;
+
+    public FavoriteLinksWindow(Config cfg) throws IOException, URISyntaxException {
+        super((Window) FancySwing.getCurrentFrame());
+        this.cfg = cfg;
+        try {
+            this.updateLinks();
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
+        }
         final ETable table = new ETable() {
             private static final long serialVersionUID = -8250534232070637135L;
 
@@ -129,5 +168,50 @@ public class FavoriteLinksWindow extends JWindow {
                 }
             }
         });
+    }
+
+    /**
+     * update links
+     */
+    public void updateLinks() throws MalformedURLException, IOException, URISyntaxException {
+        Map<String, Long> existing = new HashMap<String, Long>();
+
+        File[] urls = new File(this.cfg.getData(), "links").listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                if (!name.toLowerCase().endsWith(".url")) { //$NON-NLS-1$
+                    return false;
+                }
+                return true;
+            }
+        });
+        if (urls != null) {
+            for (File url : urls) {
+                existing.put(url.getName(), url.lastModified());
+            }
+        }
+        URL base = new URL(this.cfg.getMmmrSvnOnGoogleCode());
+        for (String record : new String(DownloadingService.downloadURL(new URL(this.cfg.getMmmrSvnOnGoogleCode() + "/data/links/links.txt"))) //$NON-NLS-1$
+                .split("\r\n")) { //$NON-NLS-1$
+            if (StringUtils.isBlank(record)) {
+                continue;
+            }
+            String[] d = record.split("::"); //$NON-NLS-1$
+            String urlname = d[1];
+            Long lastmod = Long.parseLong(d[0]);
+            Long lastmodlocal = existing.get(urlname);
+            if ((lastmodlocal == null) || (lastmodlocal < lastmod)) {
+                // does not exists or newer on server => download
+                URI uri = new URI(base.getProtocol(), base.getHost(), base.getPath() + "/data/links/" + urlname, null); //$NON-NLS-1$
+                String url = uri.toURL().toString();
+                File target = new File(this.cfg.getData(), "links/" + urlname);
+                try {
+                    DownloadingService.downloadURL(new URL(url), target);
+                } catch (IOException ex) {
+                    target.delete();
+                    throw ex;
+                }
+            }
+        }
     }
 }

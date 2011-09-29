@@ -27,6 +27,7 @@ COMPLETED FEATURES
 - HQ font for Minecraft (needs OptiFine installed or MCPatcher run manually)
 - check if mod is updated (only MinecraftForum)
 - visit mod site links to check updates, information
+- favorite links (additional ones can be added by dragging a hyperlink from the browser to the 'data\links' directory)
 
 FEATURES IN PROGRESS
 --------------------
@@ -39,7 +40,6 @@ FEATURES IN PROGRESS
 - mail bugs, feature-request and new and updated mod install configurations to include in MMMR (0% done)
 - help webpages available in MMMR (0% done)
 - support other OS (0% done)
-- favorite links (additional ones can be added by dragging a hyperlink from the browser to the 'data\links' directory) (80% done)
 
 
 
@@ -119,5 +119,5 @@ TODO
 - follow up Google Code Issues (bugs and feature request) (Eclipse Task Repositories & Task List tab)
 - follow up updating mod install configurations send by users (mailing list)
 - localization to other languages (like messages_en_UK.properties, default is English)
-
+- see 'FEATURES IN PROGRESS'
 

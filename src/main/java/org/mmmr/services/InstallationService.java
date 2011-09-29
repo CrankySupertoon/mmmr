@@ -58,6 +58,10 @@ public class InstallationService {
         this.cfg = cfg;
     }
 
+    public void checkDependency(Dependency dependency) {
+
+    }
+
     private void copy(Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
         int posmcb = this.cfg.getMcBaseFolder().getAbsolutePath().length() + 1;
         Date now = new Date();
