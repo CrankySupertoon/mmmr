@@ -42,9 +42,9 @@ public class MMMR implements MMMRI {
 
     private void addContents(String prefix, int pos, File fd) throws IOException {
         if (fd.isFile()) {
-            this.mc.addFile(new MCFile(prefix + fd.getAbsolutePath().substring(pos), new Date(fd.lastModified()), IOMethods.crc32File(fd)));
+            this.mc.addFile(new MCFile(prefix + fd.getAbsolutePath().substring(pos), new Date(fd.lastModified()), UtilityMethods.crc32File(fd)));
         }
-        for (File child : IOMethods.list(fd)) {
+        for (File child : UtilityMethods.list(fd)) {
             this.addContents(prefix, pos, child);
         }
     }
@@ -53,7 +53,7 @@ public class MMMR implements MMMRI {
      * returns true if needs reinstalling
      */
     private boolean checkMCInstall() {
-        if (IOMethods.list(this.cfg.getMcBaseFolder()).size() == 0) {
+        if (UtilityMethods.list(this.cfg.getMcBaseFolder()).size() == 0) {
             return true;
         }
         if (!new File(this.cfg.getThisFolder(), "Minecraft.exe").exists()) { //$NON-NLS-1$
@@ -82,13 +82,13 @@ public class MMMR implements MMMRI {
         if (source.isFile()) {
             String relativePath = source.getAbsolutePath().substring(s);
             File duplicate = new File(duplicateBase, relativePath);
-            if (IOMethods.fileEquals(source, duplicate)) {
+            if (UtilityMethods.fileEquals(source, duplicate)) {
                 // ("delete backup duplicate " + relativePath);
                 source.delete();
             }
 
         }
-        for (File child : IOMethods.list(source)) {
+        for (File child : UtilityMethods.list(source)) {
             this.removeOriginalFiles(s, child, duplicateBase);
         }
     }
@@ -162,14 +162,14 @@ public class MMMR implements MMMRI {
                         }
                     }
                     this.statusWindow.getMcstatus().setStatus("Minecraft: " + downloading, null);//$NON-NLS-1$
-                    IOMethods.showInformation(this.cfg, "Minecraft.",//$NON-NLS-1$
+                    UtilityMethods.showInformation(this.cfg, "Minecraft.",//$NON-NLS-1$
                             Messages.getString("MMMR.pre_minecraft_run")); //$NON-NLS-1$
                     this.startMC(true);
                     MMMR.writeMCBat(this.cfg);
-                    if (!IOMethods.showConfirmation(this.cfg, "Minecraft.", //$NON-NLS-1$
+                    if (!UtilityMethods.showConfirmation(this.cfg, "Minecraft.", //$NON-NLS-1$
                             Messages.getString("MMMR.minecraft_run_properly"))) { //$NON-NLS-1$
                         error = "installing and running Minecraft";//$NON-NLS-1$
-                        IOMethods.deleteDirectory(this.cfg.getMcBaseFolder());
+                        UtilityMethods.deleteDirectory(this.cfg.getMcBaseFolder());
                         for (i = 0; i < files.length; i++) {
                             new File(this.cfg.getThisFolder(), files[i]).delete();
                         }
@@ -177,7 +177,7 @@ public class MMMR implements MMMRI {
                     }
                     ArchiveService.extract(this.cfg.getMcJar(), this.cfg.getBackupOriginalJar());
                     if (!new File(this.cfg.getBackupOriginalJar(), "META-INF/MOJANG_C.SF").exists()) { //$NON-NLS-1$
-                        IOMethods.deleteDirectory(this.cfg.getBackupOriginalJar());
+                        UtilityMethods.deleteDirectory(this.cfg.getBackupOriginalJar());
                         throw new RuntimeException("not a clean install"); //$NON-NLS-1$
                     }
                     this.statusWindow.getMcstatus().setStatus("Minecraft: " + ready, mccheck = true);//$NON-NLS-1$
@@ -195,9 +195,9 @@ public class MMMR implements MMMRI {
                 final String ybstr2 = "YogBox.";//$NON-NLS-1$
                 final String ybstr3 = "YogBox ";//$NON-NLS-1$
                 if (!this.cfg.getMcJarBackup().exists() && !"true".equals(this.cfg.getProperty("jogbox.ignore", "?"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                    if (IOMethods.showConfirmation(this.cfg, ybstr2, "Do you want to install YogBox?\nYou need to have it downloaded already.")) { //$NON-NLS-1$
+                    if (UtilityMethods.showConfirmation(this.cfg, ybstr2, "Do you want to install YogBox?\nYou need to have it downloaded already.")) { //$NON-NLS-1$
                         try {
-                            File jbinstaller = IOMethods.selectFile(this.cfg.getThisFolder(), new javax.swing.filechooser.FileFilter() {
+                            File jbinstaller = UtilityMethods.selectFile(this.cfg.getThisFolder(), new javax.swing.filechooser.FileFilter() {
                                 @Override
                                 public boolean accept(File f) {
                                     if (f.isDirectory()) {
@@ -230,7 +230,7 @@ public class MMMR implements MMMRI {
                             pb.environment().put("APPDATA", this.cfg.getThisFolder().getAbsolutePath()); //$NON-NLS-1$
                             pb.start();
 
-                            IOMethods.showInformation(this.cfg, ybstr2, "After you installed the YogBox.\nContinue.");//$NON-NLS-1$
+                            UtilityMethods.showInformation(this.cfg, ybstr2, "After you installed the YogBox.\nContinue.");//$NON-NLS-1$
 
                             ArchiveService.extract(this.cfg.getMcJar(), this.cfg.getMcJogboxBackup());
                             this.removeOriginalFiles(this.cfg.getMcJogboxBackup().getAbsolutePath().length() + 1, this.cfg.getMcJogboxBackup(),
@@ -284,7 +284,7 @@ public class MMMR implements MMMRI {
                 }
                 File meta_inf = new File(this.cfg.getMcJar(), "META-INF");
                 if (meta_inf.exists()) {
-                    if (!IOMethods.deleteDirectory(meta_inf)) {
+                    if (!UtilityMethods.deleteDirectory(meta_inf)) {
                         throw new IOException("could not delete META-INF");
                     }
                 }
@@ -308,12 +308,12 @@ public class MMMR implements MMMRI {
                             Resource resource = new Resource("*", "*"); //$NON-NLS-1$ //$NON-NLS-2$
                             jb.addResource(resource);
                             int pos = this.cfg.getMcJogboxBackup().getAbsolutePath().length() + 1;
-                            for (File file : IOMethods.listRecursive(this.cfg.getMcJogboxBackup())) {
+                            for (File file : UtilityMethods.listRecursive(this.cfg.getMcJogboxBackup())) {
                                 if (file.isDirectory()) {
                                     continue;
                                 }
                                 String path = "bin/minecraft.jar/" + file.getAbsolutePath().substring(pos); //$NON-NLS-1$
-                                resource.addFile(new MCFile(path, new Date(file.lastModified()), IOMethods.crc32File(file)));
+                                resource.addFile(new MCFile(path, new Date(file.lastModified()), UtilityMethods.crc32File(file)));
                             }
                         }
                         db.save(jb);
@@ -324,7 +324,7 @@ public class MMMR implements MMMRI {
             allSuccess = mccheck && ybcheck;
 
             if (!allSuccess) {
-                if (!IOMethods
+                if (!UtilityMethods
                         .showConfirmation(
                                 this.cfg,
                                 Messages.getString("MMMR.error"), Messages.getString("MMMR.error_during") + ": " + error + "\n" + Messages.getString("MMMR.try_again"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$

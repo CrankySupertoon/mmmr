@@ -33,7 +33,7 @@ import javax.swing.table.TableColumn;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.IOMethods;
+import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
 import org.mmmr.services.ModList;
@@ -89,7 +89,7 @@ public class ModOptionsWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Resolve mod conflicts.
-                IOMethods.showWarning(cfg, Messages.getString("ManagerWindow.resolve"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
+                UtilityMethods.showWarning(cfg, Messages.getString("ManagerWindow.resolve"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
             }
         });
         actions.add(resolve);
@@ -199,7 +199,7 @@ public class ModOptionsWindow extends JFrame {
                             if (Desktop.isDesktopSupported()) {
                                 Desktop.getDesktop().browse(URI.create(url));
                             } else {
-                                IOMethods.showWarning(ModOptionsWindow.this.cfg,
+                                UtilityMethods.showWarning(ModOptionsWindow.this.cfg,
                                         "", Messages.getString("ModOptionsWindow.not_supported_visit_site") + url); //$NON-NLS-1$ //$NON-NLS-2$
                             }
                         }

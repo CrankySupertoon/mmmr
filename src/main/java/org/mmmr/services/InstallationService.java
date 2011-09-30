@@ -58,8 +58,22 @@ public class InstallationService {
         this.cfg = cfg;
     }
 
-    public void checkDependency(@SuppressWarnings("unused") Dependency dependency) {
-        // TODO implement checkDependency
+    public boolean checkDependency(Mod mod) {
+        for (Dependency dependency : mod.getDependencies()) {
+            Mod installed = this.cfg.getDb().hql1("from Mod mod where mod.sortableName=?", Mod.class, dependency.getSortableName()); //$NON-NLS-1$
+            if (installed == null) {
+                return false;
+            }
+            if (installed.getVersion().equals(dependency.getVersion())) {
+                continue;
+            }
+            if (!UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.install_mods_dependency"), //$NON-NLS-1$
+                    String.format(Messages.getString("InstallationService.install_mods_dependency_version"), dependency.getVersion(), //$NON-NLS-1$
+                            installed.getVersion()))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void copy(Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
@@ -69,7 +83,7 @@ public class InstallationService {
             if (ignored.contains(entry.getKey())) {
                 continue;
             }
-            long crc32 = IOMethods.copyFile(entry.getKey(), entry.getValue());
+            long crc32 = UtilityMethods.copyFile(entry.getKey(), entry.getValue());
             String path = entry.getValue().getCanonicalFile().getAbsolutePath().substring(posmcb);
             fileResource.get(entry.getKey()).addFile(new MCFile(path, now, crc32));
         }
@@ -88,7 +102,7 @@ public class InstallationService {
         String name = mod.getName();
         @SuppressWarnings("unused")
         String version = mod.getVersion();
-        File outdir = IOMethods.newDir(this.cfg.getTmp(), archive);
+        File outdir = UtilityMethods.newDir(this.cfg.getTmp(), archive);
         ArchiveService.extract(new File(this.cfg.getMods(), archive), outdir);
         Set<String> conflicts = new HashSet<String>();
         Map<File, File> toCopy = new HashMap<File, File>();
@@ -112,11 +126,11 @@ public class InstallationService {
                     excludes.add(Pattern.compile(exclude.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
                 }
             }
-            for (File fromFile : IOMethods.listRecursive(from)) {
+            for (File fromFile : UtilityMethods.listRecursive(from)) {
                 if (fromFile.isDirectory()) {
                     continue;
                 }
-                String relative = IOMethods.relativePath(from, fromFile);
+                String relative = UtilityMethods.relativePath(from, fromFile);
                 boolean ignore = false;
                 for (Pattern include : includes) {
                     if (!include.matcher(relative).find()) {
@@ -133,7 +147,7 @@ public class InstallationService {
                     continue;
                 }
                 File toFile = new File(to, relative);
-                String mcRelative = IOMethods.relativePath(this.cfg.getMcBaseFolder(), toFile);
+                String mcRelative = UtilityMethods.relativePath(this.cfg.getMcBaseFolder(), toFile);
                 toCopy.put(fromFile, toFile);
                 fileResource.put(fromFile, resource);
                 for (MCFile existing : this.cfg.getDb().getAll(new MCFile(mcRelative))) {
@@ -162,7 +176,7 @@ public class InstallationService {
                     sb.append("    ").append(conflict).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
                 }
                 sb.append("\n" + Messages.getString("InstallationService.install_force")); //$NON-NLS-1$ //$NON-NLS-2$
-                if (IOMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.conflicts"), sb.toString())) { //$NON-NLS-1$
+                if (UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.conflicts"), sb.toString())) { //$NON-NLS-1$
                     this.installMod(mod, toCopy, ignored, fileResource);
                 }
             } else {
@@ -175,7 +189,9 @@ public class InstallationService {
     }
 
     public void installMod(Mod mod) throws IOException {
-        this.installMod(true, mod);
+        if (this.checkDependency(mod)) {
+            this.installMod(true, mod);
+        }
     }
 
     private void installMod(Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
@@ -192,7 +208,7 @@ public class InstallationService {
         mod.setInstallOrder(max);
         mod.setActualUrl(InstallationService.getUrl(mod.getUrl()));
         this.cfg.getDb().save(mod);
-        IOMethods.showInformation(this.cfg,
+        UtilityMethods.showInformation(this.cfg,
                 Messages.getString("InstallationService.install_mods"), Messages.getString("InstallationService.mod_installed")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 

@@ -3,7 +3,7 @@ package org.mmmr.services.impl;
 import java.io.IOException;
 
 import org.mmmr.services.Config;
-import org.mmmr.services.IOMethods;
+import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.interfaces.ExceptionAndLogHandlerI;
 
 /**
@@ -29,7 +29,7 @@ public class ExceptionAndLogHandlerSimple implements ExceptionAndLogHandlerI {
     @Override
     public void handle(Config cfg, String title, String message, Exception ex) {
         this.log(ex);
-        IOMethods.showWarning(cfg, title, message);
+        UtilityMethods.showWarning(cfg, title, message);
     }
 
     /**

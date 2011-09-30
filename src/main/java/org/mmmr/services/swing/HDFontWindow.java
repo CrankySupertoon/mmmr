@@ -35,7 +35,7 @@ import javax.swing.WindowConstants;
 
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.IOMethods;
+import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.Messages;
 import org.mmmr.services.NiceFont;
 import org.mmmr.services.swing.common.UIUtils;
@@ -190,7 +190,7 @@ public class HDFontWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String path = "font/default.png";//$NON-NLS-1$
-                    IOMethods.copyFile(new File(HDFontWindow.this.cfg.getMcJarBackup(), path), new File(HDFontWindow.this.cfg.getMcJar(), path));
+                    UtilityMethods.copyFile(new File(HDFontWindow.this.cfg.getMcJarBackup(), path), new File(HDFontWindow.this.cfg.getMcJar(), path));
                     HDFontWindow.this.dispose();
                 } catch (Exception ex) {
                     ExceptionAndLogHandler.log(ex);

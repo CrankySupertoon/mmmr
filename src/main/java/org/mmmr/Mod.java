@@ -31,6 +31,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cascade;
+import org.mmmr.services.UtilityMethods;
 
 /**
  * @author Jurgen
@@ -66,6 +67,9 @@ public class Mod implements Comparable<Mod>, PersistentObject {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String sortableName;
+
     private String resourceCheck;
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mod")
@@ -88,28 +92,28 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     public Mod(String archive) {
         this();
-        this.archive = archive;
+        this.setArchive(archive);
     }
 
     public Mod(String name, String version) {
         this();
-        this.name = name;
-        this.version = version;
+        this.setName(name);
+        this.setVersion(version);
     }
 
     public Mod(String name, String version, String url) {
         this();
-        this.name = name;
-        this.version = version;
-        this.url = url;
+        this.setName(name);
+        this.setVersion(version);
+        this.setUrl(url);
     }
 
     public Mod(String name, String version, String url, String resourceCheck) {
         this();
-        this.name = name;
-        this.version = version;
-        this.url = url;
-        this.resourceCheck = resourceCheck;
+        this.setName(name);
+        this.setVersion(version);
+        this.setUrl(url);
+        this.setResourceCheck(resourceCheck);
     }
 
     public void addDepencency(Dependency dependency) {
@@ -128,11 +132,19 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         resource.setMod(this);
     }
 
+    /**
+     * 
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(final Mod other) {
         return new CompareToBuilder().append(this.name, other.name).append(this.version, other.version).toComparison();
     }
 
+    /**
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(final Object other) {
         if (!(other instanceof Mod)) {
@@ -163,6 +175,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         return this.description;
     }
 
+    /**
+     * 
+     * @see org.mmmr.PersistentObject#getId()
+     */
     @Override
     @XmlTransient
     public Long getId() {
@@ -210,6 +226,15 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         return this.resources;
     }
 
+    @XmlTransient
+    public String getSortableName() {
+        if (this.sortableName == null) {
+            this.setName(this.getName());
+        }
+
+        return this.sortableName;
+    }
+
     @XmlAttribute
     public String getUrl() {
         return this.url;
@@ -225,6 +250,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         return this.version;
     }
 
+    /**
+     * 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(this.name).append(this.version).toHashCode();
@@ -277,6 +306,7 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     public void setName(String name) {
         this.name = name;
+        this.setSortableName(UtilityMethods.sortable(name));
     }
 
     public void setResourceCheck(String resourceCheck) {
@@ -285,6 +315,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     public void setResources(List<Resource> resources) {
         this.resources = resources;
+    }
+
+    protected void setSortableName(String sortableName) {
+        this.sortableName = sortableName;
     }
 
     public void setUrl(String url) {
@@ -299,6 +333,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         this.version = version;
     }
 
+    /**
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("name", this.name).append("version", this.version).append("archive", this.archive) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

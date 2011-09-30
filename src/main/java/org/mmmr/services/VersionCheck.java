@@ -56,12 +56,12 @@ public class VersionCheck {
             String latestversion = versions.get(versions.size() - 1);
             if ((VersionCheck.version.compareTo(latestversion) < 0)) {
                 String text = String.format(Messages.getString("VersionCheck.newer_version"), latestversion, VersionCheck.version);//$NON-NLS-1$
-                if (IOMethods.showConfirmation(cfg, cfg.getShortTitle(), text)) {
+                if (UtilityMethods.showConfirmation(cfg, cfg.getShortTitle(), text)) {
                     String fname = VersionCheck.shortJarName + "-" + latestversion + ".jar"; //$NON-NLS-1$ //$NON-NLS-2$
                     String dl = VersionCheck.mavenBase + "/" + latestversion + "/" + fname; //$NON-NLS-1$ //$NON-NLS-2$
                     File newjar = new File(fname);
                     DownloadingService.downloadURL(new URL(dl), newjar);
-                    BatCheck.force(IOMethods.getCurrentJar(), newjar);
+                    BatCheck.force(UtilityMethods.getCurrentJar(), newjar);
                     System.exit(0);
                 }
             }

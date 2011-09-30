@@ -12,7 +12,7 @@ public class MMMRStart {
 
     public static void main(String[] args) {
         try {
-            ExceptionAndLogHandler.log(IOMethods.getCurrentJar().getAbsolutePath());
+            ExceptionAndLogHandler.log(UtilityMethods.getCurrentJar().getAbsolutePath());
             UIUtils.lookAndFeel();
             Config cfg = new Config(args);
             BatCheck.check(cfg);

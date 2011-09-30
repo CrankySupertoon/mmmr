@@ -20,6 +20,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLEncoder;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,17 +39,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.WindowConstants;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.mmmr.services.swing.common.RoundedOptionPane;
 import org.mmmr.services.swing.common.UIUtils;
 import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
-import org.mmmr.services.swing.common.RoundedOptionPane;
 
 /**
  * do not put methods in here that use non standard Java classes
  * 
  * @author Jurgen
  */
-public class IOMethods {
+public class UtilityMethods {
     public static class MemInfo {
         public final long memfreemb;
 
@@ -100,7 +102,7 @@ public class IOMethods {
     }
 
     public static long copyFile(File source, File target) throws IOException {
-        return IOMethods._copy(source, target);
+        return UtilityMethods._copy(source, target);
     }
 
     public static String crc2string(long crc) {
@@ -108,14 +110,14 @@ public class IOMethods {
     }
 
     public static long crc32File(File source) throws IOException {
-        return IOMethods._copy(source, null);
+        return UtilityMethods._copy(source, null);
     }
 
     private static JDialog createDialog(JOptionPane pane, String title) {
         try {
             final JDialog dialog = new JDialog((Frame) null, title, true);
             dialog.setUndecorated(true);
-            int style = IOMethods.styleFromMessageType(pane.getMessageType());
+            int style = UtilityMethods.styleFromMessageType(pane.getMessageType());
             Method method = JOptionPane.class.getDeclaredMethod("initDialog", JDialog.class, Integer.TYPE, Component.class); //$NON-NLS-1$
             method.setAccessible(true);
             method.invoke(pane, dialog, style, null);
@@ -130,7 +132,7 @@ public class IOMethods {
             File[] files = path.listFiles();
             for (File file : files) {
                 if (file.isDirectory()) {
-                    IOMethods.deleteDirectory(file);
+                    UtilityMethods.deleteDirectory(file);
                 } else {
                     file.delete();
                 }
@@ -188,7 +190,7 @@ public class IOMethods {
 
     public static boolean fileEquals(File f1, File f2) throws IOException {
         return (f1.isDirectory() && f2.isDirectory())
-                || (f1.exists() && f2.exists() && (f1.length() == f2.length()) && (IOMethods.crc32File(f1) == IOMethods.crc32File(f2)));
+                || (f1.exists() && f2.exists() && (f1.length() == f2.length()) && (UtilityMethods.crc32File(f1) == UtilityMethods.crc32File(f2)));
     }
 
     /**
@@ -218,14 +220,15 @@ public class IOMethods {
 
     public static Collection<String> getAllJavaRuntimes() {
         Collection<String> all = new HashSet<String>();
-        for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        for (String opt : UtilityMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             all.add(opt + "\\jre"); //$NON-NLS-1$
         }
-        for (String opt : IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        for (String opt : UtilityMethods.getRegValue(
+                "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Development Kit", "JavaHome", "REG_SZ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             all.add(opt + "\\jre"); //$NON-NLS-1$
         }
-        all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        all.addAll(IOMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        all.addAll(UtilityMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        all.addAll(UtilityMethods.getRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\JavaSoft\\Java Runtime Environment", "JavaHome", "REG_SZ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         return all;
     }
 
@@ -234,7 +237,7 @@ public class IOMethods {
     }
 
     public static File getCurrentJar() {
-        return new File(IOMethods.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        return new File(UtilityMethods.class.getProtectionDomain().getCodeSource().getLocation().getPath());
     }
 
     @SuppressWarnings("restriction")
@@ -288,7 +291,7 @@ public class IOMethods {
     }
 
     public static byte[] getResource(String path) throws IOException {
-        return IOMethods.read(IOMethods.class.getClassLoader().getResourceAsStream(path));
+        return UtilityMethods.read(UtilityMethods.class.getClassLoader().getResourceAsStream(path));
     }
 
     public static boolean is64Bit() {
@@ -296,11 +299,11 @@ public class IOMethods {
     }
 
     public static boolean isDevelopmentMode() {
-        return !IOMethods.getCurrentJar().getName().endsWith(".jar");
+        return !UtilityMethods.getCurrentJar().getName().endsWith(".jar");
     }
 
     public static boolean isStandAloneMode() {
-        return !IOMethods.isDevelopmentMode();
+        return !UtilityMethods.isDevelopmentMode();
     }
 
     @SuppressWarnings("unchecked")
@@ -314,7 +317,7 @@ public class IOMethods {
 
     public static List<File> listRecursive(File dir) {
         List<File> all = new ArrayList<File>();
-        IOMethods.listRecursive(dir, all);
+        UtilityMethods.listRecursive(dir, all);
         return all;
     }
 
@@ -326,7 +329,7 @@ public class IOMethods {
         for (File child : tmp) {
             all.add(child);
             if (child.isDirectory()) {
-                IOMethods.listRecursive(child, all);
+                UtilityMethods.listRecursive(child, all);
             }
         }
     }
@@ -437,7 +440,7 @@ public class IOMethods {
         RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
         jop.getDelegate().setShady(false);
         new MoveMouseListener(jop);
-        JDialog dialog = IOMethods.createDialog(jop, title);
+        JDialog dialog = UtilityMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
@@ -454,7 +457,7 @@ public class IOMethods {
         RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
         jop.getDelegate().setShady(false);
         new MoveMouseListener(jop);
-        JDialog dialog = IOMethods.createDialog(jop, title);
+        JDialog dialog = UtilityMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
@@ -474,7 +477,7 @@ public class IOMethods {
         jop.setWantsInput(true);
         jop.setSelectionValues(options);
         jop.setInitialSelectionValue(selected);
-        JDialog dialog = IOMethods.createDialog(jop, title);
+        JDialog dialog = UtilityMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
@@ -495,7 +498,7 @@ public class IOMethods {
         RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.ERROR_MESSAGE, JOptionPane.DEFAULT_OPTION);
         jop.getDelegate().setShady(false);
         new MoveMouseListener(jop);
-        JDialog dialog = IOMethods.createDialog(jop, title);
+        JDialog dialog = UtilityMethods.createDialog(jop, title);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
@@ -505,6 +508,29 @@ public class IOMethods {
         dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
+    }
+
+    public static String sortable(String s) {
+        if (StringUtils.isBlank(s)) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char c : s.toCharArray()) {
+            for (char nc : Normalizer.normalize(String.valueOf(c), Normalizer.Form.NFKD).toCharArray()) {
+                nc = Character.toUpperCase(nc);
+                if (('A' <= nc) && (nc <= 'Z')) {
+                    sb.append(nc);
+                }
+            }
+        }
+
+        if (sb.length() == 0) {
+            sb.append(" ");
+        }
+
+        return sb.toString();
     }
 
     private static int styleFromMessageType(int messageType) {

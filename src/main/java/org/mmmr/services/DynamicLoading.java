@@ -23,7 +23,7 @@ public class DynamicLoading {
     public static void init(StatusListener status, Config cfg) throws Exception {
         String message = ""; //$NON-NLS-1$
         try {
-            IOMethods.newDir("data/libs"); //$NON-NLS-1$
+            UtilityMethods.newDir("data/libs"); //$NON-NLS-1$
             BufferedReader in = new BufferedReader(new InputStreamReader(DynamicLoading.class.getClassLoader().getResourceAsStream("libs.txt"))); //$NON-NLS-1$
             String relative;
             while ((relative = in.readLine()) != null) {
@@ -57,9 +57,9 @@ public class DynamicLoading {
                         throw new IOException(jar.getName() + ": length><" + len); //$NON-NLS-1$
                     }
                 }
-                if (IOMethods.isStandAloneMode()) {
+                if (UtilityMethods.isStandAloneMode()) {
                     status.setStatus(Messages.getString("DynamicLoading.libs_loading") + jar.getName(), null); //$NON-NLS-1$
-                    IOMethods.loadjarAtRuntime(jar);
+                    UtilityMethods.loadjarAtRuntime(jar);
                 }
             }
             in.close();

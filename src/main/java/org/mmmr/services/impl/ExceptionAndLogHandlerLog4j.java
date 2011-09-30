@@ -7,7 +7,7 @@ import org.apache.log4j.Appender;
 import org.apache.log4j.Level;
 import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.services.Config;
-import org.mmmr.services.IOMethods;
+import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.interfaces.ExceptionAndLogHandlerI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
     @Override
     public void handle(Config cfg, String title, String message, Exception ex) {
         this.log(ex);
-        IOMethods.showWarning(cfg, title, message);
+        UtilityMethods.showWarning(cfg, title, message);
     }
 
     /**

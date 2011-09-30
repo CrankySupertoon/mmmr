@@ -22,8 +22,8 @@ import javax.swing.WindowConstants;
 
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.IOMethods;
-import org.mmmr.services.IOMethods.MemInfo;
+import org.mmmr.services.UtilityMethods;
+import org.mmmr.services.UtilityMethods.MemInfo;
 import org.mmmr.services.MMMR;
 import org.mmmr.services.Messages;
 import org.mmmr.services.swing.common.ETable;
@@ -131,7 +131,7 @@ public class JavaOptionsWindow extends JFrame {
     private ETable getOptions() throws IOException {
         int min;
         int max;
-        MemInfo info = IOMethods.getMemInfo();
+        MemInfo info = UtilityMethods.getMemInfo();
         if (info.memfreemb < 512) {
             min = 256;
             max = 1024;
@@ -166,7 +166,7 @@ public class JavaOptionsWindow extends JFrame {
 
         List<ETableRecordCollection> records = new ArrayList<ETableRecordCollection>();
 
-        for (String[] jreinfo : IOMethods.getAllJavaInfo(IOMethods.getAllJavaRuntimes())) {
+        for (String[] jreinfo : UtilityMethods.getAllJavaInfo(UtilityMethods.getAllJavaRuntimes())) {
             String jre = jreinfo[0];
             boolean _64 = "true".equals(jreinfo[2]); //$NON-NLS-1$
 
@@ -192,7 +192,7 @@ public class JavaOptionsWindow extends JFrame {
             row.add(_64 ? "y" : "n"); //$NON-NLS-1$ //$NON-NLS-2$
             for (int i = 0; i < opts.length; i++) {
                 String option = opts[i];
-                boolean result = IOMethods.process(true, false, jre + "/bin/java.exe", option, "-version").get(0).toLowerCase() //$NON-NLS-1$ //$NON-NLS-2$
+                boolean result = UtilityMethods.process(true, false, jre + "/bin/java.exe", option, "-version").get(0).toLowerCase() //$NON-NLS-1$ //$NON-NLS-2$
                         .startsWith("java version"); //$NON-NLS-1$
                 if (result) {
                     success++;

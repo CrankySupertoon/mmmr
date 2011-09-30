@@ -114,7 +114,7 @@ public class Config {
     }
 
     public Config(String[] args) throws IOException {
-        this(args, IOMethods.getCurrentDir());
+        this(args, UtilityMethods.getCurrentDir());
     }
 
     private Config(String[] args, File thisFolder) throws IOException {
@@ -129,7 +129,7 @@ public class Config {
         this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion; //$NON-NLS-1$
         this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar"; //$NON-NLS-1$
 
-        this.parameterValues = IOMethods.parseParams(args);
+        this.parameterValues = UtilityMethods.parseParams(args);
 
         // not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
         // we use a locally installed minecraft so you can mod at your heart's content
@@ -141,23 +141,23 @@ public class Config {
         this.mcJar = new File(this.mcBin, "minecraft.jar"); //$NON-NLS-1$
         this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup"); //$NON-NLS-1$
 
-        this.data = IOMethods.newDir(thisFolder, "data"); //$NON-NLS-1$
+        this.data = UtilityMethods.newDir(thisFolder, "data"); //$NON-NLS-1$
 
-        this.cfg = IOMethods.newDir(this.data, "cfg"); //$NON-NLS-1$
+        this.cfg = UtilityMethods.newDir(this.data, "cfg"); //$NON-NLS-1$
         this.properties = new Properties();
         File file = new File(this.cfg, "config.properties"); //$NON-NLS-1$
         if (file.exists()) {
             this.properties.load(new FileInputStream(file));
         }
-        this.backup = IOMethods.newDir(this.data, "backup"); //$NON-NLS-1$
-        this.mods = IOMethods.newDir(this.data, "mods"); //$NON-NLS-1$
-        this.libs = IOMethods.newDir(this.data, "libs"); //$NON-NLS-1$
+        this.backup = UtilityMethods.newDir(this.data, "backup"); //$NON-NLS-1$
+        this.mods = UtilityMethods.newDir(this.data, "mods"); //$NON-NLS-1$
+        this.libs = UtilityMethods.newDir(this.data, "libs"); //$NON-NLS-1$
         this.tmp = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
         this.tmp.deleteOnExit();
-        this.logs = IOMethods.newDir(this.data, "logs"); //$NON-NLS-1$
+        this.logs = UtilityMethods.newDir(this.data, "logs"); //$NON-NLS-1$
         this.dbdir = new File(this.data, "db"); //$NON-NLS-1$
-        this.backupOriginalJar = IOMethods.newDir(this.backup, "minecraft.jar"); //$NON-NLS-1$
-        this.mcJogboxBackup = IOMethods.newDir(this.backup, "jogbox"); //$NON-NLS-1$
+        this.backupOriginalJar = UtilityMethods.newDir(this.backup, "minecraft.jar"); //$NON-NLS-1$
+        this.mcJogboxBackup = UtilityMethods.newDir(this.backup, "jogbox"); //$NON-NLS-1$
     }
 
     public File getBackup() {

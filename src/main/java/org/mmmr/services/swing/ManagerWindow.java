@@ -24,7 +24,7 @@ import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.IOMethods;
+import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
 import org.mmmr.services.swing.common.UIUtils;
@@ -158,7 +158,7 @@ public class ManagerWindow extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // TODO change
-                    IOMethods.showWarning(ManagerWindow.this.cfg, Messages.getString("ManagerWindow.change_sex"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
+                    UtilityMethods.showWarning(ManagerWindow.this.cfg, Messages.getString("ManagerWindow.change_sex"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             mainpanel.add(comp);
@@ -170,7 +170,7 @@ public class ManagerWindow extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // TODO Backup and restore worlds/stats/etc.
-                    IOMethods.showWarning(ManagerWindow.this.cfg, Messages.getString("ManagerWindow.backup_restore"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
+                    UtilityMethods.showWarning(ManagerWindow.this.cfg, Messages.getString("ManagerWindow.backup_restore"), "Not implemented yet."); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             mainpanel.add(comp);
@@ -213,7 +213,7 @@ public class ManagerWindow extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     try {
                         Level[] levels = { Level.TRACE, Level.DEBUG, Level.WARN, Level.ERROR, Level.FATAL, Level.OFF };
-                        Level level = IOMethods.showOptions(
+                        Level level = UtilityMethods.showOptions(
                                 ManagerWindow.this.cfg,
                                 Messages.getString("ManagerWindow.change_logging_level"), Messages.getString("ManagerWindow.change_logging_level"), levels, //$NON-NLS-1$ //$NON-NLS-2$
                                 org.apache.log4j.Logger.getRootLogger().getLevel());
@@ -261,12 +261,12 @@ public class ManagerWindow extends JFrame {
                 options.add(modoption);
             }
             if (options.size() == 0) {
-                IOMethods.showInformation(this.cfg, "OptiFine.", Messages.getString("ManagerWindow.no_compatible_version")); //$NON-NLS-1$ //$NON-NLS-2$
+                UtilityMethods.showInformation(this.cfg, "OptiFine.", Messages.getString("ManagerWindow.no_compatible_version")); //$NON-NLS-1$ //$NON-NLS-2$
                 return;
             }
             ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
             ModOption selected = installedOption == null ? selectionValues[0] : installedOption;
-            selected = IOMethods.showOptions(this.cfg, "OptiFine.", Messages.getString("ManagerWindow.select_version"), selectionValues, selected); //$NON-NLS-1$ //$NON-NLS-2$
+            selected = UtilityMethods.showOptions(this.cfg, "OptiFine.", Messages.getString("ManagerWindow.select_version"), selectionValues, selected); //$NON-NLS-1$ //$NON-NLS-2$
             if (selected != null) {
                 Mod mod = ModOption.class.cast(selected).getMod();
                 if (installed != null) {
