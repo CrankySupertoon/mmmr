@@ -121,7 +121,9 @@ public class ModOption {
     }
 
     public void setInstalled(Boolean installed) {
-        this.mod.setInstalled(installed);
+        if (Boolean.TRUE.equals(this.getMod())) {
+            this.mod.setInstalled(installed);
+        }
     }
 
     public void setInstallOrder(int installOrder) {

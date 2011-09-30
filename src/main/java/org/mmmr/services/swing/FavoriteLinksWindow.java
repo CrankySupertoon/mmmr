@@ -1,7 +1,6 @@
 package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -28,7 +27,6 @@ import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JWindow;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
@@ -41,6 +39,7 @@ import org.mmmr.services.Messages;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableRecordArray;
+import org.mmmr.services.swing.common.RoundedPanel;
 import org.mmmr.services.swing.common.UIUtils;
 import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 
@@ -127,8 +126,11 @@ public class FavoriteLinksWindow extends JWindow {
         }
 
         this.setAlwaysOnTop(true);
-        final JPanel mainpanel = new JPanel(new BorderLayout());
-        mainpanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        final RoundedPanel mainpanel = new RoundedPanel(new BorderLayout());
+        mainpanel.getDelegate().setShady(false);
+        mainpanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
         this.getContentPane().add(mainpanel, BorderLayout.CENTER);
         mainpanel.setLayout(new BorderLayout());
         mainpanel.add(table.getTableHeader(), BorderLayout.NORTH);
@@ -173,6 +175,9 @@ public class FavoriteLinksWindow extends JWindow {
                 }
             }
         });
+
+        UIUtils.translucent(this);
+        UIUtils.rounded(this);
     }
 
     /**

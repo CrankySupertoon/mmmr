@@ -33,19 +33,19 @@ import javax.swing.table.TableColumn;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
 import org.mmmr.services.ModList;
+import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableI;
 import org.mmmr.services.swing.common.ETableRecord;
 import org.mmmr.services.swing.common.ETableRecordBean;
+import org.mmmr.services.swing.common.RoundedPanel;
 import org.mmmr.services.swing.common.UIUtils;
 import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
-import org.mmmr.services.swing.common.RoundedPanel;
 
 /**
  * @author Jurgen
@@ -203,12 +203,28 @@ public class ModOptionsWindow extends JFrame {
                                         "", Messages.getString("ModOptionsWindow.not_supported_visit_site") + url); //$NON-NLS-1$ //$NON-NLS-2$
                             }
                         }
+                        if (Messages.getString("ModOptionsWindow.modArchive").equals(columnValueAtVisualColumn)) { //$NON-NLS-1$
+                            Boolean archiveFound = (Boolean) safetable.getRecordAtVisualRow(row).get(col);
+                            if (!Boolean.TRUE.equals(archiveFound)) {
+                                int urlcol = orderedFields.indexOf("url");
+                                String url = String.valueOf(safetable.getRecordAtVisualRow(row).get(urlcol));
+                                if (Desktop.isDesktopSupported()) {
+                                    Desktop.getDesktop().browse(URI.create(url));
+                                } else {
+                                    UtilityMethods.showWarning(ModOptionsWindow.this.cfg,
+                                            "", Messages.getString("ModOptionsWindow.not_supported_visit_site") + url); //$NON-NLS-1$ //$NON-NLS-2$
+                                }
+                            }
+                        }
                     }
                 } catch (Exception ex) {
                     ExceptionAndLogHandler.log(ex);
                 }
             }
         });
+
+        headers.add(Messages.getString("ModOptionsWindow.modArchive"), Boolean.class, false); //$NON-NLS-1$
+        orderedFields.add("modArchive"); //$NON-NLS-1$
 
         headers.add(Messages.getString("ModOptionsWindow.installed"), Boolean.class, true); //$NON-NLS-1$
         orderedFields.add("installed"); //$NON-NLS-1$
@@ -233,9 +249,6 @@ public class ModOptionsWindow extends JFrame {
 
         headers.add(Messages.getString("ModOptionsWindow.updated"), Boolean.class, false); //$NON-NLS-1$
         orderedFields.add("updated"); //$NON-NLS-1$
-
-        headers.add(Messages.getString("ModOptionsWindow.modArchive"), Boolean.class, false); //$NON-NLS-1$
-        orderedFields.add("modArchive"); //$NON-NLS-1$
 
         safetable.setHeaders(headers);
 
