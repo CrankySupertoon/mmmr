@@ -58,6 +58,7 @@ import ca.odell.glazedlists.swing.TableComparatorChooser;
 /**
  * @author jdlandsh
  */
+@SuppressWarnings("rawtypes")
 public class ETable extends JTable implements ETableI, Reorderable {
 
     protected class EFiltering {

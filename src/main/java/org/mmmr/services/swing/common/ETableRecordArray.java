@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * @author jdlandsh
  */
-public class ETableRecordArray implements ETableRecord {
+public class ETableRecordArray implements ETableRecord<Object[]> {
     protected Object[] array;
 
     /**
@@ -32,7 +32,7 @@ public class ETableRecordArray implements ETableRecord {
      * @see org.mmmr.services.swing.common.ETableRecord#getBean()
      */
     @Override
-    public Object getBean() {
+    public Object[] getBean() {
         return this.array;
     }
 

@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * @author jdlandsh
  */
+@SuppressWarnings("rawtypes")
 public interface ETableI {
     public abstract void addRecord(final ETableRecord record);
 

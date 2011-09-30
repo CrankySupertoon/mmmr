@@ -30,8 +30,8 @@ import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableRecordCollection;
-import org.mmmr.services.swing.common.FancySwing;
-import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.UIUtils;
+import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
 
 /**
@@ -42,7 +42,7 @@ public class JavaOptionsWindow extends JFrame {
 
     public static void main(String[] args) {
         try {
-            FancySwing.lookAndFeel();
+            UIUtils.lookAndFeel();
             Config cfg = new Config(args);
             new JavaOptionsWindow(cfg, null).setVisible(true);
         } catch (Exception ex) {
@@ -116,7 +116,7 @@ public class JavaOptionsWindow extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         this.setUndecorated(true);
-        FancySwing.translucent(this);
+        UIUtils.translucent(this);
 
         if (prefSize == null) {
             this.setSize(800, 300);
@@ -124,7 +124,7 @@ public class JavaOptionsWindow extends JFrame {
             this.setSize(prefSize);
         }
 
-        FancySwing.rounded(this);
+        UIUtils.rounded(this);
         this.setResizable(false);
     }
 

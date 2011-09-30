@@ -38,8 +38,8 @@ import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
 import org.mmmr.services.Messages;
 import org.mmmr.services.NiceFont;
-import org.mmmr.services.swing.common.FancySwing;
-import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.UIUtils;
+import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
 
 public class HDFontWindow extends JFrame {
@@ -212,9 +212,9 @@ public class HDFontWindow extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         this.setUndecorated(true);
-        FancySwing.translucent(this);
+        UIUtils.translucent(this);
         this.pack();
-        FancySwing.rounded(this);
+        UIUtils.rounded(this);
         this.setResizable(false);
     }
 

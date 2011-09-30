@@ -3,7 +3,7 @@ package org.mmmr.services;
 import javax.swing.ToolTipManager;
 
 import org.mmmr.services.swing.StatusWindow;
-import org.mmmr.services.swing.common.FancySwing;
+import org.mmmr.services.swing.common.UIUtils;
 
 /**
  * @author Jurgen
@@ -13,7 +13,7 @@ public class MMMRStart {
     public static void main(String[] args) {
         try {
             ExceptionAndLogHandler.log(IOMethods.getCurrentJar().getAbsolutePath());
-            FancySwing.lookAndFeel();
+            UIUtils.lookAndFeel();
             Config cfg = new Config(args);
             BatCheck.check(cfg);
             VersionCheck.check(cfg);

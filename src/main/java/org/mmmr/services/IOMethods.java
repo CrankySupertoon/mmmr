@@ -39,8 +39,8 @@ import javax.swing.JRootPane;
 import javax.swing.WindowConstants;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.mmmr.services.swing.common.FancySwing;
-import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.UIUtils;
+import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedOptionPane;
 
 /**
@@ -442,9 +442,9 @@ public class IOMethods {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        FancySwing.rounded(dialog);
-        FancySwing.translucent(dialog);
-        dialog.setLocationRelativeTo(FancySwing.getCurrentFrame());
+        UIUtils.rounded(dialog);
+        UIUtils.translucent(dialog);
+        dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
         return jop.getValue().equals(JOptionPane.YES_OPTION);
@@ -459,9 +459,9 @@ public class IOMethods {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        FancySwing.rounded(dialog);
-        FancySwing.translucent(dialog);
-        dialog.setLocationRelativeTo(FancySwing.getCurrentFrame());
+        UIUtils.rounded(dialog);
+        UIUtils.translucent(dialog);
+        dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
     }
@@ -479,13 +479,13 @@ public class IOMethods {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        FancySwing.rounded(dialog);
-        FancySwing.translucent(dialog);
+        UIUtils.rounded(dialog);
+        UIUtils.translucent(dialog);
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
         jop.selectInitialValue();
-        dialog.setLocationRelativeTo(FancySwing.getCurrentFrame());
+        dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
         return (T) jop.getInputValue();
@@ -500,9 +500,9 @@ public class IOMethods {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        FancySwing.rounded(dialog);
-        FancySwing.translucent(dialog);
-        dialog.setLocationRelativeTo(FancySwing.getCurrentFrame());
+        UIUtils.rounded(dialog);
+        UIUtils.translucent(dialog);
+        dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
     }

@@ -41,8 +41,8 @@ import org.mmmr.services.Messages;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableRecordArray;
-import org.mmmr.services.swing.common.FancySwing;
-import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.UIUtils;
+import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 
 /**
  * @author Jurgen
@@ -77,7 +77,7 @@ public class FavoriteLinksWindow extends JWindow {
     private Config cfg;
 
     public FavoriteLinksWindow(Config cfg) throws IOException, URISyntaxException {
-        super((Window) FancySwing.getCurrentFrame());
+        super((Window) UIUtils.getCurrentFrame());
         this.cfg = cfg;
         try {
             this.updateLinks();

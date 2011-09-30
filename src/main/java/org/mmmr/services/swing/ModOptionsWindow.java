@@ -43,8 +43,8 @@ import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableI;
 import org.mmmr.services.swing.common.ETableRecord;
 import org.mmmr.services.swing.common.ETableRecordBean;
-import org.mmmr.services.swing.common.FancySwing;
-import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.UIUtils;
+import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
 
 /**
@@ -120,10 +120,10 @@ public class ModOptionsWindow extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         this.setUndecorated(true);
-        FancySwing.translucent(this);
+        UIUtils.translucent(this);
         this.pack();
         this.setSize((int) jtable.getPreferredSize().getWidth(), this.getHeight());
-        FancySwing.rounded(this);
+        UIUtils.rounded(this);
         this.setResizable(false);
     }
 

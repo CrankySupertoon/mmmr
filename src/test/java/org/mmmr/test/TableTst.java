@@ -20,7 +20,7 @@ import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableI;
 import org.mmmr.services.swing.common.ETableRecordArray;
 import org.mmmr.services.swing.common.EnumTableCellEditor;
-import org.mmmr.services.swing.common.FancySwing;
+import org.mmmr.services.swing.common.UIUtils;
 
 public class TableTst {
     public static enum EnumTest {
@@ -29,7 +29,7 @@ public class TableTst {
 
     public static void main(String[] args) {
         try {
-            FancySwing.lookAndFeel();
+            UIUtils.lookAndFeel();
             ETableConfig configuration = new ETableConfig(true);
             configuration.setVertical(true);
             final ETable table = new ETable(configuration);

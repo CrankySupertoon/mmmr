@@ -27,8 +27,8 @@ import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.IOMethods;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
-import org.mmmr.services.swing.common.FancySwing;
-import org.mmmr.services.swing.common.FancySwing.MoveMouseListener;
+import org.mmmr.services.swing.common.UIUtils;
+import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 import org.mmmr.services.swing.common.RoundedPanel;
 
 /**
@@ -99,10 +99,10 @@ public class ManagerWindow extends JFrame {
         });
         mainpanel.add(quit);
         this.setResizable(false);
-        FancySwing.translucent(this);
+        UIUtils.translucent(this);
         this.pack();
         this.setSize(800, this.getHeight());
-        FancySwing.rounded(this);
+        UIUtils.rounded(this);
         this.setVisible(true);
     }
 

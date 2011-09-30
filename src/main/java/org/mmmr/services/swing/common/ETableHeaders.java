@@ -12,10 +12,10 @@ import ca.odell.glazedlists.gui.WritableTableFormat;
 /**
  * @author jdlandsh
  */
+@SuppressWarnings("rawtypes")
 public class ETableHeaders implements WritableTableFormat<ETableRecord>, AdvancedTableFormat<ETableRecord> {
     protected final List<String> columnNames = new Vector<String>();
 
-    @SuppressWarnings("rawtypes")
     protected final List<Class> columnClasses = new Vector<Class>();
 
     protected final List<Boolean> editable = new Vector<Boolean>();

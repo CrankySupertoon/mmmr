@@ -19,7 +19,7 @@ import org.mmmr.services.ExceptionAndLogHandler;
 /**
  * @see http://java.sun.com/developer/technicalArticles/GUI/translucent_shaped_windows/
  */
-public class FancySwing {
+public class UIUtils {
     public static class MoveMouseListener implements MouseListener, MouseMotionListener {
         Point start_drag;
 
@@ -128,7 +128,7 @@ public class FancySwing {
     }
 
     public static void translucent(Window w) {
-        FancySwing.translucent(w, .93f);
+        UIUtils.translucent(w, .93f);
     }
 
     @SuppressWarnings("restriction")

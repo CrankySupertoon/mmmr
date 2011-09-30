@@ -8,7 +8,7 @@ import java.util.List;
  * @author jdlandsh
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class ETableRecordCollection implements ETableRecord {
+public class ETableRecordCollection implements ETableRecord<List> {
     protected List collection;
 
     public ETableRecordCollection() {
@@ -41,7 +41,7 @@ public class ETableRecordCollection implements ETableRecord {
      * @see org.mmmr.services.swing.common.ETableRecord#getBean()
      */
     @Override
-    public Object getBean() {
+    public List getBean() {
         return this.collection;
     }
 
