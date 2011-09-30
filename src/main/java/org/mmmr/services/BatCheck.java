@@ -20,12 +20,15 @@ public class BatCheck {
                 .getResourceAsStream("bat/start MMMR.bat"))) : null; //$NON-NLS-1$
         if (!noconsole.exists()) {
             // w is put behind java so if starts no console
-            byte[] bytes = batstring.replaceAll("\\Q{CONSOLE}\\E", "w").replaceAll("\\Q{JAR}\\E", UtilityMethods.getCurrentJar().getName()).getBytes(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            @SuppressWarnings("null")
+            byte[] bytes = batstring
+                    .replaceAll("\\Q{CONSOLE}\\E", "w").replaceAll("\\Q{JAR}\\E", UtilityMethods.getCurrentJar().getName()).getBytes(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             FileOutputStream bnco = new FileOutputStream(noconsole);
             bnco.write(bytes);
             bnco.close();
         }
         if (!console.exists()) {
+            @SuppressWarnings("null")
             byte[] bytes = batstring.replaceAll("\\Q{CONSOLE}\\E", "").replaceAll("\\Q{JAR}\\E", UtilityMethods.getCurrentJar().getName()).getBytes(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             FileOutputStream bnco = new FileOutputStream(console);
             bnco.write(bytes);

@@ -347,7 +347,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
         protected Icon sortIcon = null;
 
-        protected final static double DEGREE_90 = 90.0 * Math.PI / 180.0;
+        protected final static double DEGREE_90 = (90.0 * Math.PI) / 180.0;
 
         protected Map<Icon, Icon> rotatedIconsCache = new HashMap<Icon, Icon>();
 
@@ -383,11 +383,11 @@ public class ETable extends JTable implements ETableI, Reorderable {
             int h;
 
             if (((originalAngle >= 0) && (originalAngle <= 90)) || ((originalAngle > 180) && (originalAngle <= 270))) {
-                w = (int) (iw * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian) + ih * Math.sin(radian));
-                h = (int) (iw * Math.sin(radian) + ih * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian));
+                w = (int) ((iw * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian)) + (ih * Math.sin(radian)));
+                h = (int) ((iw * Math.sin(radian)) + (ih * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian)));
             } else {
-                w = (int) (ih * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian) + iw * Math.sin(radian));
-                h = (int) (ih * Math.sin(radian) + iw * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian));
+                w = (int) ((ih * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian)) + (iw * Math.sin(radian)));
+                h = (int) ((ih * Math.sin(radian)) + (iw * Math.sin(VerticalHeaderRenderer.DEGREE_90 - radian)));
             }
             BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
             Graphics g = image.getGraphics();
@@ -444,7 +444,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
     protected final EventTableModel<ETableRecord> tableModel;
 
-    protected final EventSelectionModel<ETableRecord> selectionModel;
+    protected final EventSelectionModel<ETableRecord> tableSelectionModel;
 
     protected final EFiltering filtering;
 
@@ -488,11 +488,11 @@ public class ETable extends JTable implements ETableI, Reorderable {
         this.filtering = new EFiltering(this.sorting.getRecords());
         this.tableModel = new ETableModel(this.filtering.getRecords(), this.tableFormat);
         this.setModel(this.tableModel);
-        this.selectionModel = new EventSelectionModel<ETableRecord>(this.records);
-        this.selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        this.tableSelectionModel = new EventSelectionModel<ETableRecord>(this.records);
+        this.tableSelectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         this.setColumnSelectionAllowed(true);
         this.setRowSelectionAllowed(true);
-        this.setSelectionModel(this.selectionModel);
+        this.setSelectionModel(this.tableSelectionModel);
         this.sorting.install();
         this.filtering.install();
         this.getTableHeader().setReorderingAllowed(this.cfg.isReorderable());

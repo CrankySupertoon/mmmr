@@ -17,8 +17,6 @@ import javax.swing.JComponent;
  * @see http://www.apache.org/licenses/LICENSE-2.0.html
  */
 public class RoundedComponentDelegate {
-    private static final long serialVersionUID = 6974828771572501794L;
-
     /** Double values for Horizzontal and Vertical radius of corner arcs */
     protected Dimension arcs = new Dimension(20, 20);
 
