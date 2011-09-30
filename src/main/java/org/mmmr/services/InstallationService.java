@@ -59,18 +59,20 @@ public class InstallationService {
     }
 
     public boolean checkDependency(Mod mod) {
-        for (Dependency dependency : mod.getDependencies()) {
-            Mod installed = this.cfg.getDb().hql1("from Mod mod where mod.sortableName=?", Mod.class, dependency.getSortableName()); //$NON-NLS-1$
-            if (installed == null) {
-                return false;
-            }
-            if (installed.getVersion().equals(dependency.getVersion())) {
-                continue;
-            }
-            if (!UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.install_mods_dependency"), //$NON-NLS-1$
-                    String.format(Messages.getString("InstallationService.install_mods_dependency_version"), dependency.getVersion(), //$NON-NLS-1$
-                            installed.getVersion()))) {
-                return false;
+        if (mod.getDependencies() != null) {
+            for (Dependency dependency : mod.getDependencies()) {
+                Mod installed = this.cfg.getDb().hql1("from Mod mod where mod.sortableName=?", Mod.class, dependency.getSortableName()); //$NON-NLS-1$
+                if (installed == null) {
+                    return false;
+                }
+                if (installed.getVersion().equals(dependency.getVersion())) {
+                    continue;
+                }
+                if (!UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.install_mods_dependency"), //$NON-NLS-1$
+                        String.format(Messages.getString("InstallationService.install_mods_dependency_version"), dependency.getVersion(), //$NON-NLS-1$
+                                installed.getVersion()))) {
+                    return false;
+                }
             }
         }
         return true;

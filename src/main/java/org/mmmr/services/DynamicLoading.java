@@ -40,9 +40,10 @@ public class DynamicLoading {
                             URL url = new URL(repo + "/" + relative); //$NON-NLS-1$
                             try {
                                 DownloadingService.downloadURL(url, jar);
-                                if (jar.length() != len) {
+                                long jlen = jar.length();
+                                if (jlen != len) {
                                     jar.delete();
-                                    throw new IOException(jar.getName() + ": length><" + len); //$NON-NLS-1$
+                                    throw new IOException(jar.getName() + ": " + jlen + "><" + len); //$NON-NLS-1$
                                 }
                                 success = true;
                                 break;

@@ -39,11 +39,11 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
                     this.setProgress(0);
 
                     try {
-                        byte[] buffer = new byte[1024 * 8];
+                        byte[] buffer = new byte[1024 * 8 * 4];
                         long dl = 0;
                         InputStream uin = entity.getInputStream();
                         int read;
-                        while ((read = uin.read(buffer)) > 0) {
+                        while ((read = uin.read(buffer)) != -1) {
                             target.write(buffer, 0, read);
                             dl += read;
                             int percentage = (int) ((dl * 100l) / entity.getContentLength());
