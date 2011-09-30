@@ -58,8 +58,8 @@ public class InstallationService {
         this.cfg = cfg;
     }
 
-    public void checkDependency(Dependency dependency) {
-
+    public void checkDependency(@SuppressWarnings("unused") Dependency dependency) {
+        // TODO implement checkDependency
     }
 
     private void copy(Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
@@ -84,7 +84,9 @@ public class InstallationService {
             }
         }
         String archive = mod.getArchive();
+        @SuppressWarnings("unused")
         String name = mod.getName();
+        @SuppressWarnings("unused")
         String version = mod.getVersion();
         File outdir = IOMethods.newDir(this.cfg.getTmp(), archive);
         ArchiveService.extract(new File(this.cfg.getMods(), archive), outdir);

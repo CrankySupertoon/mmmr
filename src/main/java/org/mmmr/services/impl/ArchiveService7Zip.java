@@ -48,7 +48,6 @@ public class ArchiveService7Zip extends ArchiveServiceSimple {
 
         private boolean skipExtraction;
 
-        @SuppressWarnings("unused")
         private long total;
 
         public Callback(File outdir, ISevenZipInArchive inArchive) {
