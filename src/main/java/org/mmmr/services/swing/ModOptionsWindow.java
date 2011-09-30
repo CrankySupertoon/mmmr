@@ -216,6 +216,19 @@ public class ModOptionsWindow extends JFrame {
                                 }
                             }
                         }
+                        if (Messages.getString("ModOptionsWindow.updated").equals(columnValueAtVisualColumn)) { //$NON-NLS-1$
+                            Boolean updated = (Boolean) safetable.getRecordAtVisualRow(row).get(col);
+                            if (Boolean.TRUE.equals(updated)) {
+                                int urlcol = orderedFields.indexOf("url");
+                                String url = String.valueOf(safetable.getRecordAtVisualRow(row).get(urlcol));
+                                if (Desktop.isDesktopSupported()) {
+                                    Desktop.getDesktop().browse(URI.create(url));
+                                } else {
+                                    UtilityMethods.showWarning(ModOptionsWindow.this.cfg,
+                                            "", Messages.getString("ModOptionsWindow.not_supported_visit_site") + url); //$NON-NLS-1$ //$NON-NLS-2$
+                                }
+                            }
+                        }
                     }
                 } catch (Exception ex) {
                     ExceptionAndLogHandler.log(ex);

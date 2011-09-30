@@ -13,11 +13,14 @@ public class ModOption {
 
     protected Boolean updated;
 
+    protected Date wasInstalled;
+
     protected final Config cfg;
 
     public ModOption(Config cfg, Mod mod) {
         this.cfg = cfg;
         this.mod = mod;
+        this.wasInstalled = mod.getInstallationDate();
     }
 
     public int compareTo(Mod other) {
@@ -121,7 +124,17 @@ public class ModOption {
     }
 
     public void setInstalled(Boolean installed) {
-        if (Boolean.TRUE.equals(this.getMod())) {
+        if (this.wasInstalled == null) {
+            this.wasInstalled = this.getInstallationDate();
+        }
+        if (installed && (this.wasInstalled != null)) {
+            // we can always revert the value
+            this.mod.setInstallationDate(this.wasInstalled);
+        } else if (installed && Boolean.TRUE.equals(this.isModArchive())) {
+            // can only install when archive is present
+            this.mod.setInstalled(installed);
+        } else if (!installed) {
+            // installed can always be unchecked
             this.mod.setInstalled(installed);
         }
     }

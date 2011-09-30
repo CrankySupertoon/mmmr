@@ -1,5 +1,5 @@
 1316954142901::airshipV2.51.1.8.1.zip.xml
-1316954142893::AlchemyandMagic.zip.xml
+1317422429444::AlchemyandMagic.zip.xml
 1316954142889::Arkidillo's Xtra Ores Mod [v2.9] Beta 1.8.1.zip.xml
 1316954142910::ArmorStand.zip.xml
 1316954142897::Arrows Mod.zip.xml
@@ -9,7 +9,7 @@
 1316954142906::Crystal Wing.zip.xml
 1317067777226::CrystalCraft v1.42.zip.xml
 1316954142910::Death Chest.zip.xml
-1317166350719::Doggy Talents v0.5.6FULL.zip.xml
+1317422621745::Doggy Talents v1.5.8.zip.xml
 1316954142908::DrZhark's Mo'Creatures Mod v2.13.1.zip.xml
 1316954142888::Dynamic Lights 1.8.1.zip.xml
 1316954142905::ElementalCreepers_v1.5_client.zip.xml
@@ -21,7 +21,7 @@
 1316954142890::InvTweaks-1.31Beta-1.8.1.zip.xml
 1316954142899::iPixeliGenderMod1.8.1v3.4client.zip.xml
 1316954142903::Lightsensor.zip.xml
-1317166177615::Millenaire1.6.1.zip.xml
+1317420794368::Millenaire1.6.1.zip.xml
 1317165899885::Millenaire1.6.3.zip.xml
 1316954142888::minecraft-mipmap-20-dev.zip.xml
 1316954142892::ModLoader.zip.xml
@@ -30,7 +30,9 @@
 1317067038882::mod_Medication.zip.xml
 1316954142902::More Stackables.zip.xml
 1316954142886::MoreCreepsv2.32.rar.xml
-1317233096645::OptiFine_1.8.1_HD_RC2.zip.xml
+1317420378501::OptiFine_1.8.1_HD_A.zip.xml
+1317420488198::OptiFine_1.8.1_HD_RC2.zip.xml
+1317420371854::OptiFine_1.8.1_HD_S_A.zip.xml
 1316987861614::PremiumWoodv15.0.zip.xml
 1316954142887::Recipe Book.zip.xml
 1316954142896::Score.zip.xml
@@ -43,8 +45,9 @@
 1316954142891::TF2Sentry_Beta_v0.5.zip.xml
 1316954142909::TF2Teleporter_v1.4.zip.xml
 1316954142895::Timber! (r3).zip.xml
-1316954142894::TooManyItems2011_09_14.zip.xml
+1317422327458::TooManyItems2011_09_27_1.8_fix.zip.xml
+1317422556784::transport_mod_1.0.2.zip.xml
 1316954142906::Treecapitator.zip.xml
 1316954142911::water_shader_v4dml.zip.xml
 1316954142901::[1.8.1] Somnia v14.zip.xml
-1316954142896::[1.8.1]ReiMinimap_v2.0.zip.xml
+1317422741087::[1.8.1]ReiMinimap_v2.2.zip.xml
