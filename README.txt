@@ -23,7 +23,6 @@ COMPLETED FEATURES
   * JVM 1.7 is sometimes required if you use mods that are compiled to only work with JVM 1.7
   * JVM 64bit is required to use more than ~1.5GB RAM for Minecraft
 - manages different OptiFine installations, quickly switch between options or remove it
-- install and uninstall mods, warns about file conflicts (75% done)
 - HQ font for Minecraft (needs OptiFine installed or MCPatcher run manually)
 - check if mod is updated (only MinecraftForum)
 - visit mod site links to check updates, information
@@ -32,6 +31,7 @@ COMPLETED FEATURES
 FEATURES IN PROGRESS
 --------------------
 
+- install and uninstall mods, warns about file conflicts (80% done)
 - backup and restore world and character data and keyboard setting, includes load order list for reference (50% done)
 - reorder mods to fix conflicts between compatible mods, or remove one of both if impossible (25% done)
 - check mod install configurations (drag and drop) when a user creates one himself by hand (0% done)
