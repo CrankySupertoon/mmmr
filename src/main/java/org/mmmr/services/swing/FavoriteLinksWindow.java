@@ -110,7 +110,7 @@ public class FavoriteLinksWindow extends JWindow {
             }
         };
         ETableHeaders headers = new ETableHeaders();
-        headers.add(Messages.getString("FavoriteLinksWindow.0")); //$NON-NLS-1$
+        headers.add(Messages.getString("FavoriteLinksWindow.links")); //$NON-NLS-1$
         table.getEventSafe().setHeaders(headers);
         File f = new File(cfg.getData(), "links"); //$NON-NLS-1$
         for (File ff : f.listFiles(new FilenameFilter() {
@@ -145,6 +145,7 @@ public class FavoriteLinksWindow extends JWindow {
         });
         mainpanel.add(close, BorderLayout.SOUTH);
         this.pack();
+        this.setSize(400, this.getHeight());
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
