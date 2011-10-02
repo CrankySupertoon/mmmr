@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="PaintballModClient.zip" mc="1.8.1" name="Paintball" url="http://www.minecraftforum.net/topic/309199-181-%e2%98%85-paintball-v271-%e2%98%85-iron-sights/" version="2.7.1">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="./"/>
+    </resources>
+</mod>
