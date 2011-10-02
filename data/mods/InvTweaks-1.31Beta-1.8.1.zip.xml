@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod archive="InvTweaks-1.31Beta-1.8.1.zip" mc="1.8.1" name="Inventory Tweaks" url="http://www.minecraftforum.net/topic/323444-181spsmp-inventory-tweaks-131-beta-sept-13/" version="1.31">
-    <dependencies>
-        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-    </dependencies>
-    <resources>
-        <resource exclude="doc" sourcepath="./" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>

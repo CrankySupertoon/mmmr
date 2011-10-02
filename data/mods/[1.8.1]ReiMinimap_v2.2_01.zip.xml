@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod archive="[1.8.1]ReiMinimap_v2.2.zip" mc="1.8.1" name="Rei's Minimap" url="http://www.minecraftforum.net/topic/482147-181oct01-reis-minimap-v22/" version="2.2">
+<mod archive="[1.8.1]ReiMinimap_v2.2_01.zip" mc="1.8.1" name="Rei's Minimap" url="http://www.minecraftforum.net/topic/482147-18119pre2oct02-reis-minimap-v22-01-bug-fix/" version="2.2_01">
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>

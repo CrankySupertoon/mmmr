@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * @see http://www.slf4j.org/
  */
 public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
-    private static final Logger logger = LoggerFactory.getLogger(ExceptionAndLogHandlerLog4j.class);
+    private static final Logger logger = LoggerFactory.getLogger("mmmr");
 
     @Override
     public void adjustLogging(Config cfg) throws IOException {
