@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="buildcraft-client-A-core-1.8.1.1.zip" mc="1.8.1" name="BuildCraft core" url="http://www.minecraftforum.net/topic/286417-181-buildcraft-220-pipes-quarry-auto-crafting-building-engines/" version="1.8.1.1">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
