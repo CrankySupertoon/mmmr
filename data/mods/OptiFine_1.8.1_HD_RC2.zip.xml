@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod archive="OptiFine_1.8.1_HD_RC2.zip" mc="1.8.1" name="OptiFine HD" url="http://www.minecraftforum.net/topic/249637-173-optifine-hd-g-fps-boost/" version="1.8.1 RC2">
-    <resources>
-        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>

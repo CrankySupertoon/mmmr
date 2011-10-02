@@ -21,7 +21,6 @@
 1317594228039::InvTweaks-1.32-1.8.1.jar.xml
 1316954142899::iPixeliGenderMod1.8.1v3.4client.zip.xml
 1316954142903::Lightsensor.zip.xml
-1317420794368::Millenaire1.6.1.zip.xml
 1317594725105::Millenaire1.6.6.zip.xml
 1316954142888::minecraft-mipmap-20-dev.zip.xml
 1316954142892::ModLoader.zip.xml
@@ -31,7 +30,6 @@
 1316954142902::More Stackables.zip.xml
 1317594517167::MoreCreepsv2.41.rar.xml
 1317420378501::OptiFine_1.8.1_HD_A.zip.xml
-1317420488198::OptiFine_1.8.1_HD_RC2.zip.xml
 1317420371854::OptiFine_1.8.1_HD_S_A.zip.xml
 1316987861614::PremiumWoodv15.0.zip.xml
 1316954142887::Recipe Book.zip.xml
