@@ -27,6 +27,7 @@ COMPLETED FEATURES
 - installing mods
  * easy filtering between installed, (un)available [depends if archive is downloaded]
  * check if mod is updated (only MinecraftForum)
+ * visit download site via column Link and DL when not checked
 - visit mod site links to check updates, information
 - favorite links (additional ones can be added by dragging a hyperlink from the browser to the 'data\links' directory)
 

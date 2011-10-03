@@ -41,6 +41,7 @@ import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
 import org.mmmr.services.ModList;
 import org.mmmr.services.UtilityMethods;
+import org.mmmr.services.swing.common.CheckBoxTitledBorder;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
@@ -61,6 +62,8 @@ public class ModOptionsWindow extends JFrame {
         private JCheckBox available = new JCheckBox(Messages.getString("ManagerWindow.available"), true); //$NON-NLS-1$
 
         private JCheckBox unavailable = new JCheckBox(Messages.getString("ManagerWindow.unavailable"), true); //$NON-NLS-1$
+
+        private JCheckBox parent;
 
         public CustomMatcher() {
             this.installed.addItemListener(this);
@@ -83,6 +86,9 @@ public class ModOptionsWindow extends JFrame {
          */
         @Override
         public boolean matches(ETableRecord<ModOption> it) {
+            if (this.parent.isSelected()) {
+                return true;
+            }
             ETableRecord<ModOption> item = it;
             if (((Boolean) this.installed.isSelected()).equals(item.getBean().getInstalled())) {
                 return true;
@@ -94,6 +100,11 @@ public class ModOptionsWindow extends JFrame {
                 return true;
             }
             return false;
+        }
+
+        public void setParent(JCheckBox parent) {
+            this.parent = parent;
+            this.parent.addItemListener(this);
         }
 
     }
@@ -130,10 +141,12 @@ public class ModOptionsWindow extends JFrame {
         jtable.getTableHeader().setBorder(BorderFactory.createRaisedBevelBorder());
 
         JPanel filters = new JPanel(new FlowLayout());
-
+        CheckBoxTitledBorder checkboxBorder = new CheckBoxTitledBorder(filters, Messages.getString("ManagerWindow.filters"));//$NON-NLS-1$
+        filters.setBorder(checkboxBorder);
         filters.add(this.matcher.installed);
         filters.add(this.matcher.available);
         filters.add(this.matcher.unavailable);
+        this.matcher.setParent(checkboxBorder.getCheckbox());
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.add(filters, BorderLayout.NORTH);
