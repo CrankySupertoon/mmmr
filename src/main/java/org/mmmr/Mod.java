@@ -60,6 +60,8 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     private String mcVersionDependency;
 
+    private Mode mode;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
     private ModPack modPack;
@@ -205,6 +207,11 @@ public class Mod implements Comparable<Mod>, PersistentObject {
         return this.mcVersionDependency;
     }
 
+    @XmlAttribute
+    public Mode getMode() {
+        return this.mode;
+    }
+
     @XmlTransient
     public ModPack getModPack() {
         return this.modPack;
@@ -298,6 +305,10 @@ public class Mod implements Comparable<Mod>, PersistentObject {
 
     public void setMcVersionDependency(String mcVersionDependency) {
         this.mcVersionDependency = mcVersionDependency;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
     }
 
     protected void setModPack(ModPack modPack) {

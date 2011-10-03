@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 
 import org.mmmr.Mod;
+import org.mmmr.Mode;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.InstallationService;
@@ -54,6 +55,10 @@ public class ModOption {
 
     public Mod getMod() {
         return this.mod;
+    }
+
+    public Mode getMode() {
+        return this.mod.getMode();
     }
 
     public String getName() {
@@ -145,6 +150,10 @@ public class ModOption {
 
     public void setModArchive(@SuppressWarnings("unused") boolean modArchive) {
         //
+    }
+
+    public void setMode(Mode mode) {
+        this.mod.setMode(mode);
     }
 
     public void setName(String name) {

@@ -45,7 +45,6 @@ FEATURES IN PROGRESS
 - help webpages available in MMMR (0% done)
 - support other OS (0% done)
 - mod install config description as html, trplace links if not encapsulated in '<a href' (0% done)
-- add property in mod (db & xml): modes (like SSP), not required, java.util.List, enum (0% done)
 - load mod install configurations also from subdirectories (0% done)
 
 

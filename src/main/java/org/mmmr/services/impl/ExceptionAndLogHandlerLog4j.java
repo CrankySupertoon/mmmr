@@ -1,6 +1,8 @@
 package org.mmmr.services.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 
 import org.apache.log4j.Appender;
@@ -54,6 +56,13 @@ public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
             LevelRangeFilter filter = LevelRangeFilter.class.cast(appender.getFilter());
             filter.setLevelMin(level);
         }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintWriter out = new PrintWriter(baos);
+        System.getProperties().list(out);
+        out.flush();
+        out.close();
+        this.log(new String(baos.toByteArray()));
     }
 
     /**

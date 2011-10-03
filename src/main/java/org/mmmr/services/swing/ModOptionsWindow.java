@@ -318,6 +318,9 @@ public class ModOptionsWindow extends JFrame {
         headers.add(Messages.getString("ModOptionsWindow.version"), String.class, false); //$NON-NLS-1$
         orderedFields.add("version"); //$NON-NLS-1$
 
+        headers.add(Messages.getString("ModOptionsWindow.mode"), String.class, false); //$NON-NLS-1$
+        orderedFields.add("mode"); //$NON-NLS-1$        
+
         headers.add(Messages.getString("ModOptionsWindow.description"), String.class, false); //$NON-NLS-1$
         orderedFields.add("description"); //$NON-NLS-1$
 
@@ -376,6 +379,17 @@ public class ModOptionsWindow extends JFrame {
                 }
                 // add mod configuration
                 records.add(new ETableRecordBean<ModOption>(orderedFields, new ModOption(this.cfg, availableMod)));
+            } catch (javax.xml.bind.UnmarshalException ex) {
+                ExceptionAndLogHandler.log(ex);
+                Throwable linkedException = ex.getLinkedException();
+                StringBuilder sb = new StringBuilder();
+                if (linkedException instanceof org.xml.sax.SAXParseException) {
+                    sb.append("     lineNumber: ").append(org.xml.sax.SAXParseException.class.cast(linkedException).getLineNumber()).append("\n");//$NON-NLS-1$ //$NON-NLS-2$
+                    sb.append("     columnNumber: ").append(org.xml.sax.SAXParseException.class.cast(linkedException).getColumnNumber()).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
+                }
+                sb.append("     ").append(linkedException.getLocalizedMessage()); //$NON-NLS-1$
+                UtilityMethods.showWarning(this.cfg, Messages.getString("ModOptionsWindow.xml_corrupt_title"), //$NON-NLS-1$
+                        String.format(Messages.getString("ModOptionsWindow.xml_corrupt_message"), "     " + modxml.getName(), sb)); //$NON-NLS-1$ //$NON-NLS-2$
             } catch (Exception ex) {
                 ExceptionAndLogHandler.log(ex);
             }

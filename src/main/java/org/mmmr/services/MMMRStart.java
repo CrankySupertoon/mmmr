@@ -17,7 +17,6 @@ public class MMMRStart {
             Config cfg = new Config(args);
             BatCheck.check(cfg);
             VersionCheck.check(cfg);
-            System.getProperties().list(System.out);
             ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
             toolTipManager.setInitialDelay(100);
             toolTipManager.setReshowDelay(100);
