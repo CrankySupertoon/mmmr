@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="Titans v4.5.zip" mc="1.8.1" name="Titans" url="http://www.minecraftforum.net/topic/515037-181titans-v45-finally-updated-to-minecraft-181/" version="4.5">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+		<mod name="Minecraft Forge" url="http://www.minecraftforum.net/topic/514000-" version="1.1.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="Put in minecraft.jar/" targetpath="bin/minecraft.jar"/>
+		<resource sourcepath="Put in resources folder/" targetpath="resources/"/>
+		<resource sourcepath="Titans.properties" targetpath="Titans.properties"/>
+    </resources>
+</mod>

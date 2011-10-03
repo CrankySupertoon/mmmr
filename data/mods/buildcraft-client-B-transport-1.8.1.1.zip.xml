@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod archive="buildcraft-client-B-transport-1.8.1.1.zip" mc="1.8.1" name="BuildCraft transport" url="http://www.minecraftforum.net/topic/286417-181-buildcraft-220-pipes-quarry-auto-crafting-building-engines/" version="1.8.1.1">
+<mod mode="SMP" archive="buildcraft-client-B-transport-1.8.1.1.zip" mc="1.8.1" name="BuildCraft transport" url="http://www.minecraftforum.net/topic/286417-181-buildcraft-220-pipes-quarry-auto-crafting-building-engines/" version="1.8.1.1">
     <dependencies>
         <mod name="BuildCraft core" version="1.8.1.1"/>
     </dependencies>

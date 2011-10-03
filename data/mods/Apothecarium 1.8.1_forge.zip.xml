@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SSP" archive="Apothecarium 1.8.1_forge.zip" mc="1.8.1" name="Apothecarium" url="http://www.minecraftforum.net/topic/535193-181-apothecarium-updated-source-code-available/" version="1.30">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+		<mod name="Minecraft Forge" url="http://www.minecraftforum.net/topic/514000-" version="1.1.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="Place in minecraft jar/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
