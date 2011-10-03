@@ -49,6 +49,8 @@ import org.mmmr.services.swing.common.ETableI;
 import org.mmmr.services.swing.common.ETableRecord;
 import org.mmmr.services.swing.common.ETableRecordBean;
 import org.mmmr.services.swing.common.RoundedPanel;
+import org.mmmr.services.swing.common.TristateCheckBox;
+import org.mmmr.services.swing.common.TristateState;
 import org.mmmr.services.swing.common.UIUtils;
 import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 
@@ -57,18 +59,15 @@ import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
  */
 public class ModOptionsWindow extends JFrame {
     private class CustomMatcher extends org.mmmr.services.swing.common.ETable.Filter<ModOption> implements ItemListener {
-        private JCheckBox installed = new JCheckBox(Messages.getString("ManagerWindow.installed"), true); //$NON-NLS-1$
+        private TristateCheckBox installed = new TristateCheckBox(Messages.getString("ManagerWindow.installed"), null, TristateState.INDETERMINATE); //$NON-NLS-1$
 
-        private JCheckBox available = new JCheckBox(Messages.getString("ManagerWindow.available"), true); //$NON-NLS-1$
-
-        private JCheckBox unavailable = new JCheckBox(Messages.getString("ManagerWindow.unavailable"), true); //$NON-NLS-1$
+        private TristateCheckBox available = new TristateCheckBox(Messages.getString("ManagerWindow.available"), null, TristateState.INDETERMINATE); //$NON-NLS-1$
 
         private JCheckBox parent;
 
         public CustomMatcher() {
             this.installed.addItemListener(this);
             this.available.addItemListener(this);
-            this.unavailable.addItemListener(this);
         }
 
         /**
@@ -86,20 +85,17 @@ public class ModOptionsWindow extends JFrame {
          */
         @Override
         public boolean matches(ETableRecord<ModOption> it) {
-            if (this.parent.isSelected()) {
-                return true;
-            }
             ETableRecord<ModOption> item = it;
-            if (((Boolean) this.installed.isSelected()).equals(item.getBean().getInstalled())) {
-                return true;
-            }
-            if (((Boolean) this.available.isSelected()).equals(item.getBean().isModArchive())) {
-                return true;
-            }
-            if (!((Boolean) this.unavailable.isSelected()).equals(item.getBean().isModArchive())) {
-                return true;
-            }
-            return false;
+            Boolean parentSelected = this.parent.isSelected();
+            Boolean installedSelected = this.installed.getStateValue();
+            Boolean availableSelected = this.available.getStateValue();
+            Boolean archiveAvailable = item.getBean().isModArchive();
+            Boolean modInstalled = item.getBean().getInstalled();
+            boolean I = (installedSelected == null) || installedSelected.equals(modInstalled);
+            boolean A = (availableSelected == null) || availableSelected.equals(archiveAvailable);
+            boolean accept = !parentSelected || (I && A);
+            ExceptionAndLogHandler.log("mod=" + item.getBean().getName() + "::" + !parentSelected + "|" + I + "&" + A);
+            return accept;
         }
 
         public void setParent(JCheckBox parent) {
@@ -145,7 +141,6 @@ public class ModOptionsWindow extends JFrame {
         filters.setBorder(checkboxBorder);
         filters.add(this.matcher.installed);
         filters.add(this.matcher.available);
-        filters.add(this.matcher.unavailable);
         this.matcher.setParent(checkboxBorder.getCheckbox());
 
         JPanel tablePanel = new JPanel(new BorderLayout());
@@ -197,6 +192,8 @@ public class ModOptionsWindow extends JFrame {
         this.setSize((int) jtable.getPreferredSize().getWidth(), this.getHeight());
         UIUtils.rounded(this);
         this.setResizable(false);
+
+        this.matcher.fire();
     }
 
     protected void applyChanges() {
