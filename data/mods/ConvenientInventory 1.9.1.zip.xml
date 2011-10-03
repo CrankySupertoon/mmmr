@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="ConvenientInventory 1.9.1.zip" mc="1.8.1" name="Convenient Inventory" url="http://www.minecraftforum.net/topic/504091-181-convenient-inventory/" version="1.9.1">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource exclude="LICENCE.TXT" sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

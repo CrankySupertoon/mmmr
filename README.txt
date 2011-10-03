@@ -40,7 +40,9 @@ FEATURES IN PROGRESS
 - mail bugs, feature-request and new and updated mod install configurations to include in MMMR (0% done)
 - help webpages available in MMMR (0% done)
 - support other OS (0% done)
-
+- mod install config description as html, trplace links if not encapsulated in '<a href' (0% done)
+- add filters in mod install manager: installed, available, unavailable (0% done)
+- add property in mod (db & xml): multiplayer compatible (0% done)
 
 
 

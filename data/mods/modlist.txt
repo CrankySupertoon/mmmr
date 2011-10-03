@@ -5,7 +5,17 @@
 1316954142897::Arrows Mod.zip.xml
 1316954142904::AudioMod.zip.xml
 1316954142907::breeder_mod.zip.xml
+1317597554778::buildcraft-client-A-core-1.8.1.1.zip.xml
+1317597860267::buildcraft-client-A-core-2.2.0.zip.xml
+1317597616744::buildcraft-client-B-builders-1.8.1.1.zip.xml
+1317597915271::buildcraft-client-B-builders-2.2.0.zip.xml
+1317597947755::buildcraft-client-B-energy-2.2.0.zip.xml
+1317597640995::buildcraft-client-B-factory-1.8.1.1.zip.xml
+1317597996684::buildcraft-client-B-factory-2.2.0.zip.xml
+1317597668506::buildcraft-client-B-transport-1.8.1.1.zip.xml
+1317598043320::buildcraft-client-B-transport-2.2.0.zip.xml
 1317593942207::Clay_Soldiers_36.zip.xml
+1317600113394::ConvenientInventory 1.9.1.zip.xml
 1316954142900::Crystal Tools 1.3 Final.zip.xml
 1316954142906::Crystal Wing.zip.xml
 1317067777226::CrystalCraft v1.42.zip.xml
@@ -23,6 +33,7 @@
 1316954142903::Lightsensor.zip.xml
 1317594725105::Millenaire1.6.6.zip.xml
 1316954142888::minecraft-mipmap-20-dev.zip.xml
+1317598431485::minecraftforge-client-1.1.1.zip.xml
 1316954142892::ModLoader.zip.xml
 1317594237614::mod_Fossil.zip.xml
 1316954142899::mod_Fossil_resources.zip.xml
@@ -31,6 +42,7 @@
 1317594517167::MoreCreepsv2.41.rar.xml
 1317420378501::OptiFine_1.8.1_HD_A.zip.xml
 1317420371854::OptiFine_1.8.1_HD_S_A.zip.xml
+1317599417629::PaintballModClient.zip.xml
 1316987861614::PremiumWoodv15.0.zip.xml
 1316954142887::Recipe Book.zip.xml
 1316954142896::Score.zip.xml
@@ -38,6 +50,7 @@
 1316954142904::Shelf.zip.xml
 1316954142885::Sign Tags.zip.xml
 1316954142891::SinglePlayerCommands-MC1.8.1V2.12.1.zip.xml
+1317598818444::SmoothCam+CreativeToggleKey for MC b1.8.zip.xml
 1316954142893::sprint_v0.2.rar.xml
 1316954142895::Starting Inventory.zip.xml
 1316954142891::TF2Sentry_Beta_v0.5.zip.xml
@@ -47,5 +60,6 @@
 1317422556784::transport_mod_1.0.2.zip.xml
 1316954142906::Treecapitator.zip.xml
 1316954142911::water_shader_v4dml.zip.xml
+1317600598826::Weaponmod.zip.xml
 1316954142901::[1.8.1] Somnia v14.zip.xml
 1317594594476::[1.8.1]ReiMinimap_v2.2_01.zip.xml

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="Weaponmod.zip" mc="1.8.1" name="Balkon's WeaponMod" url="http://www.minecraftforum.net/topic/211517-181-balkons-weaponmod-v71-cannon/" version="7.1">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource exclude="Files for mods folder/Readme.txt" sourcepath="Files for mods folder/" targetpath="mods/"/>
+        <resource exclude="HD textures (optional)/Readme.txt" sourcepath="HD textures (optional)/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
