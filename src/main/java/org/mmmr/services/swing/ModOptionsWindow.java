@@ -2,10 +2,13 @@ package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -21,6 +24,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -51,6 +55,49 @@ import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
  * @author Jurgen
  */
 public class ModOptionsWindow extends JFrame {
+    private class CustomMatcher extends org.mmmr.services.swing.common.ETable.Filter<ModOption> implements ItemListener {
+        private JCheckBox installed = new JCheckBox(Messages.getString("ManagerWindow.installed"), true); //$NON-NLS-1$
+
+        private JCheckBox available = new JCheckBox(Messages.getString("ManagerWindow.available"), true); //$NON-NLS-1$
+
+        private JCheckBox unavailable = new JCheckBox(Messages.getString("ManagerWindow.unavailable"), true); //$NON-NLS-1$
+
+        public CustomMatcher() {
+            this.installed.addItemListener(this);
+            this.available.addItemListener(this);
+            this.unavailable.addItemListener(this);
+        }
+
+        /**
+         * 
+         * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
+         */
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            this.fire();
+        }
+
+        /**
+         * 
+         * @see ca.odell.glazedlists.matchers.Matcher#matches(java.lang.Object)
+         */
+        @Override
+        public boolean matches(ETableRecord<ModOption> it) {
+            ETableRecord<ModOption> item = it;
+            if (((Boolean) this.installed.isSelected()).equals(item.getBean().getInstalled())) {
+                return true;
+            }
+            if (((Boolean) this.available.isSelected()).equals(item.getBean().isModArchive())) {
+                return true;
+            }
+            if (!((Boolean) this.unavailable.isSelected()).equals(item.getBean().isModArchive())) {
+                return true;
+            }
+            return false;
+        }
+
+    }
+
     private static final long serialVersionUID = -3663235803657033008L;
 
     protected Config cfg;
@@ -58,6 +105,8 @@ public class ModOptionsWindow extends JFrame {
     protected ETable options;
 
     private final InstallationService iserv;
+
+    private CustomMatcher matcher;
 
     public ModOptionsWindow(final Config cfg) throws HeadlessException {
         this.cfg = cfg;
@@ -79,7 +128,17 @@ public class ModOptionsWindow extends JFrame {
         final JTable jtable = this.getOptions();
         jtable.setBorder(BorderFactory.createRaisedBevelBorder());
         jtable.getTableHeader().setBorder(BorderFactory.createRaisedBevelBorder());
-        mainpanel.add(new JScrollPane(jtable), BorderLayout.CENTER);
+
+        JPanel filters = new JPanel(new FlowLayout());
+
+        filters.add(this.matcher.installed);
+        filters.add(this.matcher.available);
+        filters.add(this.matcher.unavailable);
+
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.add(filters, BorderLayout.NORTH);
+        tablePanel.add(new JScrollPane(jtable), BorderLayout.CENTER);
+        mainpanel.add(tablePanel, BorderLayout.CENTER);
 
         JPanel actions = new JPanel(new GridLayout(1, -1));
 
@@ -171,7 +230,8 @@ public class ModOptionsWindow extends JFrame {
         }
 
         ETableConfig configuration = new ETableConfig(true, false, true, true, false, true, false, true);
-        this.options = new ETable(configuration);
+        this.matcher = new CustomMatcher();
+        this.options = new ETable(configuration, this.matcher);
         this.options.setFont(this.cfg.getFontTable());
         final ETableI safetable = this.options.getEventSafe();
         final List<String> orderedFields = new ArrayList<String>();

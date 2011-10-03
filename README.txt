@@ -23,17 +23,20 @@ COMPLETED FEATURES
   * JVM 1.7 is sometimes required if you use mods that are compiled to only work with JVM 1.7
   * JVM 64bit is required to use more than ~1.5GB RAM for Minecraft
 - manages different OptiFine installations, quickly switch between options or remove it
-- HQ font for Minecraft (needs OptiFine installed or MCPatcher run manually)
-- check if mod is updated (only MinecraftForum)
+- HQ font for Minecraft (requires OptiFine to be installed)
+- installing mods
+ * easy filtering between installed, (un)available [depends if archive is downloaded]
+ * check if mod is updated (only MinecraftForum)
 - visit mod site links to check updates, information
 - favorite links (additional ones can be added by dragging a hyperlink from the browser to the 'data\links' directory)
+
 
 FEATURES IN PROGRESS
 --------------------
 
 - install and uninstall mods, warns about file conflicts (80% done)
 - backup and restore world and character data and keyboard setting, includes load order list for reference (50% done)
-- reorder mods to fix conflicts between compatible mods, or remove one of both if impossible (25% done)
+- reorder mods to fix conflicts between compatible mods, or remove one of both if impossible, drag&drop (25% done)
 - check mod install configurations (drag and drop) when a user creates one himself by hand (0% done)
 - create mod install configurations with wizard based on existing or create new ones (0% done)
 - create merged patches (to fix incompatible mods) with wizard and install them as mod (0% done)
@@ -41,8 +44,7 @@ FEATURES IN PROGRESS
 - help webpages available in MMMR (0% done)
 - support other OS (0% done)
 - mod install config description as html, trplace links if not encapsulated in '<a href' (0% done)
-- add filters in mod install manager: installed, available, unavailable (0% done)
-- add property in mod (db & xml): multiplayer compatible (0% done)
+- add property in mod (db & xml): modes (like SSP), not required, java.util.List, enum (0% done)
 
 
 

@@ -206,11 +206,17 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
         protected EventList<ETableRecord> source;
 
-        protected EFiltering(EventList<ETableRecord> source) {
+        protected EFiltering(EventList<ETableRecord> source, AbstractMatcherEditor<ETableRecord> matcher) {
             this.source = source;
+            if (matcher != null) {
+                // we do matching ourselves
+                this.filteredRecords = new FilterList<ETableRecord>(source, matcher);
+                return;
+            }
             if (!ETable.this.cfg.isFilterable()) {
                 return;
             }
+            // default matching
             this.matcherEditor = new RecordMatcherEditor();
             this.filteredRecords = new FilterList<ETableRecord>(source, this.matcherEditor);
         }
@@ -233,7 +239,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
         }
 
         protected EventList<ETableRecord> getRecords() {
-            if (!ETable.this.cfg.isFilterable()) {
+            if (this.filteredRecords == null) {
                 return this.source;
             }
             return this.filteredRecords;
@@ -330,11 +336,17 @@ public class ETable extends JTable implements ETableI, Reorderable {
         };
     }
 
+    public static abstract class Filter<T> extends RecordMatcherEditor<T> implements Matcher<ETableRecord<T>> {
+        public void fire() {
+            this.fire(this);
+        }
+    }
+
     /**
      * J_DOC
      */
-    protected class RecordMatcherEditor extends AbstractMatcherEditor<ETableRecord> {
-        public void fire(Matcher<ETableRecord> matcher) {
+    protected static class RecordMatcherEditor<T> extends AbstractMatcherEditor<ETableRecord<T>> {
+        protected void fire(Matcher<ETableRecord<T>> matcher) {
             this.fireChanged(matcher);
         }
     }
@@ -471,6 +483,10 @@ public class ETable extends JTable implements ETableI, Reorderable {
     }
 
     public ETable(ETableConfig configuration) {
+        this(configuration, null);
+    }
+
+    public ETable(ETableConfig configuration, Filter matcher) {
         this.cfg = configuration;
         this.cfg.lock();
         if (this.cfg.isVertical()) {
@@ -485,7 +501,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
         this.records = (this.cfg.isThreadSafe() ? GlazedLists.threadSafeList(new BasicEventList<ETableRecord>()) : new BasicEventList<ETableRecord>());
         this.sorting = new ESorting(this.records);
         this.tableFormat = new ETableHeaders();
-        this.filtering = new EFiltering(this.sorting.getRecords());
+        this.filtering = new EFiltering(this.sorting.getRecords(), matcher);
         this.tableModel = new ETableModel(this.filtering.getRecords(), this.tableFormat);
         this.setModel(this.tableModel);
         this.tableSelectionModel = new EventSelectionModel<ETableRecord>(this.records);
