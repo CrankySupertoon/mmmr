@@ -444,13 +444,20 @@ public class UtilityMethods {
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        UIUtils.rounded(dialog);
-        UIUtils.translucent(dialog);
-        dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
-        dialog.setVisible(true);
-        dialog.dispose();
+        dialogPostCreate(dialog);
         return jop.getValue().equals(JOptionPane.YES_OPTION);
+    }
+
+    public static boolean showConfirmationOkCancel(Config cfg, String title, String message) {
+        RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        jop.getDelegate().setShady(false);
+        new MoveMouseListener(jop);
+        JDialog dialog = UtilityMethods.createDialog(jop, title);
+        if (cfg != null) {
+            dialog.setIconImage(cfg.getIcon().getImage());
+        }
+        dialogPostCreate(dialog);
+        return jop.getValue().equals(JOptionPane.OK_OPTION);
     }
 
     public static void showInformation(Config cfg, String title, String message) {
@@ -461,6 +468,10 @@ public class UtilityMethods {
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
+        dialogPostCreate(dialog);
+    }
+
+    protected static void dialogPostCreate(JDialog dialog) {
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         UIUtils.rounded(dialog);
         UIUtils.translucent(dialog);
@@ -502,12 +513,7 @@ public class UtilityMethods {
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        UIUtils.rounded(dialog);
-        UIUtils.translucent(dialog);
-        dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
-        dialog.setVisible(true);
-        dialog.dispose();
+        dialogPostCreate(dialog);
     }
 
     public static String sortable(String s) {
