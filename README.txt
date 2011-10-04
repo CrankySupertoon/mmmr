@@ -31,21 +31,24 @@ COMPLETED FEATURES
 - visit mod site links to check updates, information
 - favorite links (additional ones can be added by dragging a hyperlink from the browser to the 'data\links' directory)
 
-
 FEATURES IN PROGRESS
 --------------------
 
-- install and uninstall mods, warns about file conflicts (80% done)
-- backup and restore world and character data and keyboard setting, includes load order list for reference (50% done)
+- install and uninstall mods, warns about file conflicts (75% done)
 - reorder mods to fix conflicts between compatible mods, or remove one of both if impossible, drag&drop (25% done)
-- check mod install configurations (drag and drop) when a user creates one himself by hand (0% done)
-- create mod install configurations with wizard based on existing or create new ones (0% done)
-- create merged patches (to fix incompatible mods) with wizard and install them as mod (0% done)
-- mail bugs, feature-request and new and updated mod install configurations to include in MMMR (0% done)
-- help webpages available in MMMR (0% done)
-- support other OS (0% done)
-- mod install config description as html, trplace links if not encapsulated in '<a href' (0% done)
-- load mod install configurations also from subdirectories (0% done)
+
+FEATURES NOT STARTED
+--------------------
+
+- backup and restore world and character data and keyboard setting, includes load order list for reference
+- check mod install configurations (drag and drop) when a user creates one himself by hand
+- create mod install configurations with wizard based on existing or create new ones
+- create merged patches (to fix incompatible mods) with wizard and install them as mod
+- mail bugs, feature-request and new and updated mod install configurations to include in MMMR
+- help webpages available in MMMR
+- support other OS
+- mod install config description as html, trplace links if not encapsulated in '<a href'
+- load mod install configurations also from subdirectories
 
 
 

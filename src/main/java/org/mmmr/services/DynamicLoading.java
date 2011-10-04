@@ -85,6 +85,9 @@ public class DynamicLoading {
                 if (path.endsWith("target/classes")) { //$NON-NLS-1$
                     continue;
                 }
+                if (path.contains("junit")) { //$NON-NLS-1$
+                    continue;
+                }
                 out.write(new File(cp).length() + "::" + path.substring(repo.length() + 1) + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
             }
             out.close();

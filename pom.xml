@@ -144,6 +144,12 @@
 			<artifactId>javassist</artifactId>
 			<version>3.12.1.GA</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -235,8 +241,6 @@
 						${project.build.sourceDirectory}
 					</sourceDirectory>
 					<tags>
-						<tag>@todo</tag>
-						<tag>@fixme</tag>
 						<tag>TODO</tag>
 						<tag>FIXME</tag>
 					</tags>
@@ -268,8 +272,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<reportSets>
-				</reportSets>
 			</plugin>
 		</plugins>
 	</reporting>

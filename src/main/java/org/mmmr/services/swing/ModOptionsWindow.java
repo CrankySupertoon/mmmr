@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,10 +31,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
 
+import org.apache.commons.lang.StringUtils;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
@@ -58,16 +63,37 @@ import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
  * @author Jurgen
  */
 public class ModOptionsWindow extends JFrame {
-    private class CustomMatcher extends org.mmmr.services.swing.common.ETable.Filter<ModOption> implements ItemListener {
+    private class CustomMatcher extends org.mmmr.services.swing.common.ETable.Filter<ModOption> implements ItemListener, DocumentListener {
         private TristateCheckBox installed = new TristateCheckBox(Messages.getString("ManagerWindow.installed"), null, TristateState.INDETERMINATE); //$NON-NLS-1$
 
         private TristateCheckBox available = new TristateCheckBox(Messages.getString("ManagerWindow.available"), null, TristateState.INDETERMINATE); //$NON-NLS-1$
+
+        private JTextField name = new JTextField(20);
 
         private JCheckBox parent;
 
         public CustomMatcher() {
             this.installed.addItemListener(this);
             this.available.addItemListener(this);
+            this.name.getDocument().addDocumentListener(this);
+        }
+
+        /**
+         * 
+         * @see javax.swing.event.DocumentListener#changedUpdate(javax.swing.event.DocumentEvent)
+         */
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            this.fire();
+        }
+
+        /**
+         * 
+         * @see javax.swing.event.DocumentListener#insertUpdate(javax.swing.event.DocumentEvent)
+         */
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            this.fire();
         }
 
         /**
@@ -93,9 +119,20 @@ public class ModOptionsWindow extends JFrame {
             Boolean modInstalled = item.getBean().getInstalled();
             boolean I = (installedSelected == null) || installedSelected.equals(modInstalled);
             boolean A = (availableSelected == null) || availableSelected.equals(archiveAvailable);
-            boolean accept = !parentSelected || (I && A);
-            ExceptionAndLogHandler.log("mod=" + item.getBean().getName() + "::" + !parentSelected + "|" + I + "&" + A);
+            boolean N = StringUtils.isBlank(this.name.getText())
+                    || Pattern.compile(this.name.getText(), Pattern.CASE_INSENSITIVE).matcher(it.getBean().getName()).find();
+            boolean accept = !parentSelected || (I && A && N);
+            ExceptionAndLogHandler.log("mod=" + item.getBean().getName() + "::" + !parentSelected + "|" + I + "&" + A + "&" + N);
             return accept;
+        }
+
+        /**
+         * 
+         * @see javax.swing.event.DocumentListener#removeUpdate(javax.swing.event.DocumentEvent)
+         */
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            this.fire();
         }
 
         public void setParent(JCheckBox parent) {
@@ -141,6 +178,8 @@ public class ModOptionsWindow extends JFrame {
         filters.setBorder(checkboxBorder);
         filters.add(this.matcher.installed);
         filters.add(this.matcher.available);
+        filters.add(new JLabel(Messages.getString("ManagerWindow.name")));//$NON-NLS-1$
+        filters.add(this.matcher.name);
         this.matcher.setParent(checkboxBorder.getCheckbox());
 
         JPanel tablePanel = new JPanel(new BorderLayout());
