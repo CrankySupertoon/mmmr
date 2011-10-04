@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="RegenOresv3.0.zip" mc="1.8.1" name="RegenOres" url="http://www.minecraftforum.net/topic/228940-181scokeev9-premiumwood-v150-12-more-thanks-for-400000-dls/#regen" version="3.0">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="add-to-minecraft-jar/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

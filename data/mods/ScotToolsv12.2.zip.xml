@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SSP" archive="ScotToolsv12.2.zip" mc="1.8.1" name="ScotTools API" url="http://www.minecraftforum.net/topic/228940-181scokeev9-premiumwood-v150-12-more-thanks-for-400000-dls/#tools" version="12.2">
+    <resources>
+        <resource sourcepath="add-to-minecraft-jar/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
