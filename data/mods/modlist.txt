@@ -31,6 +31,7 @@
 1317683165326::EqExClientV4.16.zip.xml
 1317683155414::EqExForgeV4.16.zip.xml
 1316954142898::Floating Ruins.zip.xml
+1317750917049::FloatingIslandsv2.0.zip.xml
 1316954142892::Floodgate.zip.xml
 1316954142885::GuiAPI 0.11.1-1.8.1.zip.xml
 1316986046293::ID Resolver 1.8.1 Update 0 Standard Edition.7z.xml
@@ -40,7 +41,8 @@
 1316954142899::iPixeliGenderMod1.8.1v3.4client.zip.xml
 1317683055413::ItemSpriteAPIv2.0.zip.xml
 1316954142903::Lightsensor.zip.xml
-1317594725105::Millenaire1.6.6.zip.xml
+1317751987993::Millenaire1.6.6.zip.xml
+1317749780006::Millenaire1.6.7.zip.xml
 1316954142888::minecraft-mipmap-20-dev.zip.xml
 1317598431485::minecraftforge-client-1.1.1.zip.xml
 1316954142892::ModLoader.zip.xml
@@ -55,8 +57,10 @@
 1316987861614::PremiumWoodv15.0.zip.xml
 1316954142887::Recipe Book.zip.xml
 1317677946608::RedPower2-Prerelease-2.0pr1.zip.xml
+1317751059477::RegenOresv3.0.zip.xml
 1316954142896::Score.zip.xml
-1316954142887::ScotToolsv12.1.zip.xml
+1317751988581::ScotToolsv12.1.zip.xml
+1317750522693::ScotToolsv12.2.zip.xml
 1316954142904::Shelf.zip.xml
 1317672189149::SiegeCraft_0.2.5b.rar.xml
 1317672051394::SiegeCraft_MODLOADER_SinglePlayer_0.3.1b.rar.xml
