@@ -15,8 +15,6 @@ import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,10 +31,6 @@ import org.hibernate.annotations.Cascade;
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @Entity
 public class Resource implements Comparable<Resource>, PersistentObject {
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "resource")
-    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
-    private List<Dependency> dependencies;
-
     private String exclude;
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "resource")
@@ -97,12 +91,6 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         return new EqualsBuilder().append(this.sourcePath, castOther.sourcePath).append(this.targetPath, castOther.targetPath).isEquals();
     }
 
-    @XmlElementWrapper
-    @XmlElementRef
-    public List<Dependency> getDependencies() {
-        return this.dependencies;
-    }
-
     @XmlAttribute
     public String getExclude() {
         return this.exclude;
@@ -152,10 +140,6 @@ public class Resource implements Comparable<Resource>, PersistentObject {
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(this.sourcePath).append(this.targetPath).toHashCode();
-    }
-
-    public void setDependencies(List<Dependency> dependencies) {
-        this.dependencies = dependencies;
     }
 
     public void setExclude(String exclude) {

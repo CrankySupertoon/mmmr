@@ -269,13 +269,17 @@ public class MMMR implements MMMRI {
             }
 
             if (ybcheck) {
+                File minecraftZip = new File(this.cfg.getMcJar().getAbsolutePath() + ".zip"); //$NON-NLS-1$
                 if (this.cfg.getMcJar().isFile()) {
-                    File minecraftZip = new File(this.cfg.getMcJar().getAbsolutePath() + ".zip"); //$NON-NLS-1$
                     this.cfg.getMcJar().renameTo(minecraftZip);
                     this.cfg.getMcJar().mkdirs();
                     ArchiveService.extract(minecraftZip, this.cfg.getMcJar());
                 }
                 if ((this.mc.getFiles() == null) || (this.mc.getFiles().size() == 0)) {
+                    if (this.cfg.getMcJogboxBackup().exists()) {
+                        // jogbox was not installed
+                        ArchiveService.extract(minecraftZip, this.cfg.getBackupOriginalJar());
+                    }
                     this.addContents("bin/minecraft.jar/", this.cfg.getBackupOriginalJar().getAbsolutePath().length() + 1, //$NON-NLS-1$
                             this.cfg.getBackupOriginalJar());
                     this.addContents(this.cfg.getMcResources().getName() + "/", this.cfg.getMcResources().getAbsolutePath().length() + 1, //$NON-NLS-1$

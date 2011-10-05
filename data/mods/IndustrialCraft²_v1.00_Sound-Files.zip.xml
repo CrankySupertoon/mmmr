@@ -5,6 +5,6 @@
 		<mod name="AudioMod" url="http://www.minecraftforum.net/topic/75440-v181-risugamis-mods-everything-updated/" version="1.8"/>
     </dependencies>
     <resources>
-        <resource sourcepath="sound/" targetpath="ressources/mod/sound/"/>
+        <resource sourcepath="sound/" targetpath="resources/mod/sound/"/>
     </resources>
 </mod>

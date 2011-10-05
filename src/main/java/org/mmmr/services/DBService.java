@@ -91,6 +91,15 @@ public class DBService {
         return this.hql("from " + clazz.getName(), clazz);
     }
 
+    public <T extends PersistentObject> void delete(T object) {
+        if (object.getId() != null) {
+            Transaction tx = this.session.beginTransaction();
+            this.session.delete(object);
+            this.session.flush();
+            tx.commit();
+        }
+    }
+
     /**
      * returns an object saved from databse or null
      */

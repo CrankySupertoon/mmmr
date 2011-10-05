@@ -123,14 +123,14 @@ public class InstallationService {
         for (Resource resource : mod.getResources()) {
             for (MCFile mcfile : resource.getFiles()) {
                 ExceptionAndLogHandler.log(mcfile.getPath());
-                List<Conflict> results = DBTstSuperClass.dbService.hql(hql, Conflict.class, mcfile.getPath());
+                List<Conflict> results = dbService.hql(hql, Conflict.class, mcfile.getPath());
                 Collections.sort(results);
                 int myOrder = results.indexOf(dummy);
                 int listSize = results.size();
                 if (listSize == 1) {
                     ExceptionAndLogHandler.log("one and only => remove");
                     info.delete.add(mcfile.getPath());
-                } else if (myOrder + 1 == listSize) {
+                } else if ((myOrder + 1) == listSize) {
                     Conflict conflict = results.get(listSize - 2);
                     ExceptionAndLogHandler.log("last and not only one => restore :: " + conflict);
                     info.restore.put(mcfile.getPath(), conflict.get());
@@ -315,22 +315,27 @@ public class InstallationService {
     private void uninstallMod(@SuppressWarnings("unused") boolean check, Mod mod) throws IOException {
         UninstallMod info = InstallationService.uninstallMod(this.cfg.getDb(), mod);
 
-        for (String path : info.delete) {
-            new File(this.cfg.getMcBaseFolder(), path).delete();
-        }
-
         for (Map.Entry<Object, List<String>> entry : info.restoreGrouped.entrySet()) {
             if (entry.getKey() instanceof MC) {
                 for (String path : entry.getValue()) {
-                    UtilityMethods.copyFile(new File(this.cfg.getMcJarBackup(), path), new File(this.cfg.getMcBaseFolder(), path));
+                    if (path.startsWith("bin/minecraft.jar")) {
+                        path = path.replaceFirst("bin/minecraft.jar/", "");
+                        UtilityMethods.copyFile(new File(this.cfg.getBackupOriginalJar(), path), new File(this.cfg.getMcBaseFolder(), path));
+                    } else {
+                        // FIXME cannot restore because no backup
+                    }
                 }
             } else if (entry.getKey() instanceof ModPack) {
-                // TODO restore
+                // TODO restore from modpack
             } else {
                 Mod restoring = Mod.class.cast(entry.getKey());
                 File archive = new File(this.cfg.getMods(), restoring.getArchive());
                 ArchiveService.extract(archive, this.cfg.getMcBaseFolder(), entry.getValue());
             }
+        }
+
+        for (String path : info.delete) {
+            new File(this.cfg.getMcBaseFolder(), path).delete();
         }
     }
 
@@ -348,5 +353,7 @@ public class InstallationService {
         }
 
         this.uninstallMod(true, mod);
+
+        this.cfg.getDb().delete(mod);
     }
 }
