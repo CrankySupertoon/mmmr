@@ -8,6 +8,7 @@
 1316954142897::Arrows Mod.zip.xml
 1316954142904::AudioMod.zip.xml
 1316954142907::breeder_mod.zip.xml
+1317766836078::BTWMod2-95.zip.xml
 1317681735797::buildcraft-client-A-core-1.8.1.1.zip.xml
 1317681727224::buildcraft-client-A-core-2.2.0.zip.xml
 1317681715322::buildcraft-client-B-builders-1.8.1.1.zip.xml
@@ -36,7 +37,7 @@
 1316954142885::GuiAPI 0.11.1-1.8.1.zip.xml
 1316986046293::ID Resolver 1.8.1 Update 0 Standard Edition.7z.xml
 1317680369692::IndustrialCraft²_v1.00.zip.xml
-1317680415842::IndustrialCraft²_v1.00_Sound-Files.zip.xml
+1317767801334::IndustrialCraft²_v1.00_Sound-Files.zip.xml
 1317668608182::InvTweaks-1.32-1.8.1.jar.xml
 1316954142899::iPixeliGenderMod1.8.1v3.4client.zip.xml
 1317683055413::ItemSpriteAPIv2.0.zip.xml
