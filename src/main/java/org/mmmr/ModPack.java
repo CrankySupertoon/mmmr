@@ -35,7 +35,7 @@ import org.hibernate.annotations.Cascade;
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "modpack_name_version", columnNames = { "name", "version" }) })
-public class ModPack implements Comparable<ModPack>, PersistentObject {
+public class ModPack implements Comparable<ModPack>, PersistentObject, Installable {
     private String description;
 
     /** database id */

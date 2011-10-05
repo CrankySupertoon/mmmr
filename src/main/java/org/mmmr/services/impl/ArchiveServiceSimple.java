@@ -104,4 +104,13 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
             }
         }
     }
+
+    /**
+     * 
+     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File, java.util.List)
+     */
+    @Override
+    public void extract(File archive, File out, List<String> paths) throws IOException {
+        // TODO Auto-generated method stub
+    }
 }

@@ -7,6 +7,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.Level;
+import org.apache.log4j.spi.RootLogger;
 import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.services.Config;
 import org.mmmr.services.UtilityMethods;
@@ -26,6 +27,15 @@ import org.slf4j.LoggerFactory;
 public class ExceptionAndLogHandlerLog4j implements ExceptionAndLogHandlerI {
     private static final Logger logger = LoggerFactory.getLogger("mmmr");
 
+    public static void noFileLogging() throws IOException {
+        RootLogger rootLogger = (RootLogger) org.apache.log4j.Logger.getRootLogger();
+        rootLogger.removeAppender("ROLLINGFILE");
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.interfaces.ExceptionAndLogHandlerI#adjustLogging(org.mmmr.services.Config)
+     */
     @Override
     public void adjustLogging(Config cfg) throws IOException {
         Level level;

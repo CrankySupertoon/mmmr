@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.util.List;
 import java.util.zip.CRC32;
 
 import net.sf.sevenzipjbinding.ExtractAskMode;
@@ -192,5 +193,14 @@ public class ArchiveService7Zip extends ArchiveServiceSimple {
         if (runtimeException != null) {
             throw runtimeException;
         }
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, java.io.File, java.util.List)
+     */
+    @Override
+    public void extract(File archive, File out, List<String> paths) throws IOException {
+        // TODO Auto-generated method stub
     }
 }

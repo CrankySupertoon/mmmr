@@ -44,10 +44,6 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
     @Column(nullable = false)
     private String sortableName;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
-    @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
-    private Resource resource;
-
     private String url;
 
     @Version
@@ -64,13 +60,6 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
         this();
         this.setName(name);
         this.setVersion(version);
-    }
-
-    public Dependency(String name, String version, Resource resource) {
-        super();
-        this.setName(name);
-        this.setVersion(version);
-        this.setResource(resource);
     }
 
     /**
@@ -116,11 +105,6 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
     }
 
     @XmlTransient
-    public Resource getResource() {
-        return this.resource;
-    }
-
-    @XmlTransient
     public String getSortableName() {
         if (this.sortableName == null) {
             this.setName(this.getName());
@@ -163,10 +147,6 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
     public void setName(String name) {
         this.name = name;
         this.setSortableName(UtilityMethods.sortable(name));
-    }
-
-    protected void setResource(Resource resource) {
-        this.resource = resource;
     }
 
     protected void setSortableName(String sortableName) {

@@ -75,14 +75,6 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         this.targetPath = targetPath;
     }
 
-    public void addDependency(Dependency dependency) {
-        if (this.getDependencies() == null) {
-            this.dependencies = new ArrayList<Dependency>();
-        }
-        this.getDependencies().add(dependency);
-        dependency.setResource(this);
-    }
-
     public void addFile(MCFile file) {
         if (this.getFiles() == null) {
             this.files = new ArrayList<MCFile>();

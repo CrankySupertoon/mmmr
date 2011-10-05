@@ -245,7 +245,11 @@ public class ModOptionsWindow extends JFrame {
             Mod inTable = Mod.class.cast(eTableRecordBean.getBean());
             if (!inTable.isInstalled()) {
                 ExceptionAndLogHandler.log("uninstall mod: " + inTable); //$NON-NLS-1$
-                this.iserv.uninstallMod(this.cfg.getDb().refresh(inTable));
+                try {
+                    this.iserv.uninstallMod(this.cfg.getDb().refresh(inTable));
+                } catch (IOException ex) {
+                    ExceptionAndLogHandler.log(ex);
+                }
             }
         }
         for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {

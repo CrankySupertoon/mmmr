@@ -9,7 +9,6 @@ import java.util.Properties;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
 import org.hibernate.criterion.Example;
 import org.mmmr.Dependency;
 import org.mmmr.MC;
@@ -41,16 +40,24 @@ public class DBService {
         return DBService.instance;
     }
 
-    private Session session = null;
+    public static String getNamedQuery(String name) {
+        try {
+            return new String(UtilityMethods.read(DBService.class.getClassLoader().getResourceAsStream(
+                    DBService.class.getPackage().getName().replace('.', '/') + "/hql/" + name + ".hql")));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    protected org.hibernate.Session session = null;
 
     /**
      * creates and configures database (Apache Derby)
      */
-    @SuppressWarnings("deprecation")
     public DBService(Config cfg) throws IOException, ClassNotFoundException {
         System.setProperty("derby.stream.error.file", new File(cfg.getLogs(), "derby.log").getAbsolutePath()); //$NON-NLS-1$ //$NON-NLS-2$
 
-        org.hibernate.cfg.AnnotationConfiguration configuration = new org.hibernate.cfg.AnnotationConfiguration();
+        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
         configuration.addAnnotatedClass(Dependency.class);
         configuration.addAnnotatedClass(MCFile.class);
         configuration.addAnnotatedClass(MC.class);
@@ -71,6 +78,10 @@ public class DBService {
         configuration.setProperties(properties);
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         this.session = sessionFactory.openSession();
+    }
+
+    public DBService(org.hibernate.Session session) throws IOException, ClassNotFoundException {
+        this.session = session;
     }
 
     /**

@@ -24,12 +24,12 @@ import org.apache.log4j.varia.LevelRangeFilter;
 import org.mmmr.Mod;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
+import org.mmmr.services.UtilityMethods;
+import org.mmmr.services.swing.common.RoundedPanel;
 import org.mmmr.services.swing.common.UIUtils;
 import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
-import org.mmmr.services.swing.common.RoundedPanel;
 
 /**
  * @author Jurgen
@@ -49,7 +49,7 @@ public class ManagerWindow extends JFrame {
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder(this.mod.getName()).append(Messages.getString("ManagerWindow.0")).append(this.mod.getVersion()); //$NON-NLS-1$
+            StringBuilder sb = new StringBuilder(this.mod.getName()).append(" v").append(this.mod.getVersion()); //$NON-NLS-1$
 
             if (this.mod.isInstalled()) {
                 sb.append(" [installed]"); //$NON-NLS-1$
@@ -261,12 +261,16 @@ public class ManagerWindow extends JFrame {
                 options.add(modoption);
             }
             if (options.size() == 0) {
-                UtilityMethods.showInformation(this.cfg, "OptiFine.", Messages.getString("ManagerWindow.no_compatible_version")); //$NON-NLS-1$ //$NON-NLS-2$
+                UtilityMethods.showInformation(this.cfg,
+                        Messages.getString("ManagerWindow.install_optifine"), Messages.getString("ManagerWindow.no_compatible_version")); //$NON-NLS-1$ //$NON-NLS-2$
                 return;
             }
             ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
             ModOption selected = installedOption == null ? selectionValues[0] : installedOption;
-            selected = UtilityMethods.showOptions(this.cfg, "OptiFine.", Messages.getString("ManagerWindow.select_version"), selectionValues, selected); //$NON-NLS-1$ //$NON-NLS-2$
+            selected = UtilityMethods
+                    .showOptions(
+                            this.cfg,
+                            Messages.getString("ManagerWindow.install_optifine"), Messages.getString("ManagerWindow.select_version"), selectionValues, selected); //$NON-NLS-1$ //$NON-NLS-2$
             if (selected != null) {
                 Mod mod = ModOption.class.cast(selected).getMod();
                 if (installed != null) {

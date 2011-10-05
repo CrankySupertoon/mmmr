@@ -11,4 +11,6 @@ public interface ArchiveServiceI {
     public abstract void compress(File basedir, List<String> files, File archive) throws IOException;
 
     public abstract void extract(File archive, File out) throws IOException;
+
+    public abstract void extract(File archive, File out, List<String> paths) throws IOException;
 }

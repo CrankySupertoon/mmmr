@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,28 +13,85 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.builder.CompareToBuilder;
 import org.mmmr.Dependency;
+import org.mmmr.MC;
 import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.ModPack;
 import org.mmmr.Resource;
 
-// select path,
-// case when mod.id is null then modpack.installationdate else mod.installationdate end,
-// case when mod.id is null then modpack.name else mod.name end,
-// case when mod.id is null then modpack.version else mod.version end
-// from mcfile
-// inner join resource on resource_id=resource.id
-// left join mod on mod.id=mod_id
-// left join modpack on modpack.id=resource.modpack_id
-// where path in ( select path from mcfile mci where mci.mc_id is null group by path having count(*) > 1 )
-// and mcfile.mc_id is null
-// order by path
 /**
  * @author Jurgen
  */
 public class InstallationService {
+    public static class InstallDependencyCheck {
+        public Mod mod;
+
+        public final List<Mod> installed = new ArrayList<Mod>();
+
+        public final Map<Mod, Dependency> installedButWrongVersion = new HashMap<Mod, Dependency>();
+
+        public final List<Dependency> missing = new ArrayList<Dependency>();
+    }
+
+    public static class InstallMod {
+        public Mod mod;
+
+        public final Map<Object, List<String>> conflicting = new HashMap<Object, List<String>>();
+    }
+
+    public static class UninstallDependencyCheck {
+        public Mod mod;
+
+        public final List<Dependency> isDependencyFor = new ArrayList<Dependency>();
+    }
+
+    public static class UninstallMod {
+        public Mod mod;
+
+        public final List<String> keep = new ArrayList<String>();
+
+        public final List<String> delete = new ArrayList<String>();
+
+        public final Map<String, Object> restore = new HashMap<String, Object>();
+
+        public final Map<Object, List<String>> restoreGrouped = new HashMap<Object, List<String>>();
+    }
+
+    public static InstallDependencyCheck checkDependencyOnInstall(DBService dbService, Mod mod) {
+        InstallDependencyCheck info = new InstallDependencyCheck();
+        info.mod = mod;
+
+        if (mod.getDependencies() != null) {
+            for (Dependency dependency : mod.getDependencies()) {
+                Mod installed = dbService.hql1("select mod from Mod mod where mod.sortableName=?", Mod.class, dependency.getSortableName()); //$NON-NLS-1$
+                if (installed == null) {
+                    info.missing.add(dependency);
+                    continue;
+                }
+                if (installed.getVersion().equals(dependency.getVersion())) {
+                    info.installed.add(installed);
+                    continue;
+                }
+                info.installedButWrongVersion.put(installed, dependency);
+            }
+        }
+
+        return info;
+    }
+
+    public static UninstallDependencyCheck checkDependencyOnUninstall(DBService dbService, Mod mod) {
+        UninstallDependencyCheck info = new UninstallDependencyCheck();
+        info.mod = mod;
+
+        String hql = "select dependency from Dependency dependency inner join fetch dependency.mod mod where dependency.sortableName=?";
+        for (Dependency isDependencyFor : dbService.hql(hql, Dependency.class, UtilityMethods.sortable(mod.getName()))) {
+            info.isDependencyFor.add(isDependencyFor);
+        }
+
+        return info;
+    }
+
     public static String getUrl(String url) {
         try {
             URL asUrl = new URL(url);
@@ -52,30 +108,56 @@ public class InstallationService {
         }
     }
 
+    public static InstallMod installMod(DBService dbService, Mod mod) {
+        InstallMod info = new InstallMod();
+
+        return info;
+    }
+
+    public static UninstallMod uninstallMod(DBService dbService, Mod mod) {
+        UninstallMod info = new UninstallMod();
+        info.mod = mod;
+        String hql = DBService.getNamedQuery("earlier_installed_files");
+        Conflict dummy = new Conflict(null, null, null, mod);
+        ExceptionAndLogHandler.log(hql);
+        for (Resource resource : mod.getResources()) {
+            for (MCFile mcfile : resource.getFiles()) {
+                ExceptionAndLogHandler.log(mcfile.getPath());
+                List<Conflict> results = DBTstSuperClass.dbService.hql(hql, Conflict.class, mcfile.getPath());
+                Collections.sort(results);
+                int myOrder = results.indexOf(dummy);
+                int listSize = results.size();
+                if (listSize == 1) {
+                    ExceptionAndLogHandler.log("one and only => remove");
+                    info.delete.add(mcfile.getPath());
+                } else if (myOrder + 1 == listSize) {
+                    Conflict conflict = results.get(listSize - 2);
+                    ExceptionAndLogHandler.log("last and not only one => restore :: " + conflict);
+                    info.restore.put(mcfile.getPath(), conflict.get());
+                } else {
+                    Conflict conflict = results.get(listSize - 1);
+                    ExceptionAndLogHandler.log("not last => overwritten by more recent => no change :: " + conflict);
+                    info.keep.add(mcfile.getPath());
+                }
+            }
+        }
+
+        for (Map.Entry<String, Object> el : info.restore.entrySet()) {
+            List<String> list = info.restoreGrouped.get(el.getValue());
+            if (list == null) {
+                list = new ArrayList<String>();
+                info.restoreGrouped.put(el.getValue(), list);
+            }
+            list.add(el.getKey());
+        }
+
+        return info;
+    }
+
     protected final Config cfg;
 
     public InstallationService(Config cfg) {
         this.cfg = cfg;
-    }
-
-    public boolean checkDependency(Mod mod) {
-        if (mod.getDependencies() != null) {
-            for (Dependency dependency : mod.getDependencies()) {
-                Mod installed = this.cfg.getDb().hql1("from Mod mod where mod.sortableName=?", Mod.class, dependency.getSortableName()); //$NON-NLS-1$
-                if (installed == null) {
-                    return false;
-                }
-                if (installed.getVersion().equals(dependency.getVersion())) {
-                    continue;
-                }
-                if (!UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.install_mods_dependency"), //$NON-NLS-1$
-                        String.format(Messages.getString("InstallationService.install_mods_dependency_version"), dependency.getVersion(), //$NON-NLS-1$
-                                installed.getVersion()))) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     private void copy(Mod mod, Map<File, Resource> fileResource, Map<File, File> toCopy, List<File> ignored) throws IOException {
@@ -157,6 +239,7 @@ public class InstallationService {
                         // ("conflict MC: " + mcRelative);
                         // this doesn't interest us now as almost all mods change mc class files
                         // conflicts.add("Minecraft v" + existing.getMc().getVersion());
+                        continue;
                     }
                     // TODO conflicted files should be ordered as the are installed by mod(pack)s
                     if (existing.getResource() != null) {
@@ -191,9 +274,24 @@ public class InstallationService {
     }
 
     public void installMod(Mod mod) throws IOException {
-        if (this.checkDependency(mod)) {
-            this.installMod(true, mod);
+        InstallDependencyCheck info = InstallationService.checkDependencyOnInstall(this.cfg.getDb(), mod);
+        if ((info.installedButWrongVersion.size() > 0) || (info.missing.size() > 0)) {
+            StringBuilder sb1 = new StringBuilder();
+            for (Dependency missing : info.missing) {
+                sb1.append("  - ").append(missing.getName()).append(" v").append(missing.getVersion());
+            }
+            StringBuilder sb2 = new StringBuilder();
+            for (Map.Entry<Mod, Dependency> installedButWrongVersion : info.installedButWrongVersion.entrySet()) {
+                sb2.append("  - ").append(installedButWrongVersion.getKey().getName()).append(" v")
+                        .append(installedButWrongVersion.getKey().getVersion()).append(" installed but v")
+                        .append(installedButWrongVersion.getValue().getVersion()).append(" needed");
+            }
+            if (!UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.install_mods_dependency"), //$NON-NLS-1$
+                    String.format(Messages.getString("InstallationService.install_mods_dependency_check"), sb1.toString(), sb2.toString()))) {
+                return;
+            }
         }
+        this.installMod(true, mod);
     }
 
     private void installMod(Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
@@ -214,39 +312,41 @@ public class InstallationService {
                 Messages.getString("InstallationService.install_mods"), Messages.getString("InstallationService.mod_installed")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
-    @SuppressWarnings("unused")
-    public void uninstallMod(Mod mod) {
-        String hql = "select f, (case when m.installOrder is null then p.installOrder else m.installOrder end as) installOrder, m, p as from MCFile f inner join f.resource r left outer join r.mod m left outer join r.modPack p where f.path=?";
-        for (Resource resource : mod.getResources()) {
-            for (MCFile mcfile : resource.getFiles()) {
-                int maxOrder = -1;
-                Mod maxConflictingMod = null;
-                ModPack maxConflictingModPack = null;
-                List<Object[]> results = this.cfg.getDb().hql(hql, Object[].class, mcfile.getPath());
-                if (results.size() == 0) {
-                    ExceptionAndLogHandler.log("no conflict, remove: " + mcfile.getPath());
-                    continue;
+    private void uninstallMod(@SuppressWarnings("unused") boolean check, Mod mod) throws IOException {
+        UninstallMod info = InstallationService.uninstallMod(this.cfg.getDb(), mod);
+
+        for (String path : info.delete) {
+            new File(this.cfg.getMcBaseFolder(), path).delete();
+        }
+
+        for (Map.Entry<Object, List<String>> entry : info.restoreGrouped.entrySet()) {
+            if (entry.getKey() instanceof MC) {
+                for (String path : entry.getValue()) {
+                    UtilityMethods.copyFile(new File(this.cfg.getMcJarBackup(), path), new File(this.cfg.getMcBaseFolder(), path));
                 }
-                Collections.sort(results, new Comparator<Object[]>() {
-                    @Override
-                    public int compare(Object[] o1, Object[] o2) {
-                        return new CompareToBuilder().append(Integer.class.cast(o1[1]), Integer.class.cast(o2[1])).toComparison();
-                    }
-                });
-                Object[] last = results.get(results.size() - 1);
-                if (Integer.class.cast(last[1]) != mod.getInstallOrder()) {
-                    Mod conflictingMod = Mod.class.cast(last[2]);
-                    ModPack conflictingModPack = ModPack.class.cast(last[3]);
-                    ExceptionAndLogHandler.log("another mod(pack) is already overwriting this file, no change: " + mcfile.getPath() + " "
-                            + (conflictingModPack == null ? conflictingMod : conflictingModPack));
-                    continue;
-                }
-                Object[] previous = results.get(results.size() - 2);
-                Mod conflictingMod = Mod.class.cast(previous[2]);
-                ModPack conflictingModPack = ModPack.class.cast(previous[3]);
-                ExceptionAndLogHandler.log("restoring file from conflicting mod(pack): " + mcfile.getPath() + " "
-                        + (conflictingModPack == null ? conflictingMod : conflictingModPack));
+            } else if (entry.getKey() instanceof ModPack) {
+                // TODO restore
+            } else {
+                Mod restoring = Mod.class.cast(entry.getKey());
+                File archive = new File(this.cfg.getMods(), restoring.getArchive());
+                ArchiveService.extract(archive, this.cfg.getMcBaseFolder(), entry.getValue());
             }
         }
+    }
+
+    public void uninstallMod(Mod mod) throws IOException {
+        UninstallDependencyCheck info = InstallationService.checkDependencyOnUninstall(this.cfg.getDb(), mod);
+        if (info.isDependencyFor.size() > 0) {
+            StringBuilder sb1 = new StringBuilder();
+            for (Dependency element : info.isDependencyFor) {
+                sb1.append("  - ").append(element.getName());
+            }
+            if (!UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.uninstall_mods_dependency"), //$NON-NLS-1$
+                    String.format(Messages.getString("InstallationService.InstallationService.uninstall_mods_dependency_check"), sb1.toString()))) {//$NON-NLS-1$
+                return;
+            }
+        }
+
+        this.uninstallMod(true, mod);
     }
 }

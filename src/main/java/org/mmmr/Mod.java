@@ -40,7 +40,7 @@ import org.mmmr.services.UtilityMethods;
 @XmlAccessorOrder(XmlAccessOrder.UNDEFINED)
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "mod_name_version", columnNames = { "name", "version" }) })
-public class Mod implements Comparable<Mod>, PersistentObject {
+public class Mod implements Comparable<Mod>, PersistentObject, Installable {
     private String archive;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "mod")

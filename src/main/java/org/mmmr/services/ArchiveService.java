@@ -21,6 +21,10 @@ public class ArchiveService {
         ArchiveService.getArchiveService().extract(archive, out);
     }
 
+    public static void extract(File archive, File out, List<String> paths) throws IOException {
+        ArchiveService.getArchiveService().extract(archive, out, paths);
+    }
+
     private static ArchiveServiceI getArchiveService() {
         if (ArchiveService.archiveService instanceof ArchiveServiceSimple) {
             try {
