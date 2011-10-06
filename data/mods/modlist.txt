@@ -93,6 +93,7 @@
 1317907604314::twilightforest1.3r1.zip.xml
 1317907604381::water_shader_v4dml.zip.xml
 1317907604366::Weaponmod.zip.xml
+1317936210646::ZanMinimap0.10.6d-1.8.zip.xml
 1317914818777::zombe's_modpack-v4.37_MC.beta.1.8.1.zip.xml
 1317910098521::[1.8.1] Somnia v15 MCF.zip.xml
 1317910073272::[1.8.1] Somnia v15 ML.zip.xml
