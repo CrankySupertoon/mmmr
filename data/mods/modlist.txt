@@ -54,7 +54,7 @@
 1317907604363::mod_Fossil_resources.zip.xml
 1317913811032::mod_LevelUp v1.4.zip - Elemental Arrows.xml
 1317913816528::mod_LevelUp v1.4.zip - Forge.xml
-1317913821810::mod_LevelUp v1.4.zip - Zombe.xml
+1317914854551::mod_LevelUp v1.4.zip - Zombe.xml
 1317913327437::mod_LevelUp v1.4.zip.xml
 1317907604297::mod_Medication.zip.xml
 1317907604308::More Stackables.zip.xml
@@ -93,6 +93,7 @@
 1317907604314::twilightforest1.3r1.zip.xml
 1317907604381::water_shader_v4dml.zip.xml
 1317907604366::Weaponmod.zip.xml
+1317914818777::zombe's_modpack-v4.37_MC.beta.1.8.1.zip.xml
 1317910098521::[1.8.1] Somnia v15 MCF.zip.xml
 1317910073272::[1.8.1] Somnia v15 ML.zip.xml
 1317907604300::[1.8.1]ReiMinimap_v2.2_01.zip.xml
