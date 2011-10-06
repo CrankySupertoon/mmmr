@@ -1,5 +1,4 @@
 
-
 FOR USERS
 ---------
 
@@ -49,6 +48,11 @@ FEATURES NOT STARTED
 - support other OS
 - mod install config description as html, trplace links if not encapsulated in '<a href'
 - load mod install configurations also from subdirectories
+
+EXTRA
+-----
+
+MCPatcher: use this when OptiFine is not ready for the Minecraft version you are using and install it after you started up Minecraft for the very first time (after it downloaded the client files) before continuing in MMMR: http://www.minecraftforum.net/topic/232701-181-19pre3update-103-mcpatcher-hd-fix-212/
 
 
 
@@ -129,6 +133,14 @@ TODO
 - integration of other Minecraft user and developer tools if permission is granted
 - follow up Google Code Issues (bugs and feature request) (Eclipse Task Repositories & Task List tab)
 - follow up updating mod install configurations send by users (mailing list)
-- localization to other languages (like messages_en_UK.properties, default is English)
+- localization to other languages (like messages_fr.properties, default messages.properties is English)
 - see 'FEATURES IN PROGRESS'
 
+
+
+FOR MOD DEVELOPERS
+------------------
+
+Minecraft Coding Pack: http://mcp.ocean-labs.de/index.php/Main_Page
+
+Minecraft Wiki: contains usefull information when creating mods: http://www.minecraftwiki.net/wiki/Minecraft_Wiki
