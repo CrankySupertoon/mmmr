@@ -34,7 +34,7 @@ COMPLETED FEATURES
 FEATURES IN PROGRESS
 --------------------
 
-- install and uninstall mods, warns about file conflicts (75% done)
+- install and uninstall mods, warns about file conflicts (85% done)
 - reorder mods to fix conflicts between compatible mods, or remove one of both if impossible, drag&drop (25% done)
 
 FEATURES NOT STARTED
@@ -116,6 +116,10 @@ update site: http://java.decompiler.free.fr/jd-eclipse/update
 
 3) use Jakarta Commons in Eclipse more easily with Commons4E: http://developer.berlios.de/projects/commons4e/
 update site: http://commons4e.berlios.de/updatesite31
+
+4) Maven (standalone): http://maven.apache.org/
+
+5) TortoisSVN, use SVN in the Windows explorer shell:  http://tortoisesvn.tigris.org/
 
 TODO
 ----
