@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="Thunderstone V1.5.4.zip" mc="1.8.1" name="Thunderstone" url="http://www.minecraftforum.net/topic/514552-181-thunderstone-v154/" version="1.5.4">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
