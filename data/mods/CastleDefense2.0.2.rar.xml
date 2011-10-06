@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="CastleDefense2.0.2.rar" mc="1.8.1" name="Castle Defenders" url="http://www.minecraftforum.net/topic/472937-181castle-defendersv202-updated/" version="2.0.2">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

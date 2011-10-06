@@ -200,6 +200,20 @@ public class ModOptionsWindow extends JFrame {
         });
         actions.add(resolve);
 
+        JButton open = new JButton(Messages.getString("ModOptionsWindow.open_mod_dir")); //$NON-NLS-1$
+        open.setFont(cfg.getFontLarge());
+        open.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Desktop.getDesktop().open(cfg.getMods());
+                } catch (IOException ex) {
+                    ExceptionAndLogHandler.log(ex);
+                }
+            }
+        });
+        actions.add(open);
+
         JButton commit = new JButton(Messages.getString("ModOptionsWindow.apply_changes")); //$NON-NLS-1$
         commit.setFont(cfg.getFontLarge());
         commit.addActionListener(new ActionListener() {

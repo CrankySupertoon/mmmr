@@ -2,12 +2,14 @@ package org.mmmr.services.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -199,6 +201,21 @@ public class ManagerWindow extends JFrame {
                         window.setLocationRelativeTo(ManagerWindow.this);
                         window.setVisible(true);
                     } catch (Exception ex) {
+                        ExceptionAndLogHandler.log(ex);
+                    }
+                }
+            });
+            mainpanel.add(comp);
+        }
+        {
+            JButton comp = new JButton(Messages.getString("ManagerWindow.open_minecraft_dir")); //$NON-NLS-1$
+            comp.setFont(this.cfg.getFontLarge());
+            comp.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        Desktop.getDesktop().open(ManagerWindow.this.cfg.getMcBaseFolder());
+                    } catch (IOException ex) {
                         ExceptionAndLogHandler.log(ex);
                     }
                 }

@@ -18,6 +18,7 @@
 1317681716234::buildcraft-client-B-factory-2.2.0.zip.xml
 1317681716707::buildcraft-client-B-transport-1.8.1.1.zip.xml
 1317667229136::buildcraft-client-B-transport-2.2.0.zip.xml
+1317904393922::CastleDefense2.0.2.rar.xml
 1317681144173::Clay_Soldiers_36.zip.xml
 1317600113394::ConvenientInventory 1.9.1.zip.xml
 1316954142900::Crystal Tools 1.3 Final.zip.xml
@@ -78,6 +79,8 @@
 1317422327458::TooManyItems2011_09_27_1.8_fix.zip.xml
 1317681501878::transport_mod_1.0.2.zip.xml
 1316954142906::Treecapitator.zip.xml
+1317904844328::TurretMod_v11_03.zip.xml
+1317904692944::twilightforest1.3r1.zip.xml
 1316954142911::water_shader_v4dml.zip.xml
 1317600598826::Weaponmod.zip.xml
 1317667741962::[1.8.1] Somnia v14.zip.xml
