@@ -2,6 +2,7 @@ package org.mmmr.services;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.mmmr.Mod;
 
 /**
  * @author Jurgen
@@ -40,8 +42,16 @@ public class ModList {
                 }
             });
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/mods/modlist.txt"))); //$NON-NLS-1$
+            XmlService xmlService = new XmlService(new Config());
             for (File mod : modxmls) {
-                out.write(mod.lastModified() + "::" + mod.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+                try {
+                    FileInputStream in = new FileInputStream(mod);
+                    xmlService.load(in, Mod.class);
+                    in.close();
+                    out.write(mod.lastModified() + "::" + mod.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             out.flush();
             out.close();
