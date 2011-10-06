@@ -52,6 +52,10 @@
 1317907604348::ModLoader.zip.xml
 1317907604369::mod_Fossil.zip.xml
 1317907604363::mod_Fossil_resources.zip.xml
+1317913811032::mod_LevelUp v1.4.zip - Elemental Arrows.xml
+1317913816528::mod_LevelUp v1.4.zip - Forge.xml
+1317913821810::mod_LevelUp v1.4.zip - Zombe.xml
+1317913327437::mod_LevelUp v1.4.zip.xml
 1317907604297::mod_Medication.zip.xml
 1317907604308::More Stackables.zip.xml
 1317907604358::MoreCreepsv2.41.rar.xml

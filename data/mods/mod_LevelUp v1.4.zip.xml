@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="mod_LevelUp v1.4.zip" mc="1.8.1" name="Level Up!" url="http://www.minecraftforum.net/topic/666507-181-level-up-rpg-skills-in-minecraft-update-v14-oct-5/" version="1.4">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="classes/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

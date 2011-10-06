@@ -44,13 +44,14 @@ public class ModList {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/mods/modlist.txt"))); //$NON-NLS-1$
             XmlService xmlService = new XmlService(new Config());
             for (File mod : modxmls) {
+                System.out.println(mod.getName());
                 try {
                     FileInputStream in = new FileInputStream(mod);
                     xmlService.load(in, Mod.class);
                     in.close();
                     out.write(mod.lastModified() + "::" + mod.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.out);
                 }
             }
             out.flush();
