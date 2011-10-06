@@ -43,7 +43,6 @@
 1316954142899::iPixeliGenderMod1.8.1v3.4client.zip.xml
 1317683055413::ItemSpriteAPIv2.0.zip.xml
 1316954142903::Lightsensor.zip.xml
-1317751987993::Millenaire1.6.6.zip.xml
 1317749780006::Millenaire1.6.7.zip.xml
 1316954142888::minecraft-mipmap-20-dev.zip.xml
 1317598431485::minecraftforge-client-1.1.1.zip.xml
@@ -61,7 +60,6 @@
 1317677946608::RedPower2-Prerelease-2.0pr1.zip.xml
 1317751059477::RegenOresv3.0.zip.xml
 1316954142896::Score.zip.xml
-1317751988581::ScotToolsv12.1.zip.xml
 1317750522693::ScotToolsv12.2.zip.xml
 1316954142904::Shelf.zip.xml
 1317672189149::SiegeCraft_0.2.5b.rar.xml
