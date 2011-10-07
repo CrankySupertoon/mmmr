@@ -1,15 +1,14 @@
 package org.mmmr.services.impl;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.zip.CRC32;
 
 import javax.crypto.BadPaddingException;
@@ -31,9 +30,10 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 
 import org.mmmr.services.ArchiveEntryMatcherImpl;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.ArchiveEntryMatcher;
+import org.mmmr.services.interfaces.ArchiveOutputStreamBuilder;
+import org.mmmr.services.interfaces.ArchiveOutputStreamBuilderImpl;
 
 /**
  * extracts lots of compressions formats including but not limited to zip, rar, 7z (7zip)<br/>
@@ -95,34 +95,27 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
                 throw new RuntimeException(ex);
             }
         }
-        System.out.print("password: ");
-        Scanner scanner = new Scanner(System.in);
-        String pass = scanner.next();
-        try {
-            this.pwd = ArchiveService7Zip.encrypt(pass);
-        } catch (NullPointerException ex) {
-            //
-        } catch (GeneralSecurityException ex) {
-            ex.printStackTrace();
-        }
-        return pass;
+        // System.out.print("password: ");
+        // Scanner scanner = new Scanner(System.in);
+        // String pass = scanner.next();
+        // try {
+        // this.pwd = ArchiveService7Zip.encrypt(pass);
+        // } catch (NullPointerException ex) {
+        // //
+        // } catch (GeneralSecurityException ex) {
+        // ex.printStackTrace();
+        // }
+        // return pass;
+        return null;
     }
 
     /**
      * 
-     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, java.io.File)
+     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, org.mmmr.services.interfaces.ArchiveOutputStreamBuilder,
+     *      org.mmmr.services.interfaces.ArchiveEntryMatcher)
      */
     @Override
-    public void extract(File archive, File out) throws IOException {
-        this.extract(archive, out, new ArchiveEntryMatcherImpl());
-    }
-
-    /**
-     * 
-     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, java.io.File, org.mmmr.services.interfaces.ArchiveEntryMatcher)
-     */
-    @Override
-    public void extract(File archive, File out, ArchiveEntryMatcher matcher) throws IOException {
+    public void extract(File archive, ArchiveOutputStreamBuilder out, ArchiveEntryMatcher matcher) throws IOException {
         RandomAccessFile randomAccessFile = null;
         ISevenZipInArchive inArchive = null;
         try {
@@ -135,28 +128,27 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
                     continue;
                 }
 
-                if (!matcher.matches(new ArchiveEntry(item.getPath(), item.getSize(), item.getCreationTime(), item.getLastWriteTime(), item
-                        .getPackedSize(), item.getGroup(), item.getUser()))) {
+                ArchiveEntry entry = new ArchiveEntry(item.getPath(), item.getSize(), item.getCreationTime(), item.getLastWriteTime(),
+                        item.getPackedSize(), item.getGroup(), item.getUser());
+
+                if (!matcher.matches(entry)) {
                     ExceptionAndLogHandler.log("skipping " + item.getPath());
                     continue;
                 }
 
                 ExceptionAndLogHandler.log("extracting " + item.getPath());
-
-                File target = new File(out, item.getPath());
-                target.getParentFile().mkdirs();
-                FileOutputStream fileout = null;
+                OutputStream fileout = null;
 
                 try {
-                    fileout = new FileOutputStream(target);
-                    final FileOutputStream fout = fileout;
+                    fileout = out.createOutputStream(entry);
+                    final OutputStream fout = fileout;
                     final CRC32 crc = new CRC32();
                     Integer crcValue = item.getCRC();
                     ISequentialOutStream paramISequentialOutStream = new ISequentialOutStream() {
                         @Override
                         public int write(byte[] data) throws SevenZipException {
                             try {
-                                System.out.println("writing " + data.length + " bytes");
+                                // System.out.println("writing " + data.length + " bytes");
                                 crc.update(data);
                                 fout.write(data);
                             } catch (IOException ex) {
@@ -172,7 +164,7 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
                         result = item.extractSlow(paramISequentialOutStream, this.cryptoGetTextPassword());
                     }
                     if (crc.getValue() != crcValue) {
-                        System.out.println(UtilityMethods.crc2string(crc.getValue()) + "><" + UtilityMethods.crc2string(crcValue));
+                        // System.out.println(UtilityMethods.crc2string(crc.getValue()) + "><" + UtilityMethods.crc2string(crcValue));
                     }
                     if (result != ExtractOperationResult.OK) {
                         throw new IOException("extract failed with " + result + " on " + item.getPath());
@@ -206,6 +198,15 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
                 }
             }
         }
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, java.io.File)
+     */
+    @Override
+    public void extract(File archive, File out) throws IOException {
+        this.extract(archive, new ArchiveOutputStreamBuilderImpl(out), new ArchiveEntryMatcherImpl());
     }
 
     /**

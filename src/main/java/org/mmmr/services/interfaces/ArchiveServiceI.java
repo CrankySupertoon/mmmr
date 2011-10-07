@@ -10,9 +10,9 @@ import java.util.List;
 public interface ArchiveServiceI {
     public abstract void compress(File basedir, List<String> files, File archive) throws IOException;
 
-    public abstract void extract(File archive, File out) throws IOException;
+    public abstract void extract(File archive, ArchiveOutputStreamBuilder out, ArchiveEntryMatcher matcher) throws IOException;
 
-    public abstract void extract(File archive, File out, ArchiveEntryMatcher matcher) throws IOException;
+    public abstract void extract(File archive, File out) throws IOException;
 
     public abstract List<ArchiveEntry> list(File archive) throws IOException;
 }

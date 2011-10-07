@@ -19,6 +19,7 @@ import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.ModPack;
 import org.mmmr.Resource;
+import org.mmmr.services.interfaces.ArchiveOutputStreamBuilderImpl;
 
 /**
  * @author Jurgen
@@ -331,7 +332,8 @@ public class InstallationService {
             } else {
                 Mod restoring = Mod.class.cast(entry.getKey());
                 File archive = new File(this.cfg.getMods(), restoring.getArchive());
-                ArchiveService.extract(archive, this.cfg.getMcBaseFolder(), new ArchiveEntryMatcherImpl(entry.getValue()));
+                ArchiveService.extract(archive, new ArchiveOutputStreamBuilderImpl(this.cfg.getMcBaseFolder()),
+                        new ArchiveEntryMatcherImpl(entry.getValue()));
             }
         }
 

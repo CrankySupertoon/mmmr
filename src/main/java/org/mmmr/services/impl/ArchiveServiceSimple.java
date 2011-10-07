@@ -12,6 +12,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.ArchiveEntryMatcher;
+import org.mmmr.services.interfaces.ArchiveOutputStreamBuilder;
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
 /**
@@ -64,6 +65,17 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
 
     /**
      * 
+     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, org.mmmr.services.interfaces.ArchiveOutputStreamBuilder,
+     *      org.mmmr.services.interfaces.ArchiveEntryMatcher)
+     */
+    @Override
+    public void extract(File archive, ArchiveOutputStreamBuilder out, ArchiveEntryMatcher matcher) throws IOException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("extract");
+    }
+
+    /**
+     * 
      * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File)
      */
     @Override
@@ -105,16 +117,6 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
                 }
             }
         }
-    }
-
-    /**
-     * 
-     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File, org.mmmr.services.interfaces.ArchiveEntryMatcher)
-     */
-    @Override
-    public void extract(File archive, File out, ArchiveEntryMatcher matcher) throws IOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("extract");
     }
 
     /**

@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mmmr.services.impl.ArchiveService7Zip;
 import org.mmmr.services.impl.ExceptionAndLogHandlerLog4j;
+import org.mmmr.services.interfaces.ArchiveOutputStreamBuilderImpl;
 
 public class ArchiveServiceTest {
     @BeforeClass
@@ -28,8 +29,8 @@ public class ArchiveServiceTest {
                         String f = "file" + element + "." + format;
                         System.out.println(f);
                         helper.setPassword("test");
-                        helper.extract(new File("src/test/resources/" + f), new File("target/" + format + "/" + element + "/"),
-                                new ArchiveEntryMatcherImpl(Collections.singletonList("file.txt")));
+                        helper.extract(new File("src/test/resources/" + f), new ArchiveOutputStreamBuilderImpl(new File("target/" + format + "/"
+                                + element + "/")), new ArchiveEntryMatcherImpl(Collections.singletonList("file.txt")));
                     } catch (Exception ex) {
                         ex.printStackTrace(System.out);
                     }
