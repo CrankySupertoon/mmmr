@@ -197,6 +197,7 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
         return this.isInstalled();
     }
 
+    @Override
     @XmlTransient
     public int getInstallOrder() {
         return this.installOrder;

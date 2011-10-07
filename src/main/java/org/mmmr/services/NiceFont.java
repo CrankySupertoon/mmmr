@@ -19,6 +19,7 @@ import javax.swing.JLabel;
  * @author Jurgen
  */
 public class NiceFont {
+    @SuppressWarnings("null")
     public static BufferedImage hqFontFile(GraphicsConfiguration gc, boolean debug, Config cfg, int scale, Font f) {
         try {
             int charactercount = 256; // 256 = number of characters: 16 rows x 16 columns

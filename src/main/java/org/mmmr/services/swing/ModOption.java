@@ -14,14 +14,20 @@ public class ModOption {
 
     protected Boolean updated;
 
-    protected Date wasInstalled;
+    protected Boolean installed;
+
+    protected Date installationDate;
+
+    protected int installOrder;
 
     protected final Config cfg;
 
     public ModOption(Config cfg, Mod mod) {
         this.cfg = cfg;
         this.mod = mod;
-        this.wasInstalled = mod.getInstallationDate();
+        this.installed = mod.getInstalled();
+        this.installationDate = mod.getInstallationDate();
+        this.installOrder = mod.getInstallOrder();
     }
 
     public int compareTo(Mod other) {
@@ -46,11 +52,11 @@ public class ModOption {
     }
 
     public Boolean getInstalled() {
-        return this.mod.getInstalled();
+        return this.installed;
     }
 
     public int getInstallOrder() {
-        return this.mod.getInstallOrder();
+        return this.installOrder;
     }
 
     public Mod getMod() {
@@ -125,27 +131,16 @@ public class ModOption {
     }
 
     public void setInstallationDate(Date installationDate) {
-        this.mod.setInstallationDate(installationDate);
+        this.installationDate = installationDate;
     }
 
     public void setInstalled(Boolean installed) {
-        if (this.wasInstalled == null) {
-            this.wasInstalled = this.getInstallationDate();
-        }
-        if (installed && (this.wasInstalled != null)) {
-            // we can always revert the value
-            this.mod.setInstallationDate(this.wasInstalled);
-        } else if (installed && Boolean.TRUE.equals(this.isModArchive())) {
-            // can only install when archive is present
-            this.mod.setInstalled(installed);
-        } else if (!installed) {
-            // installed can always be unchecked
-            this.mod.setInstalled(installed);
-        }
+        this.installed = installed;
+        this.setInstallationDate(installed ? (this.installationDate == null ? new Date() : this.installationDate) : null);
     }
 
     public void setInstallOrder(int installOrder) {
-        this.mod.setInstallOrder(installOrder);
+        this.installOrder = installOrder;
     }
 
     public void setModArchive(@SuppressWarnings("unused") boolean modArchive) {

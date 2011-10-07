@@ -128,6 +128,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
                     }
                 });
                 this.popupTextfield.addKeyListener(new KeyAdapter() {
+                    @SuppressWarnings("unchecked")
                     @Override
                     public void keyReleased(KeyEvent e) {
                         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -206,6 +207,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
 
         protected EventList<ETableRecord> source;
 
+        @SuppressWarnings("unchecked")
         protected EFiltering(EventList<ETableRecord> source, AbstractMatcherEditor<ETableRecord> matcher) {
             this.source = source;
             if (matcher != null) {
@@ -486,6 +488,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
         this(configuration, null);
     }
 
+    @SuppressWarnings("unchecked")
     public ETable(ETableConfig configuration, Filter matcher) {
         this.cfg = configuration;
         this.cfg.lock();

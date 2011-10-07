@@ -122,6 +122,7 @@ public class ModPack implements Comparable<ModPack>, PersistentObject, Installab
         return this.installationDate;
     }
 
+    @Override
     @XmlTransient
     public int getInstallOrder() {
         return this.installOrder;

@@ -108,6 +108,7 @@ public class InstallationService {
         }
     }
 
+    @SuppressWarnings("unused")
     public static InstallMod installMod(DBService dbService, Mod mod) {
         InstallMod info = new InstallMod();
 
@@ -330,7 +331,7 @@ public class InstallationService {
             } else {
                 Mod restoring = Mod.class.cast(entry.getKey());
                 File archive = new File(this.cfg.getMods(), restoring.getArchive());
-                ArchiveService.extract(archive, this.cfg.getMcBaseFolder(), entry.getValue());
+                ArchiveService.extract(archive, this.cfg.getMcBaseFolder(), new ArchiveEntryMatcherImpl(entry.getValue()));
             }
         }
 

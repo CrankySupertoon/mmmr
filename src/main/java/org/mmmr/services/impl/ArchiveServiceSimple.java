@@ -10,7 +10,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.mmmr.services.ArchiveEntry;
+import org.mmmr.services.interfaces.ArchiveEntry;
+import org.mmmr.services.interfaces.ArchiveEntryMatcher;
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
 /**
@@ -108,10 +109,10 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
 
     /**
      * 
-     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File, java.util.List)
+     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File, org.mmmr.services.interfaces.ArchiveEntryMatcher)
      */
     @Override
-    public void extract(File archive, File out, List<String> paths) throws IOException {
+    public void extract(File archive, File out, ArchiveEntryMatcher matcher) throws IOException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("extract");
     }

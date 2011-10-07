@@ -5,6 +5,8 @@ import java.awt.event.ItemEvent;
 import javax.swing.JToggleButton.ToggleButtonModel;
 
 public class TristateButtonModel extends ToggleButtonModel {
+    private static final long serialVersionUID = -312455813197883670L;
+
     private TristateState state = TristateState.DESELECTED;
 
     public TristateButtonModel() {
@@ -37,6 +39,7 @@ public class TristateButtonModel extends ToggleButtonModel {
     // Empty overrides of superclass methods
     @Override
     public void setArmed(boolean b) {
+        //
     }
 
     // Overrides of superclass methods
@@ -53,6 +56,7 @@ public class TristateButtonModel extends ToggleButtonModel {
 
     @Override
     public void setPressed(boolean b) {
+        //
     }
 
     @Override

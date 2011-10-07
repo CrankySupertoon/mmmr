@@ -8,7 +8,6 @@ import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,8 +28,9 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 
-import org.mmmr.services.ArchiveEntry;
 import org.mmmr.services.ExceptionAndLogHandler;
+import org.mmmr.services.interfaces.ArchiveEntry;
+import org.mmmr.services.interfaces.ArchiveEntryMatcher;
 
 /**
  * extracts lots of compressions formats including but not limited to zip, rar, 7z (7zip)<br/>
@@ -190,29 +190,6 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
         return ArchiveService7Zip.cipher.doFinal(inputBytes);
     }
 
-    public static void main(String[] args) {
-        try {
-            ArchiveService7Zip helper = new ArchiveService7Zip();
-            String[] formats = { "zip", "rar", "7z" };
-            String[] suffix = { "1", "2" };
-            List<String> paths = Collections.singletonList("file.txt");
-            for (String format : formats) {
-                for (String element : suffix) {
-                    try {
-                        String f = "file" + element + "." + format;
-                        System.out.println(f);
-                        helper.setPassword("test");
-                        helper.extract(new File("src/test/resources/" + f), new File("target/" + format + "/" + element + "/"), paths);
-                    } catch (Exception ex) {
-                        ex.printStackTrace(System.out);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private byte[] pwd = null;
 
     /**
@@ -294,10 +271,10 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
 
     /**
      * 
-     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, java.io.File, java.util.List)
+     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, java.io.File, org.mmmr.services.interfaces.ArchiveEntryMatcher)
      */
     @Override
-    public void extract(File archive, File out, List<String> paths) throws IOException {
+    public void extract(File archive, File out, ArchiveEntryMatcher matcher) throws IOException {
         RandomAccessFile randomAccessFile = null;
         ISevenZipInArchive inArchive = null;
         try {
@@ -310,9 +287,12 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
                     continue;
                 }
 
-                if ((paths != null) && !paths.contains(item.getPath().replace('\\', '/'))) {
+                if (!matcher.matches(new ArchiveEntry(item.getPath()))) {
+                    ExceptionAndLogHandler.log("skipping " + item.getPath());
                     continue;
                 }
+
+                ExceptionAndLogHandler.log("extracting " + item.getPath());
 
                 File target = new File(out, item.getPath());
                 target.getParentFile().mkdirs();
@@ -469,7 +449,7 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
         //
     }
 
-    protected void setPassword(String pwd) throws GeneralSecurityException {
+    public void setPassword(String pwd) throws GeneralSecurityException {
         this.pwd = ArchiveService7Zip.encrypt(pwd);
     }
 

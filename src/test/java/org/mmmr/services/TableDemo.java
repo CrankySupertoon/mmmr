@@ -1,4 +1,4 @@
-package org.mmmr.test;
+package org.mmmr.services;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,7 +22,7 @@ import org.mmmr.services.swing.common.ETableRecordArray;
 import org.mmmr.services.swing.common.EnumTableCellEditor;
 import org.mmmr.services.swing.common.UIUtils;
 
-public class TableTst {
+public class TableDemo {
     public static enum EnumTest {
         VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8;
     }

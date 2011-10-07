@@ -19,6 +19,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ActionMapUIResource;
 
 public final class TristateCheckBox extends JCheckBox {
+    private static final long serialVersionUID = -7488108042920772251L;
+
     // Listener on model changes to maintain correct focusability
     private final ChangeListener enableListener = new ChangeListener() {
         @Override
@@ -46,6 +48,8 @@ public final class TristateCheckBox extends JCheckBox {
         });
         ActionMap actions = new ActionMapUIResource();
         actions.put("pressed", new AbstractAction() {
+            private static final long serialVersionUID = -4444403699594853761L;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 TristateCheckBox.this.iterateState();
@@ -57,7 +61,8 @@ public final class TristateCheckBox extends JCheckBox {
 
     // Empty override of superclass method
     @Override
-    public void addMouseListener(MouseListener l) {
+    public synchronized void addMouseListener(MouseListener l) {
+        //
     }
 
     public TristateState getState() {

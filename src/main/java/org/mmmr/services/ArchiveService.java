@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.mmmr.services.impl.ArchiveServiceSimple;
+import org.mmmr.services.interfaces.ArchiveEntryMatcher;
 import org.mmmr.services.interfaces.ArchiveServiceI;
 
 /**
@@ -21,8 +22,8 @@ public class ArchiveService {
         ArchiveService.getArchiveService().extract(archive, out);
     }
 
-    public static void extract(File archive, File out, List<String> paths) throws IOException {
-        ArchiveService.getArchiveService().extract(archive, out, paths);
+    public static void extract(File archive, File out, ArchiveEntryMatcher matcher) throws IOException {
+        ArchiveService.getArchiveService().extract(archive, out, matcher);
     }
 
     private static ArchiveServiceI getArchiveService() {
