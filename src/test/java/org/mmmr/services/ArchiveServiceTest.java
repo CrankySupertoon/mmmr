@@ -21,7 +21,7 @@ public class ArchiveServiceTest {
         try {
             ArchiveService7Zip helper = new ArchiveService7Zip();
             String[] formats = { "zip", "rar", "7z" };
-            String[] suffix = { "1"/* , "2" */};
+            String[] suffix = { "1", "2" };
             for (String format : formats) {
                 for (String element : suffix) {
                     try {
@@ -36,6 +36,7 @@ public class ArchiveServiceTest {
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             Assert.fail(String.valueOf(ex));
         }
     }

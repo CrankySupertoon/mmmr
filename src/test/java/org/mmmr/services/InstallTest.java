@@ -98,6 +98,11 @@ public class InstallTest extends DBTstSuperClass {
     }
 
     @Test
+    public void testInstallStruct() {
+
+    }
+
+    @Test
     public void testNoConflict() {
         for (MCFile existing : DBTstSuperClass.dbService.getAll(new MCFile("class1.class"))) {
             if (existing.getMc() != null) {
