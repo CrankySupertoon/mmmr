@@ -128,6 +128,7 @@ public class UtilityMethods {
     }
 
     public static boolean deleteDirectory(File path) {
+        ExceptionAndLogHandler.log("deleting " + path);
         if (path.exists()) {
             File[] files = path.listFiles();
             for (File file : files) {

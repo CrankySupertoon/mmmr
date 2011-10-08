@@ -426,7 +426,7 @@ public class ModOptionsWindow extends JFrame {
                 Mod availableMod = this.cfg.getXml().load(new FileInputStream(modxml), Mod.class);
                 // mod not fit for mc version, do not show mod configuration
                 if ((availableMod.getMcVersionDependency() != null) && !availableMod.getMcVersionDependency().contains("?")) { //$NON-NLS-1$
-                    if (!availableMod.getMcVersionDependency().equals(this.cfg.getMcVersion())) {
+                    if (!this.match(availableMod.getMcVersionDependency(), this.cfg.getMcVersion())) {
                         continue;
                     }
                 }
@@ -484,5 +484,11 @@ public class ModOptionsWindow extends JFrame {
         col.setMaxWidth(250);
 
         return this.options;
+    }
+
+    private boolean match(String mcVersionDependency, String mcVersion) {
+        String v1 = mcVersionDependency.substring(0, 3);
+        String v2 = mcVersion.substring(0, 3);
+        return v1.equals(v2);
     }
 }

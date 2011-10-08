@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SMP" archive="SiegeCraft_SinglePlayer_NO_ML.1.1b.rar" mc="1.8.1" name="SiegeCraft" url="http://www.minecraftforum.net/topic/647153-181-siegecraft-11b-now-with-modloader/" version="1.1b">
+    <resources>
+        <resource sourcepath="SiegeCraft_SinglePlayer_ML.1.1b/SiegeCraft.props" targetpath="*minecraft_client*/SiegeCraft.props"/>
+        <resource sourcepath="SiegeCraft_SinglePlayer_ML.1.1b/Source" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
