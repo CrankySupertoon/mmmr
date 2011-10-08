@@ -2,6 +2,8 @@
 1318085687389::buildcraft-server-B-builders-1.8.1.1.zip.xml
 1318085683732::buildcraft-server-B-factory-1.8.1.1.zip.xml
 1318085680044::buildcraft-server-B-transport-1.8.1.1.zip.xml
+1318106818053::CB1185_ModLoaderMP181v2.7z.xml
+1318106676979::craftbukkit-0.0.1-SNAPSHOT.jar.xml
 1318085676100::ElementalCreepers_v1.5_server.zip.xml
 1318085671933::Hot Air Balloons - MP Server.zip.xml
 1318087191721::industrialcraft-2-server_1.15.jar.xml
@@ -12,4 +14,5 @@
 1318085657023::Plants and more 1.182 server.rar.xml
 1318087711447::RedstoneRemote_Server_1.0.0.zip.xml
 1318103181054::SiegeCraft_MultiPlayer_NO_ML.1.1b.rar.xml
+1318106929858::SMPMoCreatures_v1.3.1BETA.7z.xml
 1318085393114::The Shadow of Israphel 2.1 Server.zip.xml

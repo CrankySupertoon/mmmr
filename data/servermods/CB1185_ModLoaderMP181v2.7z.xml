@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SERVER" archive="CB1185_ModLoaderMP181v2.7z" mc="1.8.1" name="CraftBukkit ModLoaderMp" url="?" version="2.7">
+    <dependencies>
+		<mod name="CraftBukkit" url="http://bukkit.org/" version="1185"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="craftbukkit-0.0.1-SNAPSHOT.jar"/>
+    </resources>
+</mod>
