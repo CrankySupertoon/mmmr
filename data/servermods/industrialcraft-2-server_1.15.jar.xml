@@ -4,6 +4,6 @@
 		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1">
     </dependencies>
     <resources>
-        <resource sourcepath="./" targetpath="minecraft_server.jar"/>
+        <resource exclude="META-INF" sourcepath="./" targetpath="minecraft_server.jar"/>
     </resources>
 </mod>
