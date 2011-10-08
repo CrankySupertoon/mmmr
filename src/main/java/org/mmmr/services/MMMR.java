@@ -71,10 +71,10 @@ public class MMMR implements MMMRI {
         if (UtilityMethods.list(this.cfg.getMcBaseFolder()).size() == 0) {
             return true;
         }
-        if (!new File(this.cfg.getClientFolder(), "Minecraft.exe").exists()) { //$NON-NLS-1$
+        if (!new File(this.cfg.getClientFolder(), "minecraft.jar").exists()) { //$NON-NLS-1$
             return true;
         }
-        if (!new File(this.cfg.getClientFolder(), "minecraft.jar").exists()) { //$NON-NLS-1$
+        if (!new File(this.cfg.getServerFolder(), "minecraft_server.jar").exists()) { //$NON-NLS-1$
             return true;
         }
         if (!new File(this.cfg.getMcBaseFolder(), "bin/minecraft.jar").exists()) { //$NON-NLS-1$
@@ -164,10 +164,10 @@ public class MMMR implements MMMRI {
             if (this.checkMCInstall()) {
                 try {
                     String url = "https://s3.amazonaws.com/MinecraftDownload/launcher/"; //$NON-NLS-1$
-                    String[] files = { "Minecraft.exe", "minecraft.jar", "Minecraft_Server.exe", "minecraft_server.jar" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                    String[] files = { Config.MINECRAFT_EXE, Config.MINECRAFT_JAR, Config.MINECRAFT_SERVER_EXE, Config.MINECRAFT_SERVER_JAR };
                     int i = 0;
                     for (; i < files.length; i++) {
-                        this.statusWindow.getMcstatus().setStatus("Minecraft: " + downloading + " " + files[i], null); //$NON-NLS-1$ //$NON-NLS-2$
+                        this.statusWindow.getMcstatus().setStatus(String.format("Minecraft: %s %s", downloading, files[i]), null); //$NON-NLS-1$ 
                         try {
                             error = "downloading " + files[i]; //$NON-NLS-1$
                             File target = i < 2 ? this.cfg.getClientFolder() : this.cfg.getServerFolder();
@@ -360,7 +360,7 @@ public class MMMR implements MMMRI {
     private void startMC(boolean plain) throws IOException {
         String commandline;
         if (plain) {
-            commandline = "javaw.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.cfg.getClientFolder(), "minecraft.jar").getAbsolutePath() + "\""; //$NON-NLS-1$
+            commandline = "javaw.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.cfg.getClientFolder(), Config.MINECRAFT_JAR).getAbsolutePath() + "\""; //$NON-NLS-1$
         } else {
             commandline = this.cfg.getMcCommandline();
         }

@@ -3,6 +3,7 @@ package org.mmmr.services;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -17,6 +18,14 @@ import javax.swing.ImageIcon;
  * @author Jurgen
  */
 public class Config {
+    public static final String MINECRAFT_SERVER_JAR = "minecraft_server.jar";
+
+    public static final String MINECRAFT_JAR = "minecraft.jar";
+
+    public static final String MINECRAFT_SERVER_EXE = "Minecraft_Server.exe";
+
+    public static final String MINECRAFT_EXE = "Minecraft.exe";
+
     public static final Locale LOCALE;
 
     public static final NumberFormat NUMBER_FORMAT;
@@ -116,57 +125,17 @@ public class Config {
     private String mmmrSvnOnGoogleCode;
 
     public Config() throws IOException {
-        this(null);
+        this(new String[0]);
     }
 
     public Config(String[] args) throws IOException {
         this(args, UtilityMethods.getCurrentDir());
     }
 
-    private Config(String[] args, File thisFolder) throws IOException {
-        this.thisFolder = thisFolder;
-        this.clientFolder = UtilityMethods.newDir(thisFolder, "minecraft_client");
-        this.serverFolder = UtilityMethods.newDir(thisFolder, "minecraft_server");
-
-        this.mmmrOnGoogleCode = "http://mmmr.googlecode.com"; //$NON-NLS-1$
-        this.mmmrSvnOnGoogleCode = this.mmmrOnGoogleCode + "/svn/trunk"; //$NON-NLS-1$
-
-        this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/Minecraftx256.png")); //$NON-NLS-1$
-        this.mcVersion = "1.8.1"; //$NON-NLS-1$
-        this.shortTitle = "Minecraft Mod Manager Reloaded"; //$NON-NLS-1$
-        this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion; //$NON-NLS-1$
-        this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getClientFolder(), "minecraft.jar").getAbsolutePath() + "\""; //$NON-NLS-1$        
-        this.mcServerCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getServerFolder(), "minecraft_server.jar").getAbsolutePath() + "\""; //$NON-NLS-1$
-
+    private Config(String[] args, File thisfolder) throws IOException {
         this.parameterValues = UtilityMethods.parseParams(args);
-
-        // not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
-        // we use a locally installed minecraft so you can mod at your heart's content
-        this.mcBaseFolder = new File(this.clientFolder, ".minecraft"); //$NON-NLS-1$
-
-        this.mcBin = new File(this.mcBaseFolder, "bin"); //$NON-NLS-1$
-        this.mcMods = new File(this.mcBaseFolder, "mods"); //$NON-NLS-1$
-        this.mcResources = new File(this.mcBaseFolder, "resources"); //$NON-NLS-1$
-        this.mcJar = new File(this.mcBin, "minecraft.jar"); //$NON-NLS-1$
-        this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup"); //$NON-NLS-1$
-
-        this.data = UtilityMethods.newDir(thisFolder, "data"); //$NON-NLS-1$
-
-        this.cfg = UtilityMethods.newDir(this.data, "cfg"); //$NON-NLS-1$
-        this.properties = new Properties();
-        File file = new File(this.cfg, "config.properties"); //$NON-NLS-1$
-        if (file.exists()) {
-            this.properties.load(new FileInputStream(file));
-        }
-        this.backup = UtilityMethods.newDir(this.data, "backup"); //$NON-NLS-1$
-        this.mods = UtilityMethods.newDir(this.data, "mods"); //$NON-NLS-1$
-        this.libs = UtilityMethods.newDir(this.data, "libs"); //$NON-NLS-1$
-        this.tmp = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
-        this.tmp.deleteOnExit();
-        this.logs = UtilityMethods.newDir(this.data, "logs"); //$NON-NLS-1$
-        this.dbdir = new File(this.data, "db"); //$NON-NLS-1$
-        this.backupOriginalJar = UtilityMethods.newDir(this.backup, "minecraft.jar"); //$NON-NLS-1$
-        this.mcJogboxBackup = UtilityMethods.newDir(this.backup, "jogbox"); //$NON-NLS-1$
+        this.thisFolder = thisfolder;
+        this.init(UtilityMethods.newDir(thisfolder, "minecraft_client"), UtilityMethods.newDir(thisfolder, "minecraft_server"));
     }
 
     public File getBackup() {
@@ -323,6 +292,49 @@ public class Config {
 
     public XmlService getXml() {
         return this.xml;
+    }
+
+    protected void init(File clientfolder, File serverfolder) throws IOException, FileNotFoundException {
+        this.clientFolder = clientfolder;
+        this.serverFolder = serverfolder;
+
+        this.mmmrOnGoogleCode = "http://mmmr.googlecode.com"; //$NON-NLS-1$
+        this.mmmrSvnOnGoogleCode = this.mmmrOnGoogleCode + "/svn/trunk"; //$NON-NLS-1$
+
+        this.icon = new ImageIcon(Config.class.getClassLoader().getResource("images/Minecraftx256.png")); //$NON-NLS-1$
+        this.mcVersion = "1.8.1"; //$NON-NLS-1$
+        this.shortTitle = "Minecraft Mod Manager Reloaded"; //$NON-NLS-1$
+        this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion; //$NON-NLS-1$
+        this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getClientFolder(), Config.MINECRAFT_JAR).getAbsolutePath() + "\""; //$NON-NLS-1$        
+        this.mcServerCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getServerFolder(), Config.MINECRAFT_SERVER_JAR).getAbsolutePath() + "\""; //$NON-NLS-1$
+
+        // not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
+        // we use a locally installed minecraft so you can mod at your heart's content
+        this.mcBaseFolder = new File(this.clientFolder, ".minecraft"); //$NON-NLS-1$
+
+        this.mcBin = new File(this.mcBaseFolder, "bin"); //$NON-NLS-1$
+        this.mcMods = new File(this.mcBaseFolder, "mods"); //$NON-NLS-1$
+        this.mcResources = new File(this.mcBaseFolder, "resources"); //$NON-NLS-1$
+        this.mcJar = new File(this.mcBin, Config.MINECRAFT_JAR);
+        this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup"); //$NON-NLS-1$
+
+        this.data = UtilityMethods.newDir(this.thisFolder, "data"); //$NON-NLS-1$
+
+        this.cfg = UtilityMethods.newDir(this.data, "cfg"); //$NON-NLS-1$
+        this.properties = new Properties();
+        File file = new File(this.cfg, "config.properties"); //$NON-NLS-1$
+        if (file.exists()) {
+            this.properties.load(new FileInputStream(file));
+        }
+        this.backup = UtilityMethods.newDir(this.data, "backup"); //$NON-NLS-1$
+        this.mods = UtilityMethods.newDir(this.data, "mods"); //$NON-NLS-1$
+        this.libs = UtilityMethods.newDir(this.data, "libs"); //$NON-NLS-1$
+        this.tmp = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
+        this.tmp.deleteOnExit();
+        this.logs = UtilityMethods.newDir(this.data, "logs"); //$NON-NLS-1$
+        this.dbdir = new File(this.data, "db"); //$NON-NLS-1$
+        this.backupOriginalJar = UtilityMethods.newDir(this.backup, Config.MINECRAFT_JAR);
+        this.mcJogboxBackup = UtilityMethods.newDir(this.backup, "jogbox"); //$NON-NLS-1$
     }
 
     public void setDb(DBService db) {

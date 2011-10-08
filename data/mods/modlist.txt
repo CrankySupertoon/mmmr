@@ -87,7 +87,6 @@
 1317907604294::Starting Inventory.zip.xml
 1317907604292::TF2Sentry_Beta_v0.5.zip.xml
 1317907604378::TF2Teleporter_v1.4.zip.xml
-1317908807229::The Shadow of Israphel 2.1 Server.zip.xml
 1317908887809::The Shadow of Israphel 2.3.zip.xml
 1317909276896::Thunderstone V1.5.4.zip.xml
 1317907604295::Timber! (r3).zip.xml

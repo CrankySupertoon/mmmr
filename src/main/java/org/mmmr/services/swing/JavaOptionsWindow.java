@@ -101,7 +101,7 @@ public class JavaOptionsWindow extends JFrame {
                                 sb.append(" ").append(JavaOptionsWindow.this.options[i - 1]); //$NON-NLS-1$
                             }
                         }
-                        sb.append(" -jar \"" + new File(cfg.getClientFolder(), "minecraft.jar").getAbsolutePath() + "\""); //$NON-NLS-1$
+                        sb.append(" -jar \"" + new File(cfg.getClientFolder(), Config.MINECRAFT_JAR).getAbsolutePath() + "\""); //$NON-NLS-1$
                         cfg.setMcCommandline(sb.toString());
                         cfg.setProperty("jre", jre); //$NON-NLS-1$
                         MMMR.writeMCBat(cfg);
