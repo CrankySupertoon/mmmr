@@ -21,6 +21,8 @@ import org.mmmr.Mod;
  * @author Jurgen
  */
 public class ModList {
+    public static final String MODLIST_TXT = "modlist.txt";
+
     /**
      * write list of mod configurations available in subversion so users can download them when they are updated/added
      * 
@@ -28,34 +30,67 @@ public class ModList {
      */
     public static void main(String[] args) {
         try {
-            File mods = new File("data/mods/"); //$NON-NLS-1$
-            File[] modxmls = mods.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    if (!name.endsWith(".xml")) { //$NON-NLS-1$
-                        return false;
+            System.out.println("CLIENT:\n\n");
+            Config cfg = new Config();
+            {
+                File[] modxmls = cfg.getMods().listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        if (!name.endsWith(".xml")) { //$NON-NLS-1$
+                            return false;
+                        }
+                        if (name.toLowerCase().contains("yogbox")) { //$NON-NLS-1$
+                            return false;
+                        }
+                        return true;
                     }
-                    if (name.toLowerCase().contains("yogbox")) { //$NON-NLS-1$
-                        return false;
+                });
+                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(cfg.getMods(), ModList.MODLIST_TXT))));
+                XmlService xmlService = new XmlService(new Config());
+                for (File mod : modxmls) {
+                    System.out.println(mod.getName());
+                    try {
+                        FileInputStream in = new FileInputStream(mod);
+                        xmlService.load(in, Mod.class);
+                        in.close();
+                        out.write(mod.lastModified() + "::" + mod.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+                    } catch (Exception ex) {
+                        ex.printStackTrace(System.out);
                     }
-                    return true;
                 }
-            });
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/mods/modlist.txt"))); //$NON-NLS-1$
-            XmlService xmlService = new XmlService(new Config());
-            for (File mod : modxmls) {
-                System.out.println(mod.getName());
-                try {
-                    FileInputStream in = new FileInputStream(mod);
-                    xmlService.load(in, Mod.class);
-                    in.close();
-                    out.write(mod.lastModified() + "::" + mod.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-                } catch (Exception ex) {
-                    ex.printStackTrace(System.out);
-                }
+                out.flush();
+                out.close();
             }
-            out.flush();
-            out.close();
+            System.out.println("\n\nSERVER:\n\n");
+            {
+
+                File[] modxmls = cfg.getServerMods().listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        if (!name.endsWith(".xml")) { //$NON-NLS-1$
+                            return false;
+                        }
+                        return true;
+                    }
+                });
+                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+                        new File(cfg.getServerMods(), ModList.MODLIST_TXT))));
+                XmlService xmlService = new XmlService(new Config());
+                for (File mod : modxmls) {
+                    System.out.println(mod.getName());
+                    try {
+                        FileInputStream in = new FileInputStream(mod);
+                        xmlService.load(in, Mod.class);
+                        in.close();
+                        out.write(mod.lastModified() + "::" + mod.getName() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+                    } catch (Exception ex) {
+                        ex.printStackTrace(System.out);
+                    }
+                }
+                out.flush();
+                out.close();
+
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -84,7 +119,7 @@ public class ModList {
             }
         }
         URL base = new URL(cfg.getMmmrSvnOnGoogleCode());
-        for (String record : new String(DownloadingService.downloadURL(new URL(cfg.getMmmrSvnOnGoogleCode() + "/data/mods/modlist.txt"))) //$NON-NLS-1$
+        for (String record : new String(DownloadingService.downloadURL(new URL(cfg.getMmmrSvnOnGoogleCode() + "/data/mods/" + ModList.MODLIST_TXT))) //$NON-NLS-1$
                 .split("\r\n")) { //$NON-NLS-1$
             if (StringUtils.isBlank(record)) {
                 continue;

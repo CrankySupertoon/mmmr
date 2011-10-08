@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mod mode="SERVER" archive="modloadermp-server_fix.7z" mc="1.8.1" name="ModLoaderMp" version="1.8.1">
     <dependencies>
-		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1">
+		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
     </dependencies>
     <resources>
         <resource sourcepath="./" targetpath="minecraft_server.jar"/>

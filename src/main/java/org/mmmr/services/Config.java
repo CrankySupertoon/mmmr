@@ -102,6 +102,8 @@ public class Config {
 
     private File mods;
 
+    private File serverMods;
+
     private Map<String, String> parameterValues;
 
     private Properties properties;
@@ -274,6 +276,10 @@ public class Config {
         return this.serverFolder;
     }
 
+    public File getServerMods() {
+        return this.serverMods;
+    }
+
     public String getShortTitle() {
         return this.shortTitle;
     }
@@ -328,6 +334,7 @@ public class Config {
         }
         this.backup = UtilityMethods.newDir(this.data, "backup"); //$NON-NLS-1$
         this.mods = UtilityMethods.newDir(this.data, "mods"); //$NON-NLS-1$
+        this.serverMods = UtilityMethods.newDir(this.data, "servermods"); //$NON-NLS-1$
         this.libs = UtilityMethods.newDir(this.data, "libs"); //$NON-NLS-1$
         this.tmp = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
         this.tmp.deleteOnExit();

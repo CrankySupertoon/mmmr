@@ -1,5 +1,5 @@
 package org.mmmr;
 
 public enum Mode {
-    SSP, SMP;
+    SSP, SMP, SERVER;
 }
