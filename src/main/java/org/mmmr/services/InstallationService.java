@@ -189,7 +189,8 @@ public class InstallationService {
         @SuppressWarnings("unused")
         String version = mod.getVersion();
         File outdir = UtilityMethods.newDir(this.cfg.getTmp(), archive);
-        ArchiveService.extract(new File(this.cfg.getMods(), archive), outdir);
+        File archiveFile = new File(this.cfg.getMods(), archive);
+        ArchiveService.extract(archiveFile, outdir);
         Set<String> conflicts = new HashSet<String>();
         Map<File, File> toCopy = new HashMap<File, File>();
         List<File> ignored = new ArrayList<File>();
@@ -198,8 +199,13 @@ public class InstallationService {
             resource.setMod(mod); // fix link when loaded from xml
             String source = resource.getSourcePath();
             String target = resource.getTargetPath();
-            File from = new File(outdir, source).getCanonicalFile();
             File to = new File(this.cfg.getMcBaseFolder(), target).getCanonicalFile();
+            if (source == null) {
+                // copy archive to target
+                UtilityMethods.copyFile(archiveFile, to);
+                continue;
+            }
+            File from = new File(outdir, source).getCanonicalFile();
             List<Pattern> includes = new ArrayList<Pattern>();
             List<Pattern> excludes = new ArrayList<Pattern>();
             if (resource.getInclude() != null) {
