@@ -5,6 +5,6 @@
 		<mod name="Minecraft Forge" url="http://www.minecraftforum.net/topic/514000-api-minecraft-forge/" version="1.1.1"/>
     </dependencies>
     <resources>
-        <resource exclude="META-INF" sourcepath="./" targetpath="minecraft_server.jar"/>
+        <resource targetpath="mods/industrialcraft-2-server_1.15.jar"/>
     </resources>
 </mod>

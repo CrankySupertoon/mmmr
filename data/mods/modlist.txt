@@ -53,8 +53,8 @@
 1318069308217::Millenaire1.6.8.zip.xml
 1317907604335::minecraft-mipmap-20-dev.zip.xml
 1318076187626::minecraftforge-client-1.1.1.zip.xml
-1318074839535::ModLoader.zip.xml
-1318077528433::ModLoaderMp 1.8.1.zip.xml
+1318087039339::ModLoader.zip.xml
+1318086999713::ModLoaderMp 1.8.1.zip.xml
 1317907604369::mod_Fossil.zip.xml
 1317907604363::mod_Fossil_resources.zip.xml
 1317913811032::mod_LevelUp v1.4.zip - Elemental Arrows.xml
