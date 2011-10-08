@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod archive="sprint_v0.2.rar" mc="1.8.1" name="Sprint Key Mapping" url="http://www.minecraftforum.net/topic/645908-181-sprint-key-mapping-v03-updated/" version="0.2">
-    <resources>
-        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>
