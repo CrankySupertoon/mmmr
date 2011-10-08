@@ -53,6 +53,7 @@
 1318069308217::Millenaire1.6.8.zip.xml
 1317907604335::minecraft-mipmap-20-dev.zip.xml
 1318076187626::minecraftforge-client-1.1.1.zip.xml
+1318087464358::MinefactoryReloaded_Client_1.2.2.zip.xml
 1318087039339::ModLoader.zip.xml
 1318086999713::ModLoaderMp 1.8.1.zip.xml
 1317907604369::mod_Fossil.zip.xml
@@ -71,6 +72,7 @@
 1317907604291::PremiumWoodv15.0.zip.xml
 1317907604329::Recipe Book.zip.xml
 1317907604383::RedPower2-Prerelease-2.0pr1.zip.xml
+1318087703715::RedstoneRemote_Client_1.0.0.zip.xml
 1317907604290::RegenOresv3.0.zip.xml
 1317908367120::RuneCraftory1.2.zip.xml
 1317907604353::Score.zip.xml
