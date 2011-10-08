@@ -2,6 +2,7 @@
 <mod mode="SERVER" archive="industrialcraft-2-server_1.15.jar" mc="1.8.1" name="Industrial Craft ²" url="http://forum.industrial-craft.net/index.php?page=Thread&amp;threadID=1361" version="1.15">
     <dependencies>
 		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1">
+		<mod name="Minecraft Forge" url="http://www.minecraftforum.net/topic/514000-api-minecraft-forge/" version="1.1.1"/>
     </dependencies>
     <resources>
         <resource exclude="META-INF" sourcepath="./" targetpath="minecraft_server.jar"/>
