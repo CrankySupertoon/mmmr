@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod archive="transport_mod_1.0.2.zip" mc="1.8.1" name="Animal Transport Mod" url="http://www.minecraftforum.net/topic/655454-181-animal-transport-mod-v102/" version="1.0.2">
-    <dependencies>
-        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-    </dependencies>
-    <resources>
-        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>
