@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod mode="SMP" archive="The Shadow of Israphel 2.1 Server.zip" mc="1.8.1" name="The Shadow of Israphel" url="http://www.minecraftforum.net/topic/491770-181ssp-the-shadow-of-israphel-23-includes-mob-trophiessmp-support/" version="2.1">
-    <dependencies>
-        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-    </dependencies>
-    <resources>
-        <resource sourcepath="Client/" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>
