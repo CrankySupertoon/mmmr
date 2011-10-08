@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SERVER" archive="Plants and more 1.182 server.rar" mc="1.8.1" name="Plants and more" url="http://www.minecraftforum.net/topic/297107-181-plants-and-more-v1182-sspsmp/" version="1.182">
+    <resources>
+        <resource sourcepath="jar files/" targetpath="minecraft_server.jar"/>
+		<resource sourcepath="plants.properties" targetpath="plants.properties"/>
+    </resources>
+</mod>

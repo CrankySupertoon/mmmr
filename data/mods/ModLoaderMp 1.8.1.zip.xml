@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SMP" archive="ModLoaderMp 1.8.1.zip" mc="1.8.1" name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-181smp-flans-mods-planes-ww2-guns-vehicles-playerapi-moods-mputils-teams/#MLM" version="1.8.1">
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

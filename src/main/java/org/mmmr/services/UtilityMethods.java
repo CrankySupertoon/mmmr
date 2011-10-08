@@ -141,6 +141,15 @@ public class UtilityMethods {
         return (path.delete());
     }
 
+    protected static void dialogPostCreate(JDialog dialog) {
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        UIUtils.rounded(dialog);
+        UIUtils.translucent(dialog);
+        dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
+        dialog.setVisible(true);
+        dialog.dispose();
+    }
+
     /**
      * encode url parameter value part (' ' will be replaced by '+')
      */
@@ -444,7 +453,7 @@ public class UtilityMethods {
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
-        dialogPostCreate(dialog);
+        UtilityMethods.dialogPostCreate(dialog);
         return jop.getValue().equals(JOptionPane.YES_OPTION);
     }
 
@@ -456,7 +465,7 @@ public class UtilityMethods {
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
-        dialogPostCreate(dialog);
+        UtilityMethods.dialogPostCreate(dialog);
         return jop.getValue().equals(JOptionPane.OK_OPTION);
     }
 
@@ -468,21 +477,12 @@ public class UtilityMethods {
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
-        dialogPostCreate(dialog);
-    }
-
-    protected static void dialogPostCreate(JDialog dialog) {
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        UIUtils.rounded(dialog);
-        UIUtils.translucent(dialog);
-        dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
-        dialog.setVisible(true);
-        dialog.dispose();
+        UtilityMethods.dialogPostCreate(dialog);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> T showOptions(Config cfg, String title, String message, T[] options, T selected) {
-        RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, null, null);
+        RoundedOptionPane jop = new RoundedOptionPane(message, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, null, null);
         jop.getDelegate().setShady(false);
         new MoveMouseListener(jop);
         jop.setWantsInput(true);
@@ -502,6 +502,9 @@ public class UtilityMethods {
         dialog.setLocationRelativeTo(UIUtils.getCurrentFrame());
         dialog.setVisible(true);
         dialog.dispose();
+        if ("uninitializedValue".equals(jop.getInputValue())) {
+            return null;
+        }
         return (T) jop.getInputValue();
     }
 
@@ -513,7 +516,7 @@ public class UtilityMethods {
         if (cfg != null) {
             dialog.setIconImage(cfg.getIcon().getImage());
         }
-        dialogPostCreate(dialog);
+        UtilityMethods.dialogPostCreate(dialog);
     }
 
     public static String sortable(String s) {

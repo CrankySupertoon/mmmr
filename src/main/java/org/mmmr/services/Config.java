@@ -77,6 +77,8 @@ public class Config {
 
     private String mcCommandline;
 
+    private String mcServerCommandline;
+
     private File mcJar;
 
     private File mcJarBackup;
@@ -96,6 +98,10 @@ public class Config {
     private Properties properties;
 
     private File thisFolder;
+
+    private File clientFolder;
+
+    private File serverFolder;
 
     private String shortTitle;
 
@@ -119,6 +125,8 @@ public class Config {
 
     private Config(String[] args, File thisFolder) throws IOException {
         this.thisFolder = thisFolder;
+        this.clientFolder = UtilityMethods.newDir(thisFolder, "minecraft_client");
+        this.serverFolder = UtilityMethods.newDir(thisFolder, "minecraft_server");
 
         this.mmmrOnGoogleCode = "http://mmmr.googlecode.com"; //$NON-NLS-1$
         this.mmmrSvnOnGoogleCode = this.mmmrOnGoogleCode + "/svn/trunk"; //$NON-NLS-1$
@@ -127,13 +135,14 @@ public class Config {
         this.mcVersion = "1.8.1"; //$NON-NLS-1$
         this.shortTitle = "Minecraft Mod Manager Reloaded"; //$NON-NLS-1$
         this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion; //$NON-NLS-1$
-        this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar minecraft.jar"; //$NON-NLS-1$
+        this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getClientFolder(), "minecraft.jar").getAbsolutePath() + "\""; //$NON-NLS-1$        
+        this.mcServerCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getServerFolder(), "minecraft_server.jar").getAbsolutePath() + "\""; //$NON-NLS-1$
 
         this.parameterValues = UtilityMethods.parseParams(args);
 
         // not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
         // we use a locally installed minecraft so you can mod at your heart's content
-        this.mcBaseFolder = new File(thisFolder, ".minecraft"); //$NON-NLS-1$
+        this.mcBaseFolder = new File(this.clientFolder, ".minecraft"); //$NON-NLS-1$
 
         this.mcBin = new File(this.mcBaseFolder, "bin"); //$NON-NLS-1$
         this.mcMods = new File(this.mcBaseFolder, "mods"); //$NON-NLS-1$
@@ -170,6 +179,10 @@ public class Config {
 
     public File getCfg() {
         return this.cfg;
+    }
+
+    public File getClientFolder() {
+        return this.clientFolder;
     }
 
     public File getData() {
@@ -252,6 +265,10 @@ public class Config {
         return this.mcResources;
     }
 
+    public String getMcServerCommandline() {
+        return this.mcServerCommandline;
+    }
+
     public String getMcVersion() {
         return this.mcVersion;
     }
@@ -282,6 +299,10 @@ public class Config {
             value = this.setProperty(key, defaultValue);
         }
         return value;
+    }
+
+    public File getServerFolder() {
+        return this.serverFolder;
     }
 
     public String getShortTitle() {

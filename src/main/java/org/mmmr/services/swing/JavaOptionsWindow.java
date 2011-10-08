@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,17 +23,17 @@ import javax.swing.WindowConstants;
 
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
-import org.mmmr.services.UtilityMethods;
-import org.mmmr.services.UtilityMethods.MemInfo;
 import org.mmmr.services.MMMR;
 import org.mmmr.services.Messages;
+import org.mmmr.services.UtilityMethods;
+import org.mmmr.services.UtilityMethods.MemInfo;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableRecordCollection;
+import org.mmmr.services.swing.common.RoundedPanel;
 import org.mmmr.services.swing.common.UIUtils;
 import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
-import org.mmmr.services.swing.common.RoundedPanel;
 
 /**
  * @author Jurgen
@@ -80,9 +81,9 @@ public class JavaOptionsWindow extends JFrame {
 
         mainpanel.add(new JScrollPane(jtable), BorderLayout.CENTER);
 
-        JButton quit = new JButton(Messages.getString("JavaOptionsWindow.select_and_click")); //$NON-NLS-1$
-        quit.setFont(cfg.getFontLarge());
-        quit.addActionListener(new ActionListener() {
+        JButton choose = new JButton(Messages.getString("JavaOptionsWindow.select_and_click")); //$NON-NLS-1$
+        choose.setFont(cfg.getFontLarge());
+        choose.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -100,7 +101,7 @@ public class JavaOptionsWindow extends JFrame {
                                 sb.append(" ").append(JavaOptionsWindow.this.options[i - 1]); //$NON-NLS-1$
                             }
                         }
-                        sb.append(" -jar minecraft.jar"); //$NON-NLS-1$
+                        sb.append(" -jar \"" + new File(cfg.getClientFolder(), "minecraft.jar").getAbsolutePath() + "\""); //$NON-NLS-1$
                         cfg.setMcCommandline(sb.toString());
                         cfg.setProperty("jre", jre); //$NON-NLS-1$
                         MMMR.writeMCBat(cfg);
@@ -111,7 +112,7 @@ public class JavaOptionsWindow extends JFrame {
                 }
             }
         });
-        mainpanel.add(quit, BorderLayout.SOUTH);
+        mainpanel.add(choose, BorderLayout.SOUTH);
 
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 

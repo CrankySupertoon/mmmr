@@ -258,7 +258,7 @@ public class ManagerWindow extends JFrame {
             File[] modxmls = this.cfg.getMods().listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
-                    return name.toLowerCase().contains("optifine") && name.endsWith(".xml"); //$NON-NLS-1$ //$NON-NLS-2$
+                    return name.toLowerCase().contains("optifine") && !name.toLowerCase().contains("water") && name.endsWith(".xml"); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             List<ModOption> options = new ArrayList<ModOption>();
@@ -283,13 +283,12 @@ public class ManagerWindow extends JFrame {
                 return;
             }
             ModOption[] selectionValues = options.toArray(new ModOption[options.size()]);
-            ModOption selected = installedOption == null ? selectionValues[0] : installedOption;
-            selected = UtilityMethods
+            ModOption selected = UtilityMethods
                     .showOptions(
                             this.cfg,
-                            Messages.getString("ManagerWindow.install_optifine"), Messages.getString("ManagerWindow.select_version"), selectionValues, selected); //$NON-NLS-1$ //$NON-NLS-2$
+                            Messages.getString("ManagerWindow.install_optifine"), Messages.getString("ManagerWindow.select_version"), selectionValues, installedOption == null ? selectionValues[0] : installedOption); //$NON-NLS-1$ //$NON-NLS-2$
             if (selected != null) {
-                Mod mod = ModOption.class.cast(selected).getMod();
+                Mod mod = selected.getMod();
                 if (installed != null) {
                     if (mod.equals(installed)) {
                         // already installed, nothing to do

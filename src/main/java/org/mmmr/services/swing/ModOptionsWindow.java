@@ -401,7 +401,7 @@ public class ModOptionsWindow extends JFrame {
                 if (!name.endsWith(".xml")) { //$NON-NLS-1$
                     return false;
                 }
-                if (name.toLowerCase().contains("optifine")) { //$NON-NLS-1$
+                if (name.toLowerCase().contains("optifine") && !name.toLowerCase().contains("water")) { //$NON-NLS-1$
                     return false;
                 }
                 if (name.toLowerCase().contains("yogbox")) { //$NON-NLS-1$

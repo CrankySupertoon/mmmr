@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SERVER" archive="ElementalCreepers_v1.5_server.zip" mc="1.8.1" name="Elemental Creepers" url="http://www.minecraftforum.net/topic/498342-181-elemental-creepers-v15-updated-to-minecraft-181/" version="1.5">
+    <dependencies>
+		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1">
+    </dependencies>
+    <resources>
+        <resource targetpath="mods/"/>
+    </resources>
+</mod>
