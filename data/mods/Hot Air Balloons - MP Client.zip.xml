@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SMP" archive="Hot Air Balloons - MP Client.zip" mc="1.8.1" name="Hot Air Balloons" url="http://www.minecraftforum.net/topic/214108-v181-hot-air-balloons-v20-multiplayer-smp-update/" version="2.00">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
