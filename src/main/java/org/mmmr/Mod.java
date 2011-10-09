@@ -172,7 +172,7 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
         return this.dependencies;
     }
 
-    @XmlAttribute
+    @XmlElement
     public String getDescription() {
         return this.description;
     }

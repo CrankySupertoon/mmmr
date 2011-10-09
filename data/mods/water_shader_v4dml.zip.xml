@@ -5,6 +5,6 @@
     </dependencies>
     <resources>
         <resource sourcepath="water_shader_v4dml/Minecraft/" targetpath="bin/minecraft.jar"/>
-        <resource sourcepath="water_shader_v4dml/shader/" targetpath="bin/"/>
+        <resource sourcepath="water_shader_v4dml/shader/" targetpath="bin/shader/"/>
     </resources>
 </mod>

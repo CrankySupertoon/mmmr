@@ -65,6 +65,8 @@
 1317907604297::mod_Medication.zip.xml
 1317907604308::More Stackables.zip.xml
 1317907604358::MoreCreepsv2.41.rar.xml
+1318156508381::MysticOres-1.8.1.zip.xml
+1318156572145::MysticRuins-1.8.1.zip.xml
 1317907604323::OptiFine_1.8.1_HD_A.zip.xml
 1317907604339::OptiFine_1.8.1_HD_S_A.zip.xml
 1317907604371::PaintballModClient.zip.xml
@@ -97,7 +99,7 @@
 1317907604372::Treecapitator.zip.xml
 1317907604384::TurretMod_v11_03.zip.xml
 1317907604314::twilightforest1.3r1.zip.xml
-1317907604381::water_shader_v4dml.zip.xml
+1318120606357::water_shader_v4dml.zip.xml
 1318030524241::Weaponmod.zip.xml
 1318083409747::ZanMinimap0.10.6d-1.8.zip.xml
 1317914818777::zombe's_modpack-v4.37_MC.beta.1.8.1.zip.xml
