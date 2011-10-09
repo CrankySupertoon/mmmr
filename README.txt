@@ -48,6 +48,11 @@ FEATURES NOT STARTED
 - support other OS
 - mod install config description as html, trplace links if not encapsulated in '<a href'
 - load mod install configurations also from subdirectories
+- hide mods so you won't be bugged by mods that are incompatible with your favorite ones (and unhide)
+- show different versions of the same mod as a single line with selectable version,
+  select highest version by default, gray out when only a single version is available
+- management of minecraft server
+- management of minecraft server mods
 
 EXTRA
 -----

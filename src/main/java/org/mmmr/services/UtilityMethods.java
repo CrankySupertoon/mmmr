@@ -127,19 +127,23 @@ public class UtilityMethods {
         }
     }
 
-    public static boolean deleteDirectory(File path) {
+    /**
+     * delete a file or directory recursive, does not throw exceptions when files does not exists or null is given but returns false
+     */
+    public static boolean delete(File path) {
         ExceptionAndLogHandler.log("deleting " + path);
-        if (path.exists()) {
+        if ((path != null) && path.exists()) {
             File[] files = path.listFiles();
             for (File file : files) {
                 if (file.isDirectory()) {
-                    UtilityMethods.deleteDirectory(file);
+                    UtilityMethods.delete(file);
                 } else {
                     file.delete();
                 }
             }
+            return path.delete();
         }
-        return (path.delete());
+        return false;
     }
 
     protected static void dialogPostCreate(JDialog dialog) {
@@ -248,6 +252,10 @@ public class UtilityMethods {
 
     public static File getCurrentJar() {
         return new File(UtilityMethods.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+    }
+
+    public static String getDrive(File file) throws IOException {
+        return file.getCanonicalPath().substring(0, 2);
     }
 
     @SuppressWarnings("restriction")

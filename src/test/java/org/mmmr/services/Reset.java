@@ -1,7 +1,6 @@
 package org.mmmr.services;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Scanner;
 
 import org.mmmr.services.impl.ArchiveService7Zip;
@@ -19,32 +18,22 @@ public class Reset {
             Config cfg = new Config();
             ArchiveService7Zip z7 = new ArchiveService7Zip();
             if (resetClient) {
-                UtilityMethods.deleteDirectory(cfg.getBackup());
-                UtilityMethods.deleteDirectory(cfg.getCfg());
-                UtilityMethods.deleteDirectory(cfg.getDbdir());
-                UtilityMethods.deleteDirectory(cfg.getMcBaseFolder());
-                UtilityMethods.deleteDirectory(cfg.getLogs());
+                UtilityMethods.delete(cfg.getBackup());
+                UtilityMethods.delete(cfg.getCfg());
+                UtilityMethods.delete(cfg.getDbdir());
+                UtilityMethods.delete(cfg.getMcBaseFolder());
+                UtilityMethods.delete(cfg.getLogs());
                 File clientBackup = new File(cfg.getClientFolder(), ".minecraft.rar");
                 if (clientBackup.exists()) {
                     z7.extract(clientBackup, cfg.getClientFolder());
                 }
             }
             if (resetServer) {
-                for (File f : cfg.getServerFolder().listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return !"minecraft_server.jar.backup".equals(name);
-                    }
-                })) {
-                    if (f.isDirectory()) {
-                        UtilityMethods.deleteDirectory(f);
-                    } else {
-                        f.delete();
-                    }
+                for (File f : cfg.getServerFolder().listFiles()) {
+                    UtilityMethods.delete(f);
                 }
-                File serverBackup = new File(cfg.getServerFolder(), "minecraft_server.jar.backup");
-                if (serverBackup.exists()) {
-                    UtilityMethods.copyFile(serverBackup, new File(cfg.getServerFolder(), "minecraft_server.jar"));
+                if (cfg.getBackupServerJar().exists()) {
+                    UtilityMethods.copyFile(cfg.getBackupServerJar(), new File(cfg.getServerFolder(), Config.MINECRAFT_SERVER_JAR));
                 }
             }
         } catch (Exception ex) {

@@ -92,6 +92,10 @@ public class Config {
 
     private File mcJarBackup;
 
+    private File mcTexturePacks;
+
+    private File texturePacks;
+
     private File mcJogboxBackup;
 
     private File mcMods;
@@ -126,6 +130,8 @@ public class Config {
 
     private String mmmrSvnOnGoogleCode;
 
+    private File backupServerJar;
+
     public Config() throws IOException {
         this(new String[0]);
     }
@@ -146,6 +152,10 @@ public class Config {
 
     public File getBackupOriginalJar() {
         return this.backupOriginalJar;
+    }
+
+    public File getBackupServerJar() {
+        return this.backupServerJar;
     }
 
     public File getCfg() {
@@ -240,6 +250,10 @@ public class Config {
         return this.mcServerCommandline;
     }
 
+    public File getMcTexturePacks() {
+        return this.mcTexturePacks;
+    }
+
     public String getMcVersion() {
         return this.mcVersion;
     }
@@ -284,6 +298,10 @@ public class Config {
         return this.shortTitle;
     }
 
+    public File getTexturePacks() {
+        return this.texturePacks;
+    }
+
     public File getThisFolder() {
         return this.thisFolder;
     }
@@ -312,7 +330,7 @@ public class Config {
         this.shortTitle = "Minecraft Mod Manager Reloaded"; //$NON-NLS-1$
         this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion; //$NON-NLS-1$
         this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getClientFolder(), Config.MINECRAFT_JAR).getAbsolutePath() + "\""; //$NON-NLS-1$        
-        this.mcServerCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getServerFolder(), Config.MINECRAFT_SERVER_JAR).getAbsolutePath() + "\""; //$NON-NLS-1$
+        this.mcServerCommandline = "java.exe -Xms1024m -Xmx1024m -jar " + Config.MINECRAFT_SERVER_JAR; //$NON-NLS-1$
 
         // not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
         // we use a locally installed minecraft so you can mod at your heart's content
@@ -320,6 +338,7 @@ public class Config {
 
         this.mcBin = new File(this.mcBaseFolder, "bin"); //$NON-NLS-1$
         this.mcMods = new File(this.mcBaseFolder, "mods"); //$NON-NLS-1$
+        this.mcTexturePacks = new File(this.mcBaseFolder, "texturepacks");
         this.mcResources = new File(this.mcBaseFolder, "resources"); //$NON-NLS-1$
         this.mcJar = new File(this.mcBin, Config.MINECRAFT_JAR);
         this.mcJarBackup = new File(this.mcBin, "minecraft.jar.backup"); //$NON-NLS-1$
@@ -334,6 +353,7 @@ public class Config {
         }
         this.backup = UtilityMethods.newDir(this.data, "backup"); //$NON-NLS-1$
         this.mods = UtilityMethods.newDir(this.data, "mods"); //$NON-NLS-1$
+        this.texturePacks = UtilityMethods.newDir(this.data, "texturepacks");
         this.serverMods = UtilityMethods.newDir(this.data, "servermods"); //$NON-NLS-1$
         this.libs = UtilityMethods.newDir(this.data, "libs"); //$NON-NLS-1$
         this.tmp = new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
@@ -341,6 +361,7 @@ public class Config {
         this.logs = UtilityMethods.newDir(this.data, "logs"); //$NON-NLS-1$
         this.dbdir = new File(this.data, "db"); //$NON-NLS-1$
         this.backupOriginalJar = UtilityMethods.newDir(this.backup, Config.MINECRAFT_JAR);
+        this.backupServerJar = UtilityMethods.newDir(this.backup, Config.MINECRAFT_SERVER_EXE);
         this.mcJogboxBackup = UtilityMethods.newDir(this.backup, "jogbox"); //$NON-NLS-1$
     }
 

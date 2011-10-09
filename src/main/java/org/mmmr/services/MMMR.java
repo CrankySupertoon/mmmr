@@ -2,6 +2,7 @@ package org.mmmr.services;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,12 +26,16 @@ public class MMMR implements MMMRI {
             String commandline = cfg.getMcCommandline();
             {
                 FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft console.bat")); //$NON-NLS-1$
-                out.write(("SET APPDATA=" + cfg.getClientFolder().getAbsolutePath() + "\r\n" + commandline + "\r\npause").getBytes()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                out.write(("SET APPDATA=" + cfg.getClientFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$ //$NON-NLS-2$ 
+                        commandline + "\r\npause").getBytes() //$NON-NLS-1$ 
+                );
                 out.close();
             }
             {
                 FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft no-console.bat")); //$NON-NLS-1$
-                out.write(("SET APPDATA=" + cfg.getClientFolder().getAbsolutePath() + "\r\n" + commandline.replaceAll("java.exe", "javaw.exe")).getBytes()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                out.write(("SET APPDATA=" + cfg.getClientFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$ //$NON-NLS-2$ 
+                commandline.replaceAll("java.exe", "javaw.exe") //$NON-NLS-1$ //$NON-NLS-2$ 
+                ).getBytes());
                 out.close();
             }
         }
@@ -38,12 +43,22 @@ public class MMMR implements MMMRI {
             String commandline = cfg.getMcServerCommandline();
             {
                 FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft server console.bat")); //$NON-NLS-1$
-                out.write(("SET APPDATA=" + cfg.getServerFolder().getAbsolutePath() + "\r\n" + commandline + "\r\npause").getBytes()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                out.write(("SET APPDATA=" + cfg.getServerFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        "cd " + UtilityMethods.getDrive(cfg.getServerFolder()) + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        "cd " + cfg.getServerFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        commandline + "\r\n" + //$NON-NLS-1$
+                "pause" //$NON-NLS-1$
+                ).getBytes());
                 out.close();
             }
             {
                 FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft server no-console.bat")); //$NON-NLS-1$
-                out.write(("SET APPDATA=" + cfg.getServerFolder().getAbsolutePath() + "\r\n" + commandline.replaceAll("java.exe", "javaw.exe")).getBytes()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                out.write(("SET APPDATA=" + cfg.getServerFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        "cd " + UtilityMethods.getDrive(cfg.getServerFolder()) + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        "cd " + cfg.getServerFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        commandline.replaceAll("java.exe", "javaw.exe") + "\r\n" + //$NON-NLS-1$
+                "pause" //$NON-NLS-1$
+                ).getBytes());
                 out.close();
             }
         }
@@ -80,15 +95,6 @@ public class MMMR implements MMMRI {
         if (!new File(this.cfg.getMcBaseFolder(), "bin/minecraft.jar").exists()) { //$NON-NLS-1$
             return true;
         }
-        if (!new File(this.cfg.getMcBaseFolder(), "bin/jinput.jar").exists()) { //$NON-NLS-1$
-            return true;
-        }
-        if (!new File(this.cfg.getMcBaseFolder(), "bin/lwjgl.jar").exists()) { //$NON-NLS-1$
-            return true;
-        }
-        if (!new File(this.cfg.getMcBaseFolder(), "bin/lwjgl_util.jar").exists()) { //$NON-NLS-1$
-            return true;
-        }
 
         return false;
     }
@@ -108,16 +114,28 @@ public class MMMR implements MMMRI {
         }
     }
 
+    /**
+     * 
+     * @see org.mmmr.services.MMMRI#setCfg(org.mmmr.services.Config)
+     */
     @Override
     public void setCfg(Config cfg) {
         this.cfg = cfg;
     }
 
+    /**
+     * 
+     * @see org.mmmr.services.MMMRI#setStatusWindow(org.mmmr.services.swing.StatusWindow)
+     */
     @Override
     public void setStatusWindow(StatusWindow statusWindow) {
         this.statusWindow = statusWindow;
     }
 
+    /**
+     * 
+     * @see org.mmmr.services.MMMRI#start(java.lang.String[])
+     */
     @Override
     public void start(String[] args) throws Exception {
         DBService db;
@@ -185,7 +203,7 @@ public class MMMR implements MMMRI {
                     if (!UtilityMethods.showConfirmation(this.cfg, "Minecraft.", //$NON-NLS-1$
                             Messages.getString("MMMR.minecraft_run_properly"))) { //$NON-NLS-1$
                         error = "installing and running Minecraft";//$NON-NLS-1$
-                        UtilityMethods.deleteDirectory(this.cfg.getMcBaseFolder());
+                        UtilityMethods.delete(this.cfg.getMcBaseFolder());
                         for (i = 0; i < files.length; i++) {
                             File target = i < 2 ? this.cfg.getClientFolder() : this.cfg.getServerFolder();
                             new File(target, files[i]).delete();
@@ -194,7 +212,7 @@ public class MMMR implements MMMRI {
                     }
                     ArchiveService.extract(this.cfg.getMcJar(), this.cfg.getBackupOriginalJar());
                     if (!new File(this.cfg.getBackupOriginalJar(), "META-INF/MOJANG_C.SF").exists()) { //$NON-NLS-1$
-                        UtilityMethods.deleteDirectory(this.cfg.getBackupOriginalJar());
+                        UtilityMethods.delete(this.cfg.getBackupOriginalJar());
                         throw new RuntimeException("not a clean install"); //$NON-NLS-1$
                     }
                     this.statusWindow.getMcstatus().setStatus("Minecraft: " + ready, mccheck = true);//$NON-NLS-1$
@@ -305,7 +323,7 @@ public class MMMR implements MMMRI {
                 }
                 File meta_inf = new File(this.cfg.getMcJar(), "META-INF");
                 if (meta_inf.exists()) {
-                    if (!UtilityMethods.deleteDirectory(meta_inf)) {
+                    if (!UtilityMethods.delete(meta_inf)) {
                         throw new IOException("could not delete META-INF");
                     }
                 }
@@ -338,6 +356,23 @@ public class MMMR implements MMMRI {
                             }
                         }
                         db.save(jb);
+                    }
+                }
+                {
+                    File[] packs = this.cfg.getTexturePacks().listFiles(new FilenameFilter() {
+                        @Override
+                        public boolean accept(File dir, String name) {
+                            return name.endsWith(".zip");
+                        }
+                    });
+                    if (packs != null) {
+                        for (File pack : packs) {
+                            File tp = new File(this.cfg.getMcTexturePacks(), pack.getName());
+                            if (!tp.exists()) {
+                                ExceptionAndLogHandler.log("copy texturepack " + pack.getName());
+                                UtilityMethods.copyFile(pack, tp);
+                            }
+                        }
                     }
                 }
             }
