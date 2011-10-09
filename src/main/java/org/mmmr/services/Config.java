@@ -88,6 +88,8 @@ public class Config {
 
     private String mcServerCommandline;
 
+    private String mcBukkitCommandline;
+
     private File mcJar;
 
     private File mcJarBackup;
@@ -222,6 +224,10 @@ public class Config {
         return this.mcBin;
     }
 
+    public String getMcBukkitCommandline() {
+        return this.mcBukkitCommandline;
+    }
+
     public String getMcCommandline() {
         return this.mcCommandline;
     }
@@ -331,6 +337,7 @@ public class Config {
         this.title = this.shortTitle + " 1.0b For Minecraft " + this.mcVersion; //$NON-NLS-1$
         this.mcCommandline = "java.exe -Xms1024m -Xmx1024m -jar \"" + new File(this.getClientFolder(), Config.MINECRAFT_JAR).getAbsolutePath() + "\""; //$NON-NLS-1$        
         this.mcServerCommandline = "java.exe -Xms1024m -Xmx1024m -jar " + Config.MINECRAFT_SERVER_JAR; //$NON-NLS-1$
+        this.mcBukkitCommandline = "java.exe -Xms1024m -Xmx1024m -jar craftbukkit-0.0.1-SNAPSHOT.jar"; //$NON-NLS-1$
 
         // not used anymore: mcBaseFolder = new File(System.getenv("APPDATA"), ".minecraft");
         // we use a locally installed minecraft so you can mod at your heart's content

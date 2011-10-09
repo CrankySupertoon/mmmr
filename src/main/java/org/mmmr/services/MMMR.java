@@ -62,6 +62,29 @@ public class MMMR implements MMMRI {
                 out.close();
             }
         }
+        {
+            String commandline = cfg.getMcBukkitCommandline();
+            {
+                FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft bukkit server console.bat")); //$NON-NLS-1$
+                out.write(("SET APPDATA=" + cfg.getServerFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        "cd " + UtilityMethods.getDrive(cfg.getServerFolder()) + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        "cd " + cfg.getServerFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        commandline + "\r\n" + //$NON-NLS-1$
+                "pause" //$NON-NLS-1$
+                ).getBytes());
+                out.close();
+            }
+            {
+                FileOutputStream out = new FileOutputStream(new File(cfg.getThisFolder(), "start minecraft bukkit server no-console.bat")); //$NON-NLS-1$
+                out.write(("SET APPDATA=" + cfg.getServerFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        "cd " + UtilityMethods.getDrive(cfg.getServerFolder()) + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        "cd " + cfg.getServerFolder().getAbsolutePath() + "\r\n" + //$NON-NLS-1$//$NON-NLS-2$
+                        commandline.replaceAll("java.exe", "javaw.exe") + "\r\n" + //$NON-NLS-1$
+                "pause" //$NON-NLS-1$
+                ).getBytes());
+                out.close();
+            }
+        }
     }
 
     private Config cfg;
