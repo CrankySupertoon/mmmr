@@ -3,4 +3,5 @@
     <resources>
         <resource sourcepath="./" targetpath="minecraft_server.jar"/>
     </resources>
+	<description>unofficial update</description>
 </mod>

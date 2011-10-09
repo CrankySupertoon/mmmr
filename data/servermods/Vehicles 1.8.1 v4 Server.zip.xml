@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SERVER" archive="Vehicles 1.8.1 v4 Server.zip" mc="1.8.1" name="Vehicles Mod" url="http://www.minecraftforum.net/topic/182918-181smp-flans-mods-planes-ww2-guns-vehicles-playerapi-moods-mputils-teams/#Vehicles" version="4">
+    <dependencies>
+		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
+    </dependencies>
+	<resources>
+		<resource sourcepath="minecraft_server/" targetpath="minecraft_server.jar"/>
+		<resource sourcepath="vehicles.properties" targetpath="vehicles.properties"/>
+    </resources>
+</mod>

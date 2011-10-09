@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SERVER" archive="PaintballModServer.zip" mc="1.8.1" name="Paintball" url="http://www.minecraftforum.net/topic/309199-181-%e2%98%85-paintball-v28-%e2%98%85-faster-pellets-and-smp/" version="2.8">
+    <dependencies>
+		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="./"/>
+    </resources>
+</mod>

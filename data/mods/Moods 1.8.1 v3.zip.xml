@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SMP" archive="Moods 1.8.1 v3.zip" mc="1.8.1" name="Mood Mod" url="http://www.minecraftforum.net/topic/182918-181smp-flans-mods-planes-ww2-guns-vehicles-playerapi-moods-mputils-teams/#Moods" version="3">
+     <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+		<mod name="PlayerAPI" url="http://www.minecraftforum.net/topic/182918-/#PAPI" version="1.2"/>
+    </dependencies>
+	<resources>
+		<resource sourcepath="jar files/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

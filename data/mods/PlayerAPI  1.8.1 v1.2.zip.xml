@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod mode="SMP" archive="PlayerAPI  1.8.1 v1.2.zip" mc="1.8.1" name="PlayerAPI" url="http://www.minecraftforum.net/topic/182918-181smp-flans-mods-planes-ww2-guns-vehicles-playerapi-moods-mputils-teams/#PAPI" version="1.2">
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
