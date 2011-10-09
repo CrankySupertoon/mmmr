@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod mode="SSP" archive="buildcraft-client-B-energy-2.2.0.zip" mc="1.8.1" name="BuildCraft energy" url="http://www.minecraftforum.net/topic/682920-181-buildcraft-220-pipes-quarry-auto-crafting-building-engines/" version="2.2.0">
-    <dependencies>
-        <mod name="BuildCraft core" version="2.2.0"/>
-    </dependencies>
-    <resources>
-        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>

@@ -1,7 +1,12 @@
 1318085691036::buildcraft-server-A-core-1.8.1.1.zip.xml
+1318194408034::buildcraft-server-A-core-2.2.1.zip.xml
 1318085687389::buildcraft-server-B-builders-1.8.1.1.zip.xml
+1318194385273::buildcraft-server-B-builders-2.2.1.zip.xml
+1318194464127::buildcraft-server-B-energy-2.2.1.zip.xml
 1318085683732::buildcraft-server-B-factory-1.8.1.1.zip.xml
+1318194479866::buildcraft-server-B-factory-2.2.1.zip.xml
 1318085680044::buildcraft-server-B-transport-1.8.1.1.zip.xml
+1318194495781::buildcraft-server-B-transport-2.2.1.zip.xml
 1318106818053::CB1185_ModLoaderMP181v2.7z.xml
 1318106676979::craftbukkit-0.0.1-SNAPSHOT.jar.xml
 1318085676100::ElementalCreepers_v1.5_server.zip.xml
