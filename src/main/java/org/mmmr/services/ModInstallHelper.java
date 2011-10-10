@@ -16,19 +16,20 @@ import org.mmmr.Resource;
 import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.ArchiveEntryMatcher;
 import org.mmmr.services.interfaces.ArchiveOutputStreamBuilder;
+import org.mmmr.services.interfaces.Path;
 
 public class ModInstallHelper implements ArchiveEntryMatcher, ArchiveOutputStreamBuilder {
     private enum FilterType {
         Resources, Paths;
     }
 
-    private Map<String, String> pathing = new HashMap<String, String>();
+    private Map<Path, Path> pathing = new HashMap<Path, Path>();
 
-    private Map<String, List<Pattern>> includes = new HashMap<String, List<Pattern>>();
+    private Map<Path, List<Pattern>> includes = new HashMap<Path, List<Pattern>>();
 
-    private Map<String, List<Pattern>> excludes = new HashMap<String, List<Pattern>>();
+    private Map<Path, List<Pattern>> excludes = new HashMap<Path, List<Pattern>>();
 
-    private List<String> paths = new ArrayList<String>();
+    private List<Path> paths = new ArrayList<Path>();
 
     private FilterType type;
 
@@ -38,13 +39,13 @@ public class ModInstallHelper implements ArchiveEntryMatcher, ArchiveOutputStrea
         this.target = target;
         this.type = FilterType.Resources;
         for (Resource resource : mod.getResources()) {
-            String sp = resource.getSourcePath().replace('\\', '/').replaceFirst("\\./", "");
-            String tp = resource.getTargetPath().replace('\\', '/').replaceFirst("\\./", "");
+            Path sp = new Path(resource.getSourcePath());
+            Path tp = new Path(resource.getTargetPath());
             this.pathing.put(sp, tp);
             List<Pattern> _includes = new ArrayList<Pattern>();
             if (resource.getInclude() != null) {
                 for (String include : resource.getInclude().split(",")) {
-                    _includes.add(Pattern.compile(include.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
+                    _includes.add(Pattern.compile(new Path(include).getPath(), Pattern.CASE_INSENSITIVE));
                 }
             } else {
                 _includes.add(Pattern.compile("."));
@@ -53,7 +54,7 @@ public class ModInstallHelper implements ArchiveEntryMatcher, ArchiveOutputStrea
             List<Pattern> _excludes = new ArrayList<Pattern>();
             if (resource.getExclude() != null) {
                 for (String exclude : resource.getExclude().split(",")) {
-                    _excludes.add(Pattern.compile(exclude.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
+                    _excludes.add(Pattern.compile(new Path(exclude).getPath(), Pattern.CASE_INSENSITIVE));
                 }
             }
             this.excludes.put(sp, _excludes);
@@ -64,12 +65,12 @@ public class ModInstallHelper implements ArchiveEntryMatcher, ArchiveOutputStrea
         this.target = target;
         this.type = FilterType.Paths;
         for (Resource resource : mod.getResources()) {
-            String sp = resource.getSourcePath().replace('\\', '/').replaceFirst("\\./", "");
-            String tp = resource.getTargetPath().replace('\\', '/').replaceFirst("\\./", "");
+            Path sp = new Path(resource.getSourcePath());
+            Path tp = new Path(resource.getTargetPath());
             this.pathing.put(sp, tp);
         }
         for (String path : paths) {
-            this.paths.add(path.replace('\\', '/').replaceFirst("\\./", ""));
+            this.paths.add(new Path(path));
         }
     }
 
@@ -79,13 +80,13 @@ public class ModInstallHelper implements ArchiveEntryMatcher, ArchiveOutputStrea
      */
     @Override
     public OutputStream createOutputStream(ArchiveEntry entry) throws IOException {
-        String path = this.resolvePath(entry.path);
+        Path path = this.resolvePath(entry.path);
         ExceptionAndLogHandler.log("'" + entry.path + "' >> '" + path + "'");
         if (this.target == null) {
             // in debug mode and testing
             return new ByteArrayOutputStream();
         }
-        File file = new File(this.target, path);
+        File file = new File(this.target, path.getPath());
         file.getParentFile().mkdirs();
         return new FileOutputStream(file);
     }
@@ -96,47 +97,50 @@ public class ModInstallHelper implements ArchiveEntryMatcher, ArchiveOutputStrea
      */
     @Override
     public boolean matches(ArchiveEntry entry) {
-        String path = entry.path.replace('\\', '/');
-        String key = null;
+        Path path = entry.path;
+        Path keyPath = null;
         boolean success = false;
-        for (String resourcepath : this.pathing.keySet()) {
+        for (Path resourcepath : this.pathing.keySet()) {
             if (path.startsWith(resourcepath)) {
-                key = resourcepath;
+                keyPath = resourcepath;
                 break;
             }
         }
         switch (this.type) {
             case Paths:
-                for (String p : this.paths) {
+                for (Path p : this.paths) {
                     if (path.endsWith(p)) {
-                        success = true;
-                        break;
+                        for (Path key : this.pathing.keySet()) {
+                            if (key.append(p).equals(path)) {
+                                success = true;
+                                break;
+                            }
+                        }
                     }
                 }
                 break;
             case Resources:
-                for (Pattern pattern : this.includes.get(key)) {
-                    if (pattern.matcher(path).find()) {
+                for (Pattern pattern : this.includes.get(keyPath)) {
+                    if (pattern.matcher(path.getPath()).find()) {
                         success = true;
                         break;
                     }
                 }
-                for (Pattern pattern : this.excludes.get(key)) {
-                    if (pattern.matcher(path).find()) {
+                for (Pattern pattern : this.excludes.get(keyPath)) {
+                    if (pattern.matcher(path.getPath()).find()) {
                         success = false;
                         break;
                     }
                 }
                 break;
         }
-        ExceptionAndLogHandler.log("'" + path + "' [" + key + "]=" + success);
+        ExceptionAndLogHandler.log("'" + path + "' [" + keyPath + "]=" + success);
         return success;
     }
 
-    public String resolvePath(String path) {
-        path = path.replace('\\', '/');
-        String key = null;
-        for (String resourcepath : this.pathing.keySet()) {
+    public Path resolvePath(Path path) {
+        Path key = null;
+        for (Path resourcepath : this.pathing.keySet()) {
             if (path.startsWith(resourcepath)) {
                 key = resourcepath;
                 break;
@@ -145,10 +149,7 @@ public class ModInstallHelper implements ArchiveEntryMatcher, ArchiveOutputStrea
         if (key == null) {
             throw new NullPointerException();
         }
-        path = (this.pathing.get(key.toString()) + "/" + path.substring(key.length())).replaceAll("//", "/").replaceAll("//", "/");
-        if (path.startsWith("/")) {
-            path = path.substring(1);
-        }
-        return path;
+        Path relativePathToKey = path.relativePathTo(key);
+        return this.pathing.get(key).append(relativePathToKey);
     }
 }

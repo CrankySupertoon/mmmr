@@ -6,13 +6,14 @@ import java.util.regex.Pattern;
 
 import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.ArchiveEntryMatcher;
+import org.mmmr.services.interfaces.Path;
 
 public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
     private List<Pattern> includes;
 
     private List<Pattern> excludes;
 
-    private List<String> paths;
+    private List<Path> paths;
 
     /**
      * 
@@ -32,7 +33,7 @@ public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
     public ArchiveEntryMatcherImpl(List<String> paths) {
         paths = new ArrayList<String>();
         for (String path : paths) {
-            this.paths.add(path.replace('\\', '/'));
+            this.paths.add(new Path(path));
         }
     }
 
@@ -57,13 +58,13 @@ public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
         if (includes != null) {
             this.includes = new ArrayList<Pattern>();
             for (String include : includes.split(",")) { //$NON-NLS-1$
-                this.includes.add(Pattern.compile(include.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
+                this.includes.add(Pattern.compile(new Path(include).getPath(), Pattern.CASE_INSENSITIVE));
             }
         }
         if (excludes != null) {
             this.excludes = new ArrayList<Pattern>();
             for (String exclude : excludes.split(",")) { //$NON-NLS-1$
-                this.excludes.add(Pattern.compile(exclude.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
+                this.excludes.add(Pattern.compile(new Path(exclude).getPath(), Pattern.CASE_INSENSITIVE));
             }
         }
     }
@@ -75,18 +76,18 @@ public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
     @Override
     public boolean matches(ArchiveEntry entry) {
         if (this.paths != null) {
-            return this.paths.contains(entry.path.replace('\\', '/'));
+            return this.paths.contains(entry.path);
         }
         if (this.excludes != null) {
             for (Pattern exclude : this.excludes) {
-                if (exclude.matcher(entry.path.replace('\\', '/')).find()) {
+                if (exclude.matcher(entry.path.getPath()).find()) {
                     return false;
                 }
             }
         }
         if (this.includes != null) {
             for (Pattern include : this.includes) {
-                if (!include.matcher(entry.path.replace('\\', '/')).find()) {
+                if (!include.matcher(entry.path.getPath()).find()) {
                     return false;
                 }
             }

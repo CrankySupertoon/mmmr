@@ -27,7 +27,7 @@ public class ArchiveOutputStreamBuilderImpl implements ArchiveOutputStreamBuilde
      */
     @Override
     public OutputStream createOutputStream(ArchiveEntry entry) throws IOException {
-        File file = new File(this.target, entry.path);
+        File file = new File(this.target, entry.path.getPath());
         file.getParentFile().mkdirs();
         return new FileOutputStream(file);
     }

@@ -286,13 +286,15 @@ public class InstallationService {
         if ((info.installedButWrongVersion.size() > 0) || (info.missing.size() > 0)) {
             StringBuilder sb1 = new StringBuilder();
             for (Dependency missing : info.missing) {
-                sb1.append("  - ").append(missing.getName()).append(" v").append(missing.getVersion());
+                String line = String.format(Messages.getString("InstallationService.install_mods_dependency_check.missing"), missing.getName(),//$NON-NLS-1$
+                        missing.getVersion());
+                sb1.append(line);
             }
             StringBuilder sb2 = new StringBuilder();
             for (Map.Entry<Mod, Dependency> installedButWrongVersion : info.installedButWrongVersion.entrySet()) {
-                sb2.append("  - ").append(installedButWrongVersion.getKey().getName()).append(" v")
-                        .append(installedButWrongVersion.getKey().getVersion()).append(" installed but v")
-                        .append(installedButWrongVersion.getValue().getVersion()).append(" needed");
+                String line = String.format(Messages.getString("InstallationService.install_mods_dependency_check.wrong"), installedButWrongVersion//$NON-NLS-1$
+                        .getKey().getName(), installedButWrongVersion.getKey().getVersion(), installedButWrongVersion.getValue().getVersion());
+                sb2.append(line);
             }
             if (!UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.install_mods_dependency"), //$NON-NLS-1$
                     String.format(Messages.getString("InstallationService.install_mods_dependency_check"), sb1.toString(), sb2.toString()))) {

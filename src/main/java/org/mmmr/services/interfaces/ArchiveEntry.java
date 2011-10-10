@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class ArchiveEntry {
-    public final String path;
+    public final Path path;
 
     public final long size;
 
@@ -23,7 +23,7 @@ public class ArchiveEntry {
     private transient int hashCode;
 
     public ArchiveEntry(String path, long size, Date creation, Date modification, long compressedSize, String group, String user) {
-        this.path = path;
+        this.path = new Path(path);
         this.size = size;
         this.creation = creation;
         this.modification = modification;
@@ -61,6 +61,6 @@ public class ArchiveEntry {
      */
     @Override
     public String toString() {
-        return this.path;
+        return this.path.toString();
     }
 }
