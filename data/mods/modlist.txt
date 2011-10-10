@@ -33,6 +33,7 @@
 1318074170120::ElementalCreepers_v1.5_client.zip.xml
 1317907604340::EqExClientV4.16.zip.xml
 1317907604334::EqExForgeV4.16.zip.xml
+1318289819315::erosion_mod_2.5.zip.xml
 1318284098733::FishCraftory1.3.zip.xml
 1318289111533::FlaxBonemealFix.zip.xml
 1317907604304::Floating Ruins.zip.xml
@@ -104,6 +105,7 @@
 1317907604326::Titans v4.5.zip.xml
 1318284636361::TooManyItems2011_09_27_1.8_fix.zip.xml
 1317907604372::Treecapitator.zip.xml
+1318290345783::Tropicraft Build 2.3 (1).zip.xml
 1318199500415::turbomodelthingy-v2.3.5.zip.xml
 1317907604384::TurretMod_v11_03.zip.xml
 1317907604314::twilightforest1.3r1.zip.xml
