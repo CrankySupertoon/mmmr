@@ -272,21 +272,6 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
         return this.getInstallationDate() != null;
     }
 
-    public String resolvePath(String path) {
-        path = path.replace('\\', '/');
-        for (Resource resource : this.getResources()) {
-            String sp = resource.getSourcePath().replace('\\', '/');
-            if (sp.startsWith("./")) {
-                sp = sp.substring(2);
-            }
-            if (path.startsWith(sp)) {
-                path = path.substring(sp.length());
-                return (resource.getTargetPath() + "/" + path).replaceAll("//", "/");
-            }
-        }
-        return null;
-    }
-
     public void setActualUrl(String actualUrl) {
         this.actualUrl = actualUrl;
     }
