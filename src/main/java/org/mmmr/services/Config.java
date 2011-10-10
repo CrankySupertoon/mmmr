@@ -368,7 +368,7 @@ public class Config {
         this.logs = UtilityMethods.newDir(this.data, "logs"); //$NON-NLS-1$
         this.dbdir = new File(this.data, "db"); //$NON-NLS-1$
         this.backupOriginalJar = UtilityMethods.newDir(this.backup, Config.MINECRAFT_JAR);
-        this.backupServerJar = UtilityMethods.newDir(this.backup, Config.MINECRAFT_SERVER_EXE);
+        this.backupServerJar = new File(this.backup, Config.MINECRAFT_SERVER_JAR);
         this.mcJogboxBackup = UtilityMethods.newDir(this.backup, "jogbox"); //$NON-NLS-1$
     }
 
