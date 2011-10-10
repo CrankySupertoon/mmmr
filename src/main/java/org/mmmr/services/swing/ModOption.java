@@ -8,118 +8,100 @@ import org.mmmr.Mode;
 import org.mmmr.services.Config;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.InstallationService;
+import org.mmmr.services.swing.ModOptionsWindow.Versions;
 
 public class ModOption {
-    protected final Mod mod;
-
     protected Boolean updated;
 
-    protected Boolean installed;
+    protected Boolean installed = false;
 
-    protected Date installationDate;
+    protected Date wasInstalledDate = null;
 
-    protected int installOrder;
+    protected Integer installOrder;
 
     protected final Config cfg;
 
+    protected Versions versions = new Versions();
+
     public ModOption(Config cfg, Mod mod) {
         this.cfg = cfg;
-        this.mod = mod;
-        this.installed = mod.getInstalled();
-        this.installationDate = mod.getInstallationDate();
-        this.installOrder = mod.getInstallOrder();
+        this.addMod(mod);
     }
 
-    public int compareTo(Mod other) {
-        return this.mod.compareTo(other);
+    public void addMod(Mod mod) {
+        this.versions.addVersion(mod);
+
+        if (mod.getInstalled()) {
+            this.installed = true;
+            this.wasInstalledDate = mod.getInstallationDate();
+            this.installOrder = mod.getInstallOrder();
+        }
     }
 
-    /**
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object other) {
-        return this.mod.equals(other);
+    public Boolean checkIfUpdated() {// this trick only works here so if it is another site there is no check => false
+        if ((this.getUrl() == null) || !this.getUrl().contains("minecraftforum")) { //$NON-NLS-1$
+            return false;
+        }
+        // check only needed when not set (not persisten in db, not persisted in xml)
+        if (this.updated == null) {
+            // if actualUrl is set and differs url we already know that there is an update => true
+            if ((this.getMod().getActualUrl() != null) && !this.getMod().getActualUrl().equals(this.getUrl())) {
+                return true;
+            }
+            // trick: the site redirects to a link where the title is replaced (updated)
+            // so if the title has changed: the mod is probably updated
+            try {
+                String newUrl = InstallationService.getUrl(this.getUrl());
+                if ((newUrl != null) && !"null".equals(newUrl)) { //$NON-NLS-1$
+                    // title not changed => false OR title changed => true
+                    return !this.getUrl().equals(newUrl);
+                }
+                return false;
+            } catch (Exception ex) {
+                ExceptionAndLogHandler.log(ex);
+            }
+        }
+        return null;
     }
 
     public String getDescription() {
-        return this.mod.getDescription();
+        return this.getMod().getDescription();
     }
 
     public Date getInstallationDate() {
-        return this.mod.getInstallationDate();
+        return this.getVersions().getInstalledOrLatestMod().getInstallationDate();
     }
 
     public Boolean getInstalled() {
         return this.installed;
     }
 
-    public int getInstallOrder() {
+    public Integer getInstallOrder() {
         return this.installOrder;
     }
 
     public Mod getMod() {
-        return this.mod;
+        return this.versions.getMod();
     }
 
     public Mode getMode() {
-        return this.mod.getMode();
+        return this.getMod().getMode();
     }
 
     public String getName() {
-        return this.mod.getName();
+        return this.getMod().getName();
     }
 
     public Boolean getUpdated() {
-        // check only needed when not set (not persisten in db, not persisted in xml)
-        if (this.updated == null) {
-            // check only needed when installed => no change
-            if (this.mod.isInstalled()) {
-                // if actualUrl is set and differs url we already know that there is an update => true
-                if ((this.mod.getActualUrl() != null) && !this.mod.getActualUrl().equals(this.getUrl())) {
-                    this.updated = true;
-                } else {
-                    // this trick only works here so if it is another site there is no check => false
-                    if (!this.getUrl().contains("minecraftforum")) { //$NON-NLS-1$
-                        this.updated = false;
-                    } else {
-                        // trick: the site redirects to a link where the title is replaced (updated)
-                        // so if the title has changed: the mod is probably updated
-                        try {
-                            String newUrl = InstallationService.getUrl(this.getUrl());
-                            if ((newUrl != null) && !"null".equals(newUrl)) { //$NON-NLS-1$
-                                // title not changed => false OR title changed => true
-                                this.updated = !this.getUrl().equals(newUrl);
-                            } else {
-                                this.updated = false;
-                            }
-                        } catch (Exception ex) {
-                            ExceptionAndLogHandler.log(ex);
-                        }
-                    }
-                }
-            }
-        }
         return this.updated;
     }
 
     public String getUrl() {
-        return this.mod.getUrl();
+        return this.getMod().getUrl();
     }
 
-    public String getVersion() {
-        return this.mod.getVersion();
-    }
-
-    /**
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-
-    @Override
-    public int hashCode() {
-        return this.mod.hashCode();
+    public Versions getVersions() {
+        return this.versions;
     }
 
     public boolean isModArchive() {
@@ -127,32 +109,32 @@ public class ModOption {
     }
 
     public void setDescription(String description) {
-        this.mod.setDescription(description);
+        throw new UnsupportedOperationException(String.valueOf(description));
     }
 
     public void setInstallationDate(Date installationDate) {
-        this.installationDate = installationDate;
+        this.wasInstalledDate = installationDate;
     }
 
     public void setInstalled(Boolean installed) {
         this.installed = installed;
-        this.setInstallationDate(installed ? (this.installationDate == null ? new Date() : this.installationDate) : null);
+        this.setInstallationDate(installed ? (this.wasInstalledDate == null ? new Date() : this.wasInstalledDate) : null);
     }
 
-    public void setInstallOrder(int installOrder) {
+    public void setInstallOrder(Integer installOrder) {
         this.installOrder = installOrder;
     }
 
-    public void setModArchive(@SuppressWarnings("unused") boolean modArchive) {
-        //
+    public void setModArchive(boolean modArchive) {
+        throw new UnsupportedOperationException(String.valueOf(modArchive));
     }
 
     public void setMode(Mode mode) {
-        this.mod.setMode(mode);
+        throw new UnsupportedOperationException(String.valueOf(mode));
     }
 
     public void setName(String name) {
-        this.mod.setName(name);
+        throw new UnsupportedOperationException(String.valueOf(name));
     }
 
     public void setUpdated(Boolean updated) {
@@ -160,19 +142,10 @@ public class ModOption {
     }
 
     public void setUrl(String url) {
-        this.mod.setUrl(url);
+        throw new UnsupportedOperationException(String.valueOf(url));
     }
 
-    public void setVersion(String version) {
-        this.mod.setVersion(version);
-    }
-
-    /**
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return this.mod.getName() + " v" + this.mod.getVersion();
+    public void setVersions(Versions versions) {
+        this.versions = versions;
     }
 }

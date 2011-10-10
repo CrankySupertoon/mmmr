@@ -134,11 +134,13 @@ public class UtilityMethods {
         ExceptionAndLogHandler.log("deleting " + path);
         if ((path != null) && path.exists()) {
             File[] files = path.listFiles();
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    UtilityMethods.delete(file);
-                } else {
-                    file.delete();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        UtilityMethods.delete(file);
+                    } else {
+                        file.delete();
+                    }
                 }
             }
             return path.delete();

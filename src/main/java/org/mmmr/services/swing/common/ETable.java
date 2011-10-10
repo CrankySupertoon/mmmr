@@ -319,12 +319,21 @@ public class ETable extends JTable implements ETableI, Reorderable {
         }
     }
 
-    protected class ETableModel extends EventTableModel<ETableRecord> {
+    public class ETableModel extends EventTableModel<ETableRecord> {
         private static final long serialVersionUID = -8936359559294414836L;
 
         protected ETableModel(EventList<ETableRecord> source, TableFormat<? super ETableRecord> tableFormat) {
             super(source, tableFormat);
         }
+
+        /**
+         * 
+         * @see javax.swing.table.AbstractTableModel#fireTableCellUpdated(int, int)
+         */
+        @Override
+        public void fireTableCellUpdated(int row, int column) {
+            super.fireTableCellUpdated(row, column);
+        };
 
         /**
          * 
@@ -335,7 +344,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
             Class<?> clas = ETable.this.tableFormat.getColumnClass(columnIndex);
             // System.out.println("ETableModel.getColumnClass(" + columnIndex + ")=" + clas);
             return clas;
-        };
+        }
     }
 
     public static abstract class Filter<T> extends RecordMatcherEditor<T> implements Matcher<ETableRecord<T>> {
