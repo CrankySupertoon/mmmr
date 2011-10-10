@@ -34,6 +34,7 @@
 1317907604340::EqExClientV4.16.zip.xml
 1317907604334::EqExForgeV4.16.zip.xml
 1318284098733::FishCraftory1.3.zip.xml
+1318289111533::FlaxBonemealFix.zip.xml
 1317907604304::Floating Ruins.zip.xml
 1317907604362::FloatingIslandsv2.0.zip.xml
 1317907604343::Floodgate.zip.xml
@@ -70,6 +71,8 @@
 1317907604323::OptiFine_1.8.1_HD_A.zip.xml
 1317907604339::OptiFine_1.8.1_HD_S_A.zip.xml
 1318197927764::PaintballModClient.zip.xml
+1318289102913::PeacefulPack.zip - Forge.xml
+1318288914571::PeacefulPack.zip.xml
 1318200033982::Planes 1.8.1 v16.1.zip.xml
 1318070453473::Plants and more 1.182 client.rar.xml
 1318198666994::PlayerAPI  1.8.1 v1.2.zip.xml
@@ -83,6 +86,7 @@
 1317907604330::ScotToolsv12.2.zip.xml
 1318284163823::SeasonCraftory0.2.2.zip.xml
 1317907604370::Shelf.zip.xml
+1318287973146::ShockAhPI r9.zip.xml
 1318284844820::SiegeCraft_SinglePlayer_ML.1.2b.rar.xml
 1318284695348::SiegeCraft_SinglePlayer_NO_ML.1.1b.rar.xml
 1317907604279::Sign Tags.zip.xml

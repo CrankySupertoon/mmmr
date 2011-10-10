@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mod archive="ShockAhPI r9.zip" mc="1.8.1" name="ShockAhPI" url="http://www.minecraftforum.net/topic/78064-181-shockahs-mods-updating-in-progress/" version="9">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="bin/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
