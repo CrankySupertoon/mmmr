@@ -1,0 +1,1 @@
+select dependency from Dependency dependency inner join fetch dependency.mod mod where dependency.sortableName=?

@@ -1,0 +1,1 @@
+select max(installOrder) from Mod

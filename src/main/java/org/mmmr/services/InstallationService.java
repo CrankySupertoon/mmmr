@@ -20,6 +20,7 @@ import org.mmmr.Mod;
 import org.mmmr.ModPack;
 import org.mmmr.Resource;
 import org.mmmr.services.interfaces.ArchiveOutputStreamBuilderImpl;
+import org.mmmr.services.interfaces.Path;
 
 /**
  * @author Jurgen
@@ -65,7 +66,8 @@ public class InstallationService {
 
         if (mod.getDependencies() != null) {
             for (Dependency dependency : mod.getDependencies()) {
-                Mod installed = dbService.hql1("select mod from Mod mod where mod.sortableName=?", Mod.class, dependency.getSortableName()); //$NON-NLS-1$
+                String hql = DBService.getNamedQuery("check_dependency_on_install.hql");//$NON-NLS-1$
+                Mod installed = dbService.hql1(hql, Mod.class, dependency.getSortableName());
                 if (installed == null) {
                     info.missing.add(dependency);
                     continue;
@@ -84,12 +86,10 @@ public class InstallationService {
     public static UninstallDependencyCheck checkDependencyOnUninstall(DBService dbService, Mod mod) {
         UninstallDependencyCheck info = new UninstallDependencyCheck();
         info.mod = mod;
-
-        String hql = "select dependency from Dependency dependency inner join fetch dependency.mod mod where dependency.sortableName=?";
+        String hql = DBService.getNamedQuery("check_dependency_on_uninstall.hql");//$NON-NLS-1$
         for (Dependency isDependencyFor : dbService.hql(hql, Dependency.class, UtilityMethods.sortable(mod.getName()))) {
             info.isDependencyFor.add(isDependencyFor);
         }
-
         return info;
     }
 
@@ -119,7 +119,7 @@ public class InstallationService {
     public static UninstallMod uninstallMod(DBService dbService, Mod mod) {
         UninstallMod info = new UninstallMod();
         info.mod = mod;
-        String hql = DBService.getNamedQuery("earlier_installed_files");
+        String hql = DBService.getNamedQuery("earlier_installed_files");//$NON-NLS-1$
         Conflict dummy = new Conflict(null, null, null, mod);
         ExceptionAndLogHandler.log(hql);
         for (Resource resource : mod.getResources()) {
@@ -130,15 +130,15 @@ public class InstallationService {
                 int myOrder = results.indexOf(dummy);
                 int listSize = results.size();
                 if (listSize == 1) {
-                    ExceptionAndLogHandler.log("one and only => remove");
+                    ExceptionAndLogHandler.log("one and only => remove");//$NON-NLS-1$
                     info.delete.add(mcfile.getPath());
                 } else if ((myOrder + 1) == listSize) {
                     Conflict conflict = results.get(listSize - 2);
-                    ExceptionAndLogHandler.log("last and not only one => restore :: " + conflict);
+                    ExceptionAndLogHandler.log("last and not only one => restore :: " + conflict);//$NON-NLS-1$
                     info.restore.put(mcfile.getPath(), conflict.get());
                 } else {
                     Conflict conflict = results.get(listSize - 1);
-                    ExceptionAndLogHandler.log("not last => overwritten by more recent => no change :: " + conflict);
+                    ExceptionAndLogHandler.log("not last => overwritten by more recent => no change :: " + conflict);//$NON-NLS-1$
                     info.keep.add(mcfile.getPath());
                 }
             }
@@ -210,12 +210,12 @@ public class InstallationService {
             List<Pattern> excludes = new ArrayList<Pattern>();
             if (resource.getInclude() != null) {
                 for (String include : resource.getInclude().split(",")) { //$NON-NLS-1$
-                    includes.add(Pattern.compile(include.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
+                    includes.add(Pattern.compile(new Path(include).getPath(), Pattern.CASE_INSENSITIVE));
                 }
             }
             if (resource.getExclude() != null) {
                 for (String exclude : resource.getExclude().split(",")) { //$NON-NLS-1$
-                    excludes.add(Pattern.compile(exclude.replace('\\', '/'), Pattern.CASE_INSENSITIVE));
+                    excludes.add(Pattern.compile(new Path(exclude).getPath(), Pattern.CASE_INSENSITIVE));
                 }
             }
             for (File fromFile : UtilityMethods.listRecursive(from)) {
@@ -306,8 +306,8 @@ public class InstallationService {
 
     private void installMod(Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
         this.copy(mod, fileResource, toCopy, ignored);
-        Integer max1 = this.cfg.getDb().hql1("select max(installOrder) from Mod", Integer.class); //$NON-NLS-1$
-        Integer max2 = this.cfg.getDb().hql1("select max(installOrder) from ModPack", Integer.class); //$NON-NLS-1$
+        Integer max1 = this.cfg.getDb().hql1(DBService.getNamedQuery("max_mod.hql"), Integer.class); //$NON-NLS-1$
+        Integer max2 = this.cfg.getDb().hql1(DBService.getNamedQuery("max_modpack.hql"), Integer.class); //$NON-NLS-1$
         if (max1 == null) {
             max1 = 0;
         }
@@ -355,7 +355,7 @@ public class InstallationService {
         if (info.isDependencyFor.size() > 0) {
             StringBuilder sb1 = new StringBuilder();
             for (Dependency element : info.isDependencyFor) {
-                sb1.append("  - ").append(element.getName());
+                sb1.append("  - ").append(element.getName());//$NON-NLS-1$
             }
             if (!UtilityMethods.showConfirmation(this.cfg, Messages.getString("InstallationService.uninstall_mods_dependency"), //$NON-NLS-1$
                     String.format(Messages.getString("InstallationService.InstallationService.uninstall_mods_dependency_check"), sb1.toString()))) {//$NON-NLS-1$
