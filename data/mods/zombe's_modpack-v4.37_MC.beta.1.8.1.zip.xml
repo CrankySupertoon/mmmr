@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod archive="zombe's_modpack-v4.37_MC.beta.1.8.1.zip" mc="1.8.1" name="zombe's modpack" url="http://www.minecraftforum.net/topic/91055-v19-pre2-zombes-modpack-26-mods-v51-upd-29sep/" version="4.37">
+<mod archive="zombe's_modpack-v4.37_MC.beta.1.8.1.zip" mc="1.8.1" name="zombe's modpack" url="http://www.minecraftforum.net/topic/91055-v19-pre3-zombes-modpack-26-mods-v52-upd-8oct/" version="4.37">
     <resources>
         <resource sourcepath="classes/" targetpath="bin/minecraft.jar"/>
     </resources>

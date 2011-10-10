@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mod archive="mod_Fossil_resources.zip" mc="1.8.1" name="Fossil / Archeology resources" url="http://www.minecraftforum.net/topic/446117-181fossil-archeology-v49/" version="4.9">
+<mod archive="mod_Fossil_resources.zip" mc="1.8.1" name="Fossil / Archeology resources" url="http://www.minecraftforum.net/topic/446117-181fossil-archeology-v50/" version="5.0">
     <dependencies>
-        <mod name="Fossil / Archeology" url="http://www.minecraftforum.net/topic/446117-" version="4.9"/>
+        <mod name="Fossil / Archeology" url="http://www.minecraftforum.net/topic/446117-" version="5.0"/>
         <mod name="AudioMod" url="http://www.minecraftforum.net/topic/75440-" version="1.8"/>
     </dependencies>
     <resources>
