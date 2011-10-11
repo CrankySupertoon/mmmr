@@ -66,7 +66,7 @@ public class InstallationService {
 
         if (mod.getDependencies() != null) {
             for (Dependency dependency : mod.getDependencies()) {
-                String hql = DBService.getNamedQuery("check_dependency_on_install.hql");//$NON-NLS-1$
+                String hql = DBService.getNamedQuery("check_dependency_on_install");//$NON-NLS-1$
                 Mod installed = dbService.hql1(hql, Mod.class, dependency.getSortableName());
                 if (installed == null) {
                     info.missing.add(dependency);
@@ -86,7 +86,7 @@ public class InstallationService {
     public static UninstallDependencyCheck checkDependencyOnUninstall(DBService dbService, Mod mod) {
         UninstallDependencyCheck info = new UninstallDependencyCheck();
         info.mod = mod;
-        String hql = DBService.getNamedQuery("check_dependency_on_uninstall.hql");//$NON-NLS-1$
+        String hql = DBService.getNamedQuery("check_dependency_on_uninstall");//$NON-NLS-1$
         for (Dependency isDependencyFor : dbService.hql(hql, Dependency.class, UtilityMethods.sortable(mod.getName()))) {
             info.isDependencyFor.add(isDependencyFor);
         }
@@ -306,8 +306,8 @@ public class InstallationService {
 
     private void installMod(Mod mod, Map<File, File> toCopy, List<File> ignored, Map<File, Resource> fileResource) throws IOException {
         this.copy(mod, fileResource, toCopy, ignored);
-        Integer max1 = this.cfg.getDb().hql1(DBService.getNamedQuery("max_mod.hql"), Integer.class); //$NON-NLS-1$
-        Integer max2 = this.cfg.getDb().hql1(DBService.getNamedQuery("max_modpack.hql"), Integer.class); //$NON-NLS-1$
+        Integer max1 = this.cfg.getDb().hql1(DBService.getNamedQuery("max_mod"), Integer.class); //$NON-NLS-1$
+        Integer max2 = this.cfg.getDb().hql1(DBService.getNamedQuery("max_modpack"), Integer.class); //$NON-NLS-1$
         if (max1 == null) {
             max1 = 0;
         }

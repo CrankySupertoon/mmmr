@@ -2,6 +2,7 @@ package org.mmmr.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -42,8 +43,10 @@ public class DBService {
 
     public static String getNamedQuery(String name) {
         try {
-            return new String(UtilityMethods.read(DBService.class.getClassLoader().getResourceAsStream(
-                    DBService.class.getPackage().getName().replace('.', '/') + "/hql/" + name + ".hql")));
+            String res = DBService.class.getPackage().getName().replace('.', '/') + "/hql/" + name + ".hql";
+            InputStream resourceAsStream = DBService.class.getClassLoader().getResourceAsStream(res);
+            ExceptionAndLogHandler.log(res + " >> " + resourceAsStream);
+            return new String(UtilityMethods.read(resourceAsStream));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
