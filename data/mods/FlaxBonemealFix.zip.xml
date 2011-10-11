@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mod archive="FlaxBonemealFix.zip" mc="1.8.1" name="FlaxBonemealFix" version="1.8.1">
     <resources>
         <resource sourcepath="./" targetpath="bin/minecraft.jar"/>

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mod archive="[1.8.1]WaterShaderv4d_OptiFineHD_A_Patch.zip" mc="1.8.1" name="OptiFine + Water Shader Merged Patch" url="http://www.minecraftforum.net/topic/693026-181-optifine-water-shader-mod-patch/" version="1.8.1">
     <dependencies>
         <mod name="OptiFine" url="http://www.minecraftforum.net/topic/249637-" version="1.8.1_HD_A"/>

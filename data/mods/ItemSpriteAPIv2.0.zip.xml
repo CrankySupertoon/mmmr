@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mod archive="ItemSpriteAPIv2.0.zip" mc="1.8.1" name="ItemSprite API" url="http://www.minecraftforum.net/topic/228940-181scokeev9-premiumwood-v150-12-more-thanks-for-400000-dls/#items" version="2.0">
     <resources>
         <resource sourcepath="add-to-minecraft-jar/" targetpath="bin/minecraft.jar"/>
