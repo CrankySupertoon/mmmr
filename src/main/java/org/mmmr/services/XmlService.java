@@ -103,6 +103,8 @@ public class XmlService {
             }
         });
         SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        // Schema schema = sf.newSchema(new URL("http://mmmr.googlecode.com/svn/trunk/src/main/resources/org.mmmr.xsd"));
+        // Schema schema = sf.newSchema(XmlService.class.getClassLoader().getResource("org.mmmr.xsd"));
         Schema schema = sf.newSchema(xsdfile);
         this.marshaller = this.context.createMarshaller();
         this.marshaller.setSchema(schema);
@@ -119,5 +121,9 @@ public class XmlService {
         this.marshaller.marshal(object, out);
         this.marshaller.marshal(object, System.out);
         return object;
+    }
+
+    public Object validate(InputStream in) throws IOException {
+        return in;
     }
 }
