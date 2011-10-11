@@ -1,0 +1,5 @@
+<mod archive="OptiFine_1.8.1_HD_S_B1.zip" mc="1.8.1" name="OptiFine" url="http://www.minecraftforum.net/topic/249637-181-optifine-hd-b-fps-boost-hd-textures/" version="1.8.1_HD_S_B1">
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
