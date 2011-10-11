@@ -53,6 +53,7 @@ FEATURES NOT STARTED
   select highest version by default, gray out when only a single version is available
 - management of minecraft server
 - management of minecraft server mods
+- update LWJGL to latest version (http://www.minecraftwiki.net/wiki/Tutorials/Update_LWJGL)
 
 EXTRA
 -----
