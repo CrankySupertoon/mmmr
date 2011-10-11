@@ -1,0 +1,8 @@
+<mod mode="SERVER" archive="modloadermp-b1317.tar.gz" mc="1.8.1" name="ModLoaderMP for CraftBukkit and Canary" url="http://www.minecraftforum.net/topic/382599-181-modloadermp-for-craftbukkit-and-canary/" version="b1317">
+    <dependencies>
+		<mod name="CraftBukkit" url="http://bukkit.org/" version="1317"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="craftbukkit-0.0.1-SNAPSHOT.jar"/>
+    </resources>
+</mod>

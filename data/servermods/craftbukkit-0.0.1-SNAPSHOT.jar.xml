@@ -1,4 +1,4 @@
-<mod mode="SERVER" archive="craftbukkit-0.0.1-SNAPSHOT.jar" mc="1.8.1" name="CraftBukkit" url="http://bukkit.org/" version="1240">
+<mod mode="SERVER" archive="craftbukkit-0.0.1-SNAPSHOT.jar" mc="1.8.1" name="CraftBukkit" url="http://bukkit.org/" version="1317">
     <resources>
         <resource targetpath="craftbukkit-0.0.1-SNAPSHOT.jar"/>
     </resources>

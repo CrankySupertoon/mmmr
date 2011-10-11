@@ -1,4 +1,4 @@
-<mod archive="Minecraft181_AddFemalePlayersAndZombies.zip" mc="1.8.1" name="Add Female Players & Zombies" url="http://www.minecraftforum.net/topic/700255-181-add-female-players-zombies-aka-add-boobs/" version="2">
+<mod archive="Minecraft181_AddFemalePlayersAndZombies.zip" mc="1.8.1" name="Add Female Players &amp; Zombies" url="http://www.minecraftforum.net/topic/700255-181-add-female-players-zombies-aka-add-boobs/" version="2">
     <resources>
         <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
     </resources>
