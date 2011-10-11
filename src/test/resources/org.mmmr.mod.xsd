@@ -24,8 +24,8 @@
         </xs:complexType>
       </xs:element>
     </xs:all>
-    <xs:attribute name="archive" type="xs:string"/>
-    <xs:attribute name="mc" type="xs:string"/>
+    <xs:attribute name="archive" type="xs:string" use="required"/>
+    <xs:attribute name="mc" type="xs:string" use="required"/>
     <xs:attribute name="mode" type="mode"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
     <xs:attribute name="url" type="xs:string"/>

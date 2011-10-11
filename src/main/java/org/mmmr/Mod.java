@@ -161,18 +161,18 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
         return this.actualUrl;
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = true)
     public String getArchive() {
         return this.archive;
     }
 
-    @XmlElementWrapper
-    @XmlElementRef
+    @XmlElementWrapper(required = false)
+    @XmlElementRef(required = false)
     public List<Dependency> getDependencies() {
         return this.dependencies;
     }
 
-    @XmlElement
+    @XmlElement(required = false, nillable = false)
     public String getDescription() {
         return this.description;
     }
@@ -203,12 +203,12 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
         return this.installOrder;
     }
 
-    @XmlAttribute(name = "mc")
+    @XmlAttribute(name = "mc", required = true)
     public String getMcVersionDependency() {
         return this.mcVersionDependency;
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = false)
     public Mode getMode() {
         return this.mode;
     }
@@ -223,13 +223,13 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
         return this.name;
     }
 
-    @XmlElement(name = "resourcecheck")
+    @XmlElement(name = "resourcecheck", nillable = false, required = false)
     public String getResourceCheck() {
         return this.resourceCheck;
     }
 
-    @XmlElementWrapper
-    @XmlElementRef
+    @XmlElementWrapper(required = true, nillable = false)
+    @XmlElementRef(required = true)
     public List<Resource> getResources() {
         return this.resources;
     }
@@ -243,7 +243,7 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
         return this.sortableName;
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = false)
     public String getUrl() {
         return this.url;
     }

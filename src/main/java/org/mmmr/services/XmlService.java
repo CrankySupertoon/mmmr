@@ -43,9 +43,16 @@ public class XmlService {
 
     public static void main(String[] args) {
         try {
-            XmlService service = new XmlService(new Config());
-            File generatedSources = new File("src/main/resources");//$NON-NLS-1$ 
-            service.generateXsd(new File(generatedSources, service.contextPath + ".xsd")); //$NON-NLS-1$ 
+            {
+                XmlService service = new XmlService(new Config());
+                File generatedSources = new File("src/main/resources");//$NON-NLS-1$ 
+                service.generateXsd(new File(generatedSources, service.contextPath + ".xsd")); //$NON-NLS-1$
+            }
+            {
+                XmlService service = new XmlService(true, new Config());
+                File generatedSources = new File("src/test/resources");//$NON-NLS-1$ 
+                service.generateXsd(new File(generatedSources, service.contextPath + ".mod.xsd")); //$NON-NLS-1$
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -70,8 +77,12 @@ public class XmlService {
 
     private String contextPath;
 
-    public XmlService(@SuppressWarnings("unused") Config cfg) throws JAXBException, SAXException, IOException {
-        this.init();
+    public XmlService(boolean simple, @SuppressWarnings("unused") Config cfg) throws JAXBException, SAXException, IOException {
+        this.init(simple);
+    }
+
+    public XmlService(Config cfg) throws JAXBException, SAXException, IOException {
+        this(false, cfg);
     }
 
     private void generateXsd(final File output) throws IOException {
@@ -90,10 +101,15 @@ public class XmlService {
         return this.contextPath;
     }
 
-    private void init() throws JAXBException, SAXException, IOException {
+    private void init(boolean simple) throws JAXBException, SAXException, IOException {
         this.contextPath = Mod.class.getPackage().getName();
         final File xsdfile = File.createTempFile(this.contextPath, ".xsd"); //$NON-NLS-1$
-        this.context = JAXBContext.newInstance(this.contextPath);
+        this.context = null;
+        if (simple) {
+            this.context = JAXBContext.newInstance(Mod.class);
+        } else {
+            this.context = JAXBContext.newInstance(this.contextPath);
+        }
         this.context.generateSchema(new SchemaOutputResolver() {
             @Override
             public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
