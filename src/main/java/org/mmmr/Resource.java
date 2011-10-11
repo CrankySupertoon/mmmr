@@ -122,7 +122,7 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         return this.modPack;
     }
 
-    @XmlAttribute(name = "sourcepath", required = true)
+    @XmlAttribute(name = "sourcepath", required = false)
     public String getSourcePath() {
         return this.sourcePath;
     }
