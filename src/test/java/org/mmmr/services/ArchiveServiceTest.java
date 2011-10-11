@@ -29,8 +29,8 @@ public class ArchiveServiceTest {
                         String f = "file" + element + "." + format;
                         System.out.println(f);
                         helper.setPassword("test");
-                        helper.extract(new File("src/test/resources/" + f), new ArchiveOutputStreamBuilderImpl(new File("target/" + format + "/"
-                                + element + "/")), new ArchiveEntryMatcherImpl(Collections.singletonList("file.txt")));
+                        helper.extract(new File("src/test/resources/" + f), new ArchiveOutputStreamBuilderImpl(new File("target/test-classes/"
+                                + format + "/" + element + "/")), new ArchiveEntryMatcherImpl(Collections.singletonList("file.txt")));
                     } catch (Exception ex) {
                         ex.printStackTrace(System.out);
                     }
