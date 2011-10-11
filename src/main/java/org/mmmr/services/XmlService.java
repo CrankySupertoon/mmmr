@@ -41,6 +41,16 @@ public class XmlService {
         XmlService.factory.setNamespaceAware(false);
     }
 
+    public static void main(String[] args) {
+        try {
+            XmlService service = new XmlService(new Config());
+            File generatedSources = new File("src/main/resources");//$NON-NLS-1$ 
+            service.generateXsd(new File(generatedSources, service.contextPath + ".xsd")); //$NON-NLS-1$ 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static List<Node> xpath(InputStream xml, String xpathString) throws Exception {
         Document doc = XmlService.factory.newDocumentBuilder().parse(xml);
         doc.normalizeDocument();
@@ -56,15 +66,35 @@ public class XmlService {
 
     private Unmarshaller unmarshaller;
 
-    public XmlService(Config cfg) throws JAXBException, SAXException, IOException {
-        this.init(cfg);
+    private JAXBContext context;
+
+    private String contextPath;
+
+    public XmlService(@SuppressWarnings("unused") Config cfg) throws JAXBException, SAXException, IOException {
+        this.init();
     }
 
-    private void init(Config cfg) throws JAXBException, SAXException, IOException {
-        String contextPath = Mod.class.getPackage().getName();
-        final File xsdfile = new File(cfg.getData(), contextPath + ".xsd"); //$NON-NLS-1$
-        JAXBContext context = JAXBContext.newInstance(contextPath);
-        context.generateSchema(new SchemaOutputResolver() {
+    private void generateXsd(final File output) throws IOException {
+        this.context.generateSchema(new SchemaOutputResolver() {
+            @Override
+            public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
+                StreamResult result = new StreamResult(output);
+                result.setSystemId(output.toURI().toURL().toString());
+                return result;
+            }
+        });
+
+    }
+
+    public String getContextPath() {
+        return this.contextPath;
+    }
+
+    private void init() throws JAXBException, SAXException, IOException {
+        this.contextPath = Mod.class.getPackage().getName();
+        final File xsdfile = File.createTempFile(this.contextPath, ".xsd"); //$NON-NLS-1$
+        this.context = JAXBContext.newInstance(this.contextPath);
+        this.context.generateSchema(new SchemaOutputResolver() {
             @Override
             public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
                 StreamResult result = new StreamResult(xsdfile);
@@ -74,10 +104,10 @@ public class XmlService {
         });
         SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema = sf.newSchema(xsdfile);
-        this.marshaller = context.createMarshaller();
+        this.marshaller = this.context.createMarshaller();
         this.marshaller.setSchema(schema);
         this.marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        this.unmarshaller = context.createUnmarshaller();
+        this.unmarshaller = this.context.createUnmarshaller();
         this.unmarshaller.setSchema(schema);
     }
 
