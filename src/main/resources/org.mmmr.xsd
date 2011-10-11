@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://mmmr.googlecode.com/svn/trunk/src/main/resources/" xmlns:tns="http://mmmr.googlecode.com/svn/trunk/src/main/resources/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="mc" type="tns:mc"/>
+
+  <xs:element name="mod" nillable="true" type="xs:anyType"/>
+
+  <xs:element name="modpack" type="tns:modPack"/>
+
+  <xs:element name="resource" type="tns:resource"/>
+
+  <xs:complexType name="mc">
+    <xs:all/>
+    <xs:attribute name="version" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="dependency">
+    <xs:all/>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="url" type="xs:string"/>
+    <xs:attribute name="version" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="resource">
+    <xs:all/>
+    <xs:attribute name="exclude" type="xs:string"/>
+    <xs:attribute name="include" type="xs:string"/>
+    <xs:attribute name="sourcepath" type="xs:string"/>
+    <xs:attribute name="targetpath" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="mod">
+    <xs:all>
+      <xs:element name="dependencies" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="tns:mod" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="resourcecheck" type="xs:string" minOccurs="0"/>
+      <xs:element name="resources" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="tns:resource" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="archive" type="xs:string"/>
+    <xs:attribute name="mc" type="xs:string"/>
+    <xs:attribute name="mode" type="tns:mode"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="url" type="xs:string"/>
+    <xs:attribute name="version" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="modPack">
+    <xs:all>
+      <xs:element name="mods" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="tns:mod" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="resources" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="tns:resource" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="description" type="xs:string"/>
+    <xs:attribute name="mc" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="version" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:simpleType name="mode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SSP"/>
+      <xs:enumeration value="SMP"/>
+      <xs:enumeration value="SERVER"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+
