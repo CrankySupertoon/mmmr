@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mod mode="SERVER" archive="erosion_mod_2.4_server.zip" mc="1.8.1" name="erosion mod" url="http://www.minecraftforum.net/topic/370257-181-erosion-mod-v25/" version="2.5">
     <dependencies>
 		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
