@@ -1,0 +1,21 @@
+<!ELEMENT dependencies ( mod+ ) >
+
+<!ELEMENT description ( #PCDATA ) >
+
+<!ELEMENT mod ( dependencies?, description?, resourcecheck?, resources? ) >
+<!ATTLIST mod mc NMTOKEN #IMPLIED >
+<!ATTLIST mod mode NMTOKEN #IMPLIED >
+<!ATTLIST mod name NMTOKEN #REQUIRED >
+<!ATTLIST mod url NMTOKEN #IMPLIED >
+<!ATTLIST mod version NMTOKEN #REQUIRED >
+
+<!ELEMENT resource EMPTY >
+<!ATTLIST resource exclude NMTOKEN #IMPLIED >
+<!ATTLIST resource include NMTOKEN #IMPLIED >
+<!ATTLIST resource sourcepath NMTOKEN #REQUIRED >
+<!ATTLIST resource targetpath NMTOKEN #REQUIRED >
+
+<!ELEMENT resourcecheck ( #PCDATA ) >
+
+<!ELEMENT resources ( resource+ ) >
+
