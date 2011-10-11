@@ -93,7 +93,7 @@ public class MC implements Comparable<MC>, PersistentObject {
         return this.ver;
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = true)
     public String getVersion() {
         return this.version;
     }

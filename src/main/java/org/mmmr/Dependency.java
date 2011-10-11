@@ -99,7 +99,7 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
         return this.mod;
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = true)
     public String getName() {
         return this.name;
     }
@@ -112,7 +112,7 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
         return this.sortableName;
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = false)
     public String getUrl() {
         return this.url;
     }
@@ -122,7 +122,7 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
         return this.ver;
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = true)
     public String getVersion() {
         return this.version;
     }

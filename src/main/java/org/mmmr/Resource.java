@@ -91,7 +91,7 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         return new EqualsBuilder().append(this.sourcePath, castOther.sourcePath).append(this.targetPath, castOther.targetPath).isEquals();
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = false)
     public String getExclude() {
         return this.exclude;
     }
@@ -107,7 +107,7 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         return this.id;
     }
 
-    @XmlAttribute
+    @XmlAttribute(required = false)
     public String getInclude() {
         return this.include;
     }
@@ -122,12 +122,12 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         return this.modPack;
     }
 
-    @XmlAttribute(name = "sourcepath")
+    @XmlAttribute(name = "sourcepath", required = true)
     public String getSourcePath() {
         return this.sourcePath;
     }
 
-    @XmlAttribute(name = "targetpath")
+    @XmlAttribute(name = "targetpath", required = true)
     public String getTargetPath() {
         return this.targetPath;
     }

@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -96,7 +95,6 @@ public class MCFile implements Comparable<MCFile>, PersistentObject {
         return this.path;
     }
 
-    @XmlTransient
     public Resource getResource() {
         return this.resource;
     }
