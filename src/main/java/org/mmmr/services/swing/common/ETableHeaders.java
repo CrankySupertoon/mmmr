@@ -107,6 +107,10 @@ public class ETableHeaders implements WritableTableFormat<ETableRecord>, Advance
         return this.columnNames.get(column);
     }
 
+    public List<String> getColumnNames() {
+        return this.columnNames;
+    }
+
     /**
      * @see ca.odell.glazedlists.gui.TableFormat#getColumnValue(java.lang.Object, int)
      */
