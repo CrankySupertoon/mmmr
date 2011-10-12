@@ -53,6 +53,11 @@ public class InstallTest extends DBTstSuperClass {
     }
 
     @Test
+    public void testComplexNested() {
+        // TODO test zip in archive extract to directory
+    }
+
+    @Test
     public void testConflict1() {
         this._install1();
         for (MCFile existing : DBTstSuperClass.dbService.getAll(new MCFile("class2.class"))) {
@@ -222,5 +227,10 @@ public class InstallTest extends DBTstSuperClass {
             MC mc2 = MC.class.cast(info.restore.get("class3.class"));
             Assert.assertEquals(mc1, mc2);
         }
+    }
+
+    @Test
+    public void testSimple() {
+        // TODO just copy to dir
     }
 }
