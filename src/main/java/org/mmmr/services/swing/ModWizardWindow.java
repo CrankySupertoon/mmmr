@@ -1,14 +1,14 @@
 package org.mmmr.services.swing;
 
-import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileInputStream;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -19,17 +19,21 @@ import org.mmmr.services.XmlService;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableRecordBean;
+import org.mmmr.services.swing.common.RoundedPanel;
+import org.mmmr.services.swing.common.UIUtils;
+import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
 
 /**
  * @author Jurgen
  */
-public class ModWizard extends JFrame {
+public class ModWizardWindow extends JFrame {
     private static final long serialVersionUID = -6261674801873385201L;
 
     public static void main(String[] args) {
         try {
             Config cfg = new Config();
-            new ModWizard(cfg, new XmlService(cfg).load(new FileInputStream(new File(cfg.getMods(), "Doggy Talents v1.5.9.zip.xml")), Mod.class))
+            new ModWizardWindow(cfg,
+                    new XmlService(cfg).load(new FileInputStream(new File(cfg.getMods(), "Doggy Talents v1.5.9.zip.xml")), Mod.class))
                     .setVisible(true);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -37,14 +41,23 @@ public class ModWizard extends JFrame {
     }
 
     @SuppressWarnings("unused")
-    public ModWizard(Config cfg, Mod mod) {
+    private Config cfg;
+
+    public ModWizardWindow(Config cfg, Mod mod) {
         if (mod == null) {
             mod = new Mod();
         }
 
-        JPanel mainpanel = new JPanel(new MigLayout("wrap 4", "[][grow][][grow]", ""));
-        this.getContentPane().add(mainpanel, BorderLayout.CENTER);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.cfg = cfg;
+
+        RoundedPanel mainpanel = new RoundedPanel(new MigLayout("wrap 4", "[][grow][][grow]", ""));
+        mainpanel.getDelegate().setShady(false);
+        new MoveMouseListener(mainpanel);
+        mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        this.getContentPane().add(mainpanel);
+
+        this.setIconImage(cfg.getIcon().getImage());
+        this.setTitle(cfg.getTitle());
 
         JTextField name = new JTextField(mod.getName());
         String DDot = ":";
@@ -101,5 +114,12 @@ public class ModWizard extends JFrame {
             }
             mainpanel.add(new JScrollPane(resources), "span 4 6, growx, growy");
         }
+
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setUndecorated(true);
+        UIUtils.translucent(this);
+        this.setSize(800, 500);
+        UIUtils.rounded(this);
+        this.setResizable(false);
     }
 }
