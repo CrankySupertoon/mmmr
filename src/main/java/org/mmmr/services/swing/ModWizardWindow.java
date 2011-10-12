@@ -35,9 +35,10 @@ public class ModWizardWindow extends JFrame {
         try {
             UIUtils.lookAndFeel();
             Config cfg = new Config();
-            new ModWizardWindow(cfg,
-                    new XmlService(cfg).load(new FileInputStream(new File(cfg.getMods(), "Doggy Talents v1.5.9.zip.xml")), Mod.class))
-                    .setVisible(true);
+            ModWizardWindow modWizardWindow = new ModWizardWindow(cfg, new XmlService(cfg).load(new FileInputStream(new File(cfg.getMods(),
+                    "Doggy Talents v1.5.9.zip.xml")), Mod.class));
+            modWizardWindow.setLocationRelativeTo(null);
+            modWizardWindow.setVisible(true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -88,6 +89,7 @@ public class ModWizardWindow extends JFrame {
         mainpanel.add(archive, "span 3, growx");
 
         ETableConfig ecfg = new ETableConfig(false);
+        ecfg.setResizable(true);
         ecfg.setEditable(true);
 
         {
@@ -98,11 +100,12 @@ public class ModWizardWindow extends JFrame {
             headers.add("url", String.class, true);
             dependencies.setHeaders(headers);
             for (Dependency element : mod.getDependencies()) {
-                System.out.println(element);
                 ETableRecordBean<Dependency> record = new ETableRecordBean<Dependency>(headers.getColumnNames(), element);
                 dependencies.getEventSafe().addRecord(record);
             }
             mainpanel.add(new JScrollPane(dependencies), "span 4 6, growx, growy");
+            dependencies.packColumn(0, 4);
+            dependencies.packColumn(1, 4);
         }
 
         {
@@ -114,7 +117,6 @@ public class ModWizardWindow extends JFrame {
             headers.add("exclude", String.class, true);
             resources.setHeaders(headers);
             for (Resource element : mod.getResources()) {
-                System.out.println(element);
                 ETableRecordBean<Resource> record = new ETableRecordBean<Resource>(headers.getColumnNames(), element);
                 resources.getEventSafe().addRecord(record);
             }
@@ -124,7 +126,7 @@ public class ModWizardWindow extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setUndecorated(true);
         UIUtils.translucent(this);
-        this.setSize(800, 500);
+        this.setSize(1280, 600);
         UIUtils.rounded(this);
         this.setResizable(false);
     }
