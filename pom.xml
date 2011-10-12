@@ -7,7 +7,10 @@
 	<name>mmmr</name>
 	<description>mmmr</description>
 	<url>http://mmmr.googlecode.com</url>
-	<properties><targetJdk>1.6</targetJdk></properties>
+	<properties>
+		<targetJdk>1.6</targetJdk>
+		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License v2.1</name>
