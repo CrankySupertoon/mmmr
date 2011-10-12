@@ -484,7 +484,7 @@ public class ModOptionsWindow extends JFrame {
         for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
             ModOption modOption = record.getBean();
             Mod mod = modOption.getMod();
-            if (true == modOption.getInstalled() == mod.getInstalled()) {
+            if (Boolean.TRUE.equals(modOption.getInstalled()) && Boolean.TRUE.equals(mod.getInstalled())) {
                 if (modOption.getInstallOrder() != mod.getInstallOrder()) {
                     // TODO implement change load order
                     ExceptionAndLogHandler.log("change load order: " + mod.getInstallOrder() + " >> " + modOption.getInstallOrder() + " :: " + mod); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$

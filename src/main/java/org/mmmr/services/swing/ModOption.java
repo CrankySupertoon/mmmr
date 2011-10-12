@@ -3,6 +3,7 @@ package org.mmmr.services.swing;
 import java.io.File;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.mmmr.Mod;
 import org.mmmr.Mode;
 import org.mmmr.services.Config;
@@ -147,5 +148,16 @@ public class ModOption {
 
     public void setVersions(Versions versions) {
         this.versions = versions;
+    }
+
+    /**
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("updated", this.updated).append("installed", this.installed)
+                .append("wasInstalledDate", this.wasInstalledDate).append("installOrder", this.installOrder).append("versions", this.versions)
+                .toString();
     }
 }
