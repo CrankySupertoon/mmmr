@@ -17,7 +17,7 @@ import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -134,7 +134,7 @@ public class ModPack implements Comparable<ModPack>, PersistentObject, Installab
     }
 
     @XmlElementWrapper
-    @XmlElementRef
+    @XmlElement
     public List<Mod> getMods() {
         return this.mods;
     }
@@ -145,7 +145,7 @@ public class ModPack implements Comparable<ModPack>, PersistentObject, Installab
     }
 
     @XmlElementWrapper
-    @XmlElementRef
+    @XmlElement
     public List<Resource> getResources() {
         return this.resources;
     }
