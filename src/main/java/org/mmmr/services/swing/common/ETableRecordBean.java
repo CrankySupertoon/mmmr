@@ -37,7 +37,8 @@ public class ETableRecordBean<T> implements ETableRecord<T> {
     @Override
     public Object get(int column) {
         try {
-            return PropertyUtils.getProperty(this.object, this.orderedFields.get(column));
+            Object property = PropertyUtils.getProperty(this.object, this.orderedFields.get(column));
+            return property;
         } catch (IllegalAccessException ex) {
             ex.printStackTrace();
             return null;

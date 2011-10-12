@@ -10,16 +10,16 @@
       <xs:element name="dependencies" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="dependencies" type="dependency" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="mod" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="description" type="xs:string" minOccurs="0"/>
       <xs:element name="resourcecheck" type="xs:string" minOccurs="0"/>
-      <xs:element name="resources">
+      <xs:element name="resources" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="resources" type="resource" maxOccurs="unbounded"/>
+            <xs:element ref="resource" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>

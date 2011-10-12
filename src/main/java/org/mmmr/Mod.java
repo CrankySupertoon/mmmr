@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -166,7 +167,7 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
     }
 
     @XmlElementWrapper(required = false)
-    @XmlElement(required = false)
+    @XmlElementRef(required = false)
     public List<Dependency> getDependencies() {
         return this.dependencies;
     }
@@ -228,7 +229,7 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
     }
 
     @XmlElementWrapper(required = true, nillable = false)
-    @XmlElement(required = true)
+    @XmlElementRef(required = true)
     public List<Resource> getResources() {
         return this.resources;
     }

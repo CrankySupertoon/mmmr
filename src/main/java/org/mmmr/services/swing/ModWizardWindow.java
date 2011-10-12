@@ -14,9 +14,11 @@ import net.miginfocom.swing.MigLayout;
 
 import org.mmmr.Dependency;
 import org.mmmr.Mod;
+import org.mmmr.Resource;
 import org.mmmr.services.Config;
 import org.mmmr.services.XmlService;
 import org.mmmr.services.swing.common.ETable;
+import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
 import org.mmmr.services.swing.common.ETableRecordBean;
 import org.mmmr.services.swing.common.RoundedPanel;
@@ -31,6 +33,7 @@ public class ModWizardWindow extends JFrame {
 
     public static void main(String[] args) {
         try {
+            UIUtils.lookAndFeel();
             Config cfg = new Config();
             new ModWizardWindow(cfg,
                     new XmlService(cfg).load(new FileInputStream(new File(cfg.getMods(), "Doggy Talents v1.5.9.zip.xml")), Mod.class))
@@ -84,33 +87,36 @@ public class ModWizardWindow extends JFrame {
         mainpanel.add(new JLabel("Archive" + DDot), "");
         mainpanel.add(archive, "span 3, growx");
 
+        ETableConfig ecfg = new ETableConfig(false);
+        ecfg.setEditable(true);
+
         {
-            ETable dependencies = new ETable();
+            ETable dependencies = new ETable(ecfg);
             ETableHeaders headers = new ETableHeaders();
-            headers.add("name");
-            headers.add("version");
-            headers.add("url");
+            headers.add("name", String.class, true);
+            headers.add("version", String.class, true);
+            headers.add("url", String.class, true);
             dependencies.setHeaders(headers);
             for (Dependency element : mod.getDependencies()) {
                 System.out.println(element);
                 ETableRecordBean<Dependency> record = new ETableRecordBean<Dependency>(headers.getColumnNames(), element);
-                dependencies.addRecord(record);
+                dependencies.getEventSafe().addRecord(record);
             }
             mainpanel.add(new JScrollPane(dependencies), "span 4 6, growx, growy");
         }
 
         {
-            ETable resources = new ETable();
+            ETable resources = new ETable(ecfg);
             ETableHeaders headers = new ETableHeaders();
-            headers.add("sourcePath");
-            headers.add("targetPath");
-            headers.add("include");
-            headers.add("exclude");
+            headers.add("sourcePath", String.class, true);
+            headers.add("targetPath", String.class, true);
+            headers.add("include", String.class, true);
+            headers.add("exclude", String.class, true);
             resources.setHeaders(headers);
-            for (Dependency element : mod.getDependencies()) {
+            for (Resource element : mod.getResources()) {
                 System.out.println(element);
-                ETableRecordBean<Dependency> record = new ETableRecordBean<Dependency>(headers.getColumnNames(), element);
-                resources.addRecord(record);
+                ETableRecordBean<Resource> record = new ETableRecordBean<Resource>(headers.getColumnNames(), element);
+                resources.getEventSafe().addRecord(record);
             }
             mainpanel.add(new JScrollPane(resources), "span 4 6, growx, growy");
         }
