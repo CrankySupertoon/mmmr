@@ -563,6 +563,8 @@ public class ModOptionsWindow extends JFrame {
                         if (Messages.getString("ModOptionsWindow.updated").equals(columnValueAtVisualColumn)) { //$NON-NLS-1$
                             Boolean updated = (Boolean) recordAtVisualRow.get(col);
                             if (updated == null) {
+                                // FIXME if site gives 502 bad gateway this seems to hang the application
+                                // do this asyn and with a timeout and block functionality when busy per record
                                 Boolean newValue = mod.checkIfUpdated();
                                 recordAtVisualRow.set(orderedFields.indexOf("updated"), newValue);
                                 ETableModel.class.cast(ModOptionsWindow.this.options.getModel()).fireTableCellUpdated(row,
