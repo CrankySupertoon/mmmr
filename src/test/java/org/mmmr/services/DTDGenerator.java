@@ -1,5 +1,6 @@
 package org.mmmr.services;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Enumeration;
@@ -10,6 +11,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
@@ -286,18 +288,11 @@ public class DTDGenerator extends org.xml.sax.helpers.DefaultHandler {
         return true;
     }
 
-    public void read(InputStream in) {
-        try {
-            InputSource is = new InputSource(in);
-            XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-            parser.setContentHandler(this);
-            parser.parse(is);
-        } catch (Exception err) {
-            System.err.println("Failed while parsing source file");
-            System.err.println(err.getMessage());
-            err.printStackTrace();
-            System.exit(2);
-        }
+    public void read(InputStream in) throws SAXException, ParserConfigurationException, IOException {
+        InputSource is = new InputSource(in);
+        XMLReader parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+        parser.setContentHandler(this);
+        parser.parse(is);
     }
 
     /**
