@@ -11,7 +11,7 @@ import org.mmmr.Mod;
 import org.mmmr.Mode;
 import org.mmmr.Resource;
 
-public class DTDGenTest {
+public class DTDGenTst {
     public static void main(String[] args) {
         try {
             File generatedSources = new File("src/main/resources");//$NON-NLS-1$ 
