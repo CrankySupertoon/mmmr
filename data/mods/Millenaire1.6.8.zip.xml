@@ -3,7 +3,12 @@
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>
     <resources>
-        <resource sourcepath="MilleÌnaire 1.6.8/Put in mods folder/" targetpath="mods/"/>
-        <resource sourcepath="MilleÌnaire 1.6.8/Put in minecraft folder/" targetpath="./"/>
+		<!-- TODO how to fix the following problem -->
+		<!-- these strange symbols is what you copy/paste from inside the 7zip standalone program -->
+		<!-- in winrar it shows as 'MilleÌnaire' -->
+		<!-- but actually it should be 'Millénaire' -->
+		<!-- if you change it, the mod wont install -->
+        <resource sourcepath="Mille╠ünaire 1.6.8/Put in mods folder/" targetpath="mods/"/>
+        <resource sourcepath="Mille╠ünaire 1.6.8/Put in minecraft folder/" targetpath="./"/>
     </resources>
 </mod>
