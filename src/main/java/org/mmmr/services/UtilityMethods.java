@@ -101,6 +101,32 @@ public class UtilityMethods {
         return file.getCanonicalFile().getAbsolutePath().replace('\\', '/');
     }
 
+    public static long copy(InputStream in, OutputStream out) throws IOException, NullPointerException {
+        long total = -1;
+        try {
+            byte[] buffer = new byte[1024 * 8];
+            int read;
+
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+                total += read;
+            }
+        } finally {
+            try {
+                in.close();
+            } catch (Exception ex) {
+                //
+            }
+
+            try {
+                out.close();
+            } catch (Exception ex) {
+                //
+            }
+        }
+        return total;
+    }
+
     public static long copyFile(File source, File target) throws IOException {
         return UtilityMethods._copy(source, target);
     }

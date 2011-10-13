@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -21,6 +24,8 @@ import org.mmmr.services.interfaces.ArchiveServiceI;
  * @author Jurgen
  */
 public class ArchiveServiceSimple implements ArchiveServiceI {
+    private String charset = "UTF-8";
+
     /**
      * 
      * @see org.mmmr.services.interfaces.ArchiveServiceI#compress(java.io.File, java.util.List, java.io.File)
@@ -83,7 +88,7 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
         ZipInputStream in = null;
         OutputStream out = null;
         try {
-            in = new ZipInputStream(new FileInputStream(archive));
+            in = new ZipInputStream(new FileInputStream(archive), Charset.forName(this.charset));
             ZipEntry ze;
             byte[] buffer = new byte[1024 * 8 * 4];
             int read;
@@ -119,13 +124,41 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
         }
     }
 
+    public String getCharset() {
+        return this.charset;
+    }
+
     /**
      * 
      * @see org.mmmr.services.interfaces.ArchiveServiceI#list(File)
      */
     @Override
     public List<ArchiveEntry> list(File archive) throws IOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("list");
+        List<ArchiveEntry> entries = new ArrayList<ArchiveEntry>();
+        ZipInputStream in = null;
+        try {
+            in = new ZipInputStream(new FileInputStream(archive), Charset.forName(this.charset));
+            ZipEntry ze;
+            while ((ze = in.getNextEntry()) != null) {
+                if (ze.isDirectory()) {
+                    continue;
+                }
+                entries.add(new ArchiveEntry(ze.getName(), ze.getSize(), new Date(ze.getTime()), new Date(ze.getTime()), ze.getCompressedSize(),
+                        null, null));
+            }
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception ex) {
+                    //
+                }
+            }
+        }
+        return entries;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
     }
 }

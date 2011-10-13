@@ -1,0 +1,5 @@
+<mod archive="Millenaire1.6.8.zip" mc="1.8.1" name="Millénaire" url="http://www.millenaire.org" version="1.6.8">
+    <resources>
+        <resource sourcepath="MilleÌnaire 1.6.8/" targetpath="./"/>
+    </resources>
+</mod>

@@ -106,33 +106,35 @@ public class ModInstallHelper implements ArchiveEntryMatcher, ArchiveOutputStrea
                 break;
             }
         }
-        switch (this.type) {
-            case Paths:
-                for (Path p : this.paths) {
-                    if (path.endsWith(p)) {
-                        for (Path key : this.pathing.keySet()) {
-                            if (key.append(p).equals(path)) {
-                                success = true;
-                                break;
+        if (keyPath != null) {
+            switch (this.type) {
+                case Paths:
+                    for (Path p : this.paths) {
+                        if (path.endsWith(p)) {
+                            for (Path key : this.pathing.keySet()) {
+                                if (key.append(p).equals(path)) {
+                                    success = true;
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-                break;
-            case Resources:
-                for (Pattern pattern : this.includes.get(keyPath)) {
-                    if (pattern.matcher(path.getPath()).find()) {
-                        success = true;
-                        break;
+                    break;
+                case Resources:
+                    for (Pattern pattern : this.includes.get(keyPath)) {
+                        if (pattern.matcher(path.getPath()).find()) {
+                            success = true;
+                            break;
+                        }
                     }
-                }
-                for (Pattern pattern : this.excludes.get(keyPath)) {
-                    if (pattern.matcher(path.getPath()).find()) {
-                        success = false;
-                        break;
+                    for (Pattern pattern : this.excludes.get(keyPath)) {
+                        if (pattern.matcher(path.getPath()).find()) {
+                            success = false;
+                            break;
+                        }
                     }
-                }
-                break;
+                    break;
+            }
         }
         ExceptionAndLogHandler.log("'" + path + "' [" + keyPath + "]=" + success);
         return success;
