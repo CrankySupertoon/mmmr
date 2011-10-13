@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -88,7 +87,11 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
         ZipInputStream in = null;
         OutputStream out = null;
         try {
-            in = new ZipInputStream(new FileInputStream(archive), Charset.forName(this.charset));
+            try {
+                in = new ZipInputStream(new FileInputStream(archive));
+                // in = new ZipInputStream(new FileInputStream(archive), java.nio.charset.Charset.forName(this.charset));
+            } catch (Throwable ex) {
+            }
             ZipEntry ze;
             byte[] buffer = new byte[1024 * 8 * 4];
             int read;
@@ -137,7 +140,11 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
         List<ArchiveEntry> entries = new ArrayList<ArchiveEntry>();
         ZipInputStream in = null;
         try {
-            in = new ZipInputStream(new FileInputStream(archive), Charset.forName(this.charset));
+            try {
+                // in = new ZipInputStream(new FileInputStream(archive), java.nio.charset.Charset.forName(this.charset));
+                in = new ZipInputStream(new FileInputStream(archive));
+            } catch (Throwable ex) {
+            }
             ZipEntry ze;
             while ((ze = in.getNextEntry()) != null) {
                 if (ze.isDirectory()) {

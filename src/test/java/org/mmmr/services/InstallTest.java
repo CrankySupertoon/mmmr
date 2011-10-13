@@ -12,6 +12,7 @@ import org.mmmr.MCFile;
 import org.mmmr.Mod;
 import org.mmmr.Resource;
 import org.mmmr.services.InstallationService.UninstallMod;
+import org.mmmr.services.impl.ArchiveService7Zip;
 
 /**
  * @author jurgen
@@ -122,7 +123,7 @@ public class InstallTest extends DBTstSuperClass {
                 mod.addResource(r);
             }
             ModInstallHelper helper = new ModInstallHelper(null, mod);
-            ArchiveService.extract(archive, helper, helper);
+            new ArchiveService7Zip().extract(archive, helper, helper);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -139,7 +140,7 @@ public class InstallTest extends DBTstSuperClass {
                 mod.addResource(r);
             }
             ModInstallHelper helper = new ModInstallHelper(null, mod);
-            ArchiveService.extract(archive, helper, helper);
+            new ArchiveService7Zip().extract(archive, helper, helper);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -163,7 +164,7 @@ public class InstallTest extends DBTstSuperClass {
             List<String> paths = new ArrayList<String>();
             paths.add("base.class");
             ModInstallHelper helper = new ModInstallHelper(null, mod, paths);
-            ArchiveService.extract(archive, helper, helper);
+            new ArchiveService7Zip().extract(archive, helper, helper);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

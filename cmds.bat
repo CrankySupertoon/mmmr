@@ -2,15 +2,15 @@
 cls
 :start
 echo ------------------
-echo 1. update code
-echo 2. clean target
-echo 3. create package
-echo 4. build site
-echo 5. deploy
-echo 6. clear screen
-echo 7. quit
+echo u. update code
+echo c. clean target
+echo p. create package
+echo s. build site
+echo d. deploy
+echo w. clear window
+echo q. quit
 echo ------------------
-CHOICE /N /C:1234567
+CHOICE /N /C:ucpsdwq
 set nr=%ERRORLEVEL%
 IF %nr% EQU 1 goto lupdate
 IF %nr% EQU 2 goto lclean
@@ -19,6 +19,7 @@ IF %nr% EQU 4 goto lsite
 IF %nr% EQU 5 goto ldeploy
 IF %nr% EQU 6 goto lcls
 IF %nr% EQU 7 goto end
+goto start
 
 :lupdate
 cls

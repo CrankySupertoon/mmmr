@@ -167,7 +167,7 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
     }
 
     @XmlElementWrapper(required = false)
-    @XmlElementRef(required = false)
+    @XmlElementRef
     public List<Dependency> getDependencies() {
         return this.dependencies;
     }
@@ -229,7 +229,7 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
     }
 
     @XmlElementWrapper(required = true, nillable = false)
-    @XmlElementRef(required = true)
+    @XmlElementRef
     public List<Resource> getResources() {
         return this.resources;
     }
