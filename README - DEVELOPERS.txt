@@ -74,4 +74,4 @@ TODO
 - localization to other languages (like messages_fr.properties, default messages.properties is English)
 - see 'FEATURES IN PROGRESS'
 - start server en install mods in server
-- -Dfile.encoding=Cp1252
+
