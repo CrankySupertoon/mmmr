@@ -1,35 +1,25 @@
 package org.mmmr.services.impl;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.Key;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.zip.CRC32;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
 
 import net.sf.sevenzipjbinding.ExtractAskMode;
 import net.sf.sevenzipjbinding.ExtractOperationResult;
-import net.sf.sevenzipjbinding.IInStream;
+import net.sf.sevenzipjbinding.IArchiveExtractCallback;
 import net.sf.sevenzipjbinding.ISequentialOutStream;
 import net.sf.sevenzipjbinding.ISevenZipInArchive;
 import net.sf.sevenzipjbinding.PropID;
 import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipException;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
-import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
-import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 
 import org.mmmr.services.ArchiveEntryMatcherImpl;
-import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.ArchiveEntryMatcher;
 import org.mmmr.services.interfaces.ArchiveOutputStreamBuilder;
@@ -45,68 +35,29 @@ import org.mmmr.services.interfaces.ArchiveOutputStreamBuilderImpl;
  * @see http://sourceforge.net/apps/mediawiki/sevenzipjbind/index.php?title=Main_Page
  * @see http://sevenzipjbind.sourceforge.net/basic_snippets.html
  */
-public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.sevenzipjbinding.IArchiveOpenCallback,
-        net.sf.sevenzipjbinding.ICryptoGetTextPassword, net.sf.sevenzipjbinding.IArchiveOpenVolumeCallback,
-        net.sf.sevenzipjbinding.IArchiveExtractCallback {
-    private static String algorithm = "DESede";
+public class ArchiveService7Zip extends ArchiveServiceSimple {
+    private abstract class Callback implements net.sf.sevenzipjbinding.ICryptoGetTextPassword, IArchiveExtractCallback {
+        //
+    }
 
-    private static Key key;
+    private class InvocationException extends RuntimeException {
+        private static final long serialVersionUID = -8129174131545796688L;
 
-    private static Cipher cipher;
-
-    static {
-        try {
-            ArchiveService7Zip.key = KeyGenerator.getInstance(ArchiveService7Zip.algorithm).generateKey();
-            ArchiveService7Zip.cipher = Cipher.getInstance(ArchiveService7Zip.algorithm);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        public InvocationException(IOException cause) {
+            super(cause);
         }
     }
 
-    private static String decrypt(byte[] encryptionBytes) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        ArchiveService7Zip.cipher.init(Cipher.DECRYPT_MODE, ArchiveService7Zip.key);
-        byte[] recoveredBytes = ArchiveService7Zip.cipher.doFinal(encryptionBytes);
-        String recovered = new String(recoveredBytes);
-        return recovered;
-    }
-
-    private static byte[] encrypt(String input) throws GeneralSecurityException {
-        ArchiveService7Zip.cipher.init(Cipher.ENCRYPT_MODE, ArchiveService7Zip.key);
-        byte[] inputBytes = input.getBytes();
-        return ArchiveService7Zip.cipher.doFinal(inputBytes);
-    }
-
-    private byte[] pwd = null;
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.ICryptoGetTextPassword#cryptoGetTextPassword()
-     */
-    @Override
-    public String cryptoGetTextPassword() throws SevenZipException {
-        if ((this.pwd != null) && (this.pwd.length == 0)) {
-            return null;
-        }
-
-        if (this.pwd != null) {
-            try {
-                return ArchiveService7Zip.decrypt(this.pwd);
-            } catch (GeneralSecurityException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-        // System.out.print("password: ");
-        // Scanner scanner = new Scanner(System.in);
-        // String pass = scanner.next();
-        // try {
-        // this.pwd = ArchiveService7Zip.encrypt(pass);
-        // } catch (NullPointerException ex) {
-        // //
-        // } catch (GeneralSecurityException ex) {
-        // ex.printStackTrace();
-        // }
-        // return pass;
-        return null;
+    private ArchiveEntry createEntry(ISevenZipInArchive inArchive, int i) throws SevenZipException {
+        return new ArchiveEntry(//
+                (String) inArchive.getProperty(i, PropID.PATH),//
+                (Long) inArchive.getProperty(i, PropID.SIZE),//
+                (Date) inArchive.getProperty(i, PropID.CREATION_TIME),//
+                (Date) inArchive.getProperty(i, PropID.LAST_WRITE_TIME),//
+                (Long) inArchive.getProperty(i, PropID.PACKED_SIZE),//
+                (String) inArchive.getProperty(i, PropID.GROUP),//
+                (String) inArchive.getProperty(i, PropID.USER)//
+        );
     }
 
     /**
@@ -115,86 +66,105 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
      *      org.mmmr.services.interfaces.ArchiveEntryMatcher)
      */
     @Override
-    public void extract(File archive, ArchiveOutputStreamBuilder out, ArchiveEntryMatcher matcher) throws IOException {
-        RandomAccessFile randomAccessFile = null;
-        ISevenZipInArchive inArchive = null;
+    public void extract(final File archive, final ArchiveOutputStreamBuilder target, final ArchiveEntryMatcher matcher) throws IOException {
+        this.extract(archive, target, matcher, null);
+    }
+
+    public void extract(final File archive, final ArchiveOutputStreamBuilder target, final ArchiveEntryMatcher matcher, final String pwd)
+            throws IOException {
+        final Wrapper<RandomAccessFile> randomAccessFile = new Wrapper<RandomAccessFile>();
+        final Wrapper<ISevenZipInArchive> inArchive = new Wrapper<ISevenZipInArchive>();
         try {
-            randomAccessFile = new RandomAccessFile(archive, "r");
-            inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile), this);
-            ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
-
-            for (ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
-                if (item.isFolder()) {
-                    continue;
+            randomAccessFile.v = new RandomAccessFile(archive, "r");
+            inArchive.v = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile.v));
+            int[] in = new int[inArchive.v.getNumberOfItems()];
+            for (int i = 0; i < in.length; i++) {
+                in[i] = i;
+            }
+            final Wrapper<OutputStream> outputStream = new Wrapper<OutputStream>();
+            inArchive.v.extract(in, false, new Callback() {
+                @Override
+                public String cryptoGetTextPassword() throws SevenZipException {
+                    return pwd;
                 }
 
-                ArchiveEntry entry = new ArchiveEntry(item.getPath(), item.getSize(), item.getCreationTime(), item.getLastWriteTime(),
-                        item.getPackedSize(), item.getGroup(), item.getUser());
-
-                if (!matcher.matches(entry)) {
-                    ExceptionAndLogHandler.log("skipping " + item.getPath());
-                    continue;
-                }
-
-                ExceptionAndLogHandler.log("extracting " + item.getPath());
-                OutputStream fileout = null;
-
-                try {
-                    fileout = out.createOutputStream(entry);
-                    final OutputStream fout = fileout;
-                    final CRC32 crc = new CRC32();
-                    Integer crcValue = item.getCRC();
-                    ISequentialOutStream paramISequentialOutStream = new ISequentialOutStream() {
+                @Override
+                public ISequentialOutStream getStream(int idx, ExtractAskMode extractAskMode) throws SevenZipException {
+                    boolean skipExtraction = (Boolean) inArchive.v.getProperty(idx, PropID.IS_FOLDER);
+                    if (skipExtraction || (extractAskMode != ExtractAskMode.EXTRACT)) {
+                        return null;
+                    }
+                    ArchiveEntry entry = ArchiveService7Zip.this.createEntry(inArchive.v, idx);
+                    if (!matcher.matches(entry)) {
+                        return null;
+                    }
+                    try {
+                        outputStream.v = new BufferedOutputStream(target.createOutputStream(entry));
+                    } catch (IOException ex) {
+                        throw new InvocationException(ex);
+                    }
+                    return new ISequentialOutStream() {
                         @Override
                         public int write(byte[] data) throws SevenZipException {
                             try {
-                                // System.out.println("writing " + data.length + " bytes");
-                                crc.update(data);
-                                fout.write(data);
+                                outputStream.v.write(data);
                             } catch (IOException ex) {
-                                throw new RuntimeException(ex);
+                                throw new InvocationException(ex);
                             }
                             return data.length;
                         }
                     };
-                    ExtractOperationResult result;
-                    if (this.cryptoGetTextPassword() == null) {
-                        result = item.extractSlow(paramISequentialOutStream);
-                    } else {
-                        result = item.extractSlow(paramISequentialOutStream, this.cryptoGetTextPassword());
-                    }
-                    if (crc.getValue() != crcValue) {
-                        // System.out.println(UtilityMethods.crc2string(crc.getValue()) + "><" + UtilityMethods.crc2string(crcValue));
-                    }
-                    if (result != ExtractOperationResult.OK) {
-                        throw new IOException("extract failed with " + result + " on " + item.getPath());
-                    }
-                } finally {
-                    if (fileout != null) {
-                        try {
-                            fileout.close();
-                        } catch (Exception ex) {
-                            ExceptionAndLogHandler.log(ex);
-                        }
-                    }
                 }
-            }
+
+                @Override
+                public void prepareOperation(ExtractAskMode extractAskMode) throws SevenZipException {
+                    //
+                }
+
+                @Override
+                public void setCompleted(long completeValue) throws SevenZipException {
+                    //
+                }
+
+                @Override
+                public void setOperationResult(ExtractOperationResult extractOperationResult) throws SevenZipException {
+                    if (extractOperationResult != ExtractOperationResult.OK) {
+                        throw new RuntimeException(String.valueOf(extractOperationResult));
+                    }
+                    if (outputStream.v == null) {
+                        return;
+                    }
+                    try {
+                        outputStream.v.flush();
+                        outputStream.v.close();
+                    } catch (IOException ex) {
+                        throw new InvocationException(ex);
+                    }
+                    outputStream.v = null;
+                }
+
+                @Override
+                public void setTotal(long total) throws SevenZipException {
+                    //
+                }
+            });
+        } catch (InvocationException ex) {
+            throw (IOException) ex.getCause();
         } catch (SevenZipException ex) {
             throw new IOException(ex);
         } finally {
-            this.pwd = null;
-            if (inArchive != null) {
+            if (inArchive.v != null) {
                 try {
-                    inArchive.close();
-                } catch (SevenZipException ex) {
-                    ExceptionAndLogHandler.log(ex);
+                    inArchive.v.close();
+                } catch (Exception e) {
+                    System.err.println("Error closing archive: " + e);
                 }
             }
-            if (randomAccessFile != null) {
+            if (randomAccessFile.v != null) {
                 try {
-                    randomAccessFile.close();
-                } catch (IOException ex) {
-                    ExceptionAndLogHandler.log(ex);
+                    randomAccessFile.v.close();
+                } catch (Exception e) {
+                    System.err.println("Error closing file: " + e);
                 }
             }
         }
@@ -202,43 +172,16 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
 
     /**
      * 
-     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, java.io.File)
+     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File)
      */
     @Override
-    public void extract(File archive, File out) throws IOException {
-        this.extract(archive, new ArchiveOutputStreamBuilderImpl(out), new ArchiveEntryMatcherImpl());
+    public void extract(File archive, File target) throws IOException {
+        this.extract(archive, new ArchiveOutputStreamBuilderImpl(target), new ArchiveEntryMatcherImpl());
     }
 
     /**
      * 
-     * @see net.sf.sevenzipjbinding.IArchiveOpenVolumeCallback#getProperty(net.sf.sevenzipjbinding.PropID)
-     */
-    @Override
-    public Object getProperty(PropID paramPropID) throws SevenZipException {
-        return null;
-    }
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.IArchiveExtractCallback#getStream(int, net.sf.sevenzipjbinding.ExtractAskMode)
-     */
-    @Override
-    public ISequentialOutStream getStream(int paramInt, ExtractAskMode paramExtractAskMode) throws SevenZipException {
-        return null;
-    }
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.IArchiveOpenVolumeCallback#getStream(java.lang.String)
-     */
-    @Override
-    public IInStream getStream(String paramString) throws SevenZipException {
-        return null;
-    }
-
-    /**
-     * 
-     * @see org.mmmr.services.impl.ArchiveServiceSimple#list(File)
+     * @see org.mmmr.services.interfaces.ArchiveServiceI#list(java.io.File)
      */
     @Override
     public List<ArchiveEntry> list(File archive) throws IOException {
@@ -247,96 +190,31 @@ public class ArchiveService7Zip extends ArchiveServiceSimple implements net.sf.s
         ISevenZipInArchive inArchive = null;
         try {
             randomAccessFile = new RandomAccessFile(archive, "r");
-            inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile), this);
-            ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
-            for (ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
-                entries.add(new ArchiveEntry(item.getPath(), item.getSize(), item.getCreationTime(), item.getLastWriteTime(), item.getPackedSize(),
-                        item.getGroup(), item.getUser()));
+            inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile));
+            int itemCount = inArchive.getNumberOfItems();
+            for (int i = 0; i < itemCount; i++) {
+                entries.add(this.createEntry(inArchive, i));
             }
+        } catch (InvocationException ex) {
+            throw (IOException) ex.getCause();
         } catch (SevenZipException ex) {
             throw new IOException(ex);
         } finally {
             if (inArchive != null) {
                 try {
                     inArchive.close();
-                } catch (SevenZipException e) {
+                } catch (Exception e) {
                     System.err.println("Error closing archive: " + e);
                 }
             }
             if (randomAccessFile != null) {
                 try {
                     randomAccessFile.close();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     System.err.println("Error closing file: " + e);
                 }
             }
         }
-
         return entries;
     }
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.IArchiveExtractCallback#prepareOperation(net.sf.sevenzipjbinding.ExtractAskMode)
-     */
-    @Override
-    public void prepareOperation(ExtractAskMode paramExtractAskMode) throws SevenZipException {
-        //
-    }
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.IProgress#setCompleted(long)
-     */
-    @Override
-    public void setCompleted(long paramLong) throws SevenZipException {
-        //
-    }
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.IArchiveOpenCallback#setCompleted(java.lang.Long, java.lang.Long)
-     */
-    @Override
-    public void setCompleted(Long paramLong1, Long paramLong2) throws SevenZipException {
-        //
-    }
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.IArchiveExtractCallback#setOperationResult(net.sf.sevenzipjbinding.ExtractOperationResult)
-     */
-    @Override
-    public void setOperationResult(ExtractOperationResult paramExtractOperationResult) throws SevenZipException {
-        //
-    }
-
-    public void setPassword(String pwd) throws GeneralSecurityException {
-        if (pwd == null) {
-            this.pwd = null;
-        } else if (pwd.equals("")) {
-            this.pwd = new byte[0];
-        } else {
-            this.pwd = ArchiveService7Zip.encrypt(pwd);
-        }
-    }
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.IProgress#setTotal(long)
-     */
-    @Override
-    public void setTotal(long paramLong) throws SevenZipException {
-        //
-    }
-
-    /**
-     * 
-     * @see net.sf.sevenzipjbinding.IArchiveOpenCallback#setTotal(java.lang.Long, java.lang.Long)
-     */
-    @Override
-    public void setTotal(Long paramLong1, Long paramLong2) throws SevenZipException {
-        //
-    }
-
 }

@@ -22,12 +22,16 @@ public class ArchiveEntry {
 
     private transient int hashCode;
 
-    public ArchiveEntry(String path, long size, Date creation, Date modification, long compressedSize, String group, String user) {
-        this.path = new Path(path);
-        this.size = size;
+    public ArchiveEntry(String path) {
+        this(path, null, null, null, null, null, null);
+    }
+
+    public ArchiveEntry(String path, Long size, Date creation, Date modification, Long compressedSize, String group, String user) {
+        this.path = path == null ? null : new Path(path);
+        this.size = size == null ? 0 : size;
         this.creation = creation;
         this.modification = modification;
-        this.compressedSize = compressedSize;
+        this.compressedSize = compressedSize == null ? 0 : compressedSize;
         this.group = group;
         this.user = user;
     }
