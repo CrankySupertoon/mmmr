@@ -33,9 +33,9 @@ public class DefaultArchiveEntryMatcher implements ArchiveEntryMatcher {
      * 
      * @param paths
      */
-    public DefaultArchiveEntryMatcher(List<String> paths) {
-        paths = new ArrayList<String>();
-        for (String path : paths) {
+    public DefaultArchiveEntryMatcher(List<String> p) {
+        this.paths = new ArrayList<Path>();
+        for (String path : p) {
             this.paths.add(new Path(path));
         }
     }
