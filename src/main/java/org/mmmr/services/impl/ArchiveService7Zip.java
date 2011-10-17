@@ -19,11 +19,11 @@ import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipException;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 
-import org.mmmr.services.ArchiveEntryMatcherImpl;
+import org.mmmr.services.DefaultArchiveEntryMatcher;
+import org.mmmr.services.DefaultArchiveOutputStreamBuilder;
 import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.ArchiveEntryMatcher;
 import org.mmmr.services.interfaces.ArchiveOutputStreamBuilder;
-import org.mmmr.services.interfaces.ArchiveOutputStreamBuilderImpl;
 
 /**
  * extracts lots of compressions formats including but not limited to zip, rar, 7z (7zip)<br/>
@@ -176,7 +176,7 @@ public class ArchiveService7Zip extends ArchiveServiceSimple {
      */
     @Override
     public void extract(File archive, File target) throws IOException {
-        this.extract(archive, new ArchiveOutputStreamBuilderImpl(target), new ArchiveEntryMatcherImpl());
+        this.extract(archive, new DefaultArchiveOutputStreamBuilder(target), new DefaultArchiveEntryMatcher());
     }
 
     /**

@@ -8,7 +8,10 @@ import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.ArchiveEntryMatcher;
 import org.mmmr.services.interfaces.Path;
 
-public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
+/**
+ * @author Jurgen
+ */
+public class DefaultArchiveEntryMatcher implements ArchiveEntryMatcher {
     private List<Pattern> includes;
 
     private List<Pattern> excludes;
@@ -20,7 +23,7 @@ public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
      * create a ArchiveEntryMatcherImpl
      * 
      */
-    public ArchiveEntryMatcherImpl() {
+    public DefaultArchiveEntryMatcher() {
         super();
     }
 
@@ -30,7 +33,7 @@ public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
      * 
      * @param paths
      */
-    public ArchiveEntryMatcherImpl(List<String> paths) {
+    public DefaultArchiveEntryMatcher(List<String> paths) {
         paths = new ArrayList<String>();
         for (String path : paths) {
             this.paths.add(new Path(path));
@@ -43,7 +46,7 @@ public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
      * 
      * @param includes
      */
-    public ArchiveEntryMatcherImpl(String includes) {
+    public DefaultArchiveEntryMatcher(String includes) {
         this(includes, null);
     }
 
@@ -54,7 +57,7 @@ public class ArchiveEntryMatcherImpl implements ArchiveEntryMatcher {
      * @param includes
      * @param excludes
      */
-    public ArchiveEntryMatcherImpl(String includes, String excludes) {
+    public DefaultArchiveEntryMatcher(String includes, String excludes) {
         if (includes != null) {
             this.includes = new ArrayList<Pattern>();
             for (String include : includes.split(",")) { //$NON-NLS-1$

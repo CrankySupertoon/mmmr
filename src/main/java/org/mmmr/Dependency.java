@@ -56,6 +56,11 @@ public class Dependency implements Comparable<Dependency>, PersistentObject {
         super();
     }
 
+    public Dependency(Mod mod) {
+        this(mod.getName(), mod.getVersion());
+        this.setUrl(mod.getUrl());
+    }
+
     public Dependency(String name, String version) {
         this();
         this.setName(name);

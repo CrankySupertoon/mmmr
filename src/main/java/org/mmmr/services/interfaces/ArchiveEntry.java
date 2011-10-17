@@ -5,6 +5,9 @@ import java.util.Date;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+/**
+ * @author Jurgen
+ */
 public class ArchiveEntry {
     public final Path path;
 

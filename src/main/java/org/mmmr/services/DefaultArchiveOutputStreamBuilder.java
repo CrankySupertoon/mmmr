@@ -1,14 +1,17 @@
-package org.mmmr.services.interfaces;
+package org.mmmr.services;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.mmmr.services.interfaces.ArchiveEntry;
+import org.mmmr.services.interfaces.ArchiveOutputStreamBuilder;
+
 /**
  * @author Jurgen
  */
-public class ArchiveOutputStreamBuilderImpl implements ArchiveOutputStreamBuilder {
+public class DefaultArchiveOutputStreamBuilder implements ArchiveOutputStreamBuilder {
     private File target;
 
     /**
@@ -17,7 +20,7 @@ public class ArchiveOutputStreamBuilderImpl implements ArchiveOutputStreamBuilde
      * 
      * @param target
      */
-    public ArchiveOutputStreamBuilderImpl(File target) {
+    public DefaultArchiveOutputStreamBuilder(File target) {
         this.target = target;
     }
 

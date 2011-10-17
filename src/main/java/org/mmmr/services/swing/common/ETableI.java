@@ -31,4 +31,6 @@ public interface ETableI {
     public abstract void sort(final int col);
 
     public abstract void unsort();
+
+    public abstract List<String> getHeadernames();
 }

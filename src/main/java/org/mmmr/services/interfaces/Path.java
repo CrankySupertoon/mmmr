@@ -4,6 +4,11 @@ import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+/**
+ * representation of a relative path, always uses / as directory seperators and "" as the 'current path'
+ * 
+ * @author Jurgen
+ */
 public class Path implements Comparable<Path> {
     private final String path;
 
@@ -16,6 +21,9 @@ public class Path implements Comparable<Path> {
      */
     public Path(String path) {
         path = path.replace('\\', '/');
+        while (path.indexOf("//") != -1) {
+            path = path.replaceAll("//", "/");
+        }
         if (path.startsWith("./")) {
             path = path.substring(2);
         }
@@ -28,6 +36,9 @@ public class Path implements Comparable<Path> {
         this.path = path;
     }
 
+    /**
+     * create a new child path
+     */
     public Path append(Path p) {
         return new Path(this.path + "/" + p.path);
     }
@@ -40,6 +51,9 @@ public class Path implements Comparable<Path> {
         return new CompareToBuilder().append(this.path, other.path).toComparison();
     }
 
+    /**
+     * is this path a parent of given path
+     */
     public boolean endsWith(Path p) {
         return this.path.endsWith(p.getPath());
     }
@@ -56,6 +70,9 @@ public class Path implements Comparable<Path> {
         return new EqualsBuilder().append(this.path, castOther.path).isEquals();
     }
 
+    /**
+     * returns string representation
+     */
     public String getPath() {
         return this.path;
     }
@@ -78,6 +95,9 @@ public class Path implements Comparable<Path> {
         return new Path(this.path.substring(p.path.length()));
     }
 
+    /**
+     * is given path a parent of this path
+     */
     public boolean startsWith(Path p) {
         return this.path.startsWith(p.getPath());
     }

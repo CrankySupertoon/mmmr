@@ -6,6 +6,9 @@ import org.mmmr.MC;
 import org.mmmr.Mod;
 import org.mmmr.ModPack;
 
+/**
+ * @author Jurgen
+ */
 public class Conflict implements Comparable<Conflict>, Installable {
     private final String path;
 

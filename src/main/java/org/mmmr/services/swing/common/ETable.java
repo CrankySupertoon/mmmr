@@ -633,7 +633,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
      * @return
      */
     public ETableI getEventSafe() {
-        final ETable table = this;
+        final ETableI table = this;
         if (this.cfg.isThreadSafe()) {
             return table;
         }
@@ -698,6 +698,15 @@ public class ETable extends JTable implements ETableI, Reorderable {
             return (Frame) comp.getParent();
         }
         return this.getFrame(comp.getParent());
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#getHeadernames()
+     */
+    @Override
+    public List<String> getHeadernames() {
+        return this.tableFormat.getColumnNames();
     }
 
     /**
