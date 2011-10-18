@@ -204,10 +204,10 @@ public class ModWizardWindow extends JFrame {
             dependencies.setHeaders(headers);
             for (Dependency element : mod.getDependencies()) {
                 ETableRecordBean<Dependency> record = new ETableRecordBean<Dependency>(headers.getColumnNames(), element);
-                dependencies.getEventSafe().addRecord(record);
+                dependencies.getSimpleThreadSafeInterface().addRecord(record);
             }
-            dependencies.getEventSafe().packColumn(0);
-            dependencies.getEventSafe().packColumn(1);
+            dependencies.getSimpleThreadSafeInterface().packColumn(0);
+            dependencies.getSimpleThreadSafeInterface().packColumn(1);
 
             mainpanel.add(new JScrollPane(dependencies), "span 4 6, growx, growy");
             mainpanel.add(ddXml, "span 1 6, growx, growy"); // drag-drop xml file dependency
@@ -223,7 +223,7 @@ public class ModWizardWindow extends JFrame {
             resources.setHeaders(headers);
             for (Resource element : mod.getResources()) {
                 ETableRecordBean<Resource> record = new ETableRecordBean<Resource>(headers.getColumnNames(), element);
-                resources.getEventSafe().addRecord(record);
+                resources.getSimpleThreadSafeInterface().addRecord(record);
             }
 
             mainpanel.add(new JScrollPane(resources), "span 4 6, growx, growy");
@@ -234,10 +234,10 @@ public class ModWizardWindow extends JFrame {
                     try {
                         File a = new File(cfg.getMods(), archive.getText());
                         List<Resource> findMapping = ModWizardWindow.findMapping(a);
-                        resources.getEventSafe().removeAllRecords();
+                        resources.getSimpleThreadSafeInterface().removeAllRecords();
                         for (Resource r : findMapping) {
-                            ETableRecordBean<Resource> record = new ETableRecordBean<Resource>(resources.getEventSafe().getHeadernames(), r);
-                            resources.getEventSafe().addRecord(record);
+                            ETableRecordBean<Resource> record = new ETableRecordBean<Resource>(resources.getSimpleThreadSafeInterface().getHeadernames(), r);
+                            resources.getSimpleThreadSafeInterface().addRecord(record);
                         }
                     } catch (Exception ex) {
                         ExceptionAndLogHandler.log(ex);
@@ -303,9 +303,9 @@ public class ModWizardWindow extends JFrame {
                         try {
                             Mod dependency = cfg.getXml().load(new FileInputStream(file), Mod.class);
                             Dependency element = new Dependency(dependency);
-                            ETableRecordBean<Dependency> record = new ETableRecordBean<Dependency>(dependencies.getEventSafe().getHeadernames(),
+                            ETableRecordBean<Dependency> record = new ETableRecordBean<Dependency>(dependencies.getSimpleThreadSafeInterface().getHeadernames(),
                                     element);
-                            dependencies.getEventSafe().addRecord(record);
+                            dependencies.getSimpleThreadSafeInterface().addRecord(record);
                         } catch (Exception ex) {
                             ExceptionAndLogHandler.log(ex);
                         }

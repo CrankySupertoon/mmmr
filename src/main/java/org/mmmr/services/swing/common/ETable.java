@@ -587,7 +587,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
                 if (index == -1) {
                     return null;
                 }
-                String headerValue = String.valueOf(ETable.this.getEventSafe().getColumnValueAtVisualColumn(index));
+                String headerValue = String.valueOf(ETable.this.getSimpleThreadSafeInterface().getColumnValueAtVisualColumn(index));
 
                 if (ETable.this.cfg.isFilterable()) {
                     String filter = ETable.this.filtering.getFilterPopup().popupFilters.get(index);
@@ -630,9 +630,52 @@ public class ETable extends JTable implements ETableI, Reorderable {
     /**
      * J_DOC
      * 
+     * @param comp
      * @return
      */
-    public ETableI getEventSafe() {
+    protected Frame getFrame(Component comp) {
+        if (comp == null) {
+            comp = this;
+        }
+        if (comp.getParent() instanceof Frame) {
+            return (Frame) comp.getParent();
+        }
+        return this.getFrame(comp.getParent());
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#getHeadernames()
+     */
+    @Override
+    public List<String> getHeadernames() {
+        return this.tableFormat.getColumnNames();
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#getRecordAtVisualRow(int)
+     */
+    @Override
+    public ETableRecord getRecordAtVisualRow(int i) {
+        return this.filtering.getRecords().get(i);
+    }
+
+    /**
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#getRecords()
+     */
+    @Override
+    public List<ETableRecord> getRecords() {
+        return this.filtering.getRecords();
+    }
+
+    /**
+     * J_DOC
+     * 
+     * @return
+     */
+    public ETableI getSimpleThreadSafeInterface() {
         final ETableI table = this;
         if (this.cfg.isThreadSafe()) {
             return table;
@@ -682,49 +725,6 @@ public class ETable extends JTable implements ETableI, Reorderable {
         }
         ((javassist.util.proxy.ProxyObject) proxy).setHandler(mi);
         return (ETableI) proxy;
-    }
-
-    /**
-     * J_DOC
-     * 
-     * @param comp
-     * @return
-     */
-    protected Frame getFrame(Component comp) {
-        if (comp == null) {
-            comp = this;
-        }
-        if (comp.getParent() instanceof Frame) {
-            return (Frame) comp.getParent();
-        }
-        return this.getFrame(comp.getParent());
-    }
-
-    /**
-     * 
-     * @see org.mmmr.services.swing.common.ETableI#getHeadernames()
-     */
-    @Override
-    public List<String> getHeadernames() {
-        return this.tableFormat.getColumnNames();
-    }
-
-    /**
-     * 
-     * @see org.mmmr.services.swing.common.ETableI#getRecordAtVisualRow(int)
-     */
-    @Override
-    public ETableRecord getRecordAtVisualRow(int i) {
-        return this.filtering.getRecords().get(i);
-    }
-
-    /**
-     * 
-     * @see org.mmmr.services.swing.common.ETableI#getRecords()
-     */
-    @Override
-    public List<ETableRecord> getRecords() {
-        return this.filtering.getRecords();
     }
 
     /**
@@ -871,6 +871,28 @@ public class ETable extends JTable implements ETableI, Reorderable {
         this.sorting.sort(col);
     }
 
+    /**
+     * @see #getSimpleThreadSafeInterface()
+     */
+    public ETableI stsi() {
+        return this.getSimpleThreadSafeInterface();
+    }
+
+    /**
+     * @see #getSimpleThreadSafeInterface()
+     */
+    public ETableI STSI() {
+        return this.getSimpleThreadSafeInterface();
+    }
+
+    /**
+     * calls original renderer
+     * 
+     * @param renderer
+     * @param rowIndex
+     * @param vColIndex
+     * @return
+     */
     protected Component super_prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
         return super.prepareRenderer(renderer, rowIndex, vColIndex);
     }

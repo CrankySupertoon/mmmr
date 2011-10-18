@@ -163,7 +163,7 @@ public class JavaOptionsWindow extends JFrame {
         columnNames.add("V");
         columnNames.add("*");
 
-        this.table.getEventSafe().setHeaders(columnNames);
+        this.table.getSimpleThreadSafeInterface().setHeaders(columnNames);
 
         List<ETableRecordCollection> records = new ArrayList<ETableRecordCollection>();
 
@@ -255,7 +255,7 @@ public class JavaOptionsWindow extends JFrame {
         });
 
         for (ETableRecordCollection r : records) {
-            this.table.getEventSafe().addRecord(r);
+            this.table.getSimpleThreadSafeInterface().addRecord(r);
         }
 
         for (int i = 0; i < columnNames.getColumnCount(); i++) {

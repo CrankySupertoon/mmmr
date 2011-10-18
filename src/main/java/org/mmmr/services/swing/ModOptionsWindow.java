@@ -469,7 +469,7 @@ public class ModOptionsWindow extends JFrame {
     }
 
     protected void applyChanges() {
-        for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
+        for (ETableRecord<ModOption> record : this.options.getSimpleThreadSafeInterface().getRecords()) {
             ModOption modOption = record.getBean();
             Mod mod = modOption.getMod();
             if ((modOption.getInstalled() != mod.getInstalled()) && !modOption.getInstalled()) {
@@ -481,7 +481,7 @@ public class ModOptionsWindow extends JFrame {
                 }
             }
         }
-        for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
+        for (ETableRecord<ModOption> record : this.options.getSimpleThreadSafeInterface().getRecords()) {
             ModOption modOption = record.getBean();
             Mod mod = modOption.getMod();
             if (Boolean.TRUE.equals(modOption.getInstalled()) && Boolean.TRUE.equals(mod.getInstalled())) {
@@ -491,7 +491,7 @@ public class ModOptionsWindow extends JFrame {
                 }
             }
         }
-        for (ETableRecord<ModOption> record : this.options.getEventSafe().getRecords()) {
+        for (ETableRecord<ModOption> record : this.options.getSimpleThreadSafeInterface().getRecords()) {
             ModOption modOption = record.getBean();
             Mod mod = modOption.getMod();
             if ((modOption.getInstalled() != mod.getInstalled()) && modOption.getInstalled()) {
@@ -520,7 +520,7 @@ public class ModOptionsWindow extends JFrame {
         this.options = new ETable(configuration, this.matcher);
 
         this.options.setFont(this.cfg.getFontTable());
-        final ETableI safetable = this.options.getEventSafe();
+        final ETableI safetable = this.options.getSimpleThreadSafeInterface();
         final List<String> orderedFields = new ArrayList<String>();
         final ETableHeaders headers = new ETableHeaders();
 

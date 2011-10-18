@@ -68,7 +68,7 @@ public class TableDemo {
                 }
             });
 
-            final ETableI safetable = table.getEventSafe();
+            final ETableI safetable = table.getSimpleThreadSafeInterface();
             final JFrame frame = new JFrame();
             frame.getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

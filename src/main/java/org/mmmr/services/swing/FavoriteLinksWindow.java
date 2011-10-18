@@ -110,7 +110,7 @@ public class FavoriteLinksWindow extends JWindow {
         };
         ETableHeaders headers = new ETableHeaders();
         headers.add(Messages.getString("FavoriteLinksWindow.links")); //$NON-NLS-1$
-        table.getEventSafe().setHeaders(headers);
+        table.getSimpleThreadSafeInterface().setHeaders(headers);
         File f = new File(cfg.getData(), "links"); //$NON-NLS-1$
         for (File ff : f.listFiles(new FilenameFilter() {
             @Override
@@ -122,7 +122,7 @@ public class FavoriteLinksWindow extends JWindow {
             Properties p = new Properties();
             p.load(in);
             in.close();
-            table.getEventSafe().addRecord(new ETableRecordArray(ff.getName().replaceAll("\\.url", "").replaceAll("\\.URL", ""), p.get("URL"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            table.getSimpleThreadSafeInterface().addRecord(new ETableRecordArray(ff.getName().replaceAll("\\.url", "").replaceAll("\\.URL", ""), p.get("URL"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         }
 
         this.setAlwaysOnTop(true);
