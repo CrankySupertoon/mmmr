@@ -737,6 +737,15 @@ public class ETable extends JTable implements ETableI, Reorderable {
     }
 
     /**
+     * 
+     * @see org.mmmr.services.swing.common.ETableI#packColumn(int)
+     */
+    @Override
+    public void packColumn(int vColIndex) {
+        this.packColumn(vColIndex, 4);
+    }
+
+    /**
      * Sets the preferred width of the visible column specified by vColIndex. The column will be just wide enough to show the column head and the
      * widest cell in the column. margin pixels are added to the left and right (resulting in an additional width of 2*margin pixels).
      * 
@@ -744,6 +753,7 @@ public class ETable extends JTable implements ETableI, Reorderable {
      * @param vColIndex
      * @param margin
      */
+    @Override
     public void packColumn(int vColIndex, int margin) {
         TableColumnModel colModel = this.getColumnModel();
         TableColumn col = colModel.getColumn(vColIndex);

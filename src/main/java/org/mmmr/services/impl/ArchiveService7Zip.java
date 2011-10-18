@@ -59,7 +59,8 @@ public class ArchiveService7Zip extends ArchiveServiceSimple {
                 (Date) inArchive.getProperty(i, PropID.LAST_WRITE_TIME),//
                 (Long) inArchive.getProperty(i, PropID.PACKED_SIZE),//
                 (String) inArchive.getProperty(i, PropID.GROUP),//
-                (String) inArchive.getProperty(i, PropID.USER)//
+                (String) inArchive.getProperty(i, PropID.USER),//
+                (Boolean) inArchive.getProperty(i, PropID.IS_FOLDER)//
         );
     }
 

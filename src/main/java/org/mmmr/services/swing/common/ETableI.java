@@ -33,4 +33,8 @@ public interface ETableI {
     public abstract void unsort();
 
     public abstract List<String> getHeadernames();
+
+    public abstract void packColumn(int vColIndex, int margin);
+
+    public abstract void packColumn(int vColIndex);
 }

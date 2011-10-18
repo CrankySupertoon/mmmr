@@ -2,9 +2,11 @@ package org.mmmr.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.mmmr.services.impl.ArchiveServiceSimple;
+import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.ArchiveEntryMatcher;
 import org.mmmr.services.interfaces.ArchiveOutputStreamBuilder;
 import org.mmmr.services.interfaces.ArchiveServiceI;
@@ -19,12 +21,12 @@ public class ArchiveService {
         ArchiveService.getArchiveService().compress(basedir, files, archive);
     }
 
-    public static void extract(File archive, ArchiveOutputStreamBuilder out, ArchiveEntryMatcher matcher) throws IOException {
-        ArchiveService.getArchiveService().extract(archive, out, matcher);
+    public static Collection<ArchiveEntry> extract(File archive, ArchiveOutputStreamBuilder out, ArchiveEntryMatcher matcher) throws IOException {
+        return ArchiveService.getArchiveService().extract(archive, out, matcher);
     }
 
-    public static void extract(File archive, File out) throws IOException {
-        ArchiveService.getArchiveService().extract(archive, out);
+    public static Collection<ArchiveEntry> extract(File archive, File out) throws IOException {
+        return ArchiveService.getArchiveService().extract(archive, out);
     }
 
     private static ArchiveServiceI getArchiveService() {
@@ -36,5 +38,9 @@ public class ArchiveService {
             }
         }
         return ArchiveService.archiveService;
+    }
+
+    public static List<ArchiveEntry> list(File archive) throws IOException {
+        return ArchiveService.getArchiveService().list(archive);
     }
 }

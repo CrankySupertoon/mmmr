@@ -58,6 +58,5 @@ public class ArchiveServiceTest {
             ex.printStackTrace();
             Assert.fail(String.valueOf(ex));
         }
-
     }
 }

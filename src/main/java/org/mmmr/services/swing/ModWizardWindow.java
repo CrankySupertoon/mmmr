@@ -1,10 +1,15 @@
 package org.mmmr.services.swing;
 
 import java.awt.datatransfer.DataFlavor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
+import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.WindowConstants;
 
 import net.miginfocom.swing.MigLayout;
@@ -20,8 +26,12 @@ import net.miginfocom.swing.MigLayout;
 import org.mmmr.Dependency;
 import org.mmmr.Mod;
 import org.mmmr.Resource;
+import org.mmmr.services.ArchiveService;
 import org.mmmr.services.Config;
+import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.XmlService;
+import org.mmmr.services.interfaces.ArchiveEntry;
+import org.mmmr.services.interfaces.Path;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
@@ -34,7 +44,82 @@ import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
  * @author Jurgen
  */
 public class ModWizardWindow extends JFrame {
+    public static class EnhancedPath extends Path {
+        private final boolean dir;
+
+        public EnhancedPath(ArchiveEntry ae) {
+            super(ae.path.getPath());
+            this.dir = ae.dir;
+        }
+    }
+
     private static final long serialVersionUID = -6261674801873385201L;
+
+    public static List<Resource> findMapping(File archive) {
+        List<Resource> resources = new ArrayList<Resource>();
+        try {
+            boolean jarfolder = false;
+            Map<EnhancedPath, String> mapping = new HashMap<EnhancedPath, String>();
+            for (ArchiveEntry ae : ArchiveService.list(archive)) {
+                if (ae.path.getPath().toLowerCase().contains("read")) {
+                    //
+                } else if (ae.dir && ae.path.getPath().toLowerCase().contains("jar")) {
+                    jarfolder = true;
+                    mapping.put(new EnhancedPath(ae), "bin/" + Config.MINECRAFT_JAR);
+                } else if (ae.dir && ae.path.getPath().toLowerCase().contains("resource")) {
+                    mapping.put(new EnhancedPath(ae), "resources");
+                } else if (ae.dir && ae.path.getPath().toLowerCase().contains("mods")) {
+                    mapping.put(new EnhancedPath(ae), "mods");
+                } else {
+                    //
+                }
+            }
+            Path[] firstRun = mapping.keySet().toArray(new Path[0]);
+            for (ArchiveEntry ae : ArchiveService.list(archive)) {
+                if (ae.path.getPath().toLowerCase().contains("read")) {
+                    //
+                } else if (ae.dir && ae.path.getPath().toLowerCase().contains("jar")) {
+                    //
+                } else if (ae.dir && ae.path.getPath().toLowerCase().contains("resource")) {
+                    //
+                } else if (ae.dir && ae.path.getPath().toLowerCase().contains("mods")) {
+                    //
+                } else {
+                    boolean exists = false;
+                    for (Path existing : firstRun) {
+                        // System.out.println("? " + ae.path + " // " + existing + " // " + ae.path.startsWith(existing));
+                        if (ae.path.startsWith(existing)) {
+                            exists = true;
+                            continue;
+                        }
+
+                        if (existing.startsWith(ae.path)) {
+                            exists = true;
+                            continue;
+                        }
+                    }
+                    if (!exists) {
+                        if (jarfolder) {
+                            mapping.put(new EnhancedPath(ae), ae.path.getPath());
+                        } else {
+                            mapping.put(new EnhancedPath(ae), "bin/" + Config.MINECRAFT_JAR + "/" + ae.path.getPath());
+                        }
+                    }
+                }
+            }
+            for (Map.Entry<EnhancedPath, String> e : mapping.entrySet()) {
+                if (e.getKey().dir) {
+                    resources.add(new Resource(("".equals(e.getKey().getPath()) ? "." : e.getKey().getPath()) + "/", ("".equals(e.getValue()) ? "."
+                            : e.getValue()) + "/"));
+                } else {
+                    resources.add(new Resource(e.getKey().getPath(), e.getValue()));
+                }
+            }
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
+        }
+        return resources;
+    }
 
     public static void main(String[] args) {
         try {
@@ -45,12 +130,14 @@ public class ModWizardWindow extends JFrame {
             modWizardWindow.setLocationRelativeTo(null);
             modWizardWindow.setVisible(true);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            ExceptionAndLogHandler.log(ex);
         }
     }
 
     @SuppressWarnings("unused")
     private Config cfg;
+
+    private DataFlavor linkDataFlavor = null;
 
     public ModWizardWindow(final Config cfg, Mod mod) {
         if (mod == null) {
@@ -59,7 +146,7 @@ public class ModWizardWindow extends JFrame {
 
         this.cfg = cfg;
 
-        RoundedPanel mainpanel = new RoundedPanel(new MigLayout("wrap 5", "[][grow][][grow][20]", ""));
+        RoundedPanel mainpanel = new RoundedPanel(new MigLayout("wrap 5", "[][grow][][grow][26]", ""));
         mainpanel.getDelegate().setShady(false);
         new MoveMouseListener(mainpanel);
         mainpanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
@@ -119,15 +206,15 @@ public class ModWizardWindow extends JFrame {
                 ETableRecordBean<Dependency> record = new ETableRecordBean<Dependency>(headers.getColumnNames(), element);
                 dependencies.getEventSafe().addRecord(record);
             }
-            dependencies.packColumn(0, 4);
-            dependencies.packColumn(1, 4);
+            dependencies.getEventSafe().packColumn(0);
+            dependencies.getEventSafe().packColumn(1);
 
             mainpanel.add(new JScrollPane(dependencies), "span 4 6, growx, growy");
             mainpanel.add(ddXml, "span 1 6, growx, growy"); // drag-drop xml file dependency
         }
 
         {
-            ETable resources = new ETable(ecfg);
+            final ETable resources = new ETable(ecfg);
             ETableHeaders headers = new ETableHeaders();
             headers.add("sourcePath", String.class, true);
             headers.add("targetPath", String.class, true);
@@ -140,7 +227,24 @@ public class ModWizardWindow extends JFrame {
             }
 
             mainpanel.add(new JScrollPane(resources), "span 4 6, growx, growy");
-            mainpanel.add(new JLabel(""), "span 1 6");
+            JButton comp = new JButton("x");
+            comp.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        File a = new File(cfg.getMods(), archive.getText());
+                        List<Resource> findMapping = ModWizardWindow.findMapping(a);
+                        resources.getEventSafe().removeAllRecords();
+                        for (Resource r : findMapping) {
+                            ETableRecordBean<Resource> record = new ETableRecordBean<Resource>(resources.getEventSafe().getHeadernames(), r);
+                            resources.getEventSafe().addRecord(record);
+                        }
+                    } catch (Exception ex) {
+                        ExceptionAndLogHandler.log(ex);
+                    }
+                }
+            });
+            mainpanel.add(comp, "span 1 6, growx, growy");
         }
 
         ddArchive.setTransferHandler(new TransferHandler() {
@@ -148,19 +252,29 @@ public class ModWizardWindow extends JFrame {
 
             @Override
             public boolean canImport(TransferSupport support) {
-                return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
+                List<File> files = ModWizardWindow.this.accepts(support, "7z", "rar", "zip");
+
+                if (files == null) {
+                    return false;
+                }
+
+                support.setDropAction(TransferHandler.LINK);
+
+                if (files.size() > 1) {
+                    return false;
+                }
+
+                return true;
             }
 
             @Override
             public boolean importData(TransferSupport support) {
                 try {
-                    @SuppressWarnings("unchecked")
-                    List<File> files = List.class.cast(support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
-                    archive.setText(files.get(0).getName());
+                    archive.setText(ModWizardWindow.this.asFileList(support).get(0).getName());
 
                     return true;
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ExceptionAndLogHandler.log(ex);
                 }
                 return false;
             }
@@ -171,16 +285,21 @@ public class ModWizardWindow extends JFrame {
 
             @Override
             public boolean canImport(TransferSupport support) {
-                return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
+                List<File> files = ModWizardWindow.this.accepts(support, "xml");
+
+                if (files == null) {
+                    return false;
+                }
+
+                support.setDropAction(TransferHandler.LINK);
+
+                return true;
             }
 
             @Override
             public boolean importData(TransferSupport support) {
                 try {
-                    @SuppressWarnings("unchecked")
-                    List<File> files = List.class.cast(support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
-
-                    for (File file : files) {
+                    for (File file : ModWizardWindow.this.asFileList(support)) {
                         try {
                             Mod dependency = cfg.getXml().load(new FileInputStream(file), Mod.class);
                             Dependency element = new Dependency(dependency);
@@ -188,13 +307,13 @@ public class ModWizardWindow extends JFrame {
                                     element);
                             dependencies.getEventSafe().addRecord(record);
                         } catch (Exception ex) {
-                            ex.printStackTrace();
+                            ExceptionAndLogHandler.log(ex);
                         }
                     }
 
                     return true;
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ExceptionAndLogHandler.log(ex);
                 }
                 return false;
             }
@@ -206,9 +325,10 @@ public class ModWizardWindow extends JFrame {
             @Override
             public boolean canImport(TransferSupport support) {
                 try {
-                    return support.isDataFlavorSupported(new DataFlavor("application/x-java-url; class=java.net.URL"));
+                    support.setDropAction(TransferHandler.LINK);
+                    return support.isDataFlavorSupported(ModWizardWindow.this.getLinkflavor());
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ExceptionAndLogHandler.log(ex);
                 }
                 return false;
             }
@@ -216,12 +336,12 @@ public class ModWizardWindow extends JFrame {
             @Override
             public boolean importData(TransferSupport support) {
                 try {
-                    URL u = URL.class.cast(support.getTransferable().getTransferData(new DataFlavor("application/x-java-url; class=java.net.URL")));
+                    URL u = URL.class.cast(support.getTransferable().getTransferData(ModWizardWindow.this.getLinkflavor()));
                     url.setText(u.toExternalForm());
 
                     return true;
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ExceptionAndLogHandler.log(ex);
                 }
                 return false;
             }
@@ -233,5 +353,44 @@ public class ModWizardWindow extends JFrame {
         this.setSize(1280, 600);
         UIUtils.rounded(this);
         this.setResizable(false);
+    }
+
+    protected List<File> accepts(TransferSupport support, String... exts) {
+        if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+            return null;
+        }
+        List<File> files = this.asFileList(support);
+        if ((files == null) || (files.size() == 0)) {
+            return null;
+        }
+        for (File file : files) {
+            boolean success = false;
+            for (String ext : exts) {
+                if (file.getName().endsWith("." + ext)) {
+                    success = true;
+                }
+            }
+            if (!success) {
+                return null;
+            }
+        }
+        return files;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<File> asFileList(TransferSupport support) {
+        try {
+            return List.class.cast(support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
+        } catch (Exception ex) {
+            ExceptionAndLogHandler.log(ex);
+            return null;
+        }
+    }
+
+    protected DataFlavor getLinkflavor() throws ClassNotFoundException {
+        if (this.linkDataFlavor == null) {
+            this.linkDataFlavor = new DataFlavor("application/x-java-url; class=java.net.URL");
+        }
+        return this.linkDataFlavor;
     }
 }

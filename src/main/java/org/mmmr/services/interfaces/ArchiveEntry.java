@@ -25,11 +25,13 @@ public class ArchiveEntry {
 
     private transient int hashCode;
 
+    public Boolean dir;
+
     public ArchiveEntry(String path) {
-        this(path, null, null, null, null, null, null);
+        this(path, null, null, null, null, null, null, null);
     }
 
-    public ArchiveEntry(String path, Long size, Date creation, Date modification, Long compressedSize, String group, String user) {
+    public ArchiveEntry(String path, Long size, Date creation, Date modification, Long compressedSize, String group, String user, Boolean dir) {
         this.path = path == null ? null : new Path(path);
         this.size = size == null ? 0 : size;
         this.creation = creation;
@@ -37,6 +39,7 @@ public class ArchiveEntry {
         this.compressedSize = compressedSize == null ? 0 : compressedSize;
         this.group = group;
         this.user = user;
+        this.dir = dir;
     }
 
     /**

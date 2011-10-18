@@ -92,6 +92,10 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
                 in = new ZipInputStream(new FileInputStream(archive));
                 // in = new ZipInputStream(new FileInputStream(archive), java.nio.charset.Charset.forName(this.charset));
             } catch (Throwable ex) {
+                // FIXME
+            }
+            if (in == null) {
+                throw new NullPointerException();
             }
             ZipEntry ze;
             byte[] buffer = new byte[1024 * 8 * 4];
@@ -146,6 +150,10 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
                 // in = new ZipInputStream(new FileInputStream(archive), java.nio.charset.Charset.forName(this.charset));
                 in = new ZipInputStream(new FileInputStream(archive));
             } catch (Throwable ex) {
+                // FIXME
+            }
+            if (in == null) {
+                throw new NullPointerException();
             }
             ZipEntry ze;
             while ((ze = in.getNextEntry()) != null) {
@@ -153,7 +161,7 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
                     continue;
                 }
                 entries.add(new ArchiveEntry(ze.getName(), ze.getSize(), new Date(ze.getTime()), new Date(ze.getTime()), ze.getCompressedSize(),
-                        null, null));
+                        null, null, ze.isDirectory()));
             }
         } finally {
             if (in != null) {
