@@ -15,6 +15,9 @@ import org.mmmr.ModPack;
 import org.mmmr.Resource;
 import org.mmmr.services.impl.ExceptionAndLogHandlerLog4j;
 
+/**
+ * @author Jurgen
+ */
 public class DBTstSuperClass {
     protected static DBService dbService;
 

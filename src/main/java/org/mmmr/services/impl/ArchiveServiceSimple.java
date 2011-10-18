@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -73,7 +74,7 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
      *      org.mmmr.services.interfaces.ArchiveEntryMatcher)
      */
     @Override
-    public void extract(File archive, ArchiveOutputStreamBuilder out, ArchiveEntryMatcher matcher) throws IOException {
+    public Collection<ArchiveEntry> extract(File archive, ArchiveOutputStreamBuilder out, ArchiveEntryMatcher matcher) throws IOException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("extract");
     }
@@ -83,7 +84,7 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
      * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File)
      */
     @Override
-    public void extract(File archive, File basedir) throws IOException {
+    public Collection<ArchiveEntry> extract(File archive, File basedir) throws IOException {
         ZipInputStream in = null;
         OutputStream out = null;
         try {
@@ -125,6 +126,7 @@ public class ArchiveServiceSimple implements ArchiveServiceI {
                 }
             }
         }
+        return null;
     }
 
     public String getCharset() {

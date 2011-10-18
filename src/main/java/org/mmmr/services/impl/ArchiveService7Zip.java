@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.sevenzipjbinding.ExtractAskMode;
 import net.sf.sevenzipjbinding.ExtractOperationResult;
@@ -62,24 +65,37 @@ public class ArchiveService7Zip extends ArchiveServiceSimple {
 
     /**
      * 
-     * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, org.mmmr.services.interfaces.ArchiveOutputStreamBuilder,
+     * @see org.mmmr.services.impl.ArchiveServiceSimple#extract(java.io.File, org.mmmr.services.interfaces.ArchiveOutputStreamBuilder,
      *      org.mmmr.services.interfaces.ArchiveEntryMatcher)
      */
     @Override
-    public void extract(final File archive, final ArchiveOutputStreamBuilder target, final ArchiveEntryMatcher matcher) throws IOException {
-        this.extract(archive, target, matcher, null);
+    public Collection<ArchiveEntry> extract(final File archive, final ArchiveOutputStreamBuilder target, final ArchiveEntryMatcher matcher)
+            throws IOException {
+        return this.extract(archive, target, matcher, null);
     }
 
-    public void extract(final File archive, final ArchiveOutputStreamBuilder target, final ArchiveEntryMatcher matcher, final String pwd)
-            throws IOException {
+    public Collection<ArchiveEntry> extract(final File archive, final ArchiveOutputStreamBuilder target, final ArchiveEntryMatcher matcher,
+            final String pwd) throws IOException {
         final Wrapper<RandomAccessFile> randomAccessFile = new Wrapper<RandomAccessFile>();
         final Wrapper<ISevenZipInArchive> inArchive = new Wrapper<ISevenZipInArchive>();
         try {
             randomAccessFile.v = new RandomAccessFile(archive, "r");
             inArchive.v = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile.v));
-            int[] in = new int[inArchive.v.getNumberOfItems()];
+            List<Integer> indexesToExtract = new ArrayList<Integer>();
+            final Map<Integer, ArchiveEntry> map = new HashMap<Integer, ArchiveEntry>();
+            for (int i = 0; i < inArchive.v.getNumberOfItems(); i++) {
+                if ((Boolean) inArchive.v.getProperty(i, PropID.IS_FOLDER)) {
+                    continue;
+                }
+                ArchiveEntry ae = this.createEntry(inArchive.v, i);
+                if (matcher.matches(ae)) {
+                    indexesToExtract.add(i);
+                    map.put(i, ae);
+                }
+            }
+            int[] in = new int[indexesToExtract.size()];
             for (int i = 0; i < in.length; i++) {
-                in[i] = i;
+                in[i] = indexesToExtract.get(i);
             }
             final Wrapper<OutputStream> outputStream = new Wrapper<OutputStream>();
             inArchive.v.extract(in, false, new Callback() {
@@ -94,10 +110,7 @@ public class ArchiveService7Zip extends ArchiveServiceSimple {
                     if (skipExtraction || (extractAskMode != ExtractAskMode.EXTRACT)) {
                         return null;
                     }
-                    ArchiveEntry entry = ArchiveService7Zip.this.createEntry(inArchive.v, idx);
-                    if (!matcher.matches(entry)) {
-                        return null;
-                    }
+                    ArchiveEntry entry = map.get(idx);
                     try {
                         outputStream.v = new BufferedOutputStream(target.createOutputStream(entry));
                     } catch (IOException ex) {
@@ -148,6 +161,8 @@ public class ArchiveService7Zip extends ArchiveServiceSimple {
                     //
                 }
             });
+
+            return map.values();
         } catch (InvocationException ex) {
             throw (IOException) ex.getCause();
         } catch (SevenZipException ex) {
@@ -175,8 +190,8 @@ public class ArchiveService7Zip extends ArchiveServiceSimple {
      * @see org.mmmr.services.interfaces.ArchiveServiceI#extract(java.io.File, java.io.File)
      */
     @Override
-    public void extract(File archive, File target) throws IOException {
-        this.extract(archive, new DefaultArchiveOutputStreamBuilder(target), new DefaultArchiveEntryMatcher());
+    public Collection<ArchiveEntry> extract(File archive, File target) throws IOException {
+        return this.extract(archive, new DefaultArchiveOutputStreamBuilder(target), new DefaultArchiveEntryMatcher());
     }
 
     /**

@@ -12,6 +12,9 @@ import org.mmmr.Mod;
 import org.mmmr.Mode;
 import org.mmmr.Resource;
 
+/**
+ * @author Jurgen
+ */
 public class XmlTest {
     @Test
     public void test() {

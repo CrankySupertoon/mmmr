@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import org.mmmr.services.Config;
 import org.mmmr.services.swing.common.ETable;
 import org.mmmr.services.swing.common.ETableConfig;
 import org.mmmr.services.swing.common.ETableHeaders;
@@ -22,6 +21,9 @@ import org.mmmr.services.swing.common.ETableRecordArray;
 import org.mmmr.services.swing.common.EnumTableCellEditor;
 import org.mmmr.services.swing.common.UIUtils;
 
+/**
+ * @author Jurgen
+ */
 public class TableDemo {
     public static enum EnumTest {
         VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8;

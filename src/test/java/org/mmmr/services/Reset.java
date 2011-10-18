@@ -5,6 +5,9 @@ import java.util.Scanner;
 
 import org.mmmr.services.impl.ArchiveService7Zip;
 
+/**
+ * @author Jurgen
+ */
 public class Reset {
     public static void main(String[] args) {
         try {

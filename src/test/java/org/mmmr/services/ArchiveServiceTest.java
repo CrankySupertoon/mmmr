@@ -1,6 +1,7 @@
 package org.mmmr.services;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Collections;
 
 import junit.framework.Assert;
@@ -9,7 +10,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mmmr.services.impl.ArchiveService7Zip;
 import org.mmmr.services.impl.ExceptionAndLogHandlerLog4j;
+import org.mmmr.services.interfaces.ArchiveEntry;
 
+/**
+ * @author Jurgen
+ */
 public class ArchiveServiceTest {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -17,7 +22,7 @@ public class ArchiveServiceTest {
     }
 
     @Test
-    public void test() {
+    public void test1() {
         try {
             ArchiveService7Zip helper = new ArchiveService7Zip();
             String[] formats = { "zip", "rar", "7z" };
@@ -38,5 +43,21 @@ public class ArchiveServiceTest {
             ex.printStackTrace();
             Assert.fail(String.valueOf(ex));
         }
+    }
+
+    @Test
+    public void test2() {
+        try {
+            File a = new File("src/test/resources/1-5.7z");
+            ArchiveService7Zip s = new ArchiveService7Zip();
+            Collection<ArchiveEntry> as = s.extract(a, new MockArchiveOutputStreamBuilder(),
+                    new DefaultArchiveEntryMatcher(Collections.singletonList("1.txt")));
+            Assert.assertEquals(1, as.size());
+            Assert.assertEquals("1.txt", as.iterator().next().path.getPath());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Assert.fail(String.valueOf(ex));
+        }
+
     }
 }

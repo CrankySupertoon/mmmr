@@ -10,6 +10,9 @@ import org.mmmr.Mod;
 import org.mmmr.Resource;
 import org.mmmr.services.impl.ArchiveService7Zip;
 
+/**
+ * @author Jurgen
+ */
 public class EFixTest {
     public static String RESOURCE = "extract-problem/Millenaire1.6.8.zip";
 

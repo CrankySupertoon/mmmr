@@ -11,6 +11,9 @@ import org.mmmr.Mod;
 import org.mmmr.Mode;
 import org.mmmr.Resource;
 
+/**
+ * @author Jurgen
+ */
 public class DTDGenTst {
     public static void main(String[] args) {
         try {
