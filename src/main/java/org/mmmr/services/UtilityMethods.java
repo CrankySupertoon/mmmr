@@ -33,6 +33,8 @@ import java.util.StringTokenizer;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -284,6 +286,10 @@ public class UtilityMethods {
 
     public static String getDrive(File file) throws IOException {
         return file.getCanonicalPath().substring(0, 2);
+    }
+
+    public static Icon getIcon(String path) {
+        return new ImageIcon(UtilityMethods.class.getClassLoader().getResource(path));
     }
 
     @SuppressWarnings("restriction")

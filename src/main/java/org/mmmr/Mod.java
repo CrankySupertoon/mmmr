@@ -272,6 +272,20 @@ public class Mod implements Comparable<Mod>, PersistentObject, Installable {
         return this.getInstallationDate() != null;
     }
 
+    public void removeAllDependencies() {
+        for (Dependency d : this.dependencies) {
+            d.setMod(null);
+        }
+        this.dependencies.clear();
+    }
+
+    public void removeAllResources() {
+        for (Resource r : this.resources) {
+            r.setMod(null);
+        }
+        this.resources.clear();
+    }
+
     public void setActualUrl(String actualUrl) {
         this.actualUrl = actualUrl;
     }

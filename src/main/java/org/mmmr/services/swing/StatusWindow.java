@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,9 +15,10 @@ import javax.swing.WindowConstants;
 
 import org.mmmr.services.Config;
 import org.mmmr.services.Messages;
+import org.mmmr.services.UtilityMethods;
+import org.mmmr.services.swing.common.RoundedPanel;
 import org.mmmr.services.swing.common.UIUtils;
 import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
-import org.mmmr.services.swing.common.RoundedPanel;
 
 /**
  * @author Jurgen
@@ -33,7 +32,7 @@ public class StatusWindow extends JFrame {
         public StatusPanel(String text, String iconPath) {
             super(new BorderLayout());
             this.setOpaque(false);
-            this.statuslabel = new JLabel(text, StatusWindow.getIcon(iconPath), SwingConstants.CENTER);
+            this.statuslabel = new JLabel(text, UtilityMethods.getIcon(iconPath), SwingConstants.CENTER);
             this.statuslabel.setVerticalAlignment(SwingConstants.CENTER);
             this.statuslabel.setOpaque(false);
             this.statuslabel.setFont(StatusWindow.this.cfg.getFontLarge());
@@ -59,16 +58,13 @@ public class StatusWindow extends JFrame {
         @Override
         public void setStatus(String text, Boolean success) {
             this.statuslabel.setText(text);
-            this.statuslabel.setIcon(success == null ? StatusWindow.getIcon("images/waiting.png") : success ? StatusWindow.getIcon("images/ok.png") //$NON-NLS-1$ //$NON-NLS-2$
-                    : StatusWindow.getIcon("images/nok.png")); //$NON-NLS-1$
+            this.statuslabel
+                    .setIcon(success == null ? UtilityMethods.getIcon("images/waiting.png") : success ? UtilityMethods.getIcon("images/ok.png") //$NON-NLS-1$ //$NON-NLS-2$
+                            : UtilityMethods.getIcon("images/nok.png")); //$NON-NLS-1$
         }
     }
 
     private static final long serialVersionUID = -4214468834438916001L;
-
-    private static Icon getIcon(String path) {
-        return new ImageIcon(StatusWindow.class.getClassLoader().getResource(path));
-    }
 
     private Config cfg;
 
