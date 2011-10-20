@@ -70,6 +70,15 @@ public class Path implements Comparable<Path> {
         return new EqualsBuilder().append(this.path, castOther.path).isEquals();
     }
 
+    public String getLastPart() {
+        String[] parts = this.getParts();
+        return parts[parts.length - 1];
+    }
+
+    public String[] getParts() {
+        return this.path.split("/");
+    }
+
     /**
      * returns string representation
      */

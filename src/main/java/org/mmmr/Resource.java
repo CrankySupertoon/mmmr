@@ -77,11 +77,18 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         file.setResource(this);
     }
 
+    /**
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(final Resource other) {
         return new CompareToBuilder().append(this.sourcePath, other.sourcePath).append(this.targetPath, other.targetPath).toComparison();
     }
 
+    /**
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(final Object other) {
         if (!(other instanceof Resource)) {
@@ -101,6 +108,10 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         return this.files;
     }
 
+    /**
+     * 
+     * @see org.mmmr.PersistentObject#getId()
+     */
     @Override
     @XmlTransient
     public Long getId() {
@@ -137,6 +148,10 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         return this.ver;
     }
 
+    /**
+     * 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(this.sourcePath).append(this.targetPath).toHashCode();
@@ -178,9 +193,13 @@ public class Resource implements Comparable<Resource>, PersistentObject {
         this.ver = ver;
     }
 
+    /**
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("exclude", this.exclude).append("include", this.include).append("mod", this.mod) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                .append("modPack", this.modPack).append("sourcePath", this.sourcePath).append("targetPath", this.targetPath).toString(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return new ToStringBuilder(this).append("exclude", this.exclude).append("include", this.include) //$NON-NLS-1$ //$NON-NLS-2$ 
+                .append("sourcePath", this.sourcePath).append("targetPath", this.targetPath).toString(); //$NON-NLS-1$ //$NON-NLS-2$ 
     }
 }

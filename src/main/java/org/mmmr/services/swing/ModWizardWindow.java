@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,9 +75,11 @@ public class ModWizardWindow extends JFrame {
         for (ArchiveEntry ae : ArchiveService.list(archive)) {
             if (ae.path.getPath().toLowerCase().contains("read")) {//$NON-NLS-1$ 
                 //
-            } else if (ae.dir && ae.path.getPath().toLowerCase().contains("jar")) {//$NON-NLS-1$ 
-                jarfolder = true;
-                mapping.put(new EnhancedPath(ae), "bin/" + Config.MINECRAFT_JAR);//$NON-NLS-1$ 
+            } else if (ae.dir && ae.path.getPath().toLowerCase().contains("jar")) {//$NON-NLS-1$
+                if (ae.path.getLastPart().toLowerCase().contains("jar")) {//$NON-NLS-1$
+                    jarfolder = true;
+                    mapping.put(new EnhancedPath(ae), "bin/" + Config.MINECRAFT_JAR);//$NON-NLS-1$ 
+                }
             } else if (ae.dir && ae.path.getPath().toLowerCase().contains("resource")) {//$NON-NLS-1$ 
                 mapping.put(new EnhancedPath(ae), "resources");//$NON-NLS-1$ 
             } else if (ae.dir && ae.path.getPath().toLowerCase().contains("mods")) {//$NON-NLS-1$ 
@@ -84,6 +87,9 @@ public class ModWizardWindow extends JFrame {
             } else {
                 //
             }
+        }
+        if (mapping.size() == 0) {
+            return Collections.singletonList(new Resource("./", "bin/" + Config.MINECRAFT_JAR));
         }
         Path[] firstRun = mapping.keySet().toArray(new Path[0]);
         for (ArchiveEntry ae : ArchiveService.list(archive)) {
@@ -120,13 +126,17 @@ public class ModWizardWindow extends JFrame {
         }
         for (Map.Entry<EnhancedPath, String> e : mapping.entrySet()) {
             if (e.getKey().dir) {
-                resources.add(new Resource(("".equals(e.getKey().getPath()) ? "." : e.getKey().getPath()) + "/", ("".equals(e.getValue()) ? "." : e
-                        .getValue()) + "/"));
+                if ("bin/minecraft.jar".equals(e.getValue())) {
+                    resources.add(new Resource(("".equals(e.getKey().getPath()) ? "." : e.getKey().getPath()) + "/", e.getValue()));
+                } else {
+                    resources.add(new Resource(("".equals(e.getKey().getPath()) ? "." : e.getKey().getPath()) + "/", ("".equals(e.getValue()) ? "."
+                            : e.getValue()) + "/"));
+                }
             } else {
                 resources.add(new Resource(e.getKey().getPath(), e.getValue()));
             }
         }
-
+        Collections.sort(resources);
         return resources;
     }
 
