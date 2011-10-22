@@ -1,4 +1,4 @@
-<mod mode="SERVER" archive="RedstoneRemote_Server_1.0.0.zip" mc="1.8.1" name="Redstone Remote" url="http://www.minecraftforum.net/topic/554413-181smp-power-crystals-mods-minefactory-reloaded-122-redstone-remote-100/" version="1.0.0">
+<mod mode="SERVER" archive="RedstoneRemote_Server_1.0.1.zip" mc="1.8.1" name="Redstone Remote" url="http://www.minecraftforum.net/topic/554413-181smp-power-crystals-mods-minefactory-reloaded-130-redstone-remote-101/#rr" version="1.0.1">
     <dependencies>
 		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
     </dependencies>

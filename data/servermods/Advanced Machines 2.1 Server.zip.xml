@@ -1,0 +1,8 @@
+<mod mode="SERVER" archive="Advanced Machines 2.1 Server.zip" mc="1.8.1" name="Advanced Machines" url="http://forum.industrial-craft.net/index.php?page=Thread&threadID=1174" version="2.1">
+    <dependencies>
+		<mod name="Industrial Craft ²" url="http://forum.industrial-craft.net/index.php?page=Thread&amp;threadID=1361" version="1.15">
+    </dependencies>
+    <resources>
+        <resource targetpath="mods/Advanced Machines 2.1 Server.zip"/>
+    </resources>
+</mod>

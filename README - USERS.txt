@@ -26,18 +26,18 @@ COMPLETED FEATURES
 - visit mod site links to check updates, information
 - favorite links (additional ones can be added by dragging a hyperlink from the browser to the 'data\links' directory)
 
-FEATURES IN PROGRESS
---------------------
+FEATURES - IN PROGRESS
+----------------------
 
 - install and uninstall mods, warns about file conflicts (85% done)
 - reorder mods to fix conflicts between compatible mods, or remove one of both if impossible, drag&drop (25% done)
+- create mod install configurations with wizard based on existing or create new ones (40% done)
 
-FEATURES NOT STARTED
---------------------
+FEATURES - NOT STARTED
+----------------------
 
 - backup and restore world and character data and keyboard setting, includes load order list for reference
 - check mod install configurations (drag and drop) when a user creates one himself by hand
-- create mod install configurations with wizard based on existing or create new ones
 - create merged patches (to fix incompatible mods) with wizard and install them as mod
 - mail bugs, feature-request and new and updated mod install configurations to include in MMMR
 - help webpages available in MMMR
@@ -49,6 +49,10 @@ FEATURES NOT STARTED
   select highest version by default, gray out when only a single version is available
 - management of minecraft server
 - management of minecraft server mods
+- screenshot links (web or file) or internal (base64) in mod cfgs
+- check for incompatibilities when installing archives in the mods folder just like overwriting files
+- make "archive" in mod cfg optional, take the same name as the cfg instead and search for archive with that name
+- when an archive needs to be copied to the mods folder make the arhive name optional, take the same as "archive"
 
 SCRAPPED FEATURES OR FEATURES ON HOLD
 -------------------------------------

@@ -1,8 +1,0 @@
-<mod mode="SERVER" archive="MinefactoryReloaded_Server_1.2.2.zip" mc="1.8.1" name="MineFactory Reloaded" url="http://www.minecraftforum.net/topic/554413-181smp-power-crystals-mods-minefactory-reloaded-122-redstone-remote-100/" version="1.2.2">
-    <dependencies>
-		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
-    </dependencies>
-    <resources>
-        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>
