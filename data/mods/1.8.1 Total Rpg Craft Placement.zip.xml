@@ -1,0 +1,8 @@
+<mod archive="1.8.1 Total Rpg Craft Placement.zip" mc="1.8.1" name="Total RPG Craft" url="http://www.minecraftforum.net/topic/530417-181temp-updatetotal-rpg-craft-080b-for-181-simple-farming/" version="0.8.0b">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

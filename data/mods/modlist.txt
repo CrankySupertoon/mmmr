@@ -1,5 +1,7 @@
 1318352017025::1.8 Repair Tools and More Mod v4.rar.xml
+1319285080672::1.8.1 Total Rpg Craft Placement.zip.xml
 1318356458541::181v1.2WeepingAngels.zip.xml
+1319291671663::Advenced Machines V2.1 Client.zip.xml
 1318352017064::airshipV2.51.1.8.1.zip.xml
 1318352017125::AlchemyandMagic.zip.xml
 1318352016987::Animal_Transport_1.1.0.zip.xml
@@ -74,6 +76,7 @@
 1318352017062::mod_LevelUp v1.4.zip - Zombe.xml
 1318352017138::mod_LevelUp v1.4.zip.xml
 1318352017051::mod_Medication.zip.xml
+1319291709853::mod_PowerSystems.zip.xml
 1319282386712::mod_Zeppelin-client-1.8.1.0.17.zip.xml
 1319067123826::MoNightmare 2.0.zip.xml
 1318352017093::Moods 1.8.1 v3.zip.xml
@@ -110,6 +113,7 @@
 1318352017161::SMPMoCreatures_v1.3.1BETA.7z.xml
 1318352017128::sprint_v0.3.rar.xml
 1318352017048::Starting Inventory.zip.xml
+1319291131185::TaleOfKingdoms Ver 1.0.3.zip.xml
 1318352017035::Teams 1.8.1 v3.zip.xml
 1318352017034::TF2Sentry_Beta_v0.5.zip.xml
 1318352017160::TF2Teleporter_v1.4.zip.xml

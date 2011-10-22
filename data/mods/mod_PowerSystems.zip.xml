@@ -1,6 +1,6 @@
-<mod archive="mod_PowerSystems.zip" mc="1.8.1" name="Power Systems" url="http://forum.industrial-craft.net/index.php?page=Thread&threadID=1143" version="1.1">
+<mod archive="mod_PowerSystems.zip" mc="1.8.1" name="Power Systems" url="http://forum.industrial-craft.net/index.php?page=Thread&amp;threadID=1143" version="1.1">
     <dependencies>
-        <mod name="Industrial Craft ²" url="http://forum.industrial-craft.net/index.php?page=Thread&amp;threadID=1361" version="1.15"/>
+        <mod name="Industrial Craft Â²" url="http://forum.industrial-craft.net/index.php?page=Thread&amp;threadID=1361" version="1.15"/>
     </dependencies>
     <resources>
         <resource targetpath="mods/mod_PowerSystems.zip"/>
