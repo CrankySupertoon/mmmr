@@ -396,6 +396,22 @@ public class UtilityMethods {
         method.invoke(sysloader, new Object[] { jar.toURI().toURL() });
     }
 
+    public static void main(String[] args) {
+        for (File f : new File("C:/java/workspaces/TRUNK").listFiles()) {
+            try {
+                for (File ff : f.listFiles()) {
+                    File fff = new File(ff, "target-eclipse/.svn");
+                    if (fff.exists()) {
+                        UtilityMethods.delete(fff);
+                        System.out.println(fff);
+                    }
+                }
+            } catch (NullPointerException ex) {
+                // TODO: handle exception
+            }
+        }
+    }
+
     public static File newDir(File parent, String relative) {
         File newfile = new File(parent, relative);
         newfile.mkdirs();

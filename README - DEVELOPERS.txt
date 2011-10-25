@@ -43,7 +43,31 @@ it will download all libraries that MMMR uses to a directory called '.m2' under 
 
 8) if you installed more than 1 JDK/JRE: menu 'Window', 'Preferences', 'Java', 'Installed JRE's' and chech if the default selected options is the JDK you just installed, when not: click 'Add', 'Standard JVM', click 'Directory' and browse to 'C:\Program Files\Java\jdk1.7.0' and check it, you can remove the other ones
 
-9) the project is now ready to use
+9) optional: I use the following as default VM arguments "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:+UseFastAccessorMethods -ea -Xms64m -Xmx512m -Xss2048k -Xmn32m -XX:PermSize=64m -XX:MaxPermSize=512m -XX:SurvivorRatio=32 -XX:MinHeapFreeRatio=40 -XX:MaxHeapFreeRatio=70 -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintClassHistogram -XX:+ShowMessageBoxOnError -XX:+UseBiasedLocking -Dswing.aatext=true -XX:+DoEscapeAnalysis -XX:+EliminateLocks -Dsun.java2d.d3d=true -Dsun.java2d.translaccel=true -Dsun.java2d.ddforcevram=true -Dsun.java2d.ddscale=true -Dsun.java2d.ddoffscreen=true"
+
+10) optional: edit eclipse.ini and add on top (change path when you have another version of JDK/JRE installed)
+----------------------------
+-vm
+C:/Progra~1/Java/jdk1.7.0/bin/javaw.exe
+----------------------------
+and on the bottom, replace the following by
+----------------------------
+-Dosgi.requiredJavaVersion=...
+-Xms...m
+-Xmx...m
+----------------------------
+-Dosgi.requiredJavaVersion=1.6
+-Xms256m
+-Xmx1024m
+-XX:PermSize=256m
+-XX:MaxPermSize=256m
+-XX:+UnlockExperimentalVMOptions
+-XX:+UseG1GC
+-XX:+UseFastAccessorMethods
+-Dfile.encoding=Cp1252
+----------------------------
+
+11) the project is now ready to use
 
 EXTRA
 -----

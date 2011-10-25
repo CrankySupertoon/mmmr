@@ -1,0 +1,43 @@
+### basic ###
+-Xms64m
+-Xmx512m
+-ea
+-Xss2048k
+-Xmn32m
+
+### advanced ###
+-XX:PermSize=64m
+-XX:MaxPermSize=512m
+-XX:SurvivorRatio=32
+-XX:MinHeapFreeRatio=40
+-XX:MaxHeapFreeRatio=70
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:+PrintClassHistogram
+-XX:+ShowMessageBoxOnError
+-XX:+UseBiasedLocking
+-XX:+DoEscapeAnalysis
+-XX:+EliminateLocks
+-XX:+UnlockExperimentalVMOptions
+-XX:+UseFastAccessorMethods
+
+### only on 64 bit ###
+-XX:+UseCompressedOops
+
+### drawing ###
+-Dswing.aatext=true
+-Dsun.java2d.d3d=true
+-Dsun.java2d.translaccel=true
+-Dsun.java2d.ddforcevram=true
+-Dsun.java2d.ddscale=true
+-Dsun.java2d.ddoffscreen=true
+-XX:UseSSE=3
+
+### GC option ###
+-XX:+UseG1GC
+#-Xincgc -XX:+UseConcMarkSweepGC
+
+### GC common ###
+-XX:+UseAdaptiveGCBoundary
+-XX:MaxGCPauseMillis=500
+-XX:-UseGCOverheadLimit
+-Xnoclassgc
