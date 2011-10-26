@@ -15,7 +15,8 @@
 25496::org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar
 9752::org/slf4j/slf4j-log4j12/1.6.2/slf4j-log4j12-1.6.2.jar
 284220::commons-lang/commons-lang/2.6/commons-lang-2.6.jar
-838837::net/java/dev/glazedlists/glazedlists_java15/1.8.0/glazedlists_java15-1.8.0.jar
 206711::commons-beanutils/commons-beanutils-core/1.8.3/commons-beanutils-core-1.8.3.jar
 644148::javassist/javassist/3.12.1.GA/javassist-3.12.1.GA.jar
 201819::com/miglayout/miglayout/3.7.4/miglayout-3.7.4.jar
+78322::org/swingeasy/swing-easy/0.0.1/swing-easy-0.0.1.jar
+838837::net/java/dev/glazedlists/glazedlists_java15/1.8.0/glazedlists_java15-1.8.0.jar
