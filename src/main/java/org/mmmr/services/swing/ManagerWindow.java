@@ -29,9 +29,9 @@ import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
 import org.mmmr.services.UtilityMethods;
-import org.mmmr.services.swing.common.RoundedPanel;
-import org.mmmr.services.swing.common.UIUtils;
-import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
+import org.swingeasy.RoundedPanel;
+import org.swingeasy.UIUtils;
+import org.swingeasy.UIUtils.MoveMouseListener;
 
 /**
  * @author Jurgen

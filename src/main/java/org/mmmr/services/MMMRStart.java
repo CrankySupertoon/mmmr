@@ -3,7 +3,7 @@ package org.mmmr.services;
 import javax.swing.ToolTipManager;
 
 import org.mmmr.services.swing.StatusWindow;
-import org.mmmr.services.swing.common.UIUtils;
+import org.swingeasy.UIUtils;
 
 /**
  * @author Jurgen

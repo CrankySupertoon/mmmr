@@ -43,9 +43,9 @@ import javax.swing.WindowConstants;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.mmmr.services.swing.common.RoundedOptionPane;
-import org.mmmr.services.swing.common.UIUtils;
-import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
+import org.swingeasy.RoundedOptionPane;
+import org.swingeasy.UIUtils;
+import org.swingeasy.UIUtils.MoveMouseListener;
 
 /**
  * do not put methods in here that use non standard Java classes

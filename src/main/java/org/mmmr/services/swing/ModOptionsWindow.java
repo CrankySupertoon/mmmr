@@ -62,27 +62,26 @@ import org.mmmr.services.InstallationService;
 import org.mmmr.services.Messages;
 import org.mmmr.services.ModList;
 import org.mmmr.services.UtilityMethods;
-import org.mmmr.services.swing.common.CheckBoxTitledBorder;
-import org.mmmr.services.swing.common.ETable;
-import org.mmmr.services.swing.common.ETable.ETableModel;
-import org.mmmr.services.swing.common.ETableConfig;
-import org.mmmr.services.swing.common.ETableHeaders;
-import org.mmmr.services.swing.common.ETableI;
-import org.mmmr.services.swing.common.ETableRecord;
-import org.mmmr.services.swing.common.ETableRecordBean;
-import org.mmmr.services.swing.common.RoundedPanel;
-import org.mmmr.services.swing.common.TristateButtonModel;
-import org.mmmr.services.swing.common.TristateCheckBox;
-import org.mmmr.services.swing.common.TristateState;
-import org.mmmr.services.swing.common.UIUtils;
-import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
+import org.swingeasy.CheckBoxTitledBorder;
+import org.swingeasy.ETable;
+import org.swingeasy.ETable.ETableModel;
+import org.swingeasy.ETableConfig;
+import org.swingeasy.ETableHeaders;
+import org.swingeasy.ETableI;
+import org.swingeasy.ETableRecord;
+import org.swingeasy.ETableRecordBean;
+import org.swingeasy.RoundedPanel;
+import org.swingeasy.TristateButtonModel;
+import org.swingeasy.TristateCheckBox;
+import org.swingeasy.TristateState;
+import org.swingeasy.UIUtils;
+import org.swingeasy.UIUtils.MoveMouseListener;
 
 /**
  * @author Jurgen
  */
 public class ModOptionsWindow extends JFrame {
-    private class CustomMatcher extends org.mmmr.services.swing.common.ETable.Filter<ModOption> implements ItemListener, DocumentListener,
-            ActionListener {
+    private class CustomMatcher extends ETable.Filter<ModOption> implements ItemListener, DocumentListener, ActionListener {
         private TristateCheckBox installed = new TristateCheckBox(Messages.getString("ManagerWindow.installed"), null, TristateState.INDETERMINATE); //$NON-NLS-1$
 
         private TristateCheckBox available = new TristateCheckBox(Messages.getString("ManagerWindow.available"), null, TristateState.INDETERMINATE); //$NON-NLS-1$

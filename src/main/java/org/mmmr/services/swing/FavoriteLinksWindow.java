@@ -36,12 +36,12 @@ import org.mmmr.services.Config;
 import org.mmmr.services.DownloadingService;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.Messages;
-import org.mmmr.services.swing.common.ETable;
-import org.mmmr.services.swing.common.ETableHeaders;
-import org.mmmr.services.swing.common.ETableRecordArray;
-import org.mmmr.services.swing.common.RoundedPanel;
-import org.mmmr.services.swing.common.UIUtils;
-import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
+import org.swingeasy.ETable;
+import org.swingeasy.ETableHeaders;
+import org.swingeasy.ETableRecordArray;
+import org.swingeasy.RoundedPanel;
+import org.swingeasy.UIUtils;
+import org.swingeasy.UIUtils.MoveMouseListener;
 
 /**
  * @author Jurgen

@@ -44,14 +44,14 @@ import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.XmlService;
 import org.mmmr.services.interfaces.ArchiveEntry;
 import org.mmmr.services.interfaces.Path;
-import org.mmmr.services.swing.common.ETable;
-import org.mmmr.services.swing.common.ETableConfig;
-import org.mmmr.services.swing.common.ETableHeaders;
-import org.mmmr.services.swing.common.ETableRecord;
-import org.mmmr.services.swing.common.ETableRecordBean;
-import org.mmmr.services.swing.common.RoundedPanel;
-import org.mmmr.services.swing.common.UIUtils;
-import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
+import org.swingeasy.ETable;
+import org.swingeasy.ETableConfig;
+import org.swingeasy.ETableHeaders;
+import org.swingeasy.ETableRecord;
+import org.swingeasy.ETableRecordBean;
+import org.swingeasy.RoundedPanel;
+import org.swingeasy.UIUtils;
+import org.swingeasy.UIUtils.MoveMouseListener;
 
 /**
  * @author Jurgen

@@ -38,9 +38,9 @@ import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.UtilityMethods;
 import org.mmmr.services.Messages;
 import org.mmmr.services.NiceFont;
-import org.mmmr.services.swing.common.UIUtils;
-import org.mmmr.services.swing.common.UIUtils.MoveMouseListener;
-import org.mmmr.services.swing.common.RoundedPanel;
+import org.swingeasy.UIUtils;
+import org.swingeasy.UIUtils.MoveMouseListener;
+import org.swingeasy.RoundedPanel;
 
 public class HDFontWindow extends JFrame {
     private static final long serialVersionUID = -8166133499677459166L;

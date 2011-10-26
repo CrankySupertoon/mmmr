@@ -13,13 +13,13 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import org.mmmr.services.swing.common.ETable;
-import org.mmmr.services.swing.common.ETableConfig;
-import org.mmmr.services.swing.common.ETableHeaders;
-import org.mmmr.services.swing.common.ETableI;
-import org.mmmr.services.swing.common.ETableRecordArray;
-import org.mmmr.services.swing.common.EnumTableCellEditor;
-import org.mmmr.services.swing.common.UIUtils;
+import org.swingeasy.ETable;
+import org.swingeasy.ETableConfig;
+import org.swingeasy.ETableHeaders;
+import org.swingeasy.ETableI;
+import org.swingeasy.ETableRecordArray;
+import org.swingeasy.EnumTableCellEditor;
+import org.swingeasy.UIUtils;
 
 /**
  * @author Jurgen
