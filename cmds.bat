@@ -56,6 +56,11 @@ call mvn release:prepare
 call mvn release:perform
 goto start
 
+:linstall
+cls
+call mvn install
+goto start
+
 :lcls
 cls
 goto start
