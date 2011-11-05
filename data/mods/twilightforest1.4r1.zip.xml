@@ -1,0 +1,8 @@
+<mod archive="twilightforest1.4r1.zip" mc="1.8.1" name="The Twilight Forest" url="http://www.minecraftforum.net/topic/561673-181the-twilight-forest-v14/" version="1.4">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

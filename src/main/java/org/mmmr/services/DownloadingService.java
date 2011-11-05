@@ -26,6 +26,10 @@ public class DownloadingService {
         DownloadingService.getDownloadingService().downloadURL(url, target);
     }
 
+    public static boolean exists(String url) {
+        return DownloadingService.getDownloadingService().exists(url);
+    }
+
     private static DownloadingServiceI getDownloadingService() {
         if (DownloadingService.downloadingService instanceof DownloadingServiceSimple) {
             try {

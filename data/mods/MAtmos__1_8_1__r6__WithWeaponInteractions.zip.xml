@@ -1,0 +1,9 @@
+<mod mode="SMP" archive="MAtmos__1_8_1__r6__WithWeaponInteractions.zip" mc="1.8.1" name="MAtmos with Weapon Interactions expansion" url="http://www.minecraftforum.net/topic/379925-181-matmos-r6-environmental-sound-atmosphere-simulator/" version="6">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="CLASSFILES/" targetpath="bin/minecraft.jar"/>
+        <resource sourcepath="minecraft/" targetpath="./"/>
+    </resources>
+</mod>

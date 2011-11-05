@@ -26,7 +26,6 @@ import org.apache.http.client.params.ClientPNames;
 import org.apache.http.impl.client.ContentEncodingHttpClient;
 import org.mmmr.services.ExceptionAndLogHandler;
 import org.mmmr.services.Messages;
-import org.mmmr.services.interfaces.DownloadingServiceI;
 
 /**
  * {@link HttpClient} (httpcomponents from apache) download service<br>
@@ -36,7 +35,7 @@ import org.mmmr.services.interfaces.DownloadingServiceI;
  * 
  * @see http://hc.apache.org/
  */
-public class DownloadingServiceHttpClient implements DownloadingServiceI {
+public class DownloadingServiceHttpClient extends DownloadingServiceSimple {
     public class DownloadProgressMonitor extends ProgressMonitor implements PropertyChangeListener {
         private final SwingWorker<String, Void> sw;
 

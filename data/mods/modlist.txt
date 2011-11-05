@@ -57,6 +57,8 @@
 1318445634261::KModsVM.zip.xml
 1318352017141::koi13.zip.xml
 1318352017070::Lightsensor.zip.xml
+1320490007798::MAtmos__1_8_1__r6.zip.xml
+1320490008312::MAtmos__1_8_1__r6__WithWeaponInteractions.zip.xml
 1318352017123::MerchantMod Ver1.1.8.zip.xml
 1318523150213::Millenaire1.6.8.zip.xml
 1318352017103::minecraft-mipmap-20-dev.zip.xml
@@ -85,6 +87,7 @@
 1318352017076::MysticOres-1.8.1.zip.xml
 1318352017148::MysticRuins-1.8.1.zip.xml
 1319067685456::NatureOverhaul.v1.3.zip.xml
+1320489494210::NoHoldsBarredHalloween_v11.zip.xml
 1318355365592::OptiFine_1.8.1_HD_B1.zip.xml
 1318355318736::OptiFine_1.8.1_HD_MT_A.zip.xml
 1318355347547::OptiFine_1.8.1_HD_S_B1.zip.xml
@@ -113,7 +116,7 @@
 1318352017161::SMPMoCreatures_v1.3.1BETA.7z.xml
 1318352017128::sprint_v0.3.rar.xml
 1318352017048::Starting Inventory.zip.xml
-1319291131185::TaleOfKingdoms Ver 1.0.3.zip.xml
+1320489637778::TaleOfKingdoms Ver 1.0.5.zip.xml
 1318352017035::Teams 1.8.1 v3.zip.xml
 1318352017034::TF2Sentry_Beta_v0.5.zip.xml
 1318352017160::TF2Teleporter_v1.4.zip.xml
@@ -126,7 +129,7 @@
 1318352016989::Tropicraft Build 2.3 (1).zip.xml
 1318352017111::turbomodelthingy-v2.3.5.zip.xml
 1318352017167::TurretMod_v11_03.zip.xml
-1318352017074::twilightforest1.3r1.zip.xml
+1320489712471::twilightforest1.4r1.zip.xml
 1318352017071::Vehicles 1.8.1  v4.zip.xml
 1319283007923::WalledCity_2.1.1.zip.xml
 1318352017166::water_shader_v4dml.zip.xml
@@ -135,6 +138,7 @@
 1319282036230::zAdditionalPipesClient19.zip.xml
 1318352017171::ZanMinimap0.10.6d-1.8.zip.xml
 1318352016990::zmp4.37_forge1.1.1.zip.xml
+1320490132546::ZombDismemberment181v2.zip.xml
 1318352016986::zombe's_modpack-v4.37_MC.beta.1.8.1.zip.xml
 1318352017028::ZombieLand 1.8.1 v.1.1.3 .zip.xml
 1318352017109::[1.8.1] Somnia v15 MCF.zip.xml

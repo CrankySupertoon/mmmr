@@ -133,6 +133,15 @@ public class DownloadingServiceSimple implements DownloadingServiceI {
 
     /**
      * 
+     * @see org.mmmr.services.interfaces.DownloadingServiceI#exists(java.lang.String)
+     */
+    @Override
+    public boolean exists(String url) {
+        return true;
+    }
+
+    /**
+     * 
      * @see org.mmmr.services.interfaces.DownloadingServiceI#trace(java.net.URL)
      */
     @Override

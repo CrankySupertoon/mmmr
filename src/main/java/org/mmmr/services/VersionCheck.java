@@ -47,6 +47,9 @@ public class VersionCheck {
                 return;
             }
             String mavenProjectBase = VersionCheck.mavenBase + "/maven-metadata.xml"; //$NON-NLS-1$
+            if (!DownloadingService.exists(mavenProjectBase)) {
+                return;
+            }
             byte[] data = DownloadingService.downloadURL(new URL(mavenProjectBase));
             List<String> versions = new ArrayList<String>();
             for (Node node : XmlService.xpath(new ByteArrayInputStream(data), "/metadata/versioning/versions/version")) { //$NON-NLS-1$

@@ -15,5 +15,7 @@ public interface DownloadingServiceI {
 
     public abstract void downloadURL(URL url, OutputStream target) throws IOException;
 
+    public abstract boolean exists(String url);
+
     public abstract String trace(URL url) throws IOException;
 }
