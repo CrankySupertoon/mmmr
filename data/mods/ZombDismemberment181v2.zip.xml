@@ -1,4 +1,4 @@
-<mod archive="ZombDismemberment181v2.zip" mc="1.8.1" name="Zombie Dismemberment" url="http://www.minecraftforum.net/topic/723304-181-zombie-dismemberment-v2-fixed-not-dropping-xp-orbs/" version="2">
+<mod archive="ZombDismemberment181v2.zip" mc="1.8.1" name="Zombie Dismemberment" url="http://www.minecraftforum.net/topic/723304-18119pre5-zombie-dismemberment-v1-fixed-for-smp/" version="2">
      <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>

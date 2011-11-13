@@ -1,0 +1,8 @@
+<mod archive="mod_Zeppelin-guiControls-1.8.1.0.18.zip" mc="1.8.1" name="Zeppelin guiControls" url="http://www.minecraftforum.net/topic/488434-181-zeppelin-018-wip/" version="0.18">
+    <dependencies>
+        <mod url="http://www.minecraftforum.net/topic/488434-" version="0.18"/>
+    </dependencies>
+    <resources>
+		<resource sourcepath="lo.class" targetpath="bin/minecraft.jar/lo.class"/>
+    </resources>
+</mod>

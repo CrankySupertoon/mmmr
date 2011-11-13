@@ -1,4 +1,4 @@
-<mod archive="Sign Tags.zip" mc="1.8.1" name="Sign Tags" url="http://www.minecraftforum.net/topic/75440-v181-risugamis-mods-everything-updated/" version="1.8">
+<mod archive="Sign Tags.zip" mc="1.8.1" name="Sign Tags" url="http://www.minecraftforum.net/topic/75440-v18119p5-risugamis-mods-everything-updated-prerelease-included/" version="1.8">
     <resources>
         <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
     </resources>

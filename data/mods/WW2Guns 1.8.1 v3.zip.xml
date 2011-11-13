@@ -1,4 +1,4 @@
-<mod mode="SMP" archive="WW2Guns 1.8.1 v3.zip" mc="1.8.1" name="WW2 Guns Mod" url="http://www.minecraftforum.net/topic/182918-181smp-flans-mods-planes-ww2-guns-vehicles-playerapi-moods-mputils-teams/#Guns" version="3">
+<mod mode="SMP" archive="WW2Guns 1.8.1 v3.zip" mc="1.8.1" name="WW2 Guns Mod" url="http://www.minecraftforum.net/topic/182918-181-19pre5smp-flans-mods-planes-ww2-guns-vehicles-playerapi-moods-mputils-teams/#Guns" version="3">
      <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
 		<mod name="AudioMod" url="http://www.minecraftforum.net/topic/75440-" version="1.8"/>

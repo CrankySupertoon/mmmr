@@ -1,9 +1,9 @@
-<mod mode="SSP" archive="[1.8.1] Somnia v15 MCF.zip" mc="1.8.1" name="Somnia Forge" url="http://www.minecraftforum.net/topic/162771-18119pre5-somnia-sspmlforge/" version="15">
+<mod archive="ShockAhPI r10.zip" mc="1.8.1" name="ShockAhPI" url="http://www.minecraftforum.net/topic/78064-181-shockahs-mods-updating-in-progress-sapi-r10/" version="10">
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
 		<mod name="Minecraft Forge" url="http://www.minecraftforum.net/topic/514000-" version="1.1.1"/>
     </dependencies>
     <resources>
-        <resource sourcepath="minecraftJar/" targetpath="bin/minecraft.jar" exclude="README.txt"/>
+        <resource sourcepath="bin/" targetpath="bin/minecraft.jar"/>
     </resources>
 </mod>

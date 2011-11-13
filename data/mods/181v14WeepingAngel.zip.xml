@@ -1,0 +1,10 @@
+<mod archive="181v14WeepingAngel.zip" mc="1.8.1" name="Weeping Angels" url="http://www.minecraftforum.net/topic/694829-181-weeping-angels-v14-16-oct/" version="1.4">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+        <mod name="AudioMod" url="http://www.minecraftforum.net/topic/75440-" version="1.8"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="181v1.4WeepingAngel/Put these in the jar/" targetpath="bin/minecraft.jar"/>
+        <resource sourcepath="181v1.4WeepingAngel/resources/" targetpath="resources/"/>
+    </resources>
+</mod>

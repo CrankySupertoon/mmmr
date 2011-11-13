@@ -1,0 +1,9 @@
+<mod mode="SSP" archive="SiegeCraft_SinglePlayer_ML.1.3b.rar" mc="1.8.1" name="SiegeCraft ML" url="http://www.minecraftforum.net/topic/647153-181-siegecraft-13b-now-with-modloader/" version="1.3b">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="SiegeCraft_SinglePlayer_ML.1.3b/SiegeCraft.props" targetpath="*minecraft_client*/SiegeCraft.props"/>
+        <resource sourcepath="SiegeCraft_SinglePlayer_ML.1.3b/Source" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

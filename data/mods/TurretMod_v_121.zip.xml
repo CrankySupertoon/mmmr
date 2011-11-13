@@ -1,9 +1,9 @@
-<mod archive="TurretMod_v11_03.zip" mc="1.8.1" name="Turret Mod" url="http://www.minecraftforum.net/topic/562836-181-turret-mod-v-11-03/" version="1.1_03">
+<mod archive="TurretMod_v_121.zip" mc="1.8.1" name="Turret Mod" url="http://www.minecraftforum.net/topic/562836-181-turret-mod-v-121/" version="1.2.1">
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>
     <resources>
-        <resource sourcepath="Content in minecraft.jar(1.8_o)/" targetpath="bin/minecraft.jar"/>
+        <resource sourcepath="Content in minecraft.jar/" targetpath="bin/minecraft.jar"/>
         <resource sourcepath="Content in resources/" targetpath="resources/"/>
     </resources>
 </mod>

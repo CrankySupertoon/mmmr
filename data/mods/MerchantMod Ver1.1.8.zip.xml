@@ -1,8 +1,0 @@
-<mod archive="MerchantMod Ver1.1.8.zip" mc="1.8.1" name="The Merchant's Mod" url="http://www.minecraftforum.net/topic/656861-181the-merchants-mod-ver118/" version="1.1.8">
-    <dependencies>
-        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-    </dependencies>
-    <resources>
-        <resource targetpath="mods/MerchantMod Ver1.1.8.zip"/>
-    </resources>
-</mod>

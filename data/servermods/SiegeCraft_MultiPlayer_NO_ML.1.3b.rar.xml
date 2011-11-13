@@ -1,0 +1,6 @@
+<mod mode="SERVER" archive="SiegeCraft_MultiPlayer_NO_ML.1.3b.rar" mc="1.8.1" name="SiegeCraft" url="http://www.minecraftforum.net/topic/647153-181-siegecraft-13b-now-with-modloader/" version="1.3b">
+    <resources>
+        <resource sourcepath="SiegeCraft_MultiPlayer_NO_ML.1.3b/SiegeCraft.props" targetpath="*minecraft_server*/SiegeCraft.props"/>
+        <resource sourcepath="SiegeCraft_MultiPlayer_NO_ML.1.3b/Source" targetpath="minecraft_server.jar"/>
+    </resources>
+</mod>

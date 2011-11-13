@@ -1,4 +1,4 @@
-<mod archive="mod_Zeppelin-client-1.8.1.0.17.zip" mc="1.8.1" name="Zeppelin" url="http://www.minecraftforum.net/topic/488434-181-zeppelin-017-wip/" version="0.17">
+<mod archive="mod_Zeppelin-client-1.8.1.0.18.zip" mc="1.8.1" name="Zeppelin" url="http://www.minecraftforum.net/topic/488434-181-zeppelin-018-wip/" version="0.18">
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>
