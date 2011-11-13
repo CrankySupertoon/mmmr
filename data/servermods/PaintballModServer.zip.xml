@@ -1,8 +1,8 @@
-<mod mode="SERVER" archive="PaintballModServer.zip" mc="1.8.1" name="Paintball" url="http://www.minecraftforum.net/topic/309199-181-%e2%98%85-paintball-v28-%e2%98%85-faster-pellets-and-smp/" version="2.8">
+<mod mode="SERVER" archive="PaintballModServer.zip" mc="1.8.1" name="Paintball" url="http://www.minecraftforum.net/topic/309199-181-%E2%98%85-paintball-v29-%E2%98%85-claymores-and-faster-pellets/#Download" version="2.9">
     <dependencies>
 		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
     </dependencies>
     <resources>
-        <resource sourcepath="./" targetpath="./"/>
+        <resource sourcepath="./" targetpath="minecraft_server.jar"/>
     </resources>
 </mod>

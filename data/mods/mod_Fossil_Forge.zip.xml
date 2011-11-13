@@ -1,0 +1,9 @@
+<mod archive="mod_Fossil_Forge.zip" mc="1.8.1" name="Fossil / Archeology" url="http://www.minecraftforum.net/topic/446117-181fossil-archeology-v52-p2/" version="5.2 p2">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+		<mod name="Minecraft Forge" url="http://www.minecraftforum.net/topic/514000-" version="1.1.2"/>
+    </dependencies>
+    <resources>
+        <resource targetpath="mods/mod_Fossil.zip"/>
+    </resources>
+</mod>

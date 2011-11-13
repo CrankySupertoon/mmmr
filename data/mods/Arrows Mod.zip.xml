@@ -1,4 +1,4 @@
-<mod archive="Arrows Mod.zip" mc="1.8.1" name="Elemental Arrows" url="http://www.minecraftforum.net/topic/75440-v181-risugamis-mods-everything-updated/" version="1.8">
+<mod archive="Arrows Mod.zip" mc="1.8.1" name="Elemental Arrows" url="http://www.minecraftforum.net/topic/75440-v18119p5-risugamis-mods-everything-updated-prerelease-included/" version="1.8">
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>

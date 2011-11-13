@@ -1,0 +1,8 @@
+<mod mode="SERVER" archive="Mo'medications V1.7 SMP vanilla.rar" mc="1.8.1" name="Mo'healing stuff" url="http://www.minecraftforum.net/topic/485952-181mohealing-stuffv17-more-bugfixes/" version="1.7">
+    <dependencies>
+		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
+    </dependencies>
+	<resources>
+		<resource sourcepath="./" targetpath="minecraft_server.jar"/>
+    </resources>
+</mod>

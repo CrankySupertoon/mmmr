@@ -1,4 +1,4 @@
-<mod mode="SMP" archive="RedstoneRemote_Client_1.0.1.zip" mc="1.8.1" name="Redstone Remote" url="http://www.minecraftforum.net/topic/554413-181smp-power-crystals-mods-minefactory-reloaded-130-redstone-remote-101/#rr" version="1.1.0">
+<mod archive="GUICraftory1.0.4.zip" mc="1.8.1" name="GUICraftory" url="http://www.minecraftforum.net/topic/655155-181runecraftory-v132-fishcraftory-v141-and-seasoncraftory-v053-new-leveling-system-gui/" version="1.0.4">
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>

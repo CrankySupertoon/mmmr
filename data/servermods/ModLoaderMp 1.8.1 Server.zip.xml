@@ -1,4 +1,4 @@
-<mod mode="SERVER" archive="ModLoaderMp 1.8.1 Server.zip" mc="1.8.1" name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-181smp-flans-mods-planes-ww2-guns-vehicles-playerapi-moods-mputils-teams/#MLM" version="1.8.1">
+<mod mode="SERVER" archive="ModLoaderMp 1.8.1 Server.zip" mc="1.8.1" name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-181-19pre5smp-flans-mods-planes-ww2-guns-vehicles-playerapi-moods-mputils-teams/#MLM" version="1.8.1">
     <resources>
         <resource sourcepath="./" targetpath="minecraft_server.jar"/>
     </resources>

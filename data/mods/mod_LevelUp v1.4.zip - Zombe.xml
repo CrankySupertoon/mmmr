@@ -1,9 +1,0 @@
-<mod archive="mod_LevelUp v1.4.zip" mc="1.8.1" name="Level Up! for Zombe's Mods" url="http://www.minecraftforum.net/topic/666507-181-level-up-rpg-skills-in-minecraft-update-v14-oct-5/" version="1.4">
-    <dependencies>
-        <mod name="Level Up!" url="http://www.minecraftforum.net/topic/666507-" version="1.4"/>
-		<mod name="zombe's modpack" url="http://www.minecraftforum.net/topic/91055-" version="4.37"/>
-    </dependencies>
-    <resources>
-        <resource sourcepath="Zombe Merged Classes/" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>

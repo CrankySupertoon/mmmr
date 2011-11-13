@@ -1,0 +1,8 @@
+<mod archive="Horror Mod15.zip" mc="1.8.1" name="Horror Pack" url="http://www.minecraftforum.net/topic/624335-18119pre5-horror-mod-15-jason-freddy-jigsaw-and-more-in-your-worst-nightmare/" version="1.5">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="Horror Mod/MinecraftJar/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>

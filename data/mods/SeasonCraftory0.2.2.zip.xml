@@ -1,8 +1,0 @@
-<mod archive="SeasonCraftory0.2.2.zip" mc="1.8.1" name="SeasonCraftory" url="http://www.minecraftforum.net/topic/655155-181forgerunecraftory-v121-18-new-cropsfishcraftory-v13-50-new-fish-cookingand-seasoncraftory-v022all-4-seasons/" version="0.2.2">
-    <dependencies>
-        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
-    </dependencies>
-    <resources>
-        <resource sourcepath="./" targetpath="bin/minecraft.jar"/>
-    </resources>
-</mod>

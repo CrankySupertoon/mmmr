@@ -1,0 +1,8 @@
+<mod archive="Doggy Talents v1.5.9.zip" mc="1.8.1" name="Doggy Talents" url="httpwww.minecraftforum.nettopic520521-181-doggy-talents-mod-v1592" version="1.5.92">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+    </dependencies>
+    <resources>
+        <resource sourcepath="Doggy Talents v1.5.92/put these in your minecraft jar/" targetpath="bin/minecraft.jar"/>
+    </resources>
+</mod>
