@@ -1,0 +1,10 @@
+<mod mode="SMP" archive="industrialcraft-2-client_1.23.jar" mc="1.8.1" name="Industrial Craft ²" url="http://forum.industrial-craft.net/index.php?page=Thread&amp;threadID=2144" version="1.23">
+    <dependencies>
+        <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
+		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
+		<mod name="Minecraft Forge" url="http://www.minecraftforum.net/topic/514000-" version="1.1.2"/>
+    </dependencies>
+    <resources>
+        <resource targetpath="mods/industrialcraft-2-client_1.23.jar"/>
+    </resources>
+</mod>

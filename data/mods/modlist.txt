@@ -46,7 +46,7 @@
 1321205324913::Horror Mod15.zip.xml
 1318352017112::Hot Air Balloons - MP Client.zip.xml
 1318352017014::ID Resolver 1.8.1 Update 0 Standard Edition.7z.xml
-1318352017021::industrialcraft-2-client_1.15.jar.xml
+1321215269347::industrialcraft-2-client_1.23.jar.xml
 1321205361118::InvTweaks-1.32-1.8.1.jar.xml
 1321205486229::iPixeliGenderMod1.8.1vSMPClient.xml
 1318352017105::ItemSpriteAPIv2.0.zip.xml
@@ -62,7 +62,7 @@
 1318352017103::minecraft-mipmap-20-dev.zip.xml
 1321199681130::Minecraft181_AddFemalePlayersAndZombiesv3.zip.xml
 1318357039491::Minecraft181_showhealth.zip.xml
-1318352017032::minecraftforge-client-1.1.1.zip.xml
+1321215166447::minecraftforge-client-1.1.2.zip.xml
 1321206063181::MineFactoryReloaded_Client_1.3.2.zip.xml
 1321206452752::Mo'medification V1.7 SSP.zip.xml
 1321199496542::ModLoader.zip.xml

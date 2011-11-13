@@ -9,8 +9,8 @@
 1318352017569::ElementalCreepers_v1.5_server.zip.xml
 1318352017560::erosion_mod_2.4_server.zip.xml
 1318352017586::Hot Air Balloons - MP Server.zip.xml
-1318352017582::industrialcraft-2-server_1.15.jar.xml
-1318352017592::minecraftforge-server-1.1.1.zip.xml
+1321215248595::industrialcraft-2-server_1.23.jar.xml
+1321215192550::minecraftforge-server-1.1.2.zip.xml
 1321206124241::MineFactoryReloaded_Server_1.3.2.zip.xml
 1321206602886::Mo'medications V1.7 SMP vanilla.rar.xml
 1321206651666::ModLoaderMp 1.8.1 Server.zip.xml
