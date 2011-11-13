@@ -1,4 +1,4 @@
-<mod archive="CarpetMod.zip" mc="1.8.1" name="Carpet Mod" url="http://www.minecraftforum.net/topic/687007-181-kyles-mods-carpet-mod-kitchen-additions-vending-machines/" version="1.0">
+<mod archive="CarpetMod.zip" mc="1.8.1" name="Carpet Mod" url="http://www.minecraftforum.net/topic/687007-181kitchen-additions-working-stove-and-fridge-garden-additions-carpets-vendingmachines-mob-wands/" version="1.0">
     <dependencies>
         <mod name="ModLoader" url="http://www.minecraftforum.net/topic/75440-" version="1.8.1"/>
     </dependencies>

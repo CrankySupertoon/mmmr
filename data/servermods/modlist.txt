@@ -1,13 +1,9 @@
 1319291430139::Advanced Machines 2.1 Server.zip.xml
-1318352017589::buildcraft-server-A-core-1.8.1.1.zip.xml
-1318352017562::buildcraft-server-A-core-2.2.1.zip.xml
-1318352017604::buildcraft-server-B-builders-1.8.1.1.zip.xml
-1318352017575::buildcraft-server-B-builders-2.2.1.zip.xml
-1318352017565::buildcraft-server-B-energy-2.2.1.zip.xml
-1318352017576::buildcraft-server-B-factory-1.8.1.1.zip.xml
-1318352017596::buildcraft-server-B-factory-2.2.1.zip.xml
-1318352017595::buildcraft-server-B-transport-1.8.1.1.zip.xml
-1318352017566::buildcraft-server-B-transport-2.2.1.zip.xml
+1321202301557::buildcraft-server-A-core-2.2.5.zip.xml
+1321202351614::buildcraft-server-B-builders-2.2.5.zip.xml
+1321202378387::buildcraft-server-B-energy-2.2.5.zip.xml
+1321202404969::buildcraft-server-B-factory-2.2.5.zip.xml
+1321202433399::buildcraft-server-B-transport-2.2.5.zip.xml
 1318352017564::CB1185_ModLoaderMP181v2.7z.xml
 1318374894689::craftbukkit-0.0.1-SNAPSHOT.jar.xml
 1318352017569::ElementalCreepers_v1.5_server.zip.xml
@@ -30,5 +26,6 @@
 1318352017571::Teams 1.8.1 v3 Server.zip.xml
 1318352017579::The Shadow of Israphel 2.1 Server.zip.xml
 1318352017590::Vehicles 1.8.1 v4 Server.zip.xml
+1321201234600::WeaponMod SMP Server.zip.xml
 1318352017572::WW2Guns 1.8.1 v3.1  Server.zip.xml
-1319282049133::zAdditionalPipesServer19.zip.xml
+1321202670542::zAdditionalPipesServer.zip.xml

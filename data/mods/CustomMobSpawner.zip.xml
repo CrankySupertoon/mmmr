@@ -1,0 +1,5 @@
+<mod archive="CustomMobSpawner.zip" mc="1.8.1" name="Custom Mob Spawner" url="http://www.minecraftforum.net/topic/769339-181-custom-mob-spawner/" version="1.1">
+    <resources>
+        <resource targetpath="mods/"/>
+    </resources>
+</mod>

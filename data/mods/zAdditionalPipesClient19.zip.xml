@@ -1,8 +1,0 @@
-<mod mode="SMP" archive="zAdditionalPipesClient19.zip" mc="1.8.1" name="BuildCraft Teleport Pipes" url="http://www.minecraftforum.net/topic/653775-mc181bc222ap19-buildcraft-teleport-pipes-now-called-additionalpipes-distribution-gui/" version="1.9">
-    <dependencies>
-        <mod name="BuildCraft core" url="http://www.minecraftforum.net/topic/682920-" version="2.2.1"/>
-    </dependencies>
-    <resources>
-        <resource targetpath="mods/zAdditionalPipesClient19.zip"/>
-    </resources>
-</mod>

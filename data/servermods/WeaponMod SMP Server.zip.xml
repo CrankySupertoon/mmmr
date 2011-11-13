@@ -1,0 +1,9 @@
+<mod mode="SERVER" archive="WeaponMod SMP Server.zip" mc="1.8.1" name="WeaponMod" url="http://www.minecraftforum.net/topic/211517-181-balkons-weaponmod-v80-blunderbuss-and-mcforge/" version="6.1">
+    <dependencies>
+		<mod name="ModLoaderMp" url="http://www.minecraftforum.net/topic/182918-" version="1.8.1"/>
+    </dependencies>
+	<resources>
+		<resource sourcepath="Files for minecraft_server.jar/" targetpath="minecraft_server.jar"/>
+		<resource sourcepath="weaponmod.properties" targetpath="weaponmod.properties"/>
+    </resources>
+</mod>
