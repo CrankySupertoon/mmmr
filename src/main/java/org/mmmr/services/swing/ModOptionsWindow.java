@@ -341,7 +341,7 @@ public class ModOptionsWindow extends JFrame {
 
     protected Config cfg;
 
-    protected ETable options;
+    protected ETable<ModOption> options;
 
     private final InstallationService iserv;
 

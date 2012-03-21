@@ -43,7 +43,7 @@ public class JavaOptionsWindow extends JFrame {
 
     public static void main(String[] args) {
         try {
-            UIUtils.lookAndFeel();
+            UIUtils.niceLookAndFeel();
             Config cfg = new Config(args);
             new JavaOptionsWindow(cfg, null).setVisible(true);
         } catch (Exception ex) {

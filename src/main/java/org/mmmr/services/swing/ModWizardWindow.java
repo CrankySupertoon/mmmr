@@ -142,7 +142,7 @@ public class ModWizardWindow extends JFrame {
 
     public static void main(String[] args) {
         try {
-            UIUtils.lookAndFeel();
+            UIUtils.niceLookAndFeel();
             Config cfg = new Config();
             ModWizardWindow modWizardWindow = new ModWizardWindow(cfg, new XmlService(cfg).load(new FileInputStream(new File(cfg.getMods(),
                     "Doggy Talents v1.5.9.zip.xml")), Mod.class));
@@ -281,7 +281,7 @@ public class ModWizardWindow extends JFrame {
         ecfg.setEditable(true);
 
         JButton ddXml = new JButton(UtilityMethods.getIcon("images/dropcopy.png"));
-        final ETable dependencies = new ETable(ecfg);
+        final ETable<Dependency> dependencies = new ETable<Dependency>(ecfg);
         {
             ETableHeaders headers = new ETableHeaders();
             headers.add("name", String.class, true);//$NON-NLS-1$ 
@@ -299,7 +299,7 @@ public class ModWizardWindow extends JFrame {
             formpanel.add(ddXml, "span 1 6, growx, growy");//$NON-NLS-1$  // drag-drop xml file dependency
         }
 
-        final ETable resources = new ETable(ecfg);
+        final ETable<Resource> resources = new ETable<Resource>(ecfg);
         {
             ETableHeaders headers = new ETableHeaders();
             headers.add("sourcePath", String.class, true);//$NON-NLS-1$ 
